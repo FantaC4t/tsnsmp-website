@@ -1,0 +1,262 @@
+/* ===== Shared Header Styles - UPDATED ===== */
+.site-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    background: rgba(10, 10, 18, 0.2); /* Subtle dark tint */
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    transition: all 0.3s ease;
+}
+
+.site-header.scrolled {
+    background: rgba(10, 10, 18, 0.95);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(123, 104, 238, 0.1);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+}
+
+body:not(.dark-mode) .site-header {
+    background: rgba(255, 255, 255, 0.2);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+body:not(.dark-mode) .site-header.scrolled {
+    background: rgba(255, 255, 255, 0.95);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+/* === LIGHT MODE TEXT FIXES === */
+body:not(.dark-mode) .nav-links a {
+    color: #1a1a1a; /* Dark text for light background */
+}
+
+body:not(.dark-mode) .nav-links a:hover,
+body:not(.dark-mode) .nav-links a.active {
+    color: #6200ea; /* Purple accent for active/hover */
+    background: rgba(98, 0, 234, 0.1);
+}
+
+body:not(.dark-mode) .hamburger,
+body:not(.dark-mode) .hamburger::before,
+body:not(.dark-mode) .hamburger::after {
+    background: #1a1a1a; /* Dark hamburger menu icons */
+}
+/* ============================= */
+
+.site-header.scrolled {
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+}
+
+.navbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.75rem 2rem;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+/* Brand / Logo - UPDATED */
+.nav-brand a {
+    display: flex;
+    align-items: center; 
+    gap: 1rem;
+    text-decoration: none;
+    transition: transform 0.3s ease;
+}
+
+.nav-brand a:hover {
+    transform: scale(1.05);
+}
+
+.nav-logo {
+    height: 64px; /* Bigger height */
+    width: auto;  /* Maintain aspect ratio */
+    border-radius: 0; /* NO CIRCLE */
+    filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.3));
+    transition: all 0.3s ease;
+    border: none; /* Remove border */
+}
+
+.nav-brand a::before {
+    display: none;
+}
+
+.nav-brand a:hover .nav-logo {
+    filter: drop-shadow(0 0 15px rgba(123, 104, 238, 0.6));
+    transform: none; /* Reset rotation */
+}
+
+/* REMOVE OR HIDE nav-title */
+.nav-title {
+    display: none;
+}
+
+.nav-links {
+    display: flex;
+    list-style: none;
+    gap: 2rem;
+    margin: 0;
+    padding: 0;
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: var(--text-color, #e0e0e0);
+    font-weight: 500;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    transition: all 0.3s ease;
+}
+
+.nav-links a:hover,
+.nav-links a.active {
+    color: var(--accent-color, #7c4dff);
+    background: rgba(124, 77, 255, 0.1);
+}
+
+.nav-toggle {
+    display: none;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.5rem;
+}
+
+.hamburger,
+.hamburger::before,
+.hamburger::after {
+    display: block;
+    width: 25px;
+    height: 3px;
+    background: var(--text-color, #e0e0e0);
+    border-radius: 3px;
+    transition: all 0.3s ease;
+}
+
+.hamburger {
+    position: relative;
+}
+
+.hamburger::before,
+.hamburger::after {
+    content: '';
+    position: absolute;
+    left: 0;
+}
+
+.hamburger::before {
+    top: -8px;
+}
+
+.hamburger::after {
+    top: 8px;
+}
+
+.nav-toggle.active .hamburger {
+    background: transparent;
+}
+
+.nav-toggle.active .hamburger::before {
+    transform: rotate(45deg);
+    top: 0;
+}
+
+.nav-toggle.active .hamburger::after {
+    transform: rotate(-45deg);
+    top: 0;
+}
+
+.theme-toggle {
+    background: none;
+    border: 2px solid var(--accent-color, #7c4dff);
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+    font-size: 1.2rem;
+    transition: all 0.3s ease;
+}
+
+.theme-toggle:hover {
+    background: rgba(124, 77, 255, 0.2);
+    transform: scale(1.1);
+}
+
+/* Mobile styles */
+@media (max-width: 768px) {
+    .nav-toggle {
+        display: block;
+    }
+
+    .nav-links {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        flex-direction: column;
+        background: var(--header-bg, rgba(20, 20, 30, 0.98));
+        
+        /* === FIX: HIDE BY DEFAULT === */
+        padding: 0; /* Remove padding so it collapses fully */
+        max-height: 0;
+        overflow: hidden;
+        opacity: 0; /* Make it invisible */
+        visibility: hidden; /* Prevent clicking links when closed */
+        transition: all 0.3s ease; /* Animate everything */
+        gap: 0;
+    }
+
+    .nav-links.open {
+        /* === SHOW WHEN OPEN === */
+        max-height: 400px; /* Enough height for all links */
+        padding: 1rem; /* Add padding back only when open */
+        opacity: 1;
+        visibility: visible;
+    }
+
+    .nav-links a {
+        display: block;
+        padding: 1rem;
+        text-align: center;
+    }
+
+    /* === MOBILE LIGHT MODE FIXES === */
+    /* 1. Fix Dropdown Background to be White */
+    body:not(.dark-mode) .nav-links {
+        background: #ffffff;
+        box-shadow: 0 15px 40px rgba(0,0,0,0.1);
+        border-top: 1px solid rgba(0,0,0,0.05);
+    }
+
+    /* 2. Fix Link Colors & Separators in Dropdown */
+    body:not(.dark-mode) .nav-links li {
+        border-bottom: 1px solid rgba(0,0,0,0.05);
+    }
+
+    body:not(.dark-mode) .nav-links a {
+        color: #1a1a1a;
+    }
+
+    body:not(.dark-mode) .nav-links a:hover,
+    body:not(.dark-mode) .nav-links a.active {
+        background: #f8f9fa;
+        color: #6200ea;
+    }
+}
+
+/* 3. Fix "Dark Line" below header (Force light border) */
+body:not(.dark-mode) .site-header {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.06) !important;
+    background: rgba(255, 255, 255, 0.95); /* Ensure opacity covers content behind */
+}
+
+/* Body padding to account for fixed header */
+body {
+    padding-top: 70px;
+}

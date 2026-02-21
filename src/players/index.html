@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Our Community - TSNSMP</title>
+    <link rel="stylesheet" href="../css/base.css">
+    <link rel="stylesheet" href="../css/header.css">
+    <link rel="stylesheet" href="../css/footer.css">
+    <link rel="stylesheet" href="../css/players.css">
+    <link rel="icon" href="../assets/big_logo.png" type="image/png">
+</head>
+<body class="dark-mode">
+    
+    <!-- Header injected by JS -->
+    
+    <main>
+        <section class="players-hero">
+            <div class="hero-bg"></div>
+            <div class="hero-grid"></div>
+            <div class="container">
+                <h1>Meet the Community</h1>
+                <p class="players-hero-subtitle">
+                    The amazing people who make TSNSMP special.
+                </p>
+            </div>
+        </section>
+
+        <section class="players-list">
+            <div class="container">
+                <div class="players-search">
+                    <input type="text" id="player-search" placeholder="Search players..." autocomplete="off" />
+                </div>
+                <p class="players-missing-notice">
+                    👋 Member but not listed? DM <strong>FantaCat</strong> to be added — include your <strong>color</strong>, <strong>pronouns</strong>, and <strong>Twitch link</strong> if you have one!
+                </p>
+                <div class="players-grid" id="players-grid">
+                    <!-- Players will be injected here -->
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script src="../js/header.js"></script>
+    <script>
+        createHeader('players');
+
+        const grid = document.getElementById('players-grid');
+
+        // ── 7UpPup glitch corruption ──
+        const GLYPH_POOL = 'ÅŽŸ§±×÷ĦĴĿŊŪŭůűŲŵŷŹźżžſƀƃƄƈƊƋƎƏƢƣƤƦƧƩƪƫÐÞҒӁӂӃӇ';
+        function randGlyph(len) {
+            return Array.from({ length: len }, () =>
+                GLYPH_POOL[Math.floor(Math.random() * GLYPH_POOL.length)]
+            ).join('');
+        }
+
+        function startImposterCorruption(card) {
+            const nameEl     = card.querySelector('.player-name');
+            const pronounsEl = card.querySelector('.player-pronouns');
+            const roleEl     = card.querySelector('.player-role');
+            const realNameHTML = nameEl.innerHTML;
+            const realPronouns = pronounsEl ? pronounsEl.textContent : '';
+            const realRole     = roleEl     ? roleEl.textContent     : '';
+
+            function corrupt() {
+                card.classList.add('player-card--corrupted');
+                nameEl.innerHTML = randGlyph(5 + Math.floor(Math.random() * 5));
+                if (pronounsEl) pronounsEl.textContent = randGlyph(3) + '/' + randGlyph(3);
+                if (roleEl)     roleEl.textContent     = randGlyph(6 + Math.floor(Math.random() * 4));
+                setTimeout(restore, 1200 + Math.random() * 2000);
+            }
+            function restore() {
+                card.classList.remove('player-card--corrupted');
+                nameEl.innerHTML = realNameHTML;
+                if (pronounsEl) pronounsEl.textContent = realPronouns;
+                if (roleEl) { roleEl.textContent = realRole; roleEl.className = 'player-role role-imposter'; }
+                setTimeout(corrupt, 3000 + Math.random() * 5000);
+            }
+            setTimeout(corrupt, 1500 + Math.random() * 3000);
+        }
+
+        // ── Render ──
+        function buildCard(member) {
+            const card = document.createElement('div');
+            card.className = 'player-card';
+            card.dataset.name = member.name.toLowerCase();
+            if (member.name === '7UpPup') card.classList.add('player-card--glitch');
+
+            const skinUrl = `https://minotar.net/armor/body/${member.name}/150.png`;
+
+            const twitchIcon = member.twitch ? `
+                <a href="${member.twitch}" target="_blank" class="twitch-link" title="Watch on Twitch">
+                    <svg class="twitch-icon-svg" viewBox="0 0 24 24">
+                        <path d="M11.571 4.714h1.715v5.143H11.57zm4.715 0H18v5.143h-1.714zM6 0L1.714 4.286v15.428h5.143V24l4.286-4.286h3.428L22.286 12V0zm14.571 11.143l-3.428 3.428h-3.429l-3 3v-3H6.857V1.714h13.714Z"/>
+                    </svg>
+                </a>` : '';
+
+            const nameStyle = member.color ? `style="color: ${member.color}"` : '';
+
+            card.innerHTML = `
+                <div class="skin-viewer">
+                    <img src="${skinUrl}" alt="${member.name}" class="skin-image" loading="lazy"
+                         onerror="this.src='https://minotar.net/armor/body/Steve/150.png'">
+                </div>
+                <div class="player-info">
+                    <div class="player-name" ${nameStyle}>
+                        ${member.name}
+                        ${twitchIcon}
+                    </div>
+                    ${member.pronouns ? `<div class="player-pronouns">${member.pronouns}</div>` : ''}
+                    <div class="player-role role-${member.role}">${member.role.toUpperCase()}</div>
+                </div>
+            `;
+            return card;
+        }
+
+        async function renderPlayers() {
+            grid.innerHTML = '<p style="text-align:center;color:var(--text-secondary);padding:4rem 0">Loading members…</p>';
+
+            let members;
+            try {
+                const res = await fetch('/api/members');
+                if (!res.ok) throw new Error(`HTTP ${res.status}`);
+                members = await res.json();
+            } catch (e) {
+                grid.innerHTML = '<p style="text-align:center;color:var(--text-secondary);padding:4rem 0">Could not load members. Please try again later.</p>';
+                console.error('Failed to load members:', e);
+                return;
+            }
+
+            grid.innerHTML = '';
+            const searchTerm = document.getElementById('player-search').value.toLowerCase();
+
+            for (const member of members) {
+                const card = buildCard(member);
+                grid.appendChild(card);
+                if (member.name === '7UpPup') startImposterCorruption(card);
+                if (searchTerm && !member.name.toLowerCase().includes(searchTerm)) {
+                    card.style.display = 'none';
+                }
+            }
+        }
+
+        renderPlayers();
+
+        document.getElementById('player-search').addEventListener('input', function () {
+            const term = this.value.toLowerCase().trim();
+            document.querySelectorAll('.player-card').forEach(card => {
+                card.style.display = (!term || card.dataset.name.includes(term)) ? '' : 'none';
+            });
+        });
+    </script>
+          "022c741d-693d-4bef-8444-918bba5133f7": { "link": "https://www.twitch.tv/gaqy_", "color": "#940F0F" },
+</body>
+</html>

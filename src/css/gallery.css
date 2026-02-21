@@ -1,0 +1,328 @@
+/* Gallery Page Styles */
+
+.page-hero {
+    position: relative;
+    min-height: 40vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    background: var(--bg-primary);
+    padding-top: 120px;
+}
+
+/* Dynamic Background Mesh */
+.hero-bg {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    background: 
+        radial-gradient(circle at 15% 50%, rgba(76, 175, 80, 0.08), transparent 25%),
+        radial-gradient(circle at 85% 30%, rgba(123, 104, 238, 0.1), transparent 25%);
+    filter: blur(60px);
+    animation: bgPulse 10s ease-in-out infinite alternate;
+}
+
+body:not(.dark-mode) .hero-bg {
+    background: 
+        radial-gradient(circle at 15% 50%, rgba(76, 175, 80, 0.15), transparent 30%),
+        radial-gradient(circle at 85% 30%, rgba(123, 104, 238, 0.15), transparent 30%);
+    opacity: 0.8;
+}
+
+@keyframes bgPulse {
+    0% { opacity: 0.5; transform: scale(1); }
+    100% { opacity: 1; transform: scale(1.1); }
+}
+
+/* Grid Pattern Overlay */
+.hero-grid {
+    position: absolute;
+    inset: 0;
+    background-image: 
+        linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+    background-size: 50px 50px;
+    mask-image: radial-gradient(circle at center, black 40%, transparent 80%);
+    -webkit-mask-image: radial-gradient(circle at center, black 40%, transparent 80%);
+    z-index: 1;
+    pointer-events: none;
+}
+
+body:not(.dark-mode) .hero-grid {
+    background-image: 
+        linear-gradient(rgba(0, 0, 0, 0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 0, 0, 0.05) 1px, transparent 1px);
+}
+
+/* Floating Shapes */
+.floating-shapes {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.shape {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(60px);
+    opacity: 0.3;
+    animation: floatShape 20s ease-in-out infinite;
+}
+
+.shape-1 {
+    width: 200px;
+    height: 200px;
+    background: linear-gradient(135deg, #7b68ee, #9575cd);
+    top: 10%;
+    left: 5%;
+}
+
+.shape-2 {
+    width: 150px;
+    height: 150px;
+    background: linear-gradient(135deg, #4caf50, #81c784);
+    bottom: 20%;
+    right: 10%;
+    animation-delay: 5s;
+}
+
+@keyframes floatShape {
+    0%, 100% { transform: translate(0, 0); }
+    33% { transform: translate(30px, -50px); }
+    66% { transform: translate(-20px, 20px); }
+}
+
+.page-hero .container {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+}
+
+.page-hero h1 {
+    font-size: 3.5rem;
+    margin-bottom: 1rem;
+    background: linear-gradient(135deg, #fff 0%, var(--primary-purple) 50%, var(--primary-green) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 0 10px 30px rgba(76, 175, 80, 0.3);
+}
+
+.construction-scene {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 4rem 2rem;
+    background: var(--bg-card);
+    border-radius: 24px;
+    border: 2px dashed var(--primary-purple);
+    margin: 2rem auto;
+    max-width: 800px;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Caution Tape Effect */
+.construction-scene::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 20px;
+    background: repeating-linear-gradient(
+        45deg,
+        #ffd700,
+        #ffd700 20px,
+        #000 20px,
+        #000 40px
+    );
+}
+
+.construction-scene::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 20px;
+    background: repeating-linear-gradient(
+        45deg,
+        #ffd700,
+        #ffd700 20px,
+        #000 20px,
+        #000 40px
+    );
+}
+
+/* Character Container */
+.character-stop-container {
+    position: relative;
+    width: 200px;
+    height: 300px;
+    margin-bottom: 2rem;
+}
+
+/* FantaC4t Placeholder */
+.fantac4t-placeholder {
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.2);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+/* The actual skin image will go here */
+.fantac4t-skin {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    image-rendering: pixelated;
+    filter: drop-shadow(0 10px 20px rgba(0,0,0,0.4));
+}
+
+/* The STOP Hand/Sign Overlay */
+.stop-overlay {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(-15deg);
+    background: #ff3333;
+    color: white;
+    width: 120px;
+    height: 120px;
+    border-radius: 50%; /* Octagon-ish via border or just circle for now */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 900;
+    font-size: 2rem;
+    border: 4px solid white;
+    box-shadow: 0 0 20px rgba(255, 51, 51, 0.6);
+    animation: pulseStop 2s infinite;
+    z-index: 10;
+}
+
+/* Make it an octagon shape using clip-path */
+.stop-sign-shape {
+    clip-path: polygon(30% 0%, 70% 0%, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0% 70%, 0% 30%);
+    border-radius: 0;
+    width: 140px;
+    height: 140px;
+}
+
+@keyframes pulseStop {
+    0% { transform: translate(-50%, -50%) rotate(-15deg) scale(1); }
+    50% { transform: translate(-50%, -50%) rotate(-15deg) scale(1.1); }
+    100% { transform: translate(-50%, -50%) rotate(-15deg) scale(1); }
+}
+
+.construction-text h2 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    color: var(--primary-purple);
+}
+
+.construction-text p {
+    font-size: 1.2rem;
+    color: var(--text-secondary);
+    max-width: 500px;
+    margin: 0 auto 2rem;
+}
+
+/* Gallery Page Specific Styles */
+
+.gallery-content {
+    padding: 4rem 0;
+}
+
+.gallery-filters {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 3rem;
+    flex-wrap: wrap;
+}
+
+.filter-btn {
+    padding: 10px 20px;
+    border: 2px solid var(--border-color);
+    background: var(--bg-card);
+    color: var(--text-primary);
+    border-radius: 25px;
+    cursor: pointer;
+    transition: var(--transition);
+    font-weight: 500;
+}
+
+.filter-btn:hover,
+.filter-btn.active {
+    border-color: var(--primary-purple);
+    background: linear-gradient(45deg, var(--primary-green), var(--primary-purple));
+    color: white;
+}
+
+.gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+}
+
+.gallery-item {
+    position: relative;
+    border-radius: var(--border-radius);
+    overflow: hidden;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.gallery-item:hover {
+    transform: translateY(-10px);
+    box-shadow: var(--shadow-heavy);
+}
+
+.gallery-item img {
+    width: 100%;
+    height: 250px;
+    object-fit: cover;
+    transition: var(--transition);
+}
+
+.gallery-item:hover img {
+    transform: scale(1.1);
+}
+
+.gallery-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
+    color: white;
+    padding: 2rem 1rem 1rem;
+    transform: translateY(100%);
+    transition: var(--transition);
+}
+
+.gallery-item:hover .gallery-overlay {
+    transform: translateY(0);
+}
+
+.gallery-overlay h3 {
+    margin-bottom: 0.5rem;
+}
+
+.gallery-overlay p {
+    margin-bottom: 1rem;
+    opacity: 0.8;
+}
+
+.gallery-stats {
+    display: flex;
+    gap: 1rem;
+}

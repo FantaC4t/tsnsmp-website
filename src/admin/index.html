@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TSNSMP Admin</title>
+    <link rel="icon" href="../assets/big_logo.png" type="image/png">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --bg:        #0f0f23;
+            --bg2:       #1a1a2e;
+            --card:      #16213e;
+            --border:    #3a3b3c;
+            --purple:    #7B68EE;
+            --green:     #2d8f47;
+            --red:       #e05555;
+            --text:      #e8e9ea;
+            --muted:     #b0b3b8;
+            --radius:    12px;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+        }
+
+        /* ── LOGIN GATE ── */
+        #login-gate {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: radial-gradient(circle at 30% 50%, rgba(123,104,238,.12), transparent 45%),
+                        radial-gradient(circle at 70% 30%, rgba(45,143,71,.08), transparent 45%);
+        }
+
+        .login-box {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 3rem;
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0,0,0,.4);
+        }
+
+        .login-box h1 { font-size: 1.8rem; margin-bottom: .4rem; }
+        .login-box p  { color: var(--muted); margin-bottom: 2rem; font-size: .9rem; }
+
+        .login-box input {
+            width: 100%;
+            padding: 12px 16px;
+            background: var(--bg2);
+            border: 1px solid var(--border);
+            border-radius: 50px;
+            color: var(--text);
+            font-size: 1rem;
+            margin-bottom: 1rem;
+            transition: border-color .2s;
+        }
+        .login-box input:focus { outline: none; border-color: var(--purple); }
+
+        .login-error {
+            color: var(--red);
+            font-size: .85rem;
+            margin-bottom: 1rem;
+            display: none;
+        }
+
+        /* ── ADMIN PANEL ── */
+        #admin-panel { display: none; }
+
+        .admin-header {
+            background: var(--card);
+            border-bottom: 1px solid var(--border);
+            padding: 1rem 2rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .admin-header h1 { font-size: 1.3rem; flex: 1; }
+        .admin-header span { color: var(--muted); font-size: .85rem; }
+
+        .admin-body { max-width: 1100px; margin: 0 auto; padding: 2rem; }
+
+        /* ── BUTTONS ── */
+        .btn {
+            padding: 10px 22px;
+            border-radius: 50px;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: .9rem;
+            font-family: inherit;
+            transition: all .2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .btn-primary  { background: var(--purple); color: #fff; }
+        .btn-primary:hover  { filter: brightness(1.15); transform: translateY(-1px); }
+        .btn-green    { background: var(--green); color: #fff; }
+        .btn-green:hover    { filter: brightness(1.2); transform: translateY(-1px); }
+        .btn-danger   { background: rgba(224,85,85,.15); color: var(--red); border: 1px solid rgba(224,85,85,.3); padding: 6px 14px; font-size: .8rem; }
+        .btn-danger:hover   { background: rgba(224,85,85,.3); }
+        .btn-edit     { background: rgba(123,104,238,.15); color: var(--purple); border: 1px solid rgba(123,104,238,.3); padding: 6px 14px; font-size: .8rem; }
+        .btn-edit:hover     { background: rgba(123,104,238,.3); }
+        .btn-ghost    { background: transparent; color: var(--muted); border: 1px solid var(--border); }
+        .btn-ghost:hover    { color: var(--text); border-color: var(--muted); }
+
+        /* ── CARDS ── */
+        .panel {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        .panel h2 { font-size: 1.2rem; margin-bottom: 1.2rem; color: var(--text); }
+
+        /* ── ADD FORM ── */
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .form-group { display: flex; flex-direction: column; gap: 6px; }
+        .form-group label { font-size: .8rem; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; font-weight: 600; }
+
+        .form-group input,
+        .form-group select {
+            padding: 10px 14px;
+            background: var(--bg2);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text);
+            font-size: .95rem;
+            font-family: inherit;
+            transition: border-color .2s;
+        }
+        .form-group input:focus,
+        .form-group select:focus { outline: none; border-color: var(--purple); }
+        .form-group select option { background: var(--bg2); }
+
+        .color-row { display: flex; align-items: center; gap: 8px; }
+        .color-row input[type="color"] {
+            width: 40px; height: 40px; padding: 2px;
+            border-radius: 8px; cursor: pointer; flex-shrink: 0;
+        }
+        .color-row input[type="text"] { flex: 1; }
+
+        /* ── MEMBER TABLE ── */
+        .member-table { width: 100%; border-collapse: collapse; }
+        .member-table th {
+            text-align: left;
+            padding: 8px 12px;
+            font-size: .75rem;
+            text-transform: uppercase;
+            letter-spacing: .08em;
+            color: var(--muted);
+            border-bottom: 1px solid var(--border);
+        }
+        .member-table td { padding: 10px 12px; border-bottom: 1px solid rgba(255,255,255,.04); vertical-align: middle; }
+        .member-table tr:last-child td { border-bottom: none; }
+        .member-table tr:hover td { background: rgba(255,255,255,.02); }
+
+        .member-color-dot {
+            display: inline-block;
+            width: 12px; height: 12px;
+            border-radius: 50%;
+            margin-right: 8px;
+            vertical-align: middle;
+            border: 1px solid rgba(255,255,255,.1);
+        }
+
+        .role-pill {
+            display: inline-block;
+            padding: 2px 10px;
+            border-radius: 20px;
+            font-size: .7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: .05em;
+        }
+        .role-owner    { background: rgba(255,85,85,.15);  color: #ff6b6b; border: 1px solid rgba(255,85,85,.3); }
+        .role-admin    { background: rgba(189,0,189,.15);  color: #e056fd; border: 1px solid rgba(189,0,189,.3); }
+        .role-mod      { background: rgba(0,230,118,.15);  color: #69f0ae; border: 1px solid rgba(0,230,118,.3); }
+        .role-member   { background: rgba(0,229,255,.1);   color: #84ffff; border: 1px solid rgba(0,229,255,.25); }
+        .role-imposter { background: rgba(255,255,255,.08);color: #e0e0e0; border: 1px solid rgba(255,255,255,.2); }
+
+        .td-actions { display: flex; gap: 6px; justify-content: flex-end; }
+
+        /* ── EDIT ROW (inline editing) ── */
+        .edit-row td { background: rgba(123,104,238,.04); }
+        .edit-row input, .edit-row select {
+            padding: 5px 8px;
+            background: var(--bg2);
+            border: 1px solid var(--purple);
+            border-radius: 6px;
+            color: var(--text);
+            font-family: inherit;
+            font-size: .85rem;
+            width: 100%;
+        }
+
+        /* ── TOAST ── */
+        #toast {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            padding: 12px 20px;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: .9rem;
+            box-shadow: 0 8px 24px rgba(0,0,0,.4);
+            transform: translateY(20px);
+            opacity: 0;
+            transition: all .3s ease;
+            z-index: 100;
+            pointer-events: none;
+        }
+        #toast.show { transform: translateY(0); opacity: 1; }
+        #toast.success { background: var(--green); color: #fff; }
+        #toast.error   { background: var(--red);   color: #fff; }
+
+        /* ── SEED BANNER ── */
+        .seed-banner {
+            background: rgba(123,104,238,.08);
+            border: 1px solid rgba(123,104,238,.25);
+            border-radius: var(--radius);
+            padding: 1.2rem 1.5rem;
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+        .seed-banner p { flex: 1; color: var(--muted); font-size: .9rem; }
+
+        .loading { color: var(--muted); text-align: center; padding: 3rem; font-size: .95rem; }
+
+        @media (max-width: 600px) {
+            .form-grid { grid-template-columns: 1fr; }
+            .admin-body { padding: 1rem; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- ── LOGIN GATE ── -->
+<div id="login-gate">
+    <div class="login-box">
+        <h1>🔐 TSNSMP Admin</h1>
+        <p>Members management — authorised access only</p>
+        <input type="password" id="password-input" placeholder="Enter admin password" />
+        <div class="login-error" id="login-error">Incorrect password. Try again.</div>
+        <button class="btn btn-primary" style="width:100%" onclick="login()">Sign In</button>
+    </div>
+</div>
+
+<!-- ── ADMIN PANEL ── -->
+<div id="admin-panel">
+    <header class="admin-header">
+        <h1>🛠️ TSNSMP Admin</h1>
+        <span id="member-count"></span>
+        <button class="btn btn-ghost" onclick="logout()">Log out</button>
+    </header>
+
+    <div class="admin-body">
+
+        <!-- Seed banner — only shown when KV is empty -->
+        <div class="seed-banner" id="seed-banner" style="display:none">
+            <p>⚡ KV is empty — no members found. Click to load the default member list from <code>data/members-seed.json</code>.</p>
+            <button class="btn btn-primary" onclick="seedMembers()">Load Default Members</button>
+        </div>
+
+        <!-- Add member -->
+        <div class="panel">
+            <h2>➕ Add Member</h2>
+            <div class="form-grid">
+                <div class="form-group">
+                    <label>Minecraft Username *</label>
+                    <input type="text" id="add-name" placeholder="e.g. FantaC4t" />
+                </div>
+                <div class="form-group">
+                    <label>Role *</label>
+                    <select id="add-role">
+                        <option value="member">Member</option>
+                        <option value="mod">Mod</option>
+                        <option value="admin">Admin</option>
+                        <option value="owner">Owner</option>
+                        <option value="imposter">Imposter</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Pronouns</label>
+                    <input type="text" id="add-pronouns" placeholder="e.g. they/them" />
+                </div>
+                <div class="form-group">
+                    <label>Name Color</label>
+                    <div class="color-row">
+                        <input type="color" id="add-color-pick" value="#7B68EE" oninput="document.getElementById('add-color-text').value=this.value" />
+                        <input type="text"  id="add-color-text" placeholder="#7B68EE" oninput="document.getElementById('add-color-pick').value=this.value||'#7B68EE'" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Twitch URL</label>
+                    <input type="text" id="add-twitch" placeholder="https://twitch.tv/..." />
+                </div>
+            </div>
+            <button class="btn btn-green" onclick="addMember()">➕ Add to Roster</button>
+        </div>
+
+        <!-- Current members -->
+        <div class="panel">
+            <h2>👥 Current Members</h2>
+            <div id="members-container">
+                <div class="loading">Loading members…</div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div id="toast"></div>
+
+<script>
+    const API = '/api/members';
+    let PASSWORD = '';
+    let membersCache = [];
+
+    // ── Auth ──
+    function login() {
+        const pw = document.getElementById('password-input').value.trim();
+        if (!pw) return;
+        PASSWORD = pw;
+        // Try fetching — auth is only checked on POST, so verify with a dummy POST
+        fetch(API, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${pw}` },
+            body: JSON.stringify({ action: 'update', name: '__check__' })
+        }).then(async r => {
+            if (r.status === 401) {
+                document.getElementById('login-error').style.display = 'block';
+                PASSWORD = '';
+            } else {
+                // 404 "Member not found" is fine — means auth passed
+                sessionStorage.setItem('admin_pw', pw);
+                showPanel();
+            }
+        }).catch(() => {
+            // Network error — let them through if they want (can't check offline)
+            sessionStorage.setItem('admin_pw', pw);
+            showPanel();
+        });
+    }
+
+    function logout() {
+        sessionStorage.removeItem('admin_pw');
+        PASSWORD = '';
+        document.getElementById('admin-panel').style.display = 'none';
+        document.getElementById('login-gate').style.display = 'flex';
+        document.getElementById('password-input').value = '';
+    }
+
+    function showPanel() {
+        document.getElementById('login-gate').style.display = 'none';
+        document.getElementById('admin-panel').style.display = 'block';
+        loadMembers();
+    }
+
+    document.getElementById('password-input').addEventListener('keydown', e => {
+        if (e.key === 'Enter') login();
+    });
+
+    // Restore session
+    const savedPw = sessionStorage.getItem('admin_pw');
+    if (savedPw) { PASSWORD = savedPw; showPanel(); }
+
+    // ── Load ──
+    async function loadMembers() {
+        document.getElementById('members-container').innerHTML = '<div class="loading">Loading…</div>';
+        try {
+            const res = await fetch(API);
+            membersCache = await res.json();
+        } catch {
+            document.getElementById('members-container').innerHTML = '<div class="loading">⚠️ Could not reach API. Is this deployed to Cloudflare Pages?</div>';
+            return;
+        }
+
+        document.getElementById('member-count').textContent = `${membersCache.length} members`;
+
+        if (membersCache.length === 0) {
+            document.getElementById('seed-banner').style.display = 'flex';
+        } else {
+            document.getElementById('seed-banner').style.display = 'none';
+        }
+
+        renderTable();
+    }
+
+    function renderTable() {
+        if (membersCache.length === 0) {
+            document.getElementById('members-container').innerHTML = '<div class="loading">No members yet. Use the form above to add the first one.</div>';
+            return;
+        }
+
+        const rows = membersCache.map((m, i) => `
+            <tr id="row-${i}">
+                <td>
+                    ${m.color ? `<span class="member-color-dot" style="background:${m.color}"></span>` : ''}
+                    <strong>${m.name}</strong>
+                </td>
+                <td><span class="role-pill role-${m.role}">${m.role}</span></td>
+                <td>${m.pronouns || '—'}</td>
+                <td>${m.twitch ? `<a href="${m.twitch}" target="_blank" style="color:#9146FF">${m.twitch.replace('https://www.twitch.tv/','')}</a>` : '—'}</td>
+                <td class="td-actions">
+                    <button class="btn btn-edit" onclick="startEdit(${i})">✏️ Edit</button>
+                    <button class="btn btn-danger" onclick="removeMember('${m.name}')">🗑️ Remove</button>
+                </td>
+            </tr>
+        `).join('');
+
+        document.getElementById('members-container').innerHTML = `
+            <table class="member-table">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Role</th>
+                        <th>Pronouns</th>
+                        <th>Twitch</th>
+                        <th style="text-align:right">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>${rows}</tbody>
+            </table>
+        `;
+    }
+
+    // ── Add ──
+    async function addMember() {
+        const name     = document.getElementById('add-name').value.trim();
+        const role     = document.getElementById('add-role').value;
+        const pronouns = document.getElementById('add-pronouns').value.trim();
+        const color    = document.getElementById('add-color-text').value.trim();
+        const twitch   = document.getElementById('add-twitch').value.trim();
+
+        if (!name) { showToast('Username is required', 'error'); return; }
+
+        const res = await apiPost({ action: 'add', name, role, pronouns, color, twitch });
+        if (!res) return;
+
+        showToast(`✅ ${name} added!`, 'success');
+        // Clear form
+        ['add-name','add-pronouns','add-color-text','add-twitch'].forEach(id => document.getElementById(id).value = '');
+        document.getElementById('add-color-pick').value = '#7B68EE';
+        document.getElementById('add-role').value = 'member';
+        membersCache = res.members;
+        document.getElementById('member-count').textContent = `${membersCache.length} members`;
+        renderTable();
+    }
+
+    // ── Remove ──
+    async function removeMember(name) {
+        if (!confirm(`Remove ${name} from the roster?`)) return;
+        const res = await apiPost({ action: 'remove', name });
+        if (!res) return;
+        showToast(`🗑️ ${name} removed`, 'success');
+        membersCache = res.members;
+        document.getElementById('member-count').textContent = `${membersCache.length} members`;
+        renderTable();
+    }
+
+    // ── Inline Edit ──
+    function startEdit(i) {
+        const m = membersCache[i];
+        const row = document.getElementById(`row-${i}`);
+        row.classList.add('edit-row');
+        row.innerHTML = `
+            <td><input id="edit-name" value="${m.name}" /></td>
+            <td>
+                <select id="edit-role">
+                    ${['member','mod','admin','owner','imposter'].map(r =>
+                        `<option ${m.role===r?'selected':''}>${r}</option>`
+                    ).join('')}
+                </select>
+            </td>
+            <td><input id="edit-pronouns" value="${m.pronouns||''}" placeholder="pronouns" /></td>
+            <td>
+                <div style="display:flex;gap:5px;align-items:center">
+                    <input type="color" id="edit-color-pick" value="${m.color||'#7B68EE'}" style="width:32px;height:32px;padding:2px;border-radius:6px;border:1px solid var(--border);background:var(--bg2);cursor:pointer" oninput="document.getElementById('edit-color-text').value=this.value" />
+                    <input type="text" id="edit-color-text" value="${m.color||''}" placeholder="#hex" style="width:90px" oninput="document.getElementById('edit-color-pick').value=this.value||'#7B68EE'" />
+                    <input type="text" id="edit-twitch" value="${m.twitch||''}" placeholder="twitch url" style="flex:1" />
+                </div>
+            </td>
+            <td class="td-actions">
+                <button class="btn btn-green" onclick="saveEdit('${m.name}')">💾 Save</button>
+                <button class="btn btn-ghost" onclick="renderTable()">Cancel</button>
+            </td>
+        `;
+    }
+
+    async function saveEdit(originalName) {
+        const name     = document.getElementById('edit-name').value.trim();
+        const role     = document.getElementById('edit-role').value;
+        const pronouns = document.getElementById('edit-pronouns').value.trim();
+        const color    = document.getElementById('edit-color-text').value.trim();
+        const twitch   = document.getElementById('edit-twitch').value.trim();
+
+        // If name changed, remove old + add new
+        if (name.toLowerCase() !== originalName.toLowerCase()) {
+            const removeRes = await apiPost({ action: 'remove', name: originalName });
+            if (!removeRes) return;
+            const addRes = await apiPost({ action: 'add', name, role, pronouns, color, twitch });
+            if (!addRes) return;
+            membersCache = addRes.members;
+        } else {
+            const res = await apiPost({ action: 'update', name: originalName, role, pronouns, color, twitch });
+            if (!res) return;
+            membersCache = res.members;
+        }
+
+        showToast('✅ Changes saved', 'success');
+        document.getElementById('member-count').textContent = `${membersCache.length} members`;
+        renderTable();
+    }
+
+    // ── Seed ──
+    async function seedMembers() {
+        try {
+            const res = await fetch('/data/members-seed.json');
+            const seedMembers = await res.json();
+            const r = await apiPost({ action: 'seed', members: seedMembers });
+            if (!r) return;
+            showToast(`✅ Loaded ${r.count} members`, 'success');
+            membersCache = r.members;
+            document.getElementById('member-count').textContent = `${membersCache.length} members`;
+            document.getElementById('seed-banner').style.display = 'none';
+            renderTable();
+        } catch {
+            showToast('Could not load seed file', 'error');
+        }
+    }
+
+    // ── Helpers ──
+    async function apiPost(body) {
+        try {
+            const res = await fetch(API, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${PASSWORD}`
+                },
+                body: JSON.stringify(body)
+            });
+            const data = await res.json();
+            if (!res.ok) {
+                showToast(data.error || 'Something went wrong', 'error');
+                return null;
+            }
+            return data;
+        } catch {
+            showToast('Network error — check console', 'error');
+            return null;
+        }
+    }
+
+    let toastTimer;
+    function showToast(msg, type = 'success') {
+        const t = document.getElementById('toast');
+        t.textContent = msg;
+        t.className = `show ${type}`;
+        clearTimeout(toastTimer);
+        toastTimer = setTimeout(() => { t.className = ''; }, 3000);
+    }
+</script>
+</body>
+</html>

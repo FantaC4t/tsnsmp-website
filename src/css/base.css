@@ -1,0 +1,167 @@
+/* Reset & Base Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    /* Light Mode Colors */
+    --primary-green: #2d8f47;
+    --secondary-green: #4CAF50;
+    --light-green: #81C784;
+    --primary-purple: #7B68EE;
+    --secondary-purple: #9575CD;
+    --light-purple: #B39DDB;
+    --light-bg: #f8f9fa;
+    --light-text: #2c3e50;
+    --light-card-bg: #ffffff;
+    
+    /* Dark Mode Colors */
+    --dark-bg: #0f0f23;
+    --dark-secondary-bg: #1a1a2e;
+    --dark-card-bg: #16213e;
+    --dark-text: #e8e9ea;
+    --dark-text-secondary: #b0b3b8;
+    --dark-border: #3a3b3c;
+    
+    /* Current theme variables */
+    --bg-primary: var(--dark-bg);
+    --bg-secondary: var(--dark-secondary-bg);
+    --bg-card: var(--dark-card-bg);
+    --text-primary: var(--dark-text);
+    --text-secondary: var(--dark-text-secondary);
+    --border-color: var(--dark-border);
+    
+    --shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    --shadow-heavy: 0 8px 32px rgba(0, 0, 0, 0.4);
+    --border-radius: 15px;
+    --transition: all 0.3s ease;
+}
+
+/* Light Mode */
+body:not(.dark-mode) {
+    --bg-primary: var(--light-bg);
+    --bg-secondary: #ffffff;
+    --bg-card: var(--light-card-bg);
+    --text-primary: var(--light-text);
+    --text-secondary: #6c757d;
+    --border-color: #dee2e6;
+    --shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    --shadow-heavy: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    line-height: 1.6;
+    color: var(--text-primary);
+    background: var(--bg-primary);
+    min-height: 100vh;
+    position: relative;
+    overflow-x: hidden;
+    transition: var(--transition);
+}
+
+.flower-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: 
+        radial-gradient(circle at 20% 80%, rgba(123, 104, 238, 0.15) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(76, 175, 80, 0.15) 0%, transparent 50%),
+        radial-gradient(circle at 40% 40%, rgba(156, 39, 176, 0.08) 0%, transparent 50%);
+    z-index: -1;
+    transition: var(--transition);
+}
+
+.dark-mode .flower-bg {
+    background-image: 
+        radial-gradient(circle at 20% 80%, rgba(123, 104, 238, 0.25) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(76, 175, 80, 0.25) 0%, transparent 50%),
+        radial-gradient(circle at 40% 40%, rgba(156, 39, 176, 0.15) 0%, transparent 50%);
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* Shared Button Styles */
+.btn-primary, .btn-secondary {
+    padding: 15px 30px;
+    border: none;
+    border-radius: var(--border-radius);
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    position: relative;
+    overflow: hidden;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.btn-primary {
+    background: linear-gradient(45deg, var(--primary-green), var(--secondary-green));
+    color: white;
+    box-shadow: 0 4px 20px rgba(76, 175, 80, 0.4);
+}
+
+.btn-primary:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 30px rgba(76, 175, 80, 0.6);
+}
+
+.btn-secondary {
+    background: linear-gradient(45deg, var(--primary-purple), var(--secondary-purple));
+    color: white;
+    box-shadow: 0 4px 20px rgba(123, 104, 238, 0.4);
+}
+
+.btn-secondary:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 30px rgba(123, 104, 238, 0.6);
+}
+
+/* Shared Card Styles */
+.card {
+    background: var(--bg-card);
+    border-radius: var(--border-radius);
+    padding: 2rem;
+    border: 1px solid var(--border-color);
+    box-shadow: var(--shadow);
+    transition: var(--transition);
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-heavy);
+}
+
+/* Page Hero Shared */
+.page-hero {
+    margin-top: 0;
+    padding: 3rem 0;
+    text-align: center;
+    background: var(--bg-secondary);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.page-hero h1 {
+    font-size: 2.5rem;
+    background: linear-gradient(45deg, var(--primary-green), var(--primary-purple));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 1rem;
+}
+
+.page-hero p {
+    font-size: 1.2rem;
+    color: var(--text-secondary);
+}

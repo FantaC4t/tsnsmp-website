@@ -263,8 +263,9 @@
     <div class="login-box">
         <h1>🔐 TSNSMP Admin</h1>
         <p>Members management — authorised access only</p>
-        <input type="password" id="password-input" placeholder="Enter admin password" />
-        <div class="login-error" id="login-error">Incorrect password. Try again.</div>
+        <p style="font-size:.8rem;color:var(--muted);margin-bottom:.5rem">Needs a GitHub token with <strong>Contents: Read &amp; Write</strong></p>
+        <input type="password" id="password-input" placeholder="GitHub Personal Access Token" />
+        <div class="login-error" id="login-error">Invalid token or could not reach GitHub. Check console.</div>
         <button class="btn btn-primary" style="width:100%" onclick="login()">Sign In</button>
     </div>
 </div>
@@ -279,9 +280,9 @@
 
     <div class="admin-body">
 
-        <!-- Seed banner — only shown when KV is empty -->
+        <!-- Seed banner — only shown when members.json is empty -->
         <div class="seed-banner" id="seed-banner" style="display:none">
-            <p>⚡ KV is empty — no members found. Click to load the default member list from <code>data/members-seed.json</code>.</p>
+            <p>⚡ No members found. Click to load the default member list.</p>
             <button class="btn btn-primary" onclick="seedMembers()">Load Default Members</button>
         </div>
 
@@ -336,39 +337,39 @@
 <div id="toast"></div>
 
 <script>
-    const API = '/api/members';
-    let PASSWORD = '';
+    const GH_OWNER  = 'FantaC4t';
+    const GH_REPO   = 'tsnsmp-website';
+    const GH_PATH   = 'src/data/members.json';
+    const GH_API    = `https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/${GH_PATH}`;
+
+    let TOKEN = '';
+    let fileSha = '';
     let membersCache = [];
 
     // ── Auth ──
-    function login() {
-        const pw = document.getElementById('password-input').value.trim();
-        if (!pw) return;
-        PASSWORD = pw;
-        // Try fetching — auth is only checked on POST, so verify with a dummy POST
-        fetch(API, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${pw}` },
-            body: JSON.stringify({ action: 'update', name: '__check__' })
-        }).then(async r => {
-            if (r.status === 401) {
-                document.getElementById('login-error').style.display = 'block';
-                PASSWORD = '';
-            } else {
-                // 404 "Member not found" is fine — means auth passed
-                sessionStorage.setItem('admin_pw', pw);
-                showPanel();
-            }
-        }).catch(() => {
-            // Network error — let them through if they want (can't check offline)
-            sessionStorage.setItem('admin_pw', pw);
+    async function login() {
+        const tok = document.getElementById('password-input').value.trim();
+        if (!tok) return;
+        try {
+            const res = await fetch(GH_API, {
+                headers: { 'Authorization': `token ${tok}`, 'Accept': 'application/vnd.github.v3+json' }
+            });
+            if (!res.ok) throw new Error(`HTTP ${res.status}`);
+            const data = await res.json();
+            TOKEN   = tok;
+            fileSha = data.sha;
+            membersCache = JSON.parse(atob(data.content.replace(/\n/g, '')));
+            sessionStorage.setItem('gh_token', tok);
             showPanel();
-        });
+        } catch (e) {
+            console.error(e);
+            document.getElementById('login-error').style.display = 'block';
+        }
     }
 
     function logout() {
-        sessionStorage.removeItem('admin_pw');
-        PASSWORD = '';
+        sessionStorage.removeItem('gh_token');
+        TOKEN = '';
         document.getElementById('admin-panel').style.display = 'none';
         document.getElementById('login-gate').style.display = 'flex';
         document.getElementById('password-input').value = '';
@@ -377,37 +378,45 @@
     function showPanel() {
         document.getElementById('login-gate').style.display = 'none';
         document.getElementById('admin-panel').style.display = 'block';
-        loadMembers();
+        renderTable();
+        document.getElementById('member-count').textContent = `${membersCache.length} members`;
+        document.getElementById('seed-banner').style.display = membersCache.length === 0 ? 'flex' : 'none';
     }
 
     document.getElementById('password-input').addEventListener('keydown', e => {
         if (e.key === 'Enter') login();
     });
 
+    // ── Commit helpers ──
+    async function commitMembers(message = 'Update members via admin panel') {
+        const content = btoa(unescape(encodeURIComponent(JSON.stringify(membersCache, null, 2))));
+        const res = await fetch(GH_API, {
+            method: 'PUT',
+            headers: {
+                'Authorization': `token ${TOKEN}`,
+                'Accept': 'application/vnd.github.v3+json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ message, content, sha: fileSha })
+        });
+        if (!res.ok) throw new Error(`Commit failed: ${res.status}`);
+        const data = await res.json();
+        fileSha = data.content.sha;
+    }
+
     // Restore session
-    const savedPw = sessionStorage.getItem('admin_pw');
-    if (savedPw) { PASSWORD = savedPw; showPanel(); }
-
-    // ── Load ──
-    async function loadMembers() {
-        document.getElementById('members-container').innerHTML = '<div class="loading">Loading…</div>';
-        try {
-            const res = await fetch(API);
-            membersCache = await res.json();
-        } catch {
-            document.getElementById('members-container').innerHTML = '<div class="loading">⚠️ Could not reach API. Is this deployed to Cloudflare Pages?</div>';
-            return;
-        }
-
-        document.getElementById('member-count').textContent = `${membersCache.length} members`;
-
-        if (membersCache.length === 0) {
-            document.getElementById('seed-banner').style.display = 'flex';
-        } else {
-            document.getElementById('seed-banner').style.display = 'none';
-        }
-
-        renderTable();
+    const savedTok = sessionStorage.getItem('gh_token');
+    if (savedTok) {
+        TOKEN = savedTok;
+        // Reload file to get current sha + data
+        fetch(GH_API, { headers: { 'Authorization': `token ${TOKEN}`, 'Accept': 'application/vnd.github.v3+json' } })
+            .then(r => r.ok ? r.json() : Promise.reject())
+            .then(data => {
+                fileSha = data.sha;
+                membersCache = JSON.parse(atob(data.content.replace(/\n/g, '')));
+                showPanel();
+            })
+            .catch(() => sessionStorage.removeItem('gh_token'));
     }
 
     function renderTable() {
@@ -457,29 +466,41 @@
         const twitch   = document.getElementById('add-twitch').value.trim();
 
         if (!name) { showToast('Username is required', 'error'); return; }
+        if (membersCache.find(m => m.name.toLowerCase() === name.toLowerCase())) {
+            showToast(`${name} already exists`, 'error'); return;
+        }
 
-        const res = await apiPost({ action: 'add', name, role, pronouns, color, twitch });
-        if (!res) return;
-
-        showToast(`✅ ${name} added!`, 'success');
-        // Clear form
-        ['add-name','add-pronouns','add-color-text','add-twitch'].forEach(id => document.getElementById(id).value = '');
-        document.getElementById('add-color-pick').value = '#7B68EE';
-        document.getElementById('add-role').value = 'member';
-        membersCache = res.members;
-        document.getElementById('member-count').textContent = `${membersCache.length} members`;
-        renderTable();
+        membersCache.push({ name, role, pronouns, color, twitch });
+        try {
+            await commitMembers(`Add member: ${name}`);
+            showToast(`✅ ${name} added!`, 'success');
+            ['add-name','add-pronouns','add-color-text','add-twitch'].forEach(id => document.getElementById(id).value = '');
+            document.getElementById('add-color-pick').value = '#7B68EE';
+            document.getElementById('add-role').value = 'member';
+            document.getElementById('member-count').textContent = `${membersCache.length} members`;
+            renderTable();
+        } catch (e) {
+            membersCache.pop();
+            showToast('Failed to save — check console', 'error');
+            console.error(e);
+        }
     }
 
     // ── Remove ──
     async function removeMember(name) {
         if (!confirm(`Remove ${name} from the roster?`)) return;
-        const res = await apiPost({ action: 'remove', name });
-        if (!res) return;
-        showToast(`🗑️ ${name} removed`, 'success');
-        membersCache = res.members;
-        document.getElementById('member-count').textContent = `${membersCache.length} members`;
-        renderTable();
+        const prev = [...membersCache];
+        membersCache = membersCache.filter(m => m.name !== name);
+        try {
+            await commitMembers(`Remove member: ${name}`);
+            showToast(`🗑️ ${name} removed`, 'success');
+            document.getElementById('member-count').textContent = `${membersCache.length} members`;
+            renderTable();
+        } catch (e) {
+            membersCache = prev;
+            showToast('Failed to save — check console', 'error');
+            console.error(e);
+        }
     }
 
     // ── Inline Edit ──
@@ -518,61 +539,36 @@
         const color    = document.getElementById('edit-color-text').value.trim();
         const twitch   = document.getElementById('edit-twitch').value.trim();
 
-        // If name changed, remove old + add new
-        if (name.toLowerCase() !== originalName.toLowerCase()) {
-            const removeRes = await apiPost({ action: 'remove', name: originalName });
-            if (!removeRes) return;
-            const addRes = await apiPost({ action: 'add', name, role, pronouns, color, twitch });
-            if (!addRes) return;
-            membersCache = addRes.members;
-        } else {
-            const res = await apiPost({ action: 'update', name: originalName, role, pronouns, color, twitch });
-            if (!res) return;
-            membersCache = res.members;
-        }
+        const prev = [...membersCache];
+        const idx = membersCache.findIndex(m => m.name === originalName);
+        if (idx === -1) { showToast('Member not found', 'error'); return; }
+        membersCache[idx] = { name, role, pronouns, color, twitch };
 
-        showToast('✅ Changes saved', 'success');
-        document.getElementById('member-count').textContent = `${membersCache.length} members`;
-        renderTable();
+        try {
+            await commitMembers(`Update member: ${originalName}`);
+            showToast('✅ Changes saved', 'success');
+            document.getElementById('member-count').textContent = `${membersCache.length} members`;
+            renderTable();
+        } catch (e) {
+            membersCache = prev;
+            showToast('Failed to save — check console', 'error');
+            console.error(e);
+        }
     }
 
     // ── Seed ──
     async function seedMembers() {
         try {
             const res = await fetch('/data/members-seed.json');
-            const seedMembers = await res.json();
-            const r = await apiPost({ action: 'seed', members: seedMembers });
-            if (!r) return;
-            showToast(`✅ Loaded ${r.count} members`, 'success');
-            membersCache = r.members;
+            membersCache = await res.json();
+            await commitMembers('Seed default members list');
+            showToast(`✅ Loaded ${membersCache.length} members`, 'success');
             document.getElementById('member-count').textContent = `${membersCache.length} members`;
             document.getElementById('seed-banner').style.display = 'none';
             renderTable();
-        } catch {
-            showToast('Could not load seed file', 'error');
-        }
-    }
-
-    // ── Helpers ──
-    async function apiPost(body) {
-        try {
-            const res = await fetch(API, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${PASSWORD}`
-                },
-                body: JSON.stringify(body)
-            });
-            const data = await res.json();
-            if (!res.ok) {
-                showToast(data.error || 'Something went wrong', 'error');
-                return null;
-            }
-            return data;
-        } catch {
-            showToast('Network error — check console', 'error');
-            return null;
+        } catch (e) {
+            showToast('Could not seed members — check console', 'error');
+            console.error(e);
         }
     }
 

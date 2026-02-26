@@ -1065,7 +1065,10 @@
         console.log('[Gallery] Loading gallery admin grid...');
         GALLERY_REF.once('value', snap => {
             const items = [];
-            snap.forEach(child => items.push({ key: child.key, ...child.val() }));
+            snap.forEach(child => {
+                const val = child.val();
+                if (val && val.url) items.push({ key: child.key, ...val });
+            });
             items.sort((a, b) => (b.uploadedAt || 0) - (a.uploadedAt || 0));
             console.log('[Gallery] Items found:', items.length, items.map(i => i.title));
             if (!items.length) {
@@ -1090,7 +1093,9 @@
     async function deleteGalleryItem(key, storagePath) {
         if (!confirm('Delete this image permanently?')) return;
         try {
-            await storage.ref(storagePath).delete().catch(() => {});
+            if (storagePath) {
+                await storage.ref(storagePath).delete().catch(e => console.warn('[Delete] Storage delete failed (may already be gone):', e.message));
+            }
             await GALLERY_REF.child(key).remove();
             showToast('🗑️ Image deleted', 'success');
             loadGalleryAdmin();

@@ -156,7 +156,11 @@
                 console.log('[Gallery] Snapshot received, num children:', snap.numChildren());
                 document.getElementById('gallery-loading').style.display = 'none';
                 galleryItems = [];
-                snap.forEach(child => galleryItems.push({ key: child.key, ...child.val() }));
+                snap.forEach(child => {
+                    const val = child.val();
+                    console.log('[Gallery] Item:', child.key, val ? val.title : 'NULL', val && val.url ? 'has url' : 'NO URL');
+                    if (val && val.url) galleryItems.push({ key: child.key, ...val });
+                });
                 galleryItems.sort((a, b) => (b.uploadedAt || 0) - (a.uploadedAt || 0));
                 if (!galleryItems.length) {
                     document.getElementById('gallery-empty').style.display = 'flex';

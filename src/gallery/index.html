@@ -22,9 +22,12 @@
                 <div class="gallery-badge">Season 2 Memories</div>
                 <h1>Gallery</h1>
                 <p class="gallery-hero-sub">Screenshots and highlights from the server.</p>
-                <button class="gallery-upload-btn" id="upload-trigger-btn" onclick="openUploadModal()">
-                    📸 Submit a Screenshot
-                </button>
+                <div style="display:flex;align-items:center;justify-content:center;gap:1rem;flex-wrap:wrap">
+                    <button class="gallery-upload-btn" id="upload-trigger-btn" onclick="openUploadModal()">
+                        📸 Submit a Screenshot
+                    </button>
+                    <a href="../admin/" style="font-size:.8rem;color:var(--text-secondary);opacity:.5;text-decoration:none;transition:opacity .2s" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=.5">🛠️ Admin</a>
+                </div>
             </div>
         </section>
 
@@ -36,9 +39,6 @@
                     <p>No images yet — check back soon!</p>
                 </div>
                 <div id="gallery-grid" class="gallery-grid"></div>
-                <p style="text-align:center;margin-top:1.5rem">
-                    <a href="../admin/" style="font-size:.8rem;color:var(--text-secondary);opacity:.5;text-decoration:none;transition:opacity .2s" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=.5">🛠️ Admin</a>
-                </p>
             </div>
         </section>
     </main>
@@ -178,6 +178,7 @@
                         <div class="gallery-card-overlay">
                             ${item.title       ? `<strong>${item.title}</strong>` : ''}
                             ${item.description ? `<span>${item.description}</span>` : ''}
+                            ${item.uploadedBy  ? `<span style="font-size:.72rem;opacity:.6;margin-top:3px">📸 ${item.uploadedBy}</span>` : ''}
                         </div>
                     </div>
                 `).join('');

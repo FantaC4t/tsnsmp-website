@@ -144,15 +144,17 @@ body:not(.dark-mode) .gallery-hero h1 {
 .gallery-card-overlay {
     position: absolute;
     inset: 0;
-    background: linear-gradient(to top, rgba(0,0,0,.75) 0%, rgba(0,0,0,.2) 50%, transparent 100%);
+    background: linear-gradient(to top, rgba(0,0,0,.82) 0%, rgba(0,0,0,.45) 55%, rgba(0,0,0,.15) 100%);
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
     padding: 1rem;
-    opacity: 0;
-    transition: opacity .3s;
+    opacity: 1;
+    transition: background .3s;
 }
-.gallery-card:hover .gallery-card-overlay { opacity: 1; }
+.gallery-card:hover .gallery-card-overlay {
+    background: linear-gradient(to top, rgba(0,0,0,.92) 0%, rgba(0,0,0,.6) 55%, rgba(0,0,0,.25) 100%);
+}
 .gallery-card-overlay strong {
     color: #fff;
     font-size: .95rem;

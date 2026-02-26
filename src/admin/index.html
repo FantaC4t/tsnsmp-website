@@ -513,6 +513,41 @@
         .queue-meta    { font-size: .72rem !important; opacity: .7; margin-top: 2px; }
         .queue-actions { display: flex; gap: 6px; margin: .4rem .6rem .6rem; }
         .queue-actions .btn { flex: 1; justify-content: center; }
+        .gallery-item-actions { display: flex; gap: 6px; margin: 0 .6rem .6rem; }
+        .gallery-item-actions .btn { flex: 1; justify-content: center; }
+        /* Edit modal */
+        .gedit-backdrop {
+            position: fixed; inset: 0;
+            background: rgba(0,0,0,.65);
+            display: flex; align-items: center; justify-content: center;
+            z-index: 999; backdrop-filter: blur(4px);
+            opacity: 0; pointer-events: none; transition: opacity .2s;
+        }
+        .gedit-backdrop.active { opacity: 1; pointer-events: all; }
+        .gedit-box {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 18px;
+            padding: 2rem;
+            width: 100%; max-width: 460px;
+            box-shadow: 0 24px 60px rgba(0,0,0,.5);
+        }
+        .gedit-box h3 { font-size: 1.1rem; margin-bottom: 1.2rem; }
+        .gedit-box img { width: 100%; border-radius: 10px; max-height: 180px; object-fit: cover; margin-bottom: 1.2rem; }
+        .gedit-field { display: flex; flex-direction: column; gap: 5px; margin-bottom: .9rem; }
+        .gedit-field label { font-size: .78rem; color: var(--text-secondary); text-transform: uppercase; letter-spacing: .05em; font-weight: 600; }
+        .gedit-field input {
+            padding: 10px 14px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-size: .95rem; font-family: inherit;
+            transition: border-color .2s;
+        }
+        .gedit-field input:focus { outline: none; border-color: var(--s3-teal); }
+        .gedit-actions { display: flex; gap: .75rem; margin-top: 1.4rem; }
+        .gedit-actions .btn { flex: 1; justify-content: center; }
     </style>
     <script src="../js/header.js"></script>
     <!-- Firebase SDK -->
@@ -690,6 +725,30 @@
 </div>
 
 <div id="toast"></div>
+
+<!-- Gallery Edit Modal -->
+<div id="gedit-modal" class="gedit-backdrop" onclick="if(event.target===this)closeGalleryEdit()">
+    <div class="gedit-box">
+        <h3>✏️ Edit Image</h3>
+        <img id="gedit-preview" src="" alt="">
+        <div class="gedit-field">
+            <label>Title</label>
+            <input type="text" id="gedit-title" maxlength="80">
+        </div>
+        <div class="gedit-field">
+            <label>Description</label>
+            <input type="text" id="gedit-desc" maxlength="160">
+        </div>
+        <div class="gedit-field">
+            <label>Uploaded by</label>
+            <input type="text" id="gedit-by" maxlength="60">
+        </div>
+        <div class="gedit-actions">
+            <button class="btn btn-green" onclick="saveGalleryEdit()">💾 Save</button>
+            <button class="btn btn-ghost" onclick="closeGalleryEdit()">Cancel</button>
+        </div>
+    </div>
+</div>
 
 <script>
     createHeader('admin');
@@ -1081,13 +1140,55 @@
                     <div class="gallery-admin-item-info">
                         <strong>${item.title || '(no title)'}</strong>
                         <span>${item.description || ''}</span>
+                        <span style="font-size:.7rem;opacity:.55">${item.uploadedBy || ''}</span>
                     </div>
-                    <button class="btn btn-danger" onclick="deleteGalleryItem('${item.key}','${item.storagePath}')">🗑️ Delete</button>
+                    <div class="gallery-item-actions">
+                        <button class="btn btn-edit" onclick="editGalleryItem('${item.key}')">✏️ Edit</button>
+                        <button class="btn btn-danger" onclick="deleteGalleryItem('${item.key}','${item.storagePath || ''}')">🗑️</button>
+                    </div>
                 </div>
             `).join('');
         }, err => {
             console.error('[Gallery] Failed to read /gallery:', err);
         });
+    }
+
+    // ── Gallery Edit ──
+    let geditKey = null;
+
+    function editGalleryItem(key) {
+        GALLERY_REF.child(key).once('value', snap => {
+            const item = snap.val();
+            if (!item) { showToast('Item not found', 'error'); return; }
+            geditKey = key;
+            document.getElementById('gedit-preview').src = item.url;
+            document.getElementById('gedit-title').value = item.title || '';
+            document.getElementById('gedit-desc').value  = item.description || '';
+            document.getElementById('gedit-by').value    = item.uploadedBy || '';
+            document.getElementById('gedit-modal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        });
+    }
+
+    function closeGalleryEdit() {
+        document.getElementById('gedit-modal').classList.remove('active');
+        document.body.style.overflow = '';
+        geditKey = null;
+    }
+
+    async function saveGalleryEdit() {
+        if (!geditKey) return;
+        const title = document.getElementById('gedit-title').value.trim();
+        const desc  = document.getElementById('gedit-desc').value.trim();
+        const by    = document.getElementById('gedit-by').value.trim();
+        try {
+            await GALLERY_REF.child(geditKey).update({ title, description: desc, uploadedBy: by });
+            showToast('✅ Changes saved', 'success');
+            closeGalleryEdit();
+            loadGalleryAdmin();
+        } catch(e) {
+            showToast('Save failed: ' + e.message, 'error');
+        }
     }
 
     async function deleteGalleryItem(key, storagePath) {

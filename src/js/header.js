@@ -31,6 +31,7 @@ function createHeader(currentPage) {
                 <li><a href="${galleryPath}" class="${currentPage === 'gallery' ? 'active' : ''}">Gallery</a></li>
                 <li><a href="${resourcesPath}" class="${currentPage === 'resources' ? 'active' : ''}">Resources</a></li>
                 <li><a href="https://bsky.app/profile/tsnsmp.online" target="_blank" style="color: #0085ff;">🦋 Bluesky</a></li>
+                <li><a href="${prefix}admin/" class="${currentPage === 'admin' ? 'active' : ''}" style="color: var(--s3-teal); font-weight: 700;">⚙️ Admin</a></li>
             </ul>
             <button class="theme-toggle" aria-label="Toggle dark mode">
                 <span class="theme-icon">🌙</span>

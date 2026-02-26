@@ -149,10 +149,11 @@ body:not(.dark-mode) .gallery-hero h1 {
     flex-direction: column;
     justify-content: flex-end;
     padding: 1rem;
-    opacity: 1;
-    transition: background .3s;
+    opacity: 0;
+    transition: opacity .25s ease, background .3s;
 }
 .gallery-card:hover .gallery-card-overlay {
+    opacity: 1;
     background: linear-gradient(to top, rgba(0,0,0,.92) 0%, rgba(0,0,0,.6) 55%, rgba(0,0,0,.25) 100%);
 }
 .gallery-card-overlay strong {

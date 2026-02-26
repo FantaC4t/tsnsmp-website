@@ -465,6 +465,41 @@
             .btn { padding: 10px 16px; font-size: .85rem; }
         }
 
+        /* ── TABS ── */
+        .admin-tabs {
+            display: flex;
+            gap: .5rem;
+            padding: 0 2rem 0;
+            max-width: 1100px;
+            margin: 1.75rem auto 0;
+        }
+        .admin-tab-btn {
+            padding: 9px 22px;
+            background: transparent;
+            border: 1px solid var(--border);
+            border-radius: 50px;
+            color: var(--muted);
+            font-size: .9rem;
+            font-weight: 600;
+            font-family: inherit;
+            cursor: pointer;
+            transition: all .2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+        }
+        .admin-tab-btn:hover { color: var(--text); border-color: var(--muted); }
+        .admin-tab-btn.active {
+            background: rgba(123,104,238,.12);
+            border-color: rgba(123,104,238,.5);
+            color: var(--text);
+        }
+        .admin-tab-btn.active.teal {
+            background: rgba(22,196,196,.1);
+            border-color: rgba(22,196,196,.45);
+            color: #16C4C4;
+        }
+
         /* ── GALLERY ADMIN ── */
         .gallery-file-drop {
             border: 2px dashed var(--border);
@@ -638,7 +673,16 @@
         </div>
     </div>
 
+    <!-- Tab bar -->
+    <div class="admin-tabs">
+        <button class="admin-tab-btn active" data-tab="players" onclick="switchTab('players')">👥 Player List</button>
+        <button class="admin-tab-btn teal" data-tab="gallery" onclick="switchTab('gallery')">🖼️ Gallery</button>
+    </div>
+
     <div class="admin-body">
+
+        <!-- ══ PLAYER LIST TAB ══ -->
+        <div id="tab-players">
 
         <!-- Seed banner — only shown when members.json is empty -->
         <div class="seed-banner" id="seed-banner" style="display:none">
@@ -711,6 +755,11 @@
             </div>
         </div>
 
+        </div><!-- /tab-players -->
+
+        <!-- ══ GALLERY TAB ══ -->
+        <div id="tab-gallery" style="display:none">
+
         <!-- Submission Queue -->
         <div class="panel">
             <div class="panel-header">
@@ -764,6 +813,8 @@
             </div>
         </div>
 
+        </div><!-- /tab-gallery -->
+
     </div>
 </div>
 
@@ -795,6 +846,14 @@
 
 <script>
     createHeader('admin');
+
+    function switchTab(tab) {
+        document.querySelectorAll('.admin-tab-btn').forEach(b =>
+            b.classList.toggle('active', b.dataset.tab === tab)
+        );
+        document.getElementById('tab-players').style.display = tab === 'players' ? 'block' : 'none';
+        document.getElementById('tab-gallery').style.display = tab === 'gallery' ? 'block' : 'none';
+    }
 
     const auth        = firebase.auth();
     const db          = firebase.database();

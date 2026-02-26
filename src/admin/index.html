@@ -508,6 +508,11 @@
         .gallery-admin-item-info strong { font-size: .88rem; color: var(--text); }
         .gallery-admin-item-info span   { font-size: .75rem; color: var(--muted); }
         .gallery-admin-item .btn        { margin: 0 .6rem .6rem; }
+        .btn-approve   { background: rgba(0,230,118,.15); color: #69f0ae; border: 1px solid rgba(0,230,118,.3); padding: 8px 14px; font-size: .8rem; }
+        .btn-approve:hover { background: rgba(0,230,118,.28); }
+        .queue-meta    { font-size: .72rem !important; opacity: .7; margin-top: 2px; }
+        .queue-actions { display: flex; gap: 6px; margin: .4rem .6rem .6rem; }
+        .queue-actions .btn { flex: 1; justify-content: center; }
     </style>
     <script src="../js/header.js"></script>
     <!-- Firebase SDK -->
@@ -625,6 +630,20 @@
             </div>
             <div class="table-scroll" id="members-container">
                 <div class="loading">Loading members…</div>
+            </div>
+        </div>
+
+        <!-- Submission Queue -->
+        <div class="panel">
+            <div class="panel-header">
+                <span class="panel-header-icon" style="background:rgba(251,188,5,.15)">📥</span>
+                <h2>Submission Queue</h2>
+                <span id="queue-count" style="font-size:.8rem;color:var(--muted)"></span>
+            </div>
+            <div class="panel-body">
+                <div class="gallery-admin-grid" id="queue-admin-grid">
+                    <div class="loading">Loading queue…</div>
+                </div>
             </div>
         </div>
 
@@ -986,6 +1005,7 @@
     // ── GALLERY ──
     const storage    = firebase.storage();
     const GALLERY_REF = db.ref('gallery');
+    const QUEUE_REF   = db.ref('gallery_queue');
     let galleryFileObj = null;
 
     function onGalleryFileSelect(input) {
@@ -1074,10 +1094,72 @@
         }
     }
 
-    // Load gallery on panel init (fires after auth succeeds)
-    const _origShowPanel = window.showPanel;
+    // ── QUEUE ──
+    function loadQueueAdmin() {
+        const grid = document.getElementById('queue-admin-grid');
+        QUEUE_REF.orderByChild('submittedAt').once('value', snap => {
+            const items = [];
+            snap.forEach(child => items.unshift({ key: child.key, ...child.val() }));
+            const countEl = document.getElementById('queue-count');
+            if (countEl) countEl.textContent = items.length ? `${items.length} pending` : '';
+            if (!items.length) {
+                grid.innerHTML = '<p style="color:var(--muted);font-size:.9rem;padding:1rem 0">Queue is empty — no pending submissions.</p>';
+                return;
+            }
+            grid.innerHTML = items.map(item => `
+                <div class="gallery-admin-item">
+                    <img src="${item.url}" alt="${item.title || ''}" loading="lazy">
+                    <div class="gallery-admin-item-info">
+                        <strong>${item.title || '(no title)'}</strong>
+                        <span>${item.description || ''}</span>
+                        <span class="queue-meta">By ${item.submittedBy || 'Anonymous'} · ${new Date(item.submittedAt).toLocaleDateString()}</span>
+                    </div>
+                    <div class="queue-actions">
+                        <button class="btn btn-approve" onclick="approveQueueItem('${item.key}')">✅ Approve</button>
+                        <button class="btn btn-danger" onclick="declineQueueItem('${item.key}','${item.storagePath || ''}')">🗑️ Decline</button>
+                    </div>
+                </div>
+            `).join('');
+        });
+    }
+
+    async function approveQueueItem(key) {
+        try {
+            const snap = await QUEUE_REF.child(key).once('value');
+            const item = snap.val();
+            if (!item) { showToast('Item not found', 'error'); return; }
+            await GALLERY_REF.push({
+                title:       item.title,
+                description: item.description,
+                url:         item.url,
+                storagePath: item.storagePath,
+                uploadedBy:  item.submittedBy || 'Anonymous',
+                uploadedAt:  Date.now()
+            });
+            await QUEUE_REF.child(key).remove();
+            showToast('✅ Image approved and published!', 'success');
+            loadQueueAdmin();
+            loadGalleryAdmin();
+        } catch(e) {
+            showToast('Approval failed: ' + e.message, 'error');
+        }
+    }
+
+    async function declineQueueItem(key, storagePath) {
+        if (!confirm('Decline and permanently delete this submission?')) return;
+        try {
+            if (storagePath) await storage.ref(storagePath).delete().catch(() => {});
+            await QUEUE_REF.child(key).remove();
+            showToast('🗑️ Submission declined', 'success');
+            loadQueueAdmin();
+        } catch(e) {
+            showToast('Decline failed: ' + e.message, 'error');
+        }
+    }
+
+    // Load gallery + queue on panel init (fires after auth succeeds)
     firebase.auth().onAuthStateChanged(user => {
-        if (user) setTimeout(loadGalleryAdmin, 500);
+        if (user) setTimeout(() => { loadGalleryAdmin(); loadQueueAdmin(); }, 500);
     });
 </script>
 </body>

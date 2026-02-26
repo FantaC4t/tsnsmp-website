@@ -1125,22 +1125,32 @@
 
     async function approveQueueItem(key) {
         try {
+            console.log('[Approve] Reading queue item:', key);
             const snap = await QUEUE_REF.child(key).once('value');
             const item = snap.val();
+            console.log('[Approve] Queue item data:', item);
             if (!item) { showToast('Item not found', 'error'); return; }
-            await GALLERY_REF.push({
-                title:       item.title,
-                description: item.description,
+
+            const newEntry = {
+                title:       item.title       || '',
+                description: item.description || '',
                 url:         item.url,
-                storagePath: item.storagePath,
-                uploadedBy:  item.submittedBy || 'Anonymous',
+                storagePath: item.storagePath  || '',
+                uploadedBy:  item.submittedBy  || 'Anonymous',
                 uploadedAt:  Date.now()
-            });
+            };
+            console.log('[Approve] Writing to /gallery:', newEntry);
+            const ref = await GALLERY_REF.push(newEntry);
+            console.log('[Approve] Written to /gallery with key:', ref.key);
+
             await QUEUE_REF.child(key).remove();
+            console.log('[Approve] Removed from queue. Done.');
+
             showToast('✅ Image approved and published!', 'success');
             loadQueueAdmin();
             loadGalleryAdmin();
         } catch(e) {
+            console.error('[Approve] Error:', e);
             showToast('Approval failed: ' + e.message, 'error');
         }
     }

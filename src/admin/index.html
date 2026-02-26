@@ -1062,9 +1062,11 @@
 
     function loadGalleryAdmin() {
         const grid = document.getElementById('gallery-admin-grid');
+        console.log('[Gallery] Loading gallery admin grid...');
         GALLERY_REF.orderByChild('uploadedAt').once('value', snap => {
             const items = [];
             snap.forEach(child => items.unshift({ key: child.key, ...child.val() }));
+            console.log('[Gallery] Items found:', items.length, items.map(i => i.title));
             if (!items.length) {
                 grid.innerHTML = '<p style="color:var(--muted);font-size:.9rem;padding:1rem 0">No images yet.</p>';
                 return;
@@ -1079,6 +1081,8 @@
                     <button class="btn btn-danger" onclick="deleteGalleryItem('${item.key}','${item.storagePath}')">🗑️ Delete</button>
                 </div>
             `).join('');
+        }, err => {
+            console.error('[Gallery] Failed to read /gallery:', err);
         });
     }
 

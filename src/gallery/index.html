@@ -151,7 +151,9 @@
 
         // ── Gallery load (live — updates when mods approve submissions) ──
         function loadGallery() {
+            console.log('[Gallery] Attaching live listener to /gallery...');
             db.ref('gallery').orderByChild('uploadedAt').on('value', snap => {
+                console.log('[Gallery] Snapshot received, num children:', snap.numChildren());
                 document.getElementById('gallery-loading').style.display = 'none';
                 galleryItems = [];
                 snap.forEach(child => galleryItems.unshift({ key: child.key, ...child.val() }));

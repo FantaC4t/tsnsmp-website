@@ -149,14 +149,15 @@
             if (e.key === 'ArrowRight') shiftLightbox(1);
         });
 
-        // ── Gallery load (only approved images from /gallery) ──
+        // ── Gallery load (live — updates when mods approve submissions) ──
         function loadGallery() {
-            db.ref('gallery').orderByChild('uploadedAt').once('value', snap => {
+            db.ref('gallery').orderByChild('uploadedAt').on('value', snap => {
                 document.getElementById('gallery-loading').style.display = 'none';
                 galleryItems = [];
                 snap.forEach(child => galleryItems.unshift({ key: child.key, ...child.val() }));
                 if (!galleryItems.length) {
                     document.getElementById('gallery-empty').style.display = 'flex';
+                    document.getElementById('gallery-grid').innerHTML = '';
                     return;
                 }
                 document.getElementById('gallery-empty').style.display = 'none';
@@ -170,7 +171,7 @@
                         </div>
                     </div>
                 `).join('');
-            }).catch(() => {
+            }, () => {
                 document.getElementById('gallery-loading').textContent = 'Could not load images. Please try again later.';
             });
         }

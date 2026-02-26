@@ -1063,9 +1063,10 @@
     function loadGalleryAdmin() {
         const grid = document.getElementById('gallery-admin-grid');
         console.log('[Gallery] Loading gallery admin grid...');
-        GALLERY_REF.orderByChild('uploadedAt').once('value', snap => {
+        GALLERY_REF.once('value', snap => {
             const items = [];
-            snap.forEach(child => items.unshift({ key: child.key, ...child.val() }));
+            snap.forEach(child => items.push({ key: child.key, ...child.val() }));
+            items.sort((a, b) => (b.uploadedAt || 0) - (a.uploadedAt || 0));
             console.log('[Gallery] Items found:', items.length, items.map(i => i.title));
             if (!items.length) {
                 grid.innerHTML = '<p style="color:var(--muted);font-size:.9rem;padding:1rem 0">No images yet.</p>';
@@ -1101,9 +1102,10 @@
     // ── QUEUE ──
     function loadQueueAdmin() {
         const grid = document.getElementById('queue-admin-grid');
-        QUEUE_REF.orderByChild('submittedAt').once('value', snap => {
+        QUEUE_REF.once('value', snap => {
             const items = [];
-            snap.forEach(child => items.unshift({ key: child.key, ...child.val() }));
+            snap.forEach(child => items.push({ key: child.key, ...child.val() }));
+            items.sort((a, b) => (b.submittedAt || 0) - (a.submittedAt || 0));
             const countEl = document.getElementById('queue-count');
             if (countEl) countEl.textContent = items.length ? `${items.length} pending` : '';
             if (!items.length) {

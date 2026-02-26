@@ -35,7 +35,8 @@
             justify-content: center;
             background:
                 radial-gradient(circle at 15% 50%, rgba(76,175,80,0.08), transparent 25%),
-                radial-gradient(circle at 85% 30%, rgba(123,104,238,0.10), transparent 25%);
+                radial-gradient(circle at 85% 30%, rgba(123,104,238,0.10), transparent 25%),
+                radial-gradient(circle at 50% 85%, rgba(22,196,196,0.07), transparent 30%);
         }
 
         .login-box {
@@ -61,7 +62,14 @@
         }
         .login-back:hover { color: var(--text); }
 
-        .login-box h1 { font-size: 1.8rem; margin-bottom: .4rem; }
+        .login-box h1 {
+            font-size: 1.8rem;
+            margin-bottom: .4rem;
+            background: linear-gradient(135deg, #fff 0%, var(--primary-purple) 50%, #16C4C4 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
         .login-box p  { color: var(--muted); margin-bottom: 1.2rem; font-size: .9rem; }
 
         .login-box input {
@@ -134,7 +142,8 @@
             inset: 0;
             background:
                 radial-gradient(circle at 15% 50%, rgba(76,175,80,0.08), transparent 25%),
-                radial-gradient(circle at 85% 30%, rgba(123,104,238,0.10), transparent 25%);
+                radial-gradient(circle at 85% 30%, rgba(123,104,238,0.10), transparent 25%),
+                radial-gradient(circle at 50% 85%, rgba(22,196,196,0.07), transparent 30%);
             filter: blur(40px);
             z-index: 0;
         }
@@ -164,7 +173,7 @@
         .admin-hero-title {
             font-size: clamp(1.6rem, 3vw, 2.4rem);
             font-weight: 800;
-            background: linear-gradient(135deg, #fff 0%, var(--primary-purple) 50%, var(--primary-green) 100%);
+            background: linear-gradient(135deg, #fff 0%, var(--primary-purple) 40%, #16C4C4 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
@@ -245,8 +254,10 @@
             justify-content: center;
             font-size: 1rem;
         }
-        .panel-header-icon.green { background: rgba(45,143,71,.18); }
+        .panel-header-icon.green  { background: rgba(45,143,71,.18); }
         .panel-header-icon.purple { background: rgba(123,104,238,.18); }
+        .panel-header-icon.yellow { background: rgba(251,188,5,.15); }
+        .panel-header-icon.teal   { background: rgba(22,196,196,.15); }
         .panel-body { padding: 1.5rem; }
 
         /* ── ADD FORM ── */
@@ -414,6 +425,32 @@
         }
         .seed-banner p { flex: 1; color: var(--muted); font-size: .9rem; }
 
+        .queue-badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 2px 10px;
+            border-radius: 20px;
+            font-size: .7rem;
+            font-weight: 700;
+            background: rgba(251,188,5,.15);
+            color: #FBC02D;
+            border: 1px solid rgba(251,188,5,.3);
+        }
+
+        .admin-user {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: .85rem;
+            color: var(--muted);
+        }
+        .admin-user-avatar {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            border: 1px solid var(--border);
+        }
+
         .loading { color: var(--muted); text-align: center; padding: 3rem; font-size: .95rem; }
 
         @media (max-width: 600px) {
@@ -525,8 +562,8 @@
         }
         .gedit-backdrop.active { opacity: 1; pointer-events: all; }
         .gedit-box {
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
+            background: var(--card);
+            border: 1px solid var(--border);
             border-radius: 18px;
             padding: 2rem;
             width: 100%; max-width: 460px;
@@ -535,17 +572,17 @@
         .gedit-box h3 { font-size: 1.1rem; margin-bottom: 1.2rem; }
         .gedit-box img { width: 100%; border-radius: 10px; max-height: 180px; object-fit: cover; margin-bottom: 1.2rem; }
         .gedit-field { display: flex; flex-direction: column; gap: 5px; margin-bottom: .9rem; }
-        .gedit-field label { font-size: .78rem; color: var(--text-secondary); text-transform: uppercase; letter-spacing: .05em; font-weight: 600; }
+        .gedit-field label { font-size: .78rem; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; font-weight: 600; }
         .gedit-field input {
             padding: 10px 14px;
-            background: var(--bg-secondary);
-            border: 1px solid var(--border-color);
+            background: var(--bg2);
+            border: 1px solid var(--border);
             border-radius: 8px;
-            color: var(--text-primary);
+            color: var(--text);
             font-size: .95rem; font-family: inherit;
             transition: border-color .2s;
         }
-        .gedit-field input:focus { outline: none; border-color: var(--s3-teal); }
+        .gedit-field input:focus { outline: none; border-color: #16C4C4; box-shadow: 0 0 0 3px rgba(22,196,196,.12); }
         .gedit-actions { display: flex; gap: .75rem; margin-top: 1.4rem; }
         .gedit-actions .btn { flex: 1; justify-content: center; }
     </style>
@@ -562,6 +599,7 @@
 <!-- ── LOGIN GATE ── -->
 <div id="login-gate">
     <div class="login-box">
+        <a class="login-back" href="../">← Back to site</a>
         <h1>🔐 TSNSMP Admin</h1>
         <p>Members management — authorised access only</p>
         <div class="login-error" id="login-error">Access denied.</div>
@@ -575,7 +613,8 @@
             Continue with Google
         </button>
 
-        <p style="font-size:.8rem;color:var(--muted);margin-bottom:.8rem;margin-top:1.2rem">⚡ First time? Seed the database from the default list:</p>
+        <div style="border-top:1px solid var(--border);margin:1.2rem 0"></div>
+        <p style="font-size:.8rem;color:var(--muted);margin-bottom:.8rem">⚡ First time? Seed the database from the default list:</p>
         <button class="btn btn-ghost" style="width:100%" onclick="seedWithoutLogin()">Load Default Members into Database</button>
         <div id="seed-status" style="font-size:.8rem;margin-top:.6rem;display:none"></div>
     </div>
@@ -590,6 +629,10 @@
             <h1 class="admin-hero-title">🛠️ TSNSMP Admin</h1>
             <div class="admin-hero-meta">
                 <span class="admin-member-count" id="member-count"></span>
+                <div class="admin-user" id="admin-user" style="display:none">
+                    <img class="admin-user-avatar" id="admin-user-avatar" src="" alt="">
+                    <span id="admin-user-name"></span>
+                </div>
                 <button class="btn btn-ghost" onclick="logout()">Log out</button>
             </div>
         </div>
@@ -671,9 +714,9 @@
         <!-- Submission Queue -->
         <div class="panel">
             <div class="panel-header">
-                <span class="panel-header-icon" style="background:rgba(251,188,5,.15)">📥</span>
+                <span class="panel-header-icon yellow">📥</span>
                 <h2>Submission Queue</h2>
-                <span id="queue-count" style="font-size:.8rem;color:var(--muted)"></span>
+                <span id="queue-count"></span>
             </div>
             <div class="panel-body">
                 <div class="gallery-admin-grid" id="queue-admin-grid">
@@ -685,7 +728,7 @@
         <!-- Gallery management -->
         <div class="panel">
             <div class="panel-header">
-                <span class="panel-header-icon" style="background:rgba(22,196,196,.15)">🖼️</span>
+                <span class="panel-header-icon teal">🖼️</span>
                 <h2>Gallery</h2>
             </div>
             <div class="panel-body">
@@ -768,12 +811,10 @@
         try {
             const snap = await AUTH_REF.once('value');
             const val  = snap.val();
-            console.log('[Auth] authorizedEmails raw value:', val);
             if (!val) return { allowed: false, error: 'authorizedEmails list is empty or missing in the database.' };
             const list = Array.isArray(val) ? val : Object.values(val);
             const normalised = list.map(e => String(e).trim().toLowerCase());
             const userEmail  = user.email.trim().toLowerCase();
-            console.log('[Auth] checking:', userEmail, 'against list:', normalised);
             const allowed = normalised.includes(userEmail);
             return { allowed, error: allowed ? null : `${user.email} is not on the authorised list.` };
         } catch (e) {
@@ -793,7 +834,7 @@
                 errorEl.style.display = 'block';
                 return;
             }
-            loadAndShowPanel();
+            loadAndShowPanel(user);
         } else {
             document.getElementById('admin-panel').style.display = 'none';
             document.getElementById('login-gate').style.display  = 'flex';
@@ -818,9 +859,20 @@
         auth.signOut();
     }
 
-    function loadAndShowPanel() {
+    function loadAndShowPanel(user) {
         document.getElementById('login-gate').style.display  = 'none';
         document.getElementById('admin-panel').style.display = 'block';
+
+        // Show logged-in user info
+        if (user) {
+            const userEl = document.getElementById('admin-user');
+            const avatarEl = document.getElementById('admin-user-avatar');
+            const nameEl = document.getElementById('admin-user-name');
+            if (user.photoURL) avatarEl.src = user.photoURL;
+            else avatarEl.style.display = 'none';
+            nameEl.textContent = user.displayName || user.email;
+            userEl.style.display = 'flex';
+        }
 
         // Detach any stale listener before attaching a fresh one
         if (membersListener) { MEMBERS_REF.off('value', membersListener); membersListener = null; }
@@ -1121,7 +1173,6 @@
 
     function loadGalleryAdmin() {
         const grid = document.getElementById('gallery-admin-grid');
-        console.log('[Gallery] Loading gallery admin grid...');
         GALLERY_REF.once('value', snap => {
             const items = [];
             snap.forEach(child => {
@@ -1129,7 +1180,6 @@
                 if (val && val.url) items.push({ key: child.key, ...val });
             });
             items.sort((a, b) => (b.uploadedAt || 0) - (a.uploadedAt || 0));
-            console.log('[Gallery] Items found:', items.length, items.map(i => i.title));
             if (!items.length) {
                 grid.innerHTML = '<p style="color:var(--muted);font-size:.9rem;padding:1rem 0">No images yet.</p>';
                 return;
@@ -1213,7 +1263,7 @@
             snap.forEach(child => items.push({ key: child.key, ...child.val() }));
             items.sort((a, b) => (b.submittedAt || 0) - (a.submittedAt || 0));
             const countEl = document.getElementById('queue-count');
-            if (countEl) countEl.textContent = items.length ? `${items.length} pending` : '';
+            if (countEl) countEl.innerHTML = items.length ? `<span class="queue-badge">${items.length} pending</span>` : '';
             if (!items.length) {
                 grid.innerHTML = '<p style="color:var(--muted);font-size:.9rem;padding:1rem 0">Queue is empty — no pending submissions.</p>';
                 return;
@@ -1237,10 +1287,8 @@
 
     async function approveQueueItem(key) {
         try {
-            console.log('[Approve] Reading queue item:', key);
             const snap = await QUEUE_REF.child(key).once('value');
             const item = snap.val();
-            console.log('[Approve] Queue item data:', item);
             if (!item) { showToast('Item not found', 'error'); return; }
 
             const newEntry = {
@@ -1251,12 +1299,9 @@
                 uploadedBy:  item.submittedBy  || 'Anonymous',
                 uploadedAt:  Date.now()
             };
-            console.log('[Approve] Writing to /gallery:', newEntry);
-            const ref = await GALLERY_REF.push(newEntry);
-            console.log('[Approve] Written to /gallery with key:', ref.key);
+            await GALLERY_REF.push(newEntry);
 
             await QUEUE_REF.child(key).remove();
-            console.log('[Approve] Removed from queue. Done.');
 
             showToast('✅ Image approved and published!', 'success');
             loadQueueAdmin();

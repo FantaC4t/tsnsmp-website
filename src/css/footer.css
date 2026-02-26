@@ -18,7 +18,7 @@ footer {
     height: 60px;
     border-radius: 50%;
     margin-bottom: 1rem;
-    box-shadow: 0 0 20px rgba(76, 175, 80, 0.3);
+    box-shadow: 0 0 20px rgba(82, 194, 40, 0.3);
 }
 
 .footer-logo p {
@@ -45,9 +45,9 @@ footer {
 }
 
 .footer-links h4, .footer-social h4 {
-    color: var(--primary-green);
+    color: var(--s3-teal);
     margin-bottom: 1rem;
-    text-shadow: 0 0 10px rgba(76, 175, 80, 0.3);
+    text-shadow: 0 0 10px rgba(22, 196, 196, 0.3);
 }
 
 .social-links {
@@ -58,17 +58,17 @@ footer {
 
 .social-link {
     padding: 10px 20px;
-    background: linear-gradient(45deg, var(--primary-green), var(--primary-purple));
+    background: linear-gradient(45deg, var(--s3-green), var(--s3-teal));
     color: white;
     text-decoration: none;
     border-radius: 25px;
     transition: var(--transition);
-    box-shadow: 0 4px 15px rgba(123, 104, 238, 0.3);
+    box-shadow: 0 4px 15px rgba(22, 196, 196, 0.3);
 }
 
 .social-link:hover {
     transform: translateY(-3px);
-    box-shadow: 0 8px 25px rgba(123, 104, 238, 0.5);
+    box-shadow: 0 8px 25px rgba(22, 196, 196, 0.5);
 }
 
 .footer-bottom {

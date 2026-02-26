@@ -13,55 +13,339 @@
 </head>
 <body class="dark-mode">
     <!-- Header injected by JS -->
-    
+
     <main>
-        <section class="page-hero">
-            <div class="hero-bg"></div>
+        <section class="gallery-hero">
+            <div class="gallery-hero-bg"></div>
             <div class="hero-grid"></div>
-            <div class="floating-shapes">
-                <div class="shape shape-1"></div>
-                <div class="shape shape-2"></div>
-            </div>
             <div class="container">
+                <div class="gallery-badge">Season 2 Memories</div>
                 <h1>Gallery</h1>
+                <p class="gallery-hero-sub">Screenshots and highlights from the server.</p>
+                <button class="gallery-upload-btn" id="upload-trigger-btn" onclick="openUploadModal()">
+                    📸 Submit a Screenshot
+                </button>
             </div>
         </section>
 
-        <section class="under-construction">
+        <section class="gallery-section">
             <div class="container">
-                <div class="construction-scene">
-                    
-                    <!-- Character with STOP sign -->
-                    <div class="character-stop-container">
-                        <div class="fantac4t-placeholder">
-                            <!-- Fetching FantaC4t's skin automatically -->
-                            <img src="https://minotar.net/armor/body/FantaC4t/200.png" alt="FantaC4t" class="fantac4t-skin">
-                        </div>
-                        <div class="stop-overlay stop-sign-shape">
-                            STOP
-                        </div>
-                    </div>
-
-                    <div class="construction-text">
-                        <h2>Whoa there! 🚧</h2>
-                        <p>
-                            This area is currently under heavy construction! 
-                            We're still developing this bucko.
-                        </p>
-                        
-                        <a href="../index.html" class="btn-primary">
-                            🔙 Return to Safety
-                        </a>
-                    </div>
-
+                <div id="gallery-loading" class="gallery-status">Loading images…</div>
+                <div id="gallery-empty" class="gallery-status" style="display:none">
+                    <span class="gallery-empty-icon">🗜️</span>
+                    <p>No images yet — check back soon!</p>
                 </div>
+                <div id="gallery-grid" class="gallery-grid"></div>
             </div>
         </section>
     </main>
 
+    <!-- Lightbox -->
+    <div id="lightbox" class="lightbox" onclick="closeLightbox()">
+        <button class="lightbox-close" onclick="closeLightbox()">✕</button>
+        <button class="lightbox-nav lightbox-prev" onclick="event.stopPropagation(); shiftLightbox(-1)">&#8592;</button>
+        <button class="lightbox-nav lightbox-next" onclick="event.stopPropagation(); shiftLightbox(1)">&#8594;</button>
+        <div class="lightbox-inner" onclick="event.stopPropagation()">
+            <img id="lightbox-img" src="" alt="">
+            <div class="lightbox-caption">
+                <strong id="lightbox-title"></strong>
+                <span id="lightbox-desc"></span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Upload Modal -->
+    <div id="upload-modal" class="gupload-backdrop" onclick="handleBackdropClick(event)">
+        <div class="gupload-box">
+            <button class="gupload-close" onclick="closeUploadModal()">✕</button>
+
+            <!-- Step 1: Sign in -->
+            <div id="gupload-step-signin">
+                <div class="gupload-icon">📸</div>
+                <h2>Submit a Screenshot</h2>
+                <p>Sign in with your Google account to share a screenshot. Only authorised server members can upload.</p>
+                <button class="gupload-btn-google" onclick="signInGoogle()">
+                    <svg width="18" height="18" viewBox="0 0 18 18"><path fill="#4285F4" d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.874 2.684-6.615Z"/><path fill="#34A853" d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 0 0 9 18Z"/><path fill="#FBBC05" d="M3.964 10.71A5.41 5.41 0 0 1 3.682 9c0-.593.102-1.17.282-1.71V4.958H.957A8.996 8.996 0 0 0 0 9c0 1.452.348 2.827.957 4.042l3.007-2.332Z"/><path fill="#EA4335" d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 0 0 .957 4.958L3.964 6.29C4.672 4.163 6.656 3.58 9 3.58Z"/></svg>
+                    Sign in with Google
+                </button>
+                <p class="gupload-hint" id="gupload-auth-error" style="color:#e05555;display:none"></p>
+            </div>
+
+            <!-- Step 2: Upload form (shown after auth) -->
+            <div id="gupload-step-form" style="display:none">
+                <div class="gupload-user-row" id="gupload-user-row"></div>
+                <h2>Upload Screenshot</h2>
+                <div id="gupload-drop" class="gupload-drop" onclick="document.getElementById('gupload-file').click()">
+                    <div class="gupload-drop-icon">🖼️</div>
+                    <p>Click to select image</p>
+                    <span>PNG, JPG, GIF, WebP — max 10 MB</span>
+                    <input type="file" id="gupload-file" accept="image/*" style="display:none" onchange="onGUploadSelect(this)">
+                </div>
+                <div id="gupload-preview-wrap" style="display:none;position:relative;max-width:100%;margin:.5rem 0">
+                    <img id="gupload-preview-img" src="" alt="Preview" style="width:100%;border-radius:10px;display:block;max-height:220px;object-fit:contain;background:#111">
+                    <button onclick="clearGUpload()" style="position:absolute;top:6px;right:6px;background:rgba(0,0,0,.7);border:none;color:#fff;width:26px;height:26px;border-radius:50%;cursor:pointer;font-size:.85rem">✕</button>
+                </div>
+                <div class="gupload-fields">
+                    <div class="gupload-field">
+                        <label>Title</label>
+                        <input type="text" id="gupload-title" placeholder="e.g. Sunset at spawn" maxlength="80">
+                    </div>
+                    <div class="gupload-field">
+                        <label>Description <span style="opacity:.5">(optional)</span></label>
+                        <input type="text" id="gupload-desc" placeholder="e.g. S2 Day 1" maxlength="160">
+                    </div>
+                </div>
+                <div class="gupload-progress-wrap" id="gupload-progress-wrap" style="display:none">
+                    <div class="gupload-progress-bar" id="gupload-progress-bar"></div>
+                </div>
+                <div class="gupload-actions">
+                    <button class="gupload-btn-submit" onclick="submitGUpload()">📤 Upload</button>
+                    <button class="gupload-btn-signout" onclick="signOutGoogle()">Sign out</button>
+                </div>
+                <p id="gupload-form-error" style="color:#e05555;font-size:.85rem;margin-top:.6rem;text-align:center;display:none"></p>
+            </div>
+        </div>
+    </div>
+
     <script src="../js/header.js"></script>
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-storage-compat.js"></script>
+    <script src="../js/firebase-config.js"></script>
     <script>
         createHeader('gallery');
+
+        const db      = firebase.database();
+        const auth    = firebase.auth();
+        let storage;
+        try { storage = firebase.storage(); } catch(e) { console.error('Firebase Storage not available:', e); }
+        const googleProvider = new firebase.auth.GoogleAuthProvider();
+
+        let galleryItems = [];
+        let lightboxIndex = 0;
+        let gUploadFile = null;
+        let currentUser = null;
+
+        // ── Auth state ──
+        auth.onAuthStateChanged(user => {
+            currentUser = user;
+            if (user && document.getElementById('upload-modal').classList.contains('active')) {
+                checkAndShowForm(user);
+            }
+        });
+
+        // ── Lightbox ──
+        function openLightbox(i) {
+            lightboxIndex = i;
+            const item = galleryItems[i];
+            document.getElementById('lightbox-img').src = item.url;
+            document.getElementById('lightbox-title').textContent = item.title || '';
+            document.getElementById('lightbox-desc').textContent  = item.description || '';
+            document.getElementById('lightbox').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+        function closeLightbox() {
+            document.getElementById('lightbox').classList.remove('active');
+            document.body.style.overflow = '';
+        }
+        function shiftLightbox(dir) {
+            openLightbox((lightboxIndex + dir + galleryItems.length) % galleryItems.length);
+        }
+        document.addEventListener('keydown', e => {
+            if (!document.getElementById('lightbox').classList.contains('active')) return;
+            if (e.key === 'Escape')     closeLightbox();
+            if (e.key === 'ArrowLeft')  shiftLightbox(-1);
+            if (e.key === 'ArrowRight') shiftLightbox(1);
+        });
+
+        // ── Gallery load ──
+        function loadGallery() {
+            db.ref('gallery').orderByChild('uploadedAt').once('value', snap => {
+                document.getElementById('gallery-loading').style.display = 'none';
+                galleryItems = [];
+                snap.forEach(child => galleryItems.unshift({ key: child.key, ...child.val() }));
+                if (!galleryItems.length) {
+                    document.getElementById('gallery-empty').style.display = 'flex';
+                    return;
+                }
+                document.getElementById('gallery-empty').style.display = 'none';
+                const grid = document.getElementById('gallery-grid');
+                grid.innerHTML = galleryItems.map((item, i) => `
+                    <div class="gallery-card" onclick="openLightbox(${i})">
+                        <img src="${item.url}" alt="${item.title || 'Gallery image'}" loading="lazy">
+                        <div class="gallery-card-overlay">
+                            ${item.title       ? `<strong>${item.title}</strong>` : ''}
+                            ${item.description ? `<span>${item.description}</span>` : ''}
+                        </div>
+                    </div>
+                `).join('');
+            }).catch(() => {
+                document.getElementById('gallery-loading').textContent = 'Could not load images. Please try again later.';
+            });
+        }
+        loadGallery();
+
+        // ── Upload modal ──
+        function openUploadModal() {
+            document.getElementById('upload-modal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+            if (currentUser) {
+                checkAndShowForm(currentUser);
+            } else {
+                showSigninStep();
+            }
+        }
+        function closeUploadModal() {
+            document.getElementById('upload-modal').classList.remove('active');
+            document.body.style.overflow = '';
+        }
+        function handleBackdropClick(e) {
+            if (e.target === document.getElementById('upload-modal')) closeUploadModal();
+        }
+        function showSigninStep() {
+            document.getElementById('gupload-step-signin').style.display = '';
+            document.getElementById('gupload-step-form').style.display = 'none';
+            document.getElementById('gupload-auth-error').style.display = 'none';
+        }
+
+        async function checkAndShowForm(user) {
+            try {
+                const snap = await db.ref('authorizedEmails').once('value');
+                const val  = snap.val();
+                const emails = val
+                    ? (Array.isArray(val) ? val : Object.values(val)).map(e => (e||'').toLowerCase().trim())
+                    : [];
+                if (!emails.includes(user.email.toLowerCase())) {
+                    document.getElementById('gupload-auth-error').textContent =
+                        `${user.email} is not on the authorised list. Contact an admin.`;
+                    document.getElementById('gupload-auth-error').style.display = '';
+                    auth.signOut();
+                    return;
+                }
+            } catch(e) {
+                // If rules block the read, allow upload anyway (admin controls rules)
+            }
+            document.getElementById('gupload-step-signin').style.display = 'none';
+            document.getElementById('gupload-step-form').style.display = '';
+            document.getElementById('gupload-user-row').innerHTML = `
+                <img src="${user.photoURL || ''}" alt="" onerror="this.style.display='none'">
+                <span>${user.displayName || user.email}</span>
+            `;
+        }
+
+        async function signInGoogle() {
+            try {
+                await auth.signInWithPopup(googleProvider);
+            } catch(e) {
+                document.getElementById('gupload-auth-error').textContent = e.message;
+                document.getElementById('gupload-auth-error').style.display = '';
+            }
+        }
+        function signOutGoogle() {
+            auth.signOut();
+            showSigninStep();
+            clearGUpload();
+        }
+
+        // ── File handling ──
+        function onGUploadSelect(input) {
+            const file = input.files[0];
+            if (!file) return;
+            if (file.size > 10 * 1024 * 1024) {
+                setFormError('File is too large (max 10 MB).');
+                return;
+            }
+            gUploadFile = file;
+            document.getElementById('gupload-preview-img').src = URL.createObjectURL(file);
+            document.getElementById('gupload-preview-wrap').style.display = 'block';
+            document.getElementById('gupload-drop').style.display = 'none';
+            clearFormError();
+        }
+        function clearGUpload() {
+            gUploadFile = null;
+            document.getElementById('gupload-file').value = '';
+            document.getElementById('gupload-preview-wrap').style.display = 'none';
+            document.getElementById('gupload-drop').style.display = 'flex';
+        }
+        function setFormError(msg) {
+            const el = document.getElementById('gupload-form-error');
+            el.textContent = msg;
+            el.style.display = '';
+            el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+        function clearFormError() {
+            document.getElementById('gupload-form-error').style.display = 'none';
+        }
+
+        // ── Submit ──
+        async function submitGUpload() {
+            clearFormError();
+            if (!storage)     { setFormError('Storage is not configured — enable Firebase Storage in the Firebase console.'); return; }
+            if (!gUploadFile) { setFormError('Please select an image.'); return; }
+            const title = document.getElementById('gupload-title').value.trim();
+            if (!title)       { setFormError('Please add a title.'); return; }
+            if (!currentUser) { setFormError('Not signed in — please sign in again.'); return; }
+
+            const desc = document.getElementById('gupload-desc').value.trim();
+            const ext  = gUploadFile.name.split('.').pop().toLowerCase();
+            const path = `gallery/${Date.now()}_${currentUser.uid.slice(0,6)}.${ext}`;
+
+            const progressWrap = document.getElementById('gupload-progress-wrap');
+            const progressBar  = document.getElementById('gupload-progress-bar');
+            progressWrap.style.display = 'block';
+
+            console.log('[Gallery] Starting upload to path:', path);
+
+            let task;
+            try {
+                task = storage.ref(path).put(gUploadFile);
+            } catch(e) {
+                setFormError('Could not start upload: ' + e.message);
+                progressWrap.style.display = 'none';
+                return;
+            }
+
+            task.on('state_changed',
+                snap => {
+                    const pct = Math.round(snap.bytesTransferred / snap.totalBytes * 100);
+                    progressBar.style.width = pct + '%';
+                    console.log('[Gallery] Upload progress:', pct + '%');
+                },
+                err => {
+                    console.error('[Gallery] Upload error:', err);
+                    setFormError('Upload failed: ' + err.message);
+                    progressWrap.style.display = 'none';
+                },
+                async () => {
+                    try {
+                        console.log('[Gallery] Upload complete, getting URL...');
+                        const url = await task.snapshot.ref.getDownloadURL();
+                        await db.ref('gallery').push({
+                            title,
+                            description: desc,
+                            url,
+                            storagePath: path,
+                            uploadedBy: currentUser.displayName || currentUser.email,
+                            uploadedAt: Date.now()
+                        });
+                        console.log('[Gallery] Saved to database. Done!');
+                        progressWrap.style.display = 'none';
+                        progressBar.style.width = '0';
+                        closeUploadModal();
+                        clearGUpload();
+                        document.getElementById('gupload-title').value = '';
+                        document.getElementById('gupload-desc').value  = '';
+                        loadGallery();
+                    } catch(e) {
+                        console.error('[Gallery] Post-upload error:', e);
+                        setFormError('Upload succeeded but failed to save: ' + e.message);
+                        progressWrap.style.display = 'none';
+                    }
+                }
+            );
+        }
     </script>
 </body>
 </html>

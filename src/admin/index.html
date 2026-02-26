@@ -4,28 +4,27 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TSNSMP Admin</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/base.css">
+    <link rel="stylesheet" href="../css/header.css">
     <link rel="icon" href="../assets/big_logo.png" type="image/png">
     <style>
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
         :root {
-            --bg:        #0f0f23;
-            --bg2:       #1a1a2e;
-            --card:      #16213e;
-            --border:    #3a3b3c;
-            --purple:    #7B68EE;
-            --green:     #2d8f47;
-            --red:       #e05555;
-            --text:      #e8e9ea;
-            --muted:     #b0b3b8;
-            --radius:    12px;
-        }
-
-        body {
-            font-family: 'Segoe UI', system-ui, sans-serif;
-            background: var(--bg);
-            color: var(--text);
-            min-height: 100vh;
+            /* Map admin shorthand vars to the site design system */
+            --bg:     var(--bg-primary);
+            --bg2:    var(--bg-secondary);
+            --card:   var(--bg-card);
+            --border: var(--border-color);
+            --purple: var(--primary-purple);
+            --green:  var(--primary-green);
+            --red:    #e05555;
+            --text:   var(--text-primary);
+            --muted:  var(--text-secondary);
+            --radius: 12px;
         }
 
         /* ── LOGIN GATE ── */
@@ -34,8 +33,9 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            background: radial-gradient(circle at 30% 50%, rgba(123,104,238,.12), transparent 45%),
-                        radial-gradient(circle at 70% 30%, rgba(45,143,71,.08), transparent 45%);
+            background:
+                radial-gradient(circle at 15% 50%, rgba(76,175,80,0.08), transparent 25%),
+                radial-gradient(circle at 85% 30%, rgba(123,104,238,0.10), transparent 25%);
         }
 
         .login-box {
@@ -49,12 +49,24 @@
             box-shadow: 0 20px 60px rgba(0,0,0,.4);
         }
 
+        .login-back {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            color: var(--muted);
+            font-size: .85rem;
+            text-decoration: none;
+            margin-bottom: 1.5rem;
+            transition: color .2s;
+        }
+        .login-back:hover { color: var(--text); }
+
         .login-box h1 { font-size: 1.8rem; margin-bottom: .4rem; }
-        .login-box p  { color: var(--muted); margin-bottom: 2rem; font-size: .9rem; }
+        .login-box p  { color: var(--muted); margin-bottom: 1.2rem; font-size: .9rem; }
 
         .login-box input {
             width: 100%;
-            padding: 12px 16px;
+            padding: 14px 16px;
             background: var(--bg2);
             border: 1px solid var(--border);
             border-radius: 50px;
@@ -72,25 +84,108 @@
             display: none;
         }
 
+        .divider {
+            display: flex;
+            align-items: center;
+            gap: .75rem;
+            margin: 1.2rem 0;
+            color: var(--muted);
+            font-size: .8rem;
+        }
+        .divider::before, .divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: var(--border);
+        }
+
+        .btn-google {
+            width: 100%;
+            padding: 12px 16px;
+            background: #fff;
+            color: #3c4043;
+            border: 1px solid #dadce0;
+            border-radius: 50px;
+            font-size: .95rem;
+            font-weight: 600;
+            font-family: inherit;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            transition: box-shadow .2s, background .2s;
+            margin-bottom: 1rem;
+        }
+        .btn-google:hover { background: #f8f9fa; box-shadow: 0 2px 8px rgba(0,0,0,.15); }
+        .btn-google svg { flex-shrink: 0; }
+
         /* ── ADMIN PANEL ── */
         #admin-panel { display: none; }
 
-        .admin-header {
-            background: var(--card);
-            border-bottom: 1px solid var(--border);
-            padding: 1rem 2rem;
+        .admin-hero {
+            position: relative;
+            padding: 100px 2rem 2.5rem;
+            text-align: center;
+            overflow: hidden;
+        }
+        .admin-hero-bg {
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(circle at 15% 50%, rgba(76,175,80,0.08), transparent 25%),
+                radial-gradient(circle at 85% 30%, rgba(123,104,238,0.10), transparent 25%);
+            filter: blur(40px);
+            z-index: 0;
+        }
+        .admin-hero-grid {
+            position: absolute;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(255,255,255,.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            mask-image: radial-gradient(circle at center, black 40%, transparent 80%);
+            -webkit-mask-image: radial-gradient(circle at center, black 40%, transparent 80%);
+            z-index: 1;
+            pointer-events: none;
+        }
+        .admin-hero-content {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            max-width: 1100px;
+            margin: 0 auto;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        .admin-hero-title {
+            font-size: clamp(1.6rem, 3vw, 2.4rem);
+            font-weight: 800;
+            background: linear-gradient(135deg, #fff 0%, var(--primary-purple) 50%, var(--primary-green) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin: 0;
+        }
+        .admin-hero-meta {
             display: flex;
             align-items: center;
             gap: 1rem;
-            position: sticky;
-            top: 0;
-            z-index: 10;
+            flex-wrap: wrap;
+        }
+        .admin-member-count {
+            color: var(--text-secondary);
+            font-size: .9rem;
         }
 
-        .admin-header h1 { font-size: 1.3rem; flex: 1; }
-        .admin-header span { color: var(--muted); font-size: .85rem; }
-
         .admin-body { max-width: 1100px; margin: 0 auto; padding: 2rem; }
+
+        /* ── RESPONSIVE TABLE ── */
+        .table-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+        .member-table { min-width: 560px; }
 
         /* ── BUTTONS ── */
         .btn {
@@ -110,9 +205,9 @@
         .btn-primary:hover  { filter: brightness(1.15); transform: translateY(-1px); }
         .btn-green    { background: var(--green); color: #fff; }
         .btn-green:hover    { filter: brightness(1.2); transform: translateY(-1px); }
-        .btn-danger   { background: rgba(224,85,85,.15); color: var(--red); border: 1px solid rgba(224,85,85,.3); padding: 6px 14px; font-size: .8rem; }
+        .btn-danger   { background: rgba(224,85,85,.15); color: var(--red); border: 1px solid rgba(224,85,85,.3); padding: 8px 14px; font-size: .8rem; }
         .btn-danger:hover   { background: rgba(224,85,85,.3); }
-        .btn-edit     { background: rgba(123,104,238,.15); color: var(--purple); border: 1px solid rgba(123,104,238,.3); padding: 6px 14px; font-size: .8rem; }
+        .btn-edit     { background: rgba(123,104,238,.15); color: var(--purple); border: 1px solid rgba(123,104,238,.3); padding: 8px 14px; font-size: .8rem; }
         .btn-edit:hover     { background: rgba(123,104,238,.3); }
         .btn-ghost    { background: transparent; color: var(--muted); border: 1px solid var(--border); }
         .btn-ghost:hover    { color: var(--text); border-color: var(--muted); }
@@ -121,18 +216,76 @@
         .panel {
             background: var(--card);
             border: 1px solid var(--border);
-            border-radius: var(--radius);
-            padding: 1.5rem;
+            border-radius: 16px;
+            padding: 0;
             margin-bottom: 2rem;
+            overflow: hidden;
         }
-        .panel h2 { font-size: 1.2rem; margin-bottom: 1.2rem; color: var(--text); }
+        .panel-header {
+            padding: 1.2rem 1.5rem;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: .75rem;
+            background: rgba(255,255,255,.02);
+        }
+        .panel-header h2 {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--text);
+            margin: 0;
+            flex: 1;
+        }
+        .panel-header-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+        }
+        .panel-header-icon.green { background: rgba(45,143,71,.18); }
+        .panel-header-icon.purple { background: rgba(123,104,238,.18); }
+        .panel-body { padding: 1.5rem; }
 
         /* ── ADD FORM ── */
+        .add-form-layout {
+            display: flex;
+            gap: 1.5rem;
+            align-items: flex-start;
+        }
+        .skin-preview-wrap {
+            flex-shrink: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: .5rem;
+        }
+        .skin-preview-img {
+            width: 60px;
+            height: 110px;
+            object-fit: contain;
+            image-rendering: pixelated;
+            border-radius: 8px;
+            background: rgba(255,255,255,.04);
+            border: 1px solid var(--border);
+            padding: 4px;
+        }
+        .skin-preview-name {
+            font-size: .75rem;
+            font-weight: 700;
+            max-width: 70px;
+            text-align: center;
+            overflow-wrap: break-word;
+            text-shadow: 0 1px 4px rgba(0,0,0,.8);
+        }
+        .form-fields { flex: 1; min-width: 0; }
         .form-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
             gap: 1rem;
-            margin-bottom: 1rem;
+            margin-bottom: 1.2rem;
         }
 
         .form-group { display: flex; flex-direction: column; gap: 6px; }
@@ -147,11 +300,18 @@
             color: var(--text);
             font-size: .95rem;
             font-family: inherit;
-            transition: border-color .2s;
+            transition: border-color .2s, box-shadow .2s;
         }
         .form-group input:focus,
-        .form-group select:focus { outline: none; border-color: var(--purple); }
+        .form-group select:focus { outline: none; border-color: var(--purple); box-shadow: 0 0 0 3px rgba(123,104,238,.12); }
         .form-group select option { background: var(--bg2); }
+
+        /* Coloured role options */
+        select#add-role option[value="owner"]   { color: #ff6b6b; }
+        select#add-role option[value="admin"]   { color: #e056fd; }
+        select#add-role option[value="mod"]     { color: #69f0ae; }
+        select#add-role option[value="member"]  { color: #84ffff; }
+        select#add-role option[value="imposter"]{ color: #e0e0e0; }
 
         .color-row { display: flex; align-items: center; gap: 8px; }
         .color-row input[type="color"] {
@@ -171,17 +331,23 @@
             color: var(--muted);
             border-bottom: 1px solid var(--border);
         }
-        .member-table td { padding: 10px 12px; border-bottom: 1px solid rgba(255,255,255,.04); vertical-align: middle; }
+        .member-table td { padding: 12px 12px; border-bottom: 1px solid rgba(255,255,255,.04); vertical-align: middle; }
         .member-table tr:last-child td { border-bottom: none; }
-        .member-table tr:hover td { background: rgba(255,255,255,.02); }
+        .member-table tbody tr { transition: background .15s; }
+        .member-table tbody tr:hover td { background: rgba(123,104,238,.06); }
 
-        .member-color-dot {
-            display: inline-block;
-            width: 12px; height: 12px;
-            border-radius: 50%;
-            margin-right: 8px;
+        .member-avatar {
+            width: 28px;
+            height: 28px;
+            border-radius: 4px;
             vertical-align: middle;
-            border: 1px solid rgba(255,255,255,.1);
+            margin-right: 8px;
+            image-rendering: pixelated;
+        }
+
+        .member-name-colored {
+            font-weight: 700;
+            text-shadow: 0 1px 4px rgba(0,0,0,.8), 0 0 8px rgba(0,0,0,.6);
         }
 
         .role-pill {
@@ -252,31 +418,142 @@
 
         @media (max-width: 600px) {
             .form-grid { grid-template-columns: 1fr; }
+            .add-form-layout { flex-direction: column; }
+            .skin-preview-wrap { flex-direction: row; align-items: center; gap: 1rem; width: 100%; }
             .admin-body { padding: 1rem; }
+            .login-box { padding: 2rem 1.5rem; border-radius: 16px; }
+            .admin-header { padding: .75rem 1rem; gap: .6rem; }
+            .admin-header h1 { font-size: 1.1rem; }
+            .admin-header span { display: none; }
+            .btn { padding: 10px 16px; font-size: .85rem; }
         }
+
+        /* ── GALLERY ADMIN ── */
+        .gallery-file-drop {
+            border: 2px dashed var(--border);
+            border-radius: 14px;
+            padding: 2rem;
+            text-align: center;
+            cursor: pointer;
+            transition: border-color .2s, background .2s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: .5rem;
+            color: var(--muted);
+        }
+        .gallery-file-drop:hover { border-color: var(--purple); background: rgba(123,104,238,.04); }
+        .gallery-file-drop .gallery-drop-icon { font-size: 2.5rem; }
+        .gallery-file-drop p { font-size: .95rem; color: var(--text); margin: 0; }
+        .gallery-file-drop span { font-size: .78rem; }
+        .gallery-file-preview {
+            position: relative;
+            display: inline-block;
+            max-width: 260px;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+        .gallery-file-preview img { width: 100%; display: block; border-radius: 12px; }
+        .gallery-clear-btn {
+            position: absolute;
+            top: 6px; right: 6px;
+            background: rgba(0,0,0,.7);
+            border: none;
+            color: #fff;
+            width: 26px; height: 26px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: .85rem;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .gallery-progress-wrap {
+            width: 100%; height: 6px;
+            background: rgba(255,255,255,.06);
+            border-radius: 3px;
+            overflow: hidden;
+            margin-top: .75rem;
+        }
+        .gallery-progress-bar {
+            height: 100%;
+            width: 0;
+            background: linear-gradient(90deg, var(--purple), var(--green));
+            transition: width .2s;
+        }
+        .gallery-admin-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: .5rem;
+        }
+        .gallery-admin-item {
+            background: var(--bg2);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+        .gallery-admin-item img {
+            width: 100%; height: 130px;
+            object-fit: cover;
+            display: block;
+        }
+        .gallery-admin-item-info {
+            padding: .6rem .8rem;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+        .gallery-admin-item-info strong { font-size: .88rem; color: var(--text); }
+        .gallery-admin-item-info span   { font-size: .75rem; color: var(--muted); }
+        .gallery-admin-item .btn        { margin: 0 .6rem .6rem; }
     </style>
+    <script src="../js/header.js"></script>
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-storage-compat.js"></script>
+    <script src="../js/firebase-config.js"></script>
 </head>
-<body>
+<body class="dark-mode">
 
 <!-- ── LOGIN GATE ── -->
 <div id="login-gate">
     <div class="login-box">
         <h1>🔐 TSNSMP Admin</h1>
         <p>Members management — authorised access only</p>
-        <p style="font-size:.8rem;color:var(--muted);margin-bottom:.5rem">Needs a GitHub token with <strong>Contents: Read &amp; Write</strong></p>
-        <input type="password" id="password-input" placeholder="GitHub Personal Access Token" />
-        <div class="login-error" id="login-error">Invalid token or could not reach GitHub. Check console.</div>
-        <button class="btn btn-primary" style="width:100%" onclick="login()">Sign In</button>
+        <div class="login-error" id="login-error">Access denied.</div>
+        <button class="btn-google" onclick="loginWithGoogle()">
+            <svg width="18" height="18" viewBox="0 0 48 48">
+                <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
+                <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
+                <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/>
+                <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
+            </svg>
+            Continue with Google
+        </button>
+
+        <p style="font-size:.8rem;color:var(--muted);margin-bottom:.8rem;margin-top:1.2rem">⚡ First time? Seed the database from the default list:</p>
+        <button class="btn btn-ghost" style="width:100%" onclick="seedWithoutLogin()">Load Default Members into Database</button>
+        <div id="seed-status" style="font-size:.8rem;margin-top:.6rem;display:none"></div>
     </div>
 </div>
 
 <!-- ── ADMIN PANEL ── -->
 <div id="admin-panel">
-    <header class="admin-header">
-        <h1>🛠️ TSNSMP Admin</h1>
-        <span id="member-count"></span>
-        <button class="btn btn-ghost" onclick="logout()">Log out</button>
-    </header>
+    <div class="admin-hero">
+        <div class="admin-hero-bg"></div>
+        <div class="admin-hero-grid"></div>
+        <div class="admin-hero-content">
+            <h1 class="admin-hero-title">🛠️ TSNSMP Admin</h1>
+            <div class="admin-hero-meta">
+                <span class="admin-member-count" id="member-count"></span>
+                <button class="btn btn-ghost" onclick="logout()">Log out</button>
+            </div>
+        </div>
+    </div>
 
     <div class="admin-body">
 
@@ -288,46 +565,105 @@
 
         <!-- Add member -->
         <div class="panel">
-            <h2>➕ Add Member</h2>
-            <div class="form-grid">
-                <div class="form-group">
-                    <label>Minecraft Username *</label>
-                    <input type="text" id="add-name" placeholder="e.g. FantaC4t" />
-                </div>
-                <div class="form-group">
-                    <label>Role *</label>
-                    <select id="add-role">
-                        <option value="member">Member</option>
-                        <option value="mod">Mod</option>
-                        <option value="admin">Admin</option>
-                        <option value="owner">Owner</option>
-                        <option value="imposter">Imposter</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>Pronouns</label>
-                    <input type="text" id="add-pronouns" placeholder="e.g. they/them" />
-                </div>
-                <div class="form-group">
-                    <label>Name Color</label>
-                    <div class="color-row">
-                        <input type="color" id="add-color-pick" value="#7B68EE" oninput="document.getElementById('add-color-text').value=this.value" />
-                        <input type="text"  id="add-color-text" placeholder="#7B68EE" oninput="document.getElementById('add-color-pick').value=this.value||'#7B68EE'" />
+            <div class="panel-header">
+                <span class="panel-header-icon green">➕</span>
+                <h2>Add Member</h2>
+            </div>
+            <div class="panel-body">
+                <div class="add-form-layout">
+                    <div class="skin-preview-wrap">
+                        <img class="skin-preview-img" id="skin-preview" src="https://minotar.net/armor/body/Steve/60.png" alt="Skin preview">
+                        <span class="skin-preview-name" id="skin-preview-name" style="color: #7B68EE">Preview</span>
+                    </div>
+                    <div class="form-fields">
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label>Minecraft Username *</label>
+                                <input type="text" id="add-name" placeholder="e.g. FantaC4t"
+                                    oninput="updatePreview()" />
+                            </div>
+                            <div class="form-group">
+                                <label>Role *</label>
+                                <select id="add-role">
+                                    <option value="member">Member</option>
+                                    <option value="mod">Mod</option>
+                                    <option value="admin">Admin</option>
+                                    <option value="owner">Owner</option>
+                                    <option value="imposter">Imposter</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Pronouns</label>
+                                <input type="text" id="add-pronouns" placeholder="e.g. they/them" />
+                            </div>
+                            <div class="form-group">
+                                <label>Name Color</label>
+                                <div class="color-row">
+                                    <input type="color" id="add-color-pick" value="#7B68EE"
+                                        oninput="document.getElementById('add-color-text').value=this.value; updatePreview()" />
+                                    <input type="text" id="add-color-text" placeholder="#7B68EE"
+                                        oninput="document.getElementById('add-color-pick').value=this.value||'#7B68EE'; updatePreview()" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>Twitch URL</label>
+                                <input type="text" id="add-twitch" placeholder="https://twitch.tv/..." />
+                            </div>
+                        </div>
+                        <button class="btn btn-green" onclick="addMember()">➕ Add to Roster</button>
                     </div>
                 </div>
-                <div class="form-group">
-                    <label>Twitch URL</label>
-                    <input type="text" id="add-twitch" placeholder="https://twitch.tv/..." />
-                </div>
             </div>
-            <button class="btn btn-green" onclick="addMember()">➕ Add to Roster</button>
         </div>
 
         <!-- Current members -->
         <div class="panel">
-            <h2>👥 Current Members</h2>
-            <div id="members-container">
+            <div class="panel-header">
+                <span class="panel-header-icon purple">👥</span>
+                <h2>Current Members</h2>
+                <span style="font-size:.8rem;color:var(--muted)" id="member-count-inline"></span>
+            </div>
+            <div class="table-scroll" id="members-container">
                 <div class="loading">Loading members…</div>
+            </div>
+        </div>
+
+        <!-- Gallery management -->
+        <div class="panel">
+            <div class="panel-header">
+                <span class="panel-header-icon" style="background:rgba(22,196,196,.15)">🖼️</span>
+                <h2>Gallery</h2>
+            </div>
+            <div class="panel-body">
+                <div id="gallery-drop-zone" class="gallery-file-drop" onclick="document.getElementById('gallery-file').click()">
+                    <div class="gallery-drop-icon">📸</div>
+                    <p>Click to select an image</p>
+                    <span>PNG, JPG, GIF, WebP — max 10 MB</span>
+                    <input type="file" id="gallery-file" accept="image/*" style="display:none" onchange="onGalleryFileSelect(this)">
+                </div>
+                <div class="gallery-file-preview" id="gallery-file-preview" style="display:none">
+                    <img id="gallery-preview-img" src="" alt="Preview">
+                    <button class="gallery-clear-btn" onclick="clearGalleryFile()">✕</button>
+                </div>
+                <div class="form-grid" style="margin-top:1rem">
+                    <div class="form-group">
+                        <label>Title</label>
+                        <input type="text" id="gallery-title" placeholder="e.g. Sunset at spawn">
+                    </div>
+                    <div class="form-group">
+                        <label>Description</label>
+                        <input type="text" id="gallery-desc" placeholder="e.g. Taken by Nightshade_Stars">
+                    </div>
+                </div>
+                <div class="gallery-progress-wrap" id="gallery-progress-wrap" style="display:none">
+                    <div class="gallery-progress-bar" id="gallery-progress-bar"></div>
+                </div>
+                <button class="btn btn-primary" onclick="uploadGalleryImage()" style="margin-top:1rem">📤 Upload Image</button>
+
+                <h3 style="margin:2rem 0 .75rem;font-size:.9rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em">Existing Images</h3>
+                <div class="gallery-admin-grid" id="gallery-admin-grid">
+                    <div class="loading">Loading gallery…</div>
+                </div>
             </div>
         </div>
 
@@ -337,111 +673,174 @@
 <div id="toast"></div>
 
 <script>
-    const GH_OWNER  = 'FantaC4t';
-    const GH_REPO   = 'tsnsmp-website';
-    const GH_PATH   = 'src/data/members.json';
-    const GH_API    = `https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/${GH_PATH}`;
+    createHeader('admin');
 
-    let TOKEN = '';
-    let fileSha = '';
+    const auth        = firebase.auth();
+    const db          = firebase.database();
+    const MEMBERS_REF = db.ref('members');
+    const AUTH_REF    = db.ref('authorizedEmails');
+    const googleProvider = new firebase.auth.GoogleAuthProvider();
+
     let membersCache = [];
+    let membersListener = null;
 
-    // ── Auth ──
-    async function login() {
-        const tok = document.getElementById('password-input').value.trim();
-        if (!tok) return;
+    // ── Check whether the signed-in user's email is in /authorizedEmails ──
+    // Returns: { allowed: bool, error: string|null }
+    async function isAuthorized(user) {
         try {
-            const res = await fetch(GH_API, {
-                headers: { 'Authorization': `token ${tok}`, 'Accept': 'application/vnd.github.v3+json' }
-            });
-            if (!res.ok) throw new Error(`HTTP ${res.status}`);
-            const data = await res.json();
-            TOKEN   = tok;
-            fileSha = data.sha;
-            membersCache = JSON.parse(atob(data.content.replace(/\n/g, '')));
-            sessionStorage.setItem('gh_token', tok);
-            showPanel();
+            const snap = await AUTH_REF.once('value');
+            const val  = snap.val();
+            console.log('[Auth] authorizedEmails raw value:', val);
+            if (!val) return { allowed: false, error: 'authorizedEmails list is empty or missing in the database.' };
+            const list = Array.isArray(val) ? val : Object.values(val);
+            const normalised = list.map(e => String(e).trim().toLowerCase());
+            const userEmail  = user.email.trim().toLowerCase();
+            console.log('[Auth] checking:', userEmail, 'against list:', normalised);
+            const allowed = normalised.includes(userEmail);
+            return { allowed, error: allowed ? null : `${user.email} is not on the authorised list.` };
+        } catch (e) {
+            console.error('[Auth] Authorization check failed:', e);
+            return { allowed: false, error: `Database read failed (${e.code || e.message}). Check your Firebase rules allow reads of /authorizedEmails.` };
+        }
+    }
+
+    // ── Auth state observer — handles login, logout and page refresh ──
+    auth.onAuthStateChanged(async user => {
+        if (user) {
+            const { allowed, error } = await isAuthorized(user);
+            if (!allowed) {
+                await auth.signOut();
+                const errorEl = document.getElementById('login-error');
+                errorEl.textContent   = `Access denied — ${error}`;
+                errorEl.style.display = 'block';
+                return;
+            }
+            loadAndShowPanel();
+        } else {
+            document.getElementById('admin-panel').style.display = 'none';
+            document.getElementById('login-gate').style.display  = 'flex';
+        }
+    });
+
+    async function loginWithGoogle() {
+        const errorEl = document.getElementById('login-error');
+        errorEl.style.display = 'none';
+        try {
+            await auth.signInWithPopup(googleProvider);
+            // onAuthStateChanged will call loadAndShowPanel
         } catch (e) {
             console.error(e);
-            document.getElementById('login-error').style.display = 'block';
+            errorEl.textContent   = e.message || 'Google sign-in failed.';
+            errorEl.style.display = 'block';
         }
     }
 
     function logout() {
-        sessionStorage.removeItem('gh_token');
-        TOKEN = '';
-        document.getElementById('admin-panel').style.display = 'none';
-        document.getElementById('login-gate').style.display = 'flex';
-        document.getElementById('password-input').value = '';
+        if (membersListener) { MEMBERS_REF.off('value', membersListener); membersListener = null; }
+        auth.signOut();
     }
 
-    function showPanel() {
-        document.getElementById('login-gate').style.display = 'none';
+    function loadAndShowPanel() {
+        document.getElementById('login-gate').style.display  = 'none';
         document.getElementById('admin-panel').style.display = 'block';
-        renderTable();
-        document.getElementById('member-count').textContent = `${membersCache.length} members`;
-        document.getElementById('seed-banner').style.display = membersCache.length === 0 ? 'flex' : 'none';
-    }
 
-    document.getElementById('password-input').addEventListener('keydown', e => {
-        if (e.key === 'Enter') login();
-    });
+        // Detach any stale listener before attaching a fresh one
+        if (membersListener) { MEMBERS_REF.off('value', membersListener); membersListener = null; }
 
-    // ── Commit helpers ──
-    async function commitMembers(message = 'Update members via admin panel') {
-        const content = btoa(unescape(encodeURIComponent(JSON.stringify(membersCache, null, 2))));
-        const res = await fetch(GH_API, {
-            method: 'PUT',
-            headers: {
-                'Authorization': `token ${TOKEN}`,
-                'Accept': 'application/vnd.github.v3+json',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ message, content, sha: fileSha })
+        membersListener = MEMBERS_REF.on('value', snap => {
+            const raw = snap.val();
+            membersCache = raw ? (Array.isArray(raw) ? raw : Object.values(raw)) : [];
+            renderTable();
+            document.getElementById('member-count').textContent = `${membersCache.length} members`;
+            document.getElementById('seed-banner').style.display = membersCache.length === 0 ? 'flex' : 'none';
+        }, e => {
+            console.error('Failed to load members:', e);
+            document.getElementById('members-container').innerHTML =
+                `<div class="loading" style="color:var(--red)">Failed to load members: ${e.message}<br>Check your Firebase database rules.</div>`;
         });
-        if (!res.ok) throw new Error(`Commit failed: ${res.status}`);
-        const data = await res.json();
-        fileSha = data.content.sha;
     }
 
-    // Restore session
-    const savedTok = sessionStorage.getItem('gh_token');
-    if (savedTok) {
-        TOKEN = savedTok;
-        // Reload file to get current sha + data
-        fetch(GH_API, { headers: { 'Authorization': `token ${TOKEN}`, 'Accept': 'application/vnd.github.v3+json' } })
-            .then(r => r.ok ? r.json() : Promise.reject())
-            .then(data => {
-                fileSha = data.sha;
-                membersCache = JSON.parse(atob(data.content.replace(/\n/g, '')));
-                showPanel();
-            })
-            .catch(() => sessionStorage.removeItem('gh_token'));
+    // ── First-time seed (no auth required — needs DB rules to allow writes, or use before locking down) ──
+    async function seedWithoutLogin() {
+        const statusEl = document.getElementById('seed-status');
+        statusEl.style.display = 'block';
+        statusEl.style.color   = 'var(--muted)';
+        statusEl.textContent   = 'Loading seed data…';
+        try {
+            const res = await fetch('../data/members-seed.json');
+            if (!res.ok) throw new Error(`HTTP ${res.status}`);
+            const seed = await res.json();
+            await db.ref('members').set(seed);
+            statusEl.style.color = 'var(--green)';
+            statusEl.textContent = `✅ ${seed.length} members loaded into database!`;
+        } catch (e) {
+            statusEl.style.color = 'var(--red)';
+            statusEl.textContent = `❌ Failed: ${e.message}`;
+            console.error(e);
+        }
     }
+
+    // ── Live skin/name preview ──
+    let previewTimer;
+    function updatePreview() {
+        const name  = document.getElementById('add-name').value.trim();
+        const color = document.getElementById('add-color-text').value.trim() || '#7B68EE';
+        const nameEl = document.getElementById('skin-preview-name');
+        nameEl.textContent = name || 'Preview';
+        nameEl.style.color = color;
+        clearTimeout(previewTimer);
+        if (name) {
+            previewTimer = setTimeout(() => {
+                document.getElementById('skin-preview').src =
+                    `https://minotar.net/armor/body/${encodeURIComponent(name)}/60.png`;
+            }, 600);
+        } else {
+            document.getElementById('skin-preview').src = 'https://minotar.net/armor/body/Steve/60.png';
+        }
+    }
+
+    // ── Save all members to Realtime Database ──
+    async function saveMembers() {
+        await MEMBERS_REF.set(membersCache);
+    }
+
+    const ROLE_ORDER = ['owner', 'admin', 'mod', 'member', 'imposter'];
 
     function renderTable() {
+        const countEl = document.getElementById('member-count-inline');
+        if (countEl) countEl.textContent = `${membersCache.length} members`;
+
         if (membersCache.length === 0) {
             document.getElementById('members-container').innerHTML = '<div class="loading">No members yet. Use the form above to add the first one.</div>';
             return;
         }
 
-        const rows = membersCache.map((m, i) => `
-            <tr id="row-${i}">
+        const sorted = [...membersCache].sort((a, b) => {
+            const ai = ROLE_ORDER.indexOf(a.role?.toLowerCase());
+            const bi = ROLE_ORDER.indexOf(b.role?.toLowerCase());
+            return (ai === -1 ? ROLE_ORDER.length : ai) - (bi === -1 ? ROLE_ORDER.length : bi);
+        });
+
+        const rows = sorted.map((m, i) => {
+            const realIdx = membersCache.findIndex(c => c === m);
+            return `
+            <tr id="row-${realIdx}">
                 <td>
-                    ${m.color ? `<span class="member-color-dot" style="background:${m.color}"></span>` : ''}
-                    <strong>${m.name}</strong>
+                    <img class="member-avatar" src="https://mc-heads.net/avatar/${m.name}/28" alt="" onerror="this.style.display='none'">
+                    <strong class="member-name-colored" ${m.color ? `style="color:${m.color}"` : ''}>${m.name}</strong>
                 </td>
                 <td><span class="role-pill role-${m.role}">${m.role}</span></td>
                 <td>${m.pronouns || '—'}</td>
                 <td>${m.twitch ? `<a href="${m.twitch}" target="_blank" style="color:#9146FF">${m.twitch.replace('https://www.twitch.tv/','')}</a>` : '—'}</td>
                 <td class="td-actions">
-                    <button class="btn btn-edit" onclick="startEdit(${i})">✏️ Edit</button>
-                    <button class="btn btn-danger" onclick="removeMember('${m.name}')">🗑️ Remove</button>
+                    <button class="btn btn-edit" onclick="startEdit(${realIdx})">✏️ Edit</button>
+                    <button class="btn btn-danger" id="del-btn-${realIdx}" onclick="confirmRemove(${realIdx})">🗑️ Remove</button>
                 </td>
             </tr>
-        `).join('');
+        `}).join('');
 
         document.getElementById('members-container').innerHTML = `
+            <div class="table-scroll">
             <table class="member-table">
                 <thead>
                     <tr>
@@ -454,6 +853,7 @@
                 </thead>
                 <tbody>${rows}</tbody>
             </table>
+            </div>
         `;
     }
 
@@ -472,13 +872,12 @@
 
         membersCache.push({ name, role, pronouns, color, twitch });
         try {
-            await commitMembers(`Add member: ${name}`);
+            await saveMembers();
             showToast(`✅ ${name} added!`, 'success');
             ['add-name','add-pronouns','add-color-text','add-twitch'].forEach(id => document.getElementById(id).value = '');
             document.getElementById('add-color-pick').value = '#7B68EE';
             document.getElementById('add-role').value = 'member';
-            document.getElementById('member-count').textContent = `${membersCache.length} members`;
-            renderTable();
+            updatePreview();
         } catch (e) {
             membersCache.pop();
             showToast('Failed to save — check console', 'error');
@@ -487,15 +886,23 @@
     }
 
     // ── Remove ──
-    async function removeMember(name) {
-        if (!confirm(`Remove ${name} from the roster?`)) return;
+    function confirmRemove(i) {
+        const m = membersCache[i];
+        const actionsCell = document.querySelector(`#row-${i} .td-actions`);
+        if (!actionsCell) return;
+        actionsCell.innerHTML = `
+            <span style="font-size:.8rem;color:var(--muted);margin-right:4px">Remove <strong style="color:var(--text)">${m.name}</strong>?</span>
+            <button class="btn btn-danger" onclick="doRemove('${m.name}')">✔ Confirm</button>
+            <button class="btn btn-ghost" onclick="renderTable()">Cancel</button>
+        `;
+    }
+
+    async function doRemove(name) {
         const prev = [...membersCache];
         membersCache = membersCache.filter(m => m.name !== name);
         try {
-            await commitMembers(`Remove member: ${name}`);
+            await saveMembers();
             showToast(`🗑️ ${name} removed`, 'success');
-            document.getElementById('member-count').textContent = `${membersCache.length} members`;
-            renderTable();
         } catch (e) {
             membersCache = prev;
             showToast('Failed to save — check console', 'error');
@@ -545,10 +952,8 @@
         membersCache[idx] = { name, role, pronouns, color, twitch };
 
         try {
-            await commitMembers(`Update member: ${originalName}`);
+            await saveMembers();
             showToast('✅ Changes saved', 'success');
-            document.getElementById('member-count').textContent = `${membersCache.length} members`;
-            renderTable();
         } catch (e) {
             membersCache = prev;
             showToast('Failed to save — check console', 'error');
@@ -559,13 +964,10 @@
     // ── Seed ──
     async function seedMembers() {
         try {
-            const res = await fetch('/data/members-seed.json');
+            const res = await fetch('../data/members-seed.json');
             membersCache = await res.json();
-            await commitMembers('Seed default members list');
+            await saveMembers();
             showToast(`✅ Loaded ${membersCache.length} members`, 'success');
-            document.getElementById('member-count').textContent = `${membersCache.length} members`;
-            document.getElementById('seed-banner').style.display = 'none';
-            renderTable();
         } catch (e) {
             showToast('Could not seed members — check console', 'error');
             console.error(e);
@@ -580,6 +982,103 @@
         clearTimeout(toastTimer);
         toastTimer = setTimeout(() => { t.className = ''; }, 3000);
     }
+
+    // ── GALLERY ──
+    const storage    = firebase.storage();
+    const GALLERY_REF = db.ref('gallery');
+    let galleryFileObj = null;
+
+    function onGalleryFileSelect(input) {
+        const file = input.files[0];
+        if (!file) return;
+        galleryFileObj = file;
+        document.getElementById('gallery-preview-img').src = URL.createObjectURL(file);
+        document.getElementById('gallery-file-preview').style.display = 'block';
+        document.getElementById('gallery-drop-zone').style.display = 'none';
+    }
+
+    function clearGalleryFile() {
+        galleryFileObj = null;
+        document.getElementById('gallery-file').value = '';
+        document.getElementById('gallery-file-preview').style.display = 'none';
+        document.getElementById('gallery-drop-zone').style.display = 'flex';
+    }
+
+    async function uploadGalleryImage() {
+        if (!galleryFileObj) { showToast('Please select an image first', 'error'); return; }
+        const title = document.getElementById('gallery-title').value.trim();
+        const desc  = document.getElementById('gallery-desc').value.trim();
+        const ext   = galleryFileObj.name.split('.').pop();
+        const path  = `gallery/${Date.now()}.${ext}`;
+        const ref   = storage.ref(path);
+
+        const progressWrap = document.getElementById('gallery-progress-wrap');
+        const progressBar  = document.getElementById('gallery-progress-bar');
+        progressWrap.style.display = 'block';
+
+        const task = ref.put(galleryFileObj);
+        task.on('state_changed',
+            snap => {
+                const pct = Math.round(snap.bytesTransferred / snap.totalBytes * 100);
+                progressBar.style.width = pct + '%';
+            },
+            err => {
+                showToast('Upload failed: ' + err.message, 'error');
+                progressWrap.style.display = 'none';
+            },
+            async () => {
+                const url = await task.snapshot.ref.getDownloadURL();
+                await GALLERY_REF.push({ title, description: desc, url, storagePath: path, uploadedAt: Date.now() });
+                showToast('✅ Image uploaded!', 'success');
+                progressWrap.style.display = 'none';
+                progressBar.style.width = '0';
+                clearGalleryFile();
+                document.getElementById('gallery-title').value = '';
+                document.getElementById('gallery-desc').value = '';
+                loadGalleryAdmin();
+            }
+        );
+    }
+
+    function loadGalleryAdmin() {
+        const grid = document.getElementById('gallery-admin-grid');
+        GALLERY_REF.orderByChild('uploadedAt').once('value', snap => {
+            const items = [];
+            snap.forEach(child => items.unshift({ key: child.key, ...child.val() }));
+            if (!items.length) {
+                grid.innerHTML = '<p style="color:var(--muted);font-size:.9rem;padding:1rem 0">No images yet.</p>';
+                return;
+            }
+            grid.innerHTML = items.map(item => `
+                <div class="gallery-admin-item">
+                    <img src="${item.url}" alt="${item.title || ''}" loading="lazy">
+                    <div class="gallery-admin-item-info">
+                        <strong>${item.title || '(no title)'}</strong>
+                        <span>${item.description || ''}</span>
+                    </div>
+                    <button class="btn btn-danger" onclick="deleteGalleryItem('${item.key}','${item.storagePath}')">🗑️ Delete</button>
+                </div>
+            `).join('');
+        });
+    }
+
+    async function deleteGalleryItem(key, storagePath) {
+        if (!confirm('Delete this image permanently?')) return;
+        try {
+            await storage.ref(storagePath).delete().catch(() => {});
+            await GALLERY_REF.child(key).remove();
+            showToast('🗑️ Image deleted', 'success');
+            loadGalleryAdmin();
+        } catch(e) {
+            showToast('Delete failed: ' + e.message, 'error');
+        }
+    }
+
+    // Load gallery on panel init (fires after auth succeeds)
+    const _origShowPanel = window.showPanel;
+    firebase.auth().onAuthStateChanged(user => {
+        if (user) setTimeout(loadGalleryAdmin, 500);
+    });
 </script>
 </body>
 </html>

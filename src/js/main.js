@@ -84,6 +84,31 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
+// Page exit transition
+document.addEventListener('DOMContentLoaded', () => {
+    const main = document.querySelector('main');
+    document.querySelectorAll('a[href]').forEach(link => {
+        const href = link.getAttribute('href');
+        if (
+            href &&
+            !href.startsWith('#') &&
+            !href.startsWith('http') &&
+            !href.startsWith('mailto') &&
+            !href.startsWith('javascript') &&
+            !link.hasAttribute('target') &&
+            !link.dataset.noTransition
+        ) {
+            link.addEventListener('click', e => {
+                e.preventDefault();
+                if (main) {
+                    main.style.animation = 'pageExit 0.25s ease forwards';
+                }
+                setTimeout(() => { window.location.href = href; }, 230);
+            });
+        }
+    });
+});
+
 // Console easter egg
 console.log(`
 🌸 Welcome to TSNSMP! 🌸

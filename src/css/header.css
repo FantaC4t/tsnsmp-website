@@ -16,7 +16,7 @@
     background: rgba(10, 10, 18, 0.95);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
-    border-bottom: 1px solid rgba(123, 104, 238, 0.1);
+    border-bottom: 1px solid rgba(22, 196, 196, 0.15);
     box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
 }
 
@@ -37,8 +37,8 @@ body:not(.dark-mode) .nav-links a {
 
 body:not(.dark-mode) .nav-links a:hover,
 body:not(.dark-mode) .nav-links a.active {
-    color: #6200ea; /* Purple accent for active/hover */
-    background: rgba(98, 0, 234, 0.1);
+    color: var(--s3-teal);
+    background: rgba(22, 196, 196, 0.12);
 }
 
 body:not(.dark-mode) .hamburger,
@@ -116,8 +116,8 @@ body:not(.dark-mode) .hamburger::after {
 
 .nav-links a:hover,
 .nav-links a.active {
-    color: var(--accent-color, #7c4dff);
-    background: rgba(124, 77, 255, 0.1);
+    color: var(--s3-teal);
+    background: rgba(22, 196, 196, 0.12);
 }
 
 .nav-toggle {
@@ -174,7 +174,7 @@ body:not(.dark-mode) .hamburger::after {
 
 .theme-toggle {
     background: none;
-    border: 2px solid var(--accent-color, #7c4dff);
+    border: 2px solid var(--s3-teal);
     border-radius: 50%;
     width: 40px;
     height: 40px;
@@ -184,7 +184,7 @@ body:not(.dark-mode) .hamburger::after {
 }
 
 .theme-toggle:hover {
-    background: rgba(124, 77, 255, 0.2);
+    background: rgba(22, 196, 196, 0.15);
     transform: scale(1.1);
 }
 
@@ -245,8 +245,8 @@ body:not(.dark-mode) .hamburger::after {
 
     body:not(.dark-mode) .nav-links a:hover,
     body:not(.dark-mode) .nav-links a.active {
-        background: #f8f9fa;
-        color: #6200ea;
+        background: rgba(22, 196, 196, 0.1);
+        color: var(--s3-teal);
     }
 }
 

@@ -6,13 +6,20 @@
 }
 
 :root {
+    /* ── Season 3 Brand Palette ── */
+    --s3-teal:   #16C4C4;  /* sky / primary ambient accent */
+    --s3-green:  #52C228;  /* TSN SMP block letters */
+    --s3-red:    #E53200;  /* SEASON 3 text */
+    --s3-orange: #FF6622;  /* SEASON 3 highlight */
+    --s3-gold:   #AACC00;  /* letter highlight / trim */
+
     /* Light Mode Colors */
-    --primary-green: #2d8f47;
-    --secondary-green: #4CAF50;
-    --light-green: #81C784;
-    --primary-purple: #7B68EE;
-    --secondary-purple: #9575CD;
-    --light-purple: #B39DDB;
+    --primary-green: #3aad1a;   /* S3 vivid green */
+    --secondary-green: #52C228; /* S3 bright green  */
+    --light-green: #8FD96E;
+    --primary-purple: #16C4C4;  /* S3 teal — replaces purple as ambient accent */
+    --secondary-purple: #10AEAE;
+    --light-purple: #7DE0E0;
     --light-bg: #f8f9fa;
     --light-text: #2c3e50;
     --light-card-bg: #ffffff;
@@ -69,8 +76,8 @@ body {
     width: 100%;
     height: 100%;
     background-image: 
-        radial-gradient(circle at 20% 80%, rgba(123, 104, 238, 0.15) 0%, transparent 50%),
-        radial-gradient(circle at 80% 20%, rgba(76, 175, 80, 0.15) 0%, transparent 50%),
+        radial-gradient(circle at 20% 80%, rgba(22, 196, 196, 0.15) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(82, 194, 40, 0.15) 0%, transparent 50%),
         radial-gradient(circle at 40% 40%, rgba(156, 39, 176, 0.08) 0%, transparent 50%);
     z-index: -1;
     transition: var(--transition);
@@ -78,8 +85,8 @@ body {
 
 .dark-mode .flower-bg {
     background-image: 
-        radial-gradient(circle at 20% 80%, rgba(123, 104, 238, 0.25) 0%, transparent 50%),
-        radial-gradient(circle at 80% 20%, rgba(76, 175, 80, 0.25) 0%, transparent 50%),
+        radial-gradient(circle at 20% 80%, rgba(22, 196, 196, 0.25) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(82, 194, 40, 0.25) 0%, transparent 50%),
         radial-gradient(circle at 40% 40%, rgba(156, 39, 176, 0.15) 0%, transparent 50%);
 }
 
@@ -109,23 +116,23 @@ body {
 .btn-primary {
     background: linear-gradient(45deg, var(--primary-green), var(--secondary-green));
     color: white;
-    box-shadow: 0 4px 20px rgba(76, 175, 80, 0.4);
+    box-shadow: 0 4px 20px rgba(82, 194, 40, 0.4);
 }
 
 .btn-primary:hover {
     transform: translateY(-3px);
-    box-shadow: 0 8px 30px rgba(76, 175, 80, 0.6);
+    box-shadow: 0 8px 30px rgba(82, 194, 40, 0.6);
 }
 
 .btn-secondary {
     background: linear-gradient(45deg, var(--primary-purple), var(--secondary-purple));
     color: white;
-    box-shadow: 0 4px 20px rgba(123, 104, 238, 0.4);
+    box-shadow: 0 4px 20px rgba(22, 196, 196, 0.4);
 }
 
 .btn-secondary:hover {
     transform: translateY(-3px);
-    box-shadow: 0 8px 30px rgba(123, 104, 238, 0.6);
+    box-shadow: 0 8px 30px rgba(22, 196, 196, 0.6);
 }
 
 /* Shared Card Styles */
@@ -154,14 +161,36 @@ body {
 
 .page-hero h1 {
     font-size: 2.5rem;
-    background: linear-gradient(45deg, var(--primary-green), var(--primary-purple));
+    background: linear-gradient(135deg, #fff 0%, var(--s3-teal) 50%, var(--s3-green) 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
     margin-bottom: 1rem;
 }
 
+body:not(.dark-mode) .page-hero h1 {
+    background: linear-gradient(135deg, #0A8A8A 0%, var(--s3-green) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
 .page-hero p {
     font-size: 1.2rem;
     color: var(--text-secondary);
+}
+
+/* ─── Page Transitions ─── */
+@keyframes pageEnter {
+    from { opacity: 0; transform: translateY(14px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes pageExit {
+    from { opacity: 1; transform: translateY(0); }
+    to   { opacity: 0; transform: translateY(-10px); }
+}
+
+main {
+    animation: pageEnter 0.4s ease forwards;
 }

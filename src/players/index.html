@@ -9,6 +9,11 @@
     <link rel="stylesheet" href="../css/footer.css">
     <link rel="stylesheet" href="../css/players.css">
     <link rel="icon" href="../assets/big_logo.png" type="image/png">
+    <link rel="stylesheet" href="../css/responsive.css">
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+    <script src="../js/firebase-config.js"></script>
 </head>
 <body class="dark-mode">
     
@@ -19,6 +24,10 @@
             <div class="hero-bg"></div>
             <div class="hero-grid"></div>
             <div class="container">
+                <div class="players-season-badge">
+                    <span class="players-season-badge-dot"></span>
+                    Season 2 Active · S3 Coming Soon
+                </div>
                 <h1>Meet the Community</h1>
                 <p class="players-hero-subtitle">
                     The amazing people who make TSNSMP special.
@@ -32,7 +41,10 @@
                     <input type="text" id="player-search" placeholder="Search players..." autocomplete="off" />
                 </div>
                 <p class="players-missing-notice">
-                    👋 Member but not listed? DM <strong>FantaCat</strong> to be added — include your <strong>color</strong>, <strong>pronouns</strong>, and <strong>Twitch link</strong> if you have one!
+                    👋 Member but not listed? DM <strong>Our Staff</strong> to be added — PLEASE include your <strong>color</strong>, <strong>pronouns</strong>, and <strong>Twitch link</strong> if you have one!
+                </p>
+                <p style="text-align:center;margin-top:.6rem">
+                    <a href="../admin/" style="font-size:.8rem;color:var(--text-secondary);opacity:.5;text-decoration:none;transition:opacity .2s" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=.5">🛠️ Admin</a>
                 </p>
                 <div class="players-grid" id="players-grid">
                     <!-- Players will be injected here -->
@@ -115,17 +127,19 @@
             return card;
         }
 
-        async function renderPlayers() {
-            grid.innerHTML = '<p style="text-align:center;color:var(--text-secondary);padding:4rem 0">Loading members…</p>';
+        const ROLE_ORDER = ['owner', 'admin', 'mod', 'member', 'imposter'];
 
-            let members;
-            try {
-                const res = await fetch('/data/members.json');
-                if (!res.ok) throw new Error(`HTTP ${res.status}`);
-                members = await res.json();
-            } catch (e) {
+        function renderPlayers(members) {
+            members = [...members].sort((a, b) => {
+                const ai = ROLE_ORDER.indexOf(a.role?.toLowerCase());
+                const bi = ROLE_ORDER.indexOf(b.role?.toLowerCase());
+                const av = ai === -1 ? ROLE_ORDER.length : ai;
+                const bv = bi === -1 ? ROLE_ORDER.length : bi;
+                return av - bv;
+            });
+
+            if (members.length === 0) {
                 grid.innerHTML = '<p style="text-align:center;color:var(--text-secondary);padding:4rem 0">Could not load members. Please try again later.</p>';
-                console.error('Failed to load members:', e);
                 return;
             }
 
@@ -142,7 +156,35 @@
             }
         }
 
-        renderPlayers();
+        // ── Real-time listener — re-renders whenever the DB changes ──
+        grid.innerHTML = '<p style="text-align:center;color:var(--text-secondary);padding:4rem 0">Loading members…</p>';
+
+        const db = firebase.database();
+        db.ref('members').on('value', snap => {
+            const raw = snap.val();
+            let members = raw ? (Array.isArray(raw) ? raw : Object.values(raw)) : [];
+
+            if (members.length > 0) {
+                renderPlayers(members);
+            } else {
+                // Fallback to members.json if Firebase returns nothing
+                fetch('../data/members.json')
+                    .then(r => r.ok ? r.json() : [])
+                    .then(renderPlayers)
+                    .catch(e => {
+                        console.error('Failed to load members.json fallback:', e);
+                        grid.innerHTML = '<p style="text-align:center;color:var(--text-secondary);padding:4rem 0">Could not load members. Please try again later.</p>';
+                    });
+            }
+        }, e => {
+            console.warn('Firebase unavailable, falling back to members.json:', e);
+            fetch('../data/members.json')
+                .then(r => r.ok ? r.json() : [])
+                .then(renderPlayers)
+                .catch(() => {
+                    grid.innerHTML = '<p style="text-align:center;color:var(--text-secondary);padding:4rem 0">Could not load members. Please try again later.</p>';
+                });
+        });
 
         document.getElementById('player-search').addEventListener('input', function () {
             const term = this.value.toLowerCase().trim();
@@ -151,6 +193,5 @@
             });
         });
     </script>
-          "022c741d-693d-4bef-8444-918bba5133f7": { "link": "https://www.twitch.tv/gaqy_", "color": "#940F0F" },
 </body>
 </html>

@@ -51,8 +51,11 @@
     
     <!-- Favicon -->
     <link rel="icon" href="assets/big_logo.png" type="image/png">
-    
-    <!-- Spline Viewer removed - replaced by CSS 3D Creeper -->
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+    <script src="js/firebase-config.js"></script>
 </head>
 <body class="dark-mode">
 <!-- Header injected by JS --><main><!-- Hero Section -->
@@ -63,102 +66,86 @@
 <div class="hero-content">
 <div class="hero-badge">
 <div class="status-indicator"></div>
-<span>Season 2 is Live!</span></div>
+<span>Season 3 is Live!</span></div>
 <h1><span class="text-reveal">Welcome to</span><br /><span class="gradient-text">TSNSMP</span></h1>
-<p class="fade-in-up delay-1">Join our fun and friendly survival multiplayer server! Build and explore in our inclusive community! Share creative ideas while making friends!</p>
+<p class="fade-in-up delay-1">Join our fun and friendly survival multiplayer server! Build and explore in our inclusive community. Share creative ideas while making friends!</p>
 <div class="hero-server-stats fade-in-up delay-1">
-<span>⚔️ Survival SMP</span><span class="stat-dot">◆</span><span>🌍 Season 2 Active</span><span class="stat-dot">◆</span><span>🔒 Whitelist Only</span>
+<span>⚔️ Survival SMP</span><span class="stat-dot">◆</span><span>🌍 Season 3 Active</span><span class="stat-dot">◆</span><span>🔒 Whitelist Only</span>
 </div>
-<div class="hero-actions fade-in-up delay-2"><a href="#application-section" class="btn-glow pulse-btn"> <span>🎮 Join Server</span> </a> <a href="about/" class="btn-outline"> 📖 Learn More </a> <a href="https://bsky.app/profile/tsnsmp.online" target="_blank" class="btn-bluesky" rel="noopener"> 🦋 Bluesky </a></div>
+<div class="hero-member-badge fade-in-up delay-1" id="heroMemberBadge" style="display:none" aria-live="polite">
+<span class="member-badge-dot"></span>
+<span class="member-badge-text" id="heroMemberCount">0 Members</span>
+</div>
+<div class="hero-actions fade-in-up delay-2">
+    <div class="hero-primary-ctas">
+        <a href="#application-section" class="btn-glow pulse-btn"> <span>🎮 Join Server</span> </a>
+        <a href="about/" class="btn-outline"> 📖 Learn More </a>
+    </div>
+    <div class="hero-social-icons" role="group" aria-label="TSNSMP community links">
+        <a href="https://bsky.app/profile/tsnsmp.online" target="_blank" class="btn-icon" rel="noopener" aria-label="Follow TSNSMP on Bluesky" title="Follow TSNSMP on Bluesky"><img src="assets/icons/bluesky.svg" alt="Bluesky" class="btn-icon-img"></a>
+        <a href="https://discord.gg/pySpekTJ7E" target="_blank" class="btn-icon" rel="noopener" aria-label="Join TSNSMP on Discord" title="Join TSNSMP on Discord"><img src="assets/icons/discord.svg" alt="Discord" class="btn-icon-img"></a>
+    </div>
+</div>
 </div>
 
-<!-- Season transition panel -->
-<div class="hero-season-panel" aria-hidden="true">
-    <!-- S2 side: active -->
-    <div class="hsp-half hsp-s2">
-        <span class="hsp-tag">SEASON</span>
-        <span class="hsp-num">2</span>
-        <span class="hsp-status hsp-active"><span class="hsp-dot"></span>ACTIVE</span>
-        <ul class="hsp-details">
-            <li>Whitelist Open</li>
-            <li>Season 2 World</li>
-            <li>Applications Live</li>
-        </ul>
-        <div class="hsp-scanlines"></div>
+<!-- Hero halo: 3D ring of member skins -->
+<div class="hero-halo-wrap" id="heroHaloWrap" aria-hidden="true">
+    <div class="halo-glow"></div>
+    <div class="halo-particles" id="haloParticles"></div>
+    <div class="halo-orbit-ring"></div>
+    <div class="halo-orbit-ring halo-orbit-ring--inner"></div>
+    <div class="skin-halo" id="skinHalo"></div>
+</div>
+
+<!-- Live stream previews (shown when members are streaming on Twitch) -->
+<div class="hero-stream-wrap" id="heroStreamWrap" style="display:none" aria-label="Live member streams">
+    <div class="stream-header">
+        <span class="stream-live-dot"></span>
+        <span class="stream-title">Members Live on Twitch</span>
     </div>
-    <!-- S3 side: coming soon -->
-    <div class="hsp-half hsp-s3">
-        <span class="hsp-tag">SEASON</span>
-        <span class="hsp-num">3</span>
-        <span class="hsp-status hsp-soon">COMING SOON</span>
-        <ul class="hsp-details">
-            <li>New World &amp; Features</li>
-            <li>Applications Open</li>
-            <li>Spring 2026</li>
-        </ul>
-        <div class="hsp-glow-burst"></div>
-        <div class="hsp-rays"></div>
-    </div>
-    <!-- Divider beam -->
-    <div class="hsp-divider">
-        <div class="hsp-divider-orb">⇒</div>
-    </div>
-    <!-- Sparks -->
-    <div class="hsp-spark" style="top:32%;animation-delay:0s"></div>
-    <div class="hsp-spark" style="top:38%;animation-delay:0.28s"></div>
-    <div class="hsp-spark" style="top:44%;animation-delay:0.65s"></div>
-    <div class="hsp-spark" style="top:50%;animation-delay:1.05s"></div>
-    <div class="hsp-spark" style="top:56%;animation-delay:1.4s"></div>
-    <div class="hsp-spark" style="top:62%;animation-delay:1.75s"></div>
-    <div class="hsp-spark" style="top:68%;animation-delay:0.5s"></div>
+    <div class="stream-featured" id="streamFeatured"></div>
+    <div class="stream-switcher" id="streamSwitcher"></div>
 </div>
 
 </div>
 </section>
-<section class="countdown-section">
+<section class="events-section">
 <div class="container">
-<div class="countdown-wrapper">
-<div class="countdown-title">Season 3 Launch Countdown 🚀</div>
-<div class="countdown-grid" id="countdown-timer">
-<div class="time-unit"><span id="days">00</span> <label>Days</label></div>
-<div class="time-unit"><span id="hours">00</span> <label>Hours</label></div>
-<div class="time-unit"><span id="minutes">00</span> <label>Minutes</label></div>
-<div class="time-unit"><span id="seconds">00</span> <label>Seconds</label></div>
-</div>
-<p id="countdown-date">March 1st, 2026</p>
-<!-- NEW: Applications Open Notice -->
-<div class="apps-open-notice"><span class="apps-open-badge"> ✨ APPLICATIONS ARE ALREADY OPEN! </span>
-<p class="apps-open-text">Don't wait until launch day! Secure your whitelist spot for Season 3 right now. Or apply to join season 2!</p>
-<a href="#application-section" class="btn-secondary apps-open-link"> Apply for S3 </a></div>
+<div class="events-wrapper">
+    <div class="events-header">
+        <h2>What's Happening 📅</h2>
+        <p class="events-subtitle">Keep up with what’s going on in the SMP</p>
+    </div>
+    <div class="events-timeline" id="eventsTimeline"></div>
 </div>
 </div>
 </section>
-<!-- Updated Carousel Section -->
+<!-- Carousel Section — pulls from Firebase Gallery -->
 <section class="player-showcase">
 <div class="container">
 <h2>Check out some awesome builds! 🏗️</h2>
-<p class="section-subtitle">Click any image to expand</p>
+<p class="section-subtitle">Click any image to expand · Images from our <a href="gallery/" style="color:var(--primary-purple)">gallery</a></p>
 <div class="carousel-container">
-<div class="carousel-track"><!-- === SET 1: YOUR ACTUAL IMAGES === --> <!-- Replace filenames below with your real files from src/assets/ -->
-<div class="carousel-item" onclick="openLightbox(this)"><img src="assets/all_builds.png" alt="Build 4" /></div>
-<div class="carousel-item" onclick="openLightbox(this)"><img src="assets/gaqster.png" alt="Gaqy's Mall" /></div>
-<div class="carousel-item" onclick="openLightbox(this)"><img src="assets/blacksnow.png" alt="Build 2" /></div>
-<div class="carousel-item" onclick="openLightbox(this)"><img src="assets/loftylena.png" alt="Build 3" /></div>
-<div class="carousel-item" onclick="openLightbox(this)"><img src="assets/cyan.png" alt="Build 4" /></div>
-<div class="carousel-item" onclick="openLightbox(this)"><img src="assets/Fantac4t.png" alt="Build 4" /></div>
-<!-- Add more items here for every image you have... --> <!-- === SET 2: DUPLICATE OF SET 1 (For Looping) === --> <!-- Copy the exact same list from above to here -->
-<div class="carousel-item" onclick="openLightbox(this)"><img src="assets/all_builds.png" alt="Build 4" /></div>
-<div class="carousel-item" onclick="openLightbox(this)"><img src="assets/gaqster.png" alt="Gaqy's Mall" /></div>
-<div class="carousel-item" onclick="openLightbox(this)"><img src="assets/blacksnow.png" alt="Build 2" /></div>
-<div class="carousel-item" onclick="openLightbox(this)"><img src="assets/loftylena.png" alt="Build 3" /></div>
-<div class="carousel-item" onclick="openLightbox(this)"><img src="assets/cyan.png" alt="Build 4" /></div>
-<div class="carousel-item" onclick="openLightbox(this)"><img src="assets/Fantac4t.png" alt="Build 4" /></div>
-<!-- ... --></div>
+<div class="carousel-track" id="carouselTrack">
+    <!-- Populated dynamically from Firebase gallery -->
+</div>
 </div>
 </div>
 </section>
-<!-- Lightbox Container (Add this before closing body tag) -->
-<div class="lightbox" id="lightbox" onclick="closeLightbox()"><span class="lightbox-close">×</span> <img alt="Enlarged view" class="lightbox-content" id="lightbox-img" /></div>
+
+<!-- Lightbox with navigation -->
+<div class="lightbox" id="lightbox" onclick="closeLightbox()">
+    <button class="lightbox-close" onclick="closeLightbox()">✕</button>
+    <button class="lightbox-nav lightbox-prev" onclick="event.stopPropagation(); shiftLightbox(-1)">&#8592;</button>
+    <button class="lightbox-nav lightbox-next" onclick="event.stopPropagation(); shiftLightbox(1)">&#8594;</button>
+    <div class="lightbox-inner" onclick="event.stopPropagation()">
+        <img id="lightbox-img" class="lightbox-content" src="" alt="Enlarged view" />
+        <div class="lightbox-caption">
+            <strong id="lightbox-title"></strong>
+            <span id="lightbox-desc"></span>
+        </div>
+    </div>
+</div>
 <section class="features">
 <div class="container">
 <h2>Why we think you'll love it here ✨</h2>
@@ -186,7 +173,7 @@
 <div class="feature-card">
 <div class="feature-icon">🌱</div>
 <h3>New Start, Grand Adventures</h3>
-<p>Season 2 (and soon to be Season 3) means a new world with endless adventures and new memories with friends!</p>
+<p>Season 3 means a fresh world packed with endless adventures and new memories with friends!</p>
 </div>
 </div>
 </div>
@@ -222,180 +209,511 @@
 <div class="container">
 <div class="application-content">
 <h2>Join us for Season 3! 🌸</h2>
-<p>Whether you're a returning player from a previous season or a new face, we'd love to have you for our next season. We're looking for cool people who love Minecraft and want to have fun!</p>
-<div class="application-requirements">
-<h3>What we're hoping you bring to the table:</h3>
-<ul>
-<li>✨ Chill attitude and respect for other players</li>
-<li>🏗️ Love for building and collaborating (any skill level!)</li>
-<li>🎮 Clean record - no griefing or drama</li>
-<li>🌱 Age 16+ (younger players welcome if mature! and or vouched for)</li>
-<li>🤝 Commitment to keeping things friendly for everyone</li>
-</ul>
+<p class="app-subtitle">Whether you're a returning player from a previous season or a new face, we'd love to have you! We're looking for cool people who love Minecraft and want to have fun.</p>
+
+<!-- Base Picking Memo -->
+<div class="app-memo" id="appMemo">
+    <div class="app-memo-icon">🏠</div>
+    <div class="app-memo-body">
+        <strong class="app-memo-title">📌 Base Picking Phase — Until March 7th!</strong>
+        <p>Season 3 is officially underway! Right now we're in the <strong>base picking phase</strong> — hop in, explore the world, and claim your perfect spot before it's gone. Get your application in ASAP to join the fun!</p>
+    </div>
 </div>
-<p>We usually get back to applications within a day or two. If you seem like a good fit, we'll slide into your Discord DMs! 😄</p>
-<div class="application-form-wrapper"><iframe width="640" height="1734" src="https://docs.google.com/forms/d/e/1FAIpQLScLHcGkmNqaU3GcPOlIGtfzzr_F7H3Kv_dKInJcSAkikZ7vZA/viewform?embedded=true" frameborder="0" marginheight="0" marginwidth="0">Loading…</iframe></div>
+
+<div class="app-layout">
+    <!-- Left column: info -->
+    <div class="app-info-col">
+        <div class="application-requirements">
+            <h3>What we're hoping you bring:</h3>
+            <ul>
+                <li>✨ Chill attitude and respect for other players</li>
+                <li>🏗️ Love for building and collaborating (any skill level!)</li>
+                <li>🎮 Clean record — no griefing or drama</li>
+                <li>🌱 Age 16+ (younger players welcome if mature and/or vouched for)</li>
+                <li>🤝 Commitment to keeping things friendly for everyone</li>
+            </ul>
+        </div>
+        <div class="app-response-note">
+            <span class="app-response-icon">📬</span>
+            <p>We usually get back to applications within a day or two. If you seem like a good fit, we'll slide into your Discord DMs! 😄</p>
+        </div>
+        <div class="app-quick-links">
+            <a href="https://discord.gg/pySpekTJ7E" target="_blank" rel="noopener" class="app-quick-link discord">
+                <img src="assets/icons/discord.svg" alt="" width="18" height="18"> Join our Discord
+            </a>
+            <a href="about/" class="app-quick-link about">
+                📖 Learn more about us
+            </a>
+        </div>
+    </div>
+    <!-- Right column: form -->
+    <div class="app-form-col">
+        <div class="application-form-wrapper"><iframe src="https://docs.google.com/forms/d/e/1FAIpQLScLHcGkmNqaU3GcPOlIGtfzzr_F7H3Kv_dKInJcSAkikZ7vZA/viewform?embedded=true" frameborder="0" marginheight="0" marginwidth="0" title="TSNSMP Application Form">Loading…</iframe></div>
+    </div>
+</div>
+
 </div>
 </div>
 </section>
 </main>
-<p>
+
 <script src="js/header.js"></script>
 <script>
         createHeader('home');
 
-        // Lightbox Logic
-        const lightbox = document.getElementById('lightbox');
-        const lightboxImg = document.getElementById('lightbox-img');
+        /* ── Gallery-powered carousel + lightbox ── */
+        let galleryItems = [];
+        let lightboxIndex = 0;
 
-        function openLightbox(element) {
-            const img = element.querySelector('img');
-            lightboxImg.src = img.src;
-            lightbox.classList.add('active');
-            document.body.style.overflow = 'hidden'; // Prevent scrolling
+        function openLightbox(i) {
+            lightboxIndex = i;
+            const item = galleryItems[i];
+            if (!item) return;
+            document.getElementById('lightbox-img').src = item.url;
+            document.getElementById('lightbox-title').textContent = item.title || '';
+            document.getElementById('lightbox-desc').textContent  = item.description || '';
+            document.getElementById('lightbox').classList.add('active');
+            document.body.style.overflow = 'hidden';
         }
-
         function closeLightbox() {
-            lightbox.classList.remove('active');
-            document.body.style.overflow = 'auto'; // Restore scrolling
+            document.getElementById('lightbox').classList.remove('active');
+            document.body.style.overflow = '';
         }
-
-        // Close on Escape key
+        function shiftLightbox(dir) {
+            if (!galleryItems.length) return;
+            openLightbox((lightboxIndex + dir + galleryItems.length) % galleryItems.length);
+        }
         document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape') closeLightbox();
+            const lb = document.getElementById('lightbox');
+            if (!lb || !lb.classList.contains('active')) return;
+            if (e.key === 'Escape')     closeLightbox();
+            if (e.key === 'ArrowLeft')  shiftLightbox(-1);
+            if (e.key === 'ArrowRight') shiftLightbox(1);
         });
 
-        // Season 3 Countdown Logic
-        const targetDate   = new Date('March 1, 2026 00:00:00').getTime();
-        const corruptTarget = new Date('March 28, 2026 00:00:00').getTime();
-        let dateCorrupted  = false;
+        /* Load gallery images from Firebase into carousel */
+        (function loadCarouselFromGallery() {
+            const track = document.getElementById('carouselTrack');
+            if (!track) return;
 
-        // --- Glitch system ---
-        const glitchIds = ['days', 'hours', 'minutes', 'seconds'];
-        const realValues = { days: '00', hours: '00', minutes: '00', seconds: '00' };
-        let glitching = false;
-        const realDate  = 'March 1st, 2026';
-        const fakeDate  = 'March 28th, 2026';
+            /* Fallback: local images if Firebase is empty/fails */
+            const fallbackImages = [
+                { url: 'assets/all_builds.png', title: 'Aerial Overview', description: 'Server builds from above' },
+                { url: 'assets/gaqster.png',    title: 'Gaqy\'s Build',  description: 'Shopping mall build' },
+                { url: 'assets/blacksnow.png',  title: 'Blacksnow',      description: 'Winter-themed build' },
+                { url: 'assets/loftylena.png',  title: 'LoftyLena',      description: 'Scenic landscape build' },
+                { url: 'assets/cyan.png',       title: 'Cyan',           description: 'Colourful base build' },
+                { url: 'assets/Fantac4t.png',   title: 'FantaC4t',       description: 'Creative build' },
+            ];
 
-        function randDigits() {
-            return String(Math.floor(Math.random() * 100)).padStart(2, '0');
-        }
+            function renderTrack(items) {
+                galleryItems = items;
+                if (!items.length) { track.closest('.player-showcase').style.display = 'none'; return; }
+                /* Build items × 2 for seamless loop */
+                const html = items.map((item, i) => `
+                    <div class="carousel-item" onclick="openLightbox(${i})">
+                        <img src="${item.url}" alt="${item.title || 'Gallery image'}" loading="lazy" />
+                        ${item.title ? `<div class="carousel-item-label">${item.title}</div>` : ''}
+                    </div>
+                `).join('');
+                track.innerHTML = html + html; /* duplicate for infinite scroll */
 
-        function recoverDate(dateEl) {
-            // Brief recovery flicker, then restore
-            const flickers = 10;
-            let count = 0;
-            dateEl.classList.add('date-corrupted');
-            const flicker = setInterval(() => {
-                dateEl.textContent = count % 2 === 0 ? realDate : fakeDate;
-                count++;
-                if (count >= flickers) {
-                    clearInterval(flicker);
-                    dateEl.textContent = realDate;
-                    dateEl.classList.remove('date-corrupted');
-                }
-            }, 80);
-        }
+                /* Re-calc animation duration based on item count */
+                const totalWidth = items.length * (350 + 32); /* item width + gap */
+                const speed = 50; /* px per second */
+                track.style.animationDuration = (totalWidth / speed) + 's';
+            }
 
-        function triggerGlitch() {
-            if (glitching) return;
-            glitching = true;
-
-            const units    = document.querySelectorAll('.time-unit');
-            const dateEl   = document.getElementById('countdown-date');
-            units.forEach(el => el.classList.add('card-glitch'));
-
-            // 60% chance this glitch will include the date flip + stuck period
-            const flipDate = Math.random() < 0.6;
-
-            const duration = 550;
-            const tickRate = 50;
-            const start    = Date.now();
-
-            const scramble = setInterval(() => {
-                glitchIds.forEach(id => {
-                    const el = document.getElementById(id);
-                    if (!el) return;
-                    const fake = randDigits();
-                    el.innerText = fake;
-                    el.setAttribute('data-text', fake);
-                });
-
-                // Flicker the date label each tick during scramble
-                if (flipDate && dateEl) {
-                    dateEl.textContent = Math.random() < 0.5 ? fakeDate : realDate;
-                }
-
-                if (Date.now() - start >= duration) {
-                    clearInterval(scramble);
-
-                    // Restore timer digits
-                    glitchIds.forEach(id => {
-                        const el = document.getElementById(id);
-                        if (!el) return;
-                        el.innerText = realValues[id];
-                        el.setAttribute('data-text', realValues[id]);
+            try {
+                const db = firebase.database();
+                db.ref('gallery').once('value', snap => {
+                    const items = [];
+                    snap.forEach(child => {
+                        const val = child.val();
+                        if (val && val.url) items.push({ key: child.key, ...val });
                     });
-                    units.forEach(el => el.classList.remove('card-glitch'));
-                    glitching = false;
-
-                    if (flipDate && dateEl) {
-                        // Leave date stuck on March 28th for 2–4 seconds with corrupted style
-                        dateEl.textContent = fakeDate;
-                        dateEl.classList.add('date-corrupted');
-                        dateCorrupted = true;  // switch countdown to March 28th
-                        const stuckDuration = 2000 + Math.random() * 2000;
-                        setTimeout(() => {
-                            dateEl.classList.remove('date-corrupted');
-                            dateCorrupted = false;  // switch countdown back to March 1st
-                            recoverDate(dateEl);
-                        }, stuckDuration);
-                    } else if (dateEl) {
-                        dateEl.textContent = realDate;
+                    items.sort((a, b) => (b.uploadedAt || 0) - (a.uploadedAt || 0));
+                    /* Use gallery if it has images, supplement with fallbacks if under 4 */
+                    if (items.length >= 4) {
+                        renderTrack(items);
+                    } else if (items.length > 0) {
+                        /* Merge: gallery first, then enough fallbacks to fill out */
+                        const galleryUrls = new Set(items.map(i => i.url));
+                        const extras = fallbackImages.filter(f => !galleryUrls.has(f.url));
+                        renderTrack([...items, ...extras].slice(0, Math.max(items.length + extras.length, 6)));
+                    } else {
+                        renderTrack(fallbackImages);
                     }
+                }, () => {
+                    renderTrack(fallbackImages);
+                });
+            } catch(e) {
+                renderTrack(fallbackImages);
+            }
+        })();
 
-                    // Schedule next random glitch
-                    setTimeout(triggerGlitch, 2500 + Math.random() * 4000);
+        // Season 3 events timeline
+        (function buildEventsTimeline() {
+            const events = [
+                { date: '2026-03-01', label: 'Season 3 Launch 🎉', desc: 'The world is live!', status: 'past' },
+                { date: '2026-03-07', label: 'Base Picking Ends 🏠', desc: 'Last day to claim your spot', status: 'active' },
+                { date: '2026-04-01', label: 'April Event 🌟', desc: 'Details coming soon…', status: 'upcoming' },
+            ];
+
+            const now = new Date();
+            // Auto-determine status
+            events.forEach(ev => {
+                const d = new Date(ev.date + 'T23:59:59');
+                if (ev.status !== 'active') {
+                    ev.status = d < now ? 'past' : 'upcoming';
                 }
-            }, tickRate);
+            });
+
+            // Find soonest future/active event for countdown
+            const nextEvent = events.find(ev => ev.status === 'active') || events.find(ev => ev.status === 'upcoming');
+
+            const container = document.getElementById('eventsTimeline');
+            if (!container) return;
+
+            container.innerHTML = events.map((ev, i) => {
+                const d = new Date(ev.date + 'T00:00:00');
+                const monthShort = d.toLocaleString('en-GB', { month: 'short' });
+                const day = d.getDate();
+                const isNext = nextEvent && ev.date === nextEvent.date;
+                const daysAway = isNext ? Math.max(0, Math.ceil((new Date(ev.date + 'T23:59:59') - now) / 86400000)) : null;
+
+                return `
+                <div class="event-card ${ev.status}${isNext ? ' event-next' : ''}" style="animation-delay:${i * .08}s">
+                    <div class="event-date-badge">
+                        <span class="event-month">${monthShort}</span>
+                        <span class="event-day">${day}</span>
+                    </div>
+                    <div class="event-line"><span class="event-dot"></span></div>
+                    <div class="event-body">
+                        <strong class="event-label">${ev.label}</strong>
+                        <span class="event-desc">${ev.desc}</span>
+                        ${isNext && daysAway !== null ? `<span class="event-countdown">${daysAway === 0 ? 'Today!' : daysAway === 1 ? 'Tomorrow!' : daysAway + ' days left'}</span>` : ''}
+                        ${ev.status === 'past' ? '<span class="event-status-done">✓ Done</span>' : ''}
+                    </div>
+                </div>`;
+            }).join('');
+        })();
+
+        /* ── Base picking memo auto-hide after March 7 ── */
+        (function checkMemoExpiry() {
+            const memo = document.getElementById('appMemo');
+            if (!memo) return;
+            const expiry = new Date('March 7, 2026 23:59:59').getTime();
+            if (Date.now() > expiry) memo.style.display = 'none';
+        })();
+
+        /* ── Halo particles ── */
+        (function spawnParticles() {
+            const box = document.getElementById('haloParticles');
+            if (!box) return;
+            for (let i = 0; i < 10; i++) {
+                const dot = document.createElement('span');
+                dot.className = 'halo-dot';
+                dot.style.setProperty('--angle', Math.random() * 360 + 'deg');
+                dot.style.setProperty('--radius', (38 + Math.random() * 62) + '%');
+                dot.style.setProperty('--duration', (4 + Math.random() * 6) + 's');
+                dot.style.setProperty('--delay', (Math.random() * -8) + 's');
+                dot.style.setProperty('--size', (2 + Math.random() * 3) + 'px');
+                box.appendChild(dot);
+            }
+        })();
+
+        /* ── Twitch live-stream detection ── */
+        function extractTwitchUsername(url) {
+            return url.trim().split('/').filter(Boolean).pop();
         }
 
-        // Kick off first glitch after a short delay
-        setTimeout(triggerGlitch, 1500 + Math.random() * 2000);
-        // --- End glitch system ---
+        function probeStreamLive(username) {
+            /*  Twitch CDN returns a small ~4 KB placeholder for offline users
+                and a much larger thumbnail (10 KB+) for live users.
+                We fetch the image and check the size to tell the difference. */
+            return new Promise(resolve => {
+                const timer = setTimeout(() => resolve(false), 4000);
+                fetch(`https://static-cdn.jtvnw.net/previews-ttv/live_user_${username.toLowerCase()}-440x248.jpg?cb=${Date.now()}`, { mode: 'cors' })
+                    .then(r => {
+                        if (!r.ok) { clearTimeout(timer); return resolve(false); }
+                        const cl = r.headers.get('content-length');
+                        if (cl && parseInt(cl, 10) < 10000) {
+                            clearTimeout(timer); return resolve(false); /* placeholder */
+                        }
+                        return r.blob();
+                    })
+                    .then(blob => {
+                        clearTimeout(timer);
+                        if (!blob) return; /* already resolved */
+                        resolve(blob.size > 10000); /* real thumbnail > 10 KB */
+                    })
+                    .catch(() => { clearTimeout(timer); resolve(false); });
+            });
+        }
 
-        function updateCountdown() {
-            const activeTarget = dateCorrupted ? corruptTarget : targetDate;
-            const now = new Date().getTime();
-            const distance = activeTarget - now;
+        async function detectLiveStreams(members) {
+            const withTwitch = members
+                .filter(m => m.twitch && m.twitch.trim())
+                .map(m => ({ ...m, twitchUsername: extractTwitchUsername(m.twitch) }));
+            if (!withTwitch.length) return [];
+            const results = await Promise.all(
+                withTwitch.map(async m => (await probeStreamLive(m.twitchUsername)) ? m : null)
+            );
+            return results.filter(Boolean);
+        }
 
-            if (distance < 0) {
-                document.getElementById('countdown-timer').innerHTML = "<h2 style='color:var(--primary-green)'>SEASON 3 IS LIVE!</h2>";
+        let currentStreamIdx = 0;
+
+        function renderStreamCards(liveStreams) {
+            const featured  = document.getElementById('streamFeatured');
+            const switcher  = document.getElementById('streamSwitcher');
+            if (!featured) return;
+
+            const parentDomain = location.hostname || 'www.tsnsmp.online';
+
+            function showStream(idx) {
+                currentStreamIdx = idx;
+                const member = liveStreams[idx];
+                featured.innerHTML = '';
+
+                /* Big iframe player */
+                const iframeWrap = document.createElement('div');
+                iframeWrap.className = 'stream-player-wrap';
+
+                const iframe = document.createElement('iframe');
+                iframe.src = `https://player.twitch.tv/?channel=${encodeURIComponent(member.twitchUsername)}&parent=${parentDomain}&muted=true`;
+                iframe.allowFullscreen = true;
+                iframe.setAttribute('frameborder', '0');
+                iframe.setAttribute('scrolling', 'no');
+                iframe.title = `${member.name}'s Twitch stream`;
+                iframeWrap.appendChild(iframe);
+
+                /* Info bar */
+                const info = document.createElement('div');
+                info.className = 'stream-featured-info';
+
+                const avatar = document.createElement('img');
+                avatar.className = 'stream-card-avatar';
+                avatar.src = `https://minotar.net/avatar/${encodeURIComponent(member.name)}/64`;
+                avatar.alt = member.name;
+
+                const meta = document.createElement('div');
+                meta.className = 'stream-card-meta';
+
+                const nameEl = document.createElement('span');
+                nameEl.className = 'stream-card-name';
+                nameEl.textContent = member.name;
+
+                const badge = document.createElement('span');
+                badge.className = 'stream-card-badge';
+                badge.innerHTML = '<span class="live-dot"></span> LIVE';
+
+                meta.appendChild(nameEl);
+                meta.appendChild(badge);
+
+                const link = document.createElement('a');
+                link.className = 'stream-card-link';
+                link.href = member.twitch;
+                link.target = '_blank';
+                link.rel = 'noopener';
+                link.textContent = 'Open on Twitch ↗';
+
+                info.appendChild(avatar);
+                info.appendChild(meta);
+                info.appendChild(link);
+
+                featured.appendChild(iframeWrap);
+                featured.appendChild(info);
+
+                /* Update active tab */
+                if (switcher) {
+                    switcher.querySelectorAll('.stream-tab').forEach((tab, i) => {
+                        tab.classList.toggle('active', i === idx);
+                    });
+                }
+            }
+
+            /* Build switcher tabs (only if 2+) */
+            if (switcher) {
+                switcher.innerHTML = '';
+                if (liveStreams.length > 1) {
+                    liveStreams.forEach((member, i) => {
+                        const tab = document.createElement('button');
+                        tab.className = 'stream-tab' + (i === 0 ? ' active' : '');
+                        tab.onclick = () => showStream(i);
+
+                        const av = document.createElement('img');
+                        av.src = `https://minotar.net/avatar/${encodeURIComponent(member.name)}/48`;
+                        av.alt = member.name;
+                        av.className = 'stream-tab-avatar';
+
+                        const name = document.createElement('span');
+                        name.className = 'stream-tab-name';
+                        name.textContent = member.name;
+
+                        const dot = document.createElement('span');
+                        dot.className = 'stream-tab-dot';
+
+                        tab.appendChild(av);
+                        tab.appendChild(name);
+                        tab.appendChild(dot);
+                        switcher.appendChild(tab);
+                    });
+                }
+            }
+
+            showStream(0);
+        }
+
+        /* ── Skin Halo Ring (shown when no streams are live) ── */
+        function buildSkinRing(ring, allMembers) {
+            if (!ring) return;
+            if (!Array.isArray(allMembers) || allMembers.length === 0) {
+                ring.innerHTML = '<p class="skin-orbit-fallback">Join us to appear here!</p>';
                 return;
             }
 
-            const days    = Math.floor(distance / (1000 * 60 * 60 * 24));
-            const hours   = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+            const RING_SIZE = Math.min(8, allMembers.length);
+            const shuffled  = [...allMembers].sort(() => Math.random() - 0.5);
+            const active    = shuffled.slice(0, RING_SIZE);
+            const reserve   = shuffled.slice(RING_SIZE);
 
-            function setUnit(id, val) {
-                const str = String(val).padStart(2, '0');
-                realValues[id] = str;           // always track real value
-                if (glitching) return;          // don't overwrite during glitch
-                const el = document.getElementById(id);
-                el.innerText = str;
-                el.setAttribute('data-text', str);
-            }
-            setUnit('days',    days);
-            setUnit('hours',   hours);
-            setUnit('minutes', minutes);
-            setUnit('seconds', seconds);
+            ring.innerHTML = '';
+            const faces    = [];
+            const faceData = [];
+
+            active.forEach((member, i) => {
+                const face = document.createElement('div');
+                face.className = 'skin-halo-face';
+                face.style.setProperty('--index', i);
+                face.style.setProperty('--total', RING_SIZE);
+                face.style.setProperty('--depth', '0');
+
+                const inner = document.createElement('div');
+                inner.className = 'skin-halo-face-inner';
+
+                const img = document.createElement('img');
+                const safeName = encodeURIComponent(member.name || member.username || `Player${i + 1}`);
+                img.src  = `https://minotar.net/avatar/${safeName}/128`;
+                img.alt  = `${member.name || member.username || 'TSNSMP member'}'s skin`;
+
+                const label = document.createElement('span');
+                label.textContent = member.name || member.username || 'New Member';
+
+                inner.appendChild(img);
+                inner.appendChild(label);
+                face.appendChild(inner);
+                ring.appendChild(face);
+                faces.push(face);
+                faceData.push(member);
+            });
+
+            const total = RING_SIZE;
+
+            const applyDepths = (frontIdx) => {
+                faces.forEach((face, i) => {
+                    const distFwd = (i - frontIdx + total) % total;
+                    let depth;
+                    if      (distFwd === 0) depth = 0;
+                    else if (distFwd === 1) depth = 0.18;
+                    else if (distFwd === 2) depth = 0.36;
+                    else if (distFwd <= Math.floor(total / 2)) {
+                        depth = 0.50 + ((distFwd - 3) / Math.max(1, Math.floor(total / 2) - 3)) * 0.35;
+                    } else {
+                        depth = 1;
+                    }
+                    depth = Math.min(1, depth);
+                    face.style.setProperty('--depth', depth.toFixed(3));
+                    if (distFwd === 0) face.setAttribute('data-front', '');
+                    else               face.removeAttribute('data-front');
+                });
+            };
+
+            const swapHiddenFace = (slotIdx) => {
+                if (reserve.length === 0) return;
+                const rIdx = Math.floor(Math.random() * reserve.length);
+                const newMember = reserve.splice(rIdx, 1)[0];
+                reserve.push(faceData[slotIdx]);
+                faceData[slotIdx] = newMember;
+
+                const face  = faces[slotIdx];
+                const img   = face.querySelector('img');
+                const label = face.querySelector('span');
+                const safeName = encodeURIComponent(newMember.name || newMember.username || 'Player');
+                if (img) {
+                    img.src = `https://minotar.net/avatar/${safeName}/128`;
+                    img.alt = `${newMember.name || newMember.username || 'TSNSMP member'}'s skin`;
+                }
+                if (label) label.textContent = newMember.name || newMember.username || 'New Member';
+            };
+
+            let step = 0;
+            ring.style.transition = 'none';
+            ring.style.transform  = 'rotateX(5deg) rotateY(0deg)';
+            requestAnimationFrame(() => requestAnimationFrame(() => applyDepths(0)));
+
+            setInterval(() => {
+                const nextStep  = step + 1;
+                const nextFront = nextStep % total;
+                const swapSlot  = (nextFront + Math.ceil(total * 0.65)) % total;
+                swapHiddenFace(swapSlot);
+                applyDepths(nextFront);
+                setTimeout(() => {
+                    step = nextStep;
+                    const angle = -(step / total) * 360;
+                    ring.style.transition = 'transform 1.1s cubic-bezier(0.4, 0, 0.2, 1)';
+                    ring.style.transform  = `rotateX(5deg) rotateY(${angle}deg)`;
+                }, 450);
+            }, 2800);
         }
 
-        setInterval(updateCountdown, 1000);
-        updateCountdown(); // Initial call
+        /* ── Hero Init: detect live streams → show cards or halo ── */
+        (async function initHeroVisual() {
+            const haloWrap   = document.getElementById('heroHaloWrap');
+            const streamWrap = document.getElementById('heroStreamWrap');
+            const ring       = document.getElementById('skinHalo');
+
+            /* 1. Fetch members from Firebase → fallback to JSON */
+            let members = [];
+            try {
+                const db   = firebase.database();
+                const snap = await db.ref('members').once('value');
+                const raw  = snap.val();
+                members = raw ? (Array.isArray(raw) ? raw : Object.values(raw)) : [];
+            } catch (e) { /* silent */ }
+
+            if (!members.length) {
+                try { members = await fetch('data/members.json').then(r => r.json()); }
+                catch (e) { /* silent */ }
+            }
+
+            if (!members.length) { buildSkinRing(ring, []); return; }
+
+            /* 1b. Show live member count badge */
+            const badge = document.getElementById('heroMemberBadge');
+            const countEl = document.getElementById('heroMemberCount');
+            if (badge && countEl) {
+                countEl.textContent = `${members.length} Members`;
+                badge.style.removeProperty('display');
+            }
+
+            /* 2. Probe for live Twitch streams */
+            let liveStreams = await detectLiveStreams(members);
+
+            if (liveStreams.length > 0) {
+                /* Show stream previews, hide halo */
+                if (haloWrap)   haloWrap.style.display = 'none';
+                if (streamWrap) {
+                    streamWrap.style.removeProperty('display');
+                    renderStreamCards(liveStreams);
+                }
+            } else {
+                /* No live streams — show the skin halo */
+                if (streamWrap) streamWrap.style.display = 'none';
+                buildSkinRing(ring, members);
+            }
+        })();
     </script>
-</p>
 </body>
 </html>

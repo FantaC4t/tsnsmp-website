@@ -1,15 +1,82 @@
+/* ═══════════════════════════════════
+   Global Responsive Overrides
+   ═══════════════════════════════════ */
+
 @media (max-width: 1200px) {
-    /* Styles for screens smaller than 1200px */
+    .customization-grid {
+        grid-template-columns: 1fr 1fr;
+    }
 }
 
 @media (max-width: 992px) {
-    /* Styles for screens smaller than 992px */
+    .features-grid {
+        flex-wrap: wrap;
+    }
+    .feature-card {
+        flex: 0 1 calc(50% - 1rem);
+        max-width: none;
+    }
+    .customization-grid {
+        grid-template-columns: 1fr;
+    }
+    .custom-feature {
+        padding: 2rem 1.5rem;
+    }
 }
 
 @media (max-width: 768px) {
-    /* Styles for screens smaller than 768px */
+    section h2 {
+        font-size: 1.8rem;
+        margin-bottom: 2rem;
+    }
+    .features,
+    .customization-showcase,
+    .application-section,
+    .player-showcase {
+        padding: 4rem 0;
+    }
+    .feature-card {
+        flex: 1 1 100%;
+    }
+    .carousel-item {
+        flex: 0 0 280px;
+        height: 200px;
+    }
+    .application-requirements {
+        padding: 2rem 1.25rem;
+    }
+    .application-content p {
+        font-size: 1.05rem;
+    }
+
 }
 
 @media (max-width: 576px) {
-    /* Styles for screens smaller than 576px */
+    .container {
+        padding: 0 16px;
+    }
+    .hero h1 {
+        font-size: 2.4rem;
+    }
+    .hero p {
+        font-size: 1.05rem;
+    }
+    .hero-server-stats {
+        font-size: 0.72rem;
+        padding: 6px 14px;
+        gap: 0.5rem;
+    }
+    .btn-glow,
+    .btn-outline {
+        padding: 14px 24px;
+        font-size: 0.95rem;
+    }
+    .carousel-item {
+        flex: 0 0 240px;
+        height: 170px;
+    }
+    .application-form-wrapper iframe {
+        height: 2000px;
+    }
+
 }

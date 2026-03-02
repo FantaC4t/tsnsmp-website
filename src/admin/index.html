@@ -4,9 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TSNSMP Admin</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../css/base.css">
     <link rel="stylesheet" href="../css/header.css">
     <link rel="icon" href="../assets/big_logo.png" type="image/png">
@@ -453,6 +450,187 @@
 
         .loading { color: var(--muted); text-align: center; padding: 3rem; font-size: .95rem; }
 
+        /* ── SEARCH BAR ── */
+        .member-search-wrap {
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            gap: .75rem;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .member-search {
+            flex: 1;
+            min-width: 180px;
+            padding: 9px 14px 9px 36px;
+            background: var(--bg2);
+            border: 1px solid var(--border);
+            border-radius: 50px;
+            color: var(--text);
+            font-size: .9rem;
+            font-family: inherit;
+            transition: border-color .2s, box-shadow .2s;
+        }
+        .member-search:focus { outline: none; border-color: var(--purple); box-shadow: 0 0 0 3px rgba(123,104,238,.12); }
+        .search-icon-wrap {
+            position: relative;
+            flex: 1;
+            min-width: 180px;
+        }
+        .search-icon-wrap::before {
+            content: '🔍';
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: .8rem;
+            pointer-events: none;
+            z-index: 1;
+        }
+        .role-filter-pills {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+        .role-filter-pill {
+            padding: 4px 12px;
+            border-radius: 20px;
+            border: 1px solid var(--border);
+            background: transparent;
+            color: var(--muted);
+            font-size: .75rem;
+            font-weight: 600;
+            font-family: inherit;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: .04em;
+            transition: all .2s;
+        }
+        .role-filter-pill:hover { border-color: var(--muted); color: var(--text); }
+        .role-filter-pill.active { background: rgba(123,104,238,.15); border-color: rgba(123,104,238,.5); color: var(--text); }
+
+        /* ── STAT CARDS ── */
+        .admin-stats {
+            display: flex;
+            gap: .75rem;
+            flex-wrap: wrap;
+            margin-bottom: 1.5rem;
+        }
+        .admin-stat-card {
+            flex: 1;
+            min-width: 120px;
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1rem 1.2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            transition: transform .15s, box-shadow .15s;
+        }
+        .admin-stat-card:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,.2); }
+        .admin-stat-number {
+            font-size: 1.5rem;
+            font-weight: 800;
+            line-height: 1;
+        }
+        .admin-stat-label {
+            font-size: .75rem;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: .05em;
+            font-weight: 600;
+        }
+        .stat-total  .admin-stat-number { color: var(--text); }
+        .stat-owner  .admin-stat-number { color: #ff6b6b; }
+        .stat-admin  .admin-stat-number { color: #e056fd; }
+        .stat-mod    .admin-stat-number { color: #69f0ae; }
+        .stat-member .admin-stat-number { color: #84ffff; }
+
+        /* ── CONFIRM MODAL ── */
+        .confirm-backdrop {
+            position: fixed; inset: 0;
+            background: rgba(0,0,0,.6);
+            display: flex; align-items: center; justify-content: center;
+            z-index: 1000; backdrop-filter: blur(4px);
+            opacity: 0; pointer-events: none; transition: opacity .2s;
+        }
+        .confirm-backdrop.active { opacity: 1; pointer-events: all; }
+        .confirm-box {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 2rem;
+            width: 100%; max-width: 380px;
+            text-align: center;
+            box-shadow: 0 24px 60px rgba(0,0,0,.5);
+            transform: scale(.95); transition: transform .2s;
+        }
+        .confirm-backdrop.active .confirm-box { transform: scale(1); }
+        .confirm-box h3 { font-size: 1.1rem; margin-bottom: .5rem; }
+        .confirm-box p  { color: var(--muted); font-size: .9rem; margin-bottom: 1.4rem; }
+        .confirm-actions { display: flex; gap: .75rem; justify-content: center; }
+        .confirm-actions .btn { min-width: 100px; justify-content: center; }
+
+        /* ── ENTRY ANIMATIONS ── */
+        @keyframes adminFadeIn {
+            from { opacity: 0; transform: translateY(12px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+        .panel                { animation: adminFadeIn .4s ease backwards; }
+        .panel:nth-child(2)   { animation-delay: .08s; }
+        .admin-stat-card      { animation: adminFadeIn .35s ease backwards; }
+        .admin-stat-card:nth-child(2) { animation-delay: .06s; }
+        .admin-stat-card:nth-child(3) { animation-delay: .12s; }
+        .admin-stat-card:nth-child(4) { animation-delay: .18s; }
+        .admin-stat-card:nth-child(5) { animation-delay: .24s; }
+        .gallery-admin-item   { animation: adminFadeIn .3s ease backwards; }
+
+        /* ── DRAG-OVER STATE ── */
+        .gallery-file-drop.drag-over {
+            border-color: var(--purple);
+            background: rgba(123,104,238,.08);
+            box-shadow: 0 0 0 3px rgba(123,104,238,.12);
+        }
+
+        /* ── LIGHT MODE ── */
+        body:not(.dark-mode) .login-box { box-shadow: 0 20px 60px rgba(0,0,0,.12); }
+        body:not(.dark-mode) .login-box h1 {
+            background: linear-gradient(135deg, #0A8A8A 0%, #16C4C4 50%, #52C228 100%);
+            -webkit-background-clip: text; background-clip: text;
+        }
+        body:not(.dark-mode) .admin-hero-title {
+            background: linear-gradient(135deg, #0A8A8A 0%, #16C4C4 40%, #52C228 100%);
+            -webkit-background-clip: text; background-clip: text;
+        }
+        body:not(.dark-mode) .panel { box-shadow: 0 2px 12px rgba(0,0,0,.06); }
+        body:not(.dark-mode) .panel-header { background: rgba(0,0,0,.02); }
+        body:not(.dark-mode) .member-table tbody tr:hover td { background: rgba(22,196,196,.05); }
+        body:not(.dark-mode) .member-name-colored { text-shadow: none; }
+        body:not(.dark-mode) .skin-preview-name { text-shadow: none; }
+        body:not(.dark-mode) .admin-stat-card { box-shadow: 0 2px 8px rgba(0,0,0,.06); }
+        body:not(.dark-mode) .admin-stat-card:hover { box-shadow: 0 6px 20px rgba(0,0,0,.1); }
+        body:not(.dark-mode) .btn-google { border-color: #e0e0e0; }
+        body:not(.dark-mode) .member-table td { border-bottom-color: rgba(0,0,0,.06); }
+        body:not(.dark-mode) .confirm-box { box-shadow: 0 24px 60px rgba(0,0,0,.15); }
+        body:not(.dark-mode) .gallery-progress-wrap { background: rgba(0,0,0,.06); }
+        body:not(.dark-mode) #toast.success { box-shadow: 0 8px 24px rgba(0,0,0,.15); }
+        body:not(.dark-mode) #toast.error   { box-shadow: 0 8px 24px rgba(0,0,0,.15); }
+        body:not(.dark-mode) .edit-row td { background: rgba(22,196,196,.04); }
+        body:not(.dark-mode) .edit-row input,
+        body:not(.dark-mode) .edit-row select { border-color: var(--primary-purple); }
+        body:not(.dark-mode) .gedit-field input:focus { border-color: var(--primary-purple); box-shadow: 0 0 0 3px rgba(22,196,196,.12); }
+
+        @media (max-width: 768px) {
+            .admin-stats { gap: .5rem; }
+            .admin-stat-card { min-width: 90px; padding: .75rem .9rem; }
+            .admin-stat-number { font-size: 1.2rem; }
+            .admin-tabs { padding: 0 1rem; gap: .35rem; overflow-x: auto; }
+            .admin-tab-btn { padding: 8px 16px; font-size: .82rem; white-space: nowrap; }
+            .member-search-wrap { padding: .75rem 1rem; }
+            .role-filter-pills { display: none; }
+        }
+
         @media (max-width: 600px) {
             .form-grid { grid-template-columns: 1fr; }
             .add-form-layout { flex-direction: column; }
@@ -463,6 +641,9 @@
             .admin-header h1 { font-size: 1.1rem; }
             .admin-header span { display: none; }
             .btn { padding: 10px 16px; font-size: .85rem; }
+            .admin-hero-content { justify-content: center; text-align: center; }
+            .admin-stats { justify-content: center; }
+            .td-actions { flex-direction: column; gap: 4px; }
         }
 
         /* ── TABS ── */
@@ -684,6 +865,9 @@
         <!-- ══ PLAYER LIST TAB ══ -->
         <div id="tab-players">
 
+        <!-- Stat cards -->
+        <div class="admin-stats" id="admin-stats"></div>
+
         <!-- Seed banner — only shown when members.json is empty -->
         <div class="seed-banner" id="seed-banner" style="display:none">
             <p>⚡ No members found. Click to load the default member list.</p>
@@ -750,6 +934,18 @@
                 <h2>Current Members</h2>
                 <span style="font-size:.8rem;color:var(--muted)" id="member-count-inline"></span>
             </div>
+            <div class="member-search-wrap">
+                <div class="search-icon-wrap">
+                    <input class="member-search" id="member-search" type="text" placeholder="Search members…" oninput="filterMembers()">
+                </div>
+                <div class="role-filter-pills" id="role-filters">
+                    <button class="role-filter-pill active" data-role="all" onclick="setRoleFilter('all')">All</button>
+                    <button class="role-filter-pill" data-role="owner" onclick="setRoleFilter('owner')">Owner</button>
+                    <button class="role-filter-pill" data-role="admin" onclick="setRoleFilter('admin')">Admin</button>
+                    <button class="role-filter-pill" data-role="mod" onclick="setRoleFilter('mod')">Mod</button>
+                    <button class="role-filter-pill" data-role="member" onclick="setRoleFilter('member')">Member</button>
+                </div>
+            </div>
             <div class="table-scroll" id="members-container">
                 <div class="loading">Loading members…</div>
             </div>
@@ -781,9 +977,13 @@
                 <h2>Gallery</h2>
             </div>
             <div class="panel-body">
-                <div id="gallery-drop-zone" class="gallery-file-drop" onclick="document.getElementById('gallery-file').click()">
+                <div id="gallery-drop-zone" class="gallery-file-drop"
+                     onclick="document.getElementById('gallery-file').click()"
+                     ondragover="event.preventDefault();this.classList.add('drag-over')"
+                     ondragleave="this.classList.remove('drag-over')"
+                     ondrop="event.preventDefault();this.classList.remove('drag-over');handleGalleryDrop(event)">
                     <div class="gallery-drop-icon">📸</div>
-                    <p>Click to select an image</p>
+                    <p>Drop an image here or click to browse</p>
                     <span>PNG, JPG, GIF, WebP — max 10 MB</span>
                     <input type="file" id="gallery-file" accept="image/*" style="display:none" onchange="onGalleryFileSelect(this)">
                 </div>
@@ -820,6 +1020,18 @@
 
 <div id="toast"></div>
 
+<!-- Confirmation Modal -->
+<div id="confirm-modal" class="confirm-backdrop" onclick="if(event.target===this)closeConfirm()">
+    <div class="confirm-box">
+        <h3 id="confirm-title">Are you sure?</h3>
+        <p id="confirm-message">This action cannot be undone.</p>
+        <div class="confirm-actions">
+            <button class="btn btn-danger" id="confirm-yes">Confirm</button>
+            <button class="btn btn-ghost" onclick="closeConfirm()">Cancel</button>
+        </div>
+    </div>
+</div>
+
 <!-- Gallery Edit Modal -->
 <div id="gedit-modal" class="gedit-backdrop" onclick="if(event.target===this)closeGalleryEdit()">
     <div class="gedit-box">
@@ -847,6 +1059,62 @@
 <script>
     createHeader('admin');
 
+    /* ── XSS safety ── */
+    function esc(str) {
+        const d = document.createElement('div');
+        d.textContent = str;
+        return d.innerHTML;
+    }
+
+    /* ── Confirm modal ── */
+    let confirmResolve = null;
+    function showConfirm(title, message) {
+        return new Promise(resolve => {
+            confirmResolve = resolve;
+            document.getElementById('confirm-title').textContent = title;
+            document.getElementById('confirm-message').textContent = message;
+            const modal = document.getElementById('confirm-modal');
+            modal.classList.add('active');
+            document.getElementById('confirm-yes').onclick = () => { closeConfirm(); resolve(true); };
+        });
+    }
+    function closeConfirm() {
+        document.getElementById('confirm-modal').classList.remove('active');
+        if (confirmResolve) { confirmResolve(false); confirmResolve = null; }
+    }
+
+    /* ── Search & Filter state ── */
+    let currentRoleFilter = 'all';
+    function setRoleFilter(role) {
+        currentRoleFilter = role;
+        document.querySelectorAll('.role-filter-pill').forEach(p =>
+            p.classList.toggle('active', p.dataset.role === role)
+        );
+        filterMembers();
+    }
+    function filterMembers() {
+        const query = (document.getElementById('member-search')?.value || '').trim().toLowerCase();
+        const rows = document.querySelectorAll('.member-table tbody tr');
+        rows.forEach(row => {
+            const name = (row.querySelector('.member-name-colored')?.textContent || '').toLowerCase();
+            const role = (row.querySelector('.role-pill')?.textContent || '').toLowerCase();
+            const matchSearch = !query || name.includes(query);
+            const matchRole   = currentRoleFilter === 'all' || role === currentRoleFilter;
+            row.style.display = (matchSearch && matchRole) ? '' : 'none';
+        });
+    }
+
+    /* ── Keyboard shortcuts ── */
+    document.addEventListener('keydown', e => {
+        if (e.key === 'Escape') {
+            // Close any open modal or cancel editing
+            if (document.getElementById('confirm-modal').classList.contains('active')) { closeConfirm(); return; }
+            if (document.getElementById('gedit-modal').classList.contains('active')) { closeGalleryEdit(); return; }
+            // Cancel inline edit if one is active
+            if (document.querySelector('.edit-row')) { renderTable(); }
+        }
+    });
+
     function switchTab(tab) {
         document.querySelectorAll('.admin-tab-btn').forEach(b =>
             b.classList.toggle('active', b.dataset.tab === tab)
@@ -863,6 +1131,29 @@
 
     let membersCache = [];
     let membersListener = null;
+
+    /* ── Render stat cards ── */
+    function renderStats() {
+        const container = document.getElementById('admin-stats');
+        if (!container) return;
+        const counts = { total: membersCache.length, owner: 0, admin: 0, mod: 0, member: 0 };
+        membersCache.forEach(m => {
+            const r = (m.role || '').toLowerCase();
+            if (counts.hasOwnProperty(r)) counts[r]++;
+        });
+        container.innerHTML = [
+            { cls: 'stat-total',  n: counts.total,  l: 'Total' },
+            { cls: 'stat-owner',  n: counts.owner,  l: 'Owners' },
+            { cls: 'stat-admin',  n: counts.admin,  l: 'Admins' },
+            { cls: 'stat-mod',    n: counts.mod,    l: 'Mods' },
+            { cls: 'stat-member', n: counts.member, l: 'Members' },
+        ].map(s => `
+            <div class="admin-stat-card ${s.cls}">
+                <span class="admin-stat-number">${s.n}</span>
+                <span class="admin-stat-label">${s.l}</span>
+            </div>
+        `).join('');
+    }
 
     // ── Check whether the signed-in user's email is in /authorizedEmails ──
     // Returns: { allowed: bool, error: string|null }
@@ -940,6 +1231,7 @@
             const raw = snap.val();
             membersCache = raw ? (Array.isArray(raw) ? raw : Object.values(raw)) : [];
             renderTable();
+            renderStats();
             document.getElementById('member-count').textContent = `${membersCache.length} members`;
             document.getElementById('seed-banner').style.display = membersCache.length === 0 ? 'flex' : 'none';
         }, e => {
@@ -1012,15 +1304,18 @@
 
         const rows = sorted.map((m, i) => {
             const realIdx = membersCache.findIndex(c => c === m);
+            const safeName = esc(m.name);
+            const safePronouns = esc(m.pronouns || '—');
+            const safeTwitch = m.twitch ? `<a href="${esc(m.twitch)}" target="_blank" rel="noopener" style="color:#9146FF">${esc(m.twitch.replace('https://www.twitch.tv/',''))}</a>` : '—';
             return `
             <tr id="row-${realIdx}">
                 <td>
-                    <img class="member-avatar" src="https://mc-heads.net/avatar/${m.name}/28" alt="" onerror="this.style.display='none'">
-                    <strong class="member-name-colored" ${m.color ? `style="color:${m.color}"` : ''}>${m.name}</strong>
+                    <img class="member-avatar" src="https://mc-heads.net/avatar/${encodeURIComponent(m.name)}/28" alt="" onerror="this.style.display='none'">
+                    <strong class="member-name-colored" ${m.color ? `style="color:${esc(m.color)}"` : ''}>${safeName}</strong>
                 </td>
-                <td><span class="role-pill role-${m.role}">${m.role}</span></td>
-                <td>${m.pronouns || '—'}</td>
-                <td>${m.twitch ? `<a href="${m.twitch}" target="_blank" style="color:#9146FF">${m.twitch.replace('https://www.twitch.tv/','')}</a>` : '—'}</td>
+                <td><span class="role-pill role-${esc(m.role)}">${esc(m.role)}</span></td>
+                <td>${safePronouns}</td>
+                <td>${safeTwitch}</td>
                 <td class="td-actions">
                     <button class="btn btn-edit" onclick="startEdit(${realIdx})">✏️ Edit</button>
                     <button class="btn btn-danger" id="del-btn-${realIdx}" onclick="confirmRemove(${realIdx})">🗑️ Remove</button>
@@ -1044,6 +1339,9 @@
             </table>
             </div>
         `;
+
+        // Re-apply any active search/filter
+        filterMembers();
     }
 
     // ── Add ──
@@ -1075,15 +1373,14 @@
     }
 
     // ── Remove ──
-    function confirmRemove(i) {
+    async function confirmRemove(i) {
         const m = membersCache[i];
-        const actionsCell = document.querySelector(`#row-${i} .td-actions`);
-        if (!actionsCell) return;
-        actionsCell.innerHTML = `
-            <span style="font-size:.8rem;color:var(--muted);margin-right:4px">Remove <strong style="color:var(--text)">${m.name}</strong>?</span>
-            <button class="btn btn-danger" onclick="doRemove('${m.name}')">✔ Confirm</button>
-            <button class="btn btn-ghost" onclick="renderTable()">Cancel</button>
-        `;
+        const ok = await showConfirm(
+            `Remove ${m.name}?`,
+            'This will permanently remove them from the roster.'
+        );
+        if (!ok) return;
+        await doRemove(m.name);
     }
 
     async function doRemove(name) {
@@ -1177,6 +1474,19 @@
     const GALLERY_REF = db.ref('gallery');
     const QUEUE_REF   = db.ref('gallery_queue');
     let galleryFileObj = null;
+
+    /* ── Drag & Drop handler ── */
+    function handleGalleryDrop(e) {
+        const file = e.dataTransfer?.files?.[0];
+        if (!file || !file.type.startsWith('image/')) {
+            showToast('Please drop an image file', 'error');
+            return;
+        }
+        galleryFileObj = file;
+        document.getElementById('gallery-preview-img').src = URL.createObjectURL(file);
+        document.getElementById('gallery-file-preview').style.display = 'block';
+        document.getElementById('gallery-drop-zone').style.display = 'none';
+    }
 
     function onGalleryFileSelect(input) {
         const file = input.files[0];
@@ -1301,7 +1611,8 @@
     }
 
     async function deleteGalleryItem(key, storagePath) {
-        if (!confirm('Delete this image permanently?')) return;
+        const ok = await showConfirm('Delete image?', 'This will permanently remove the image from the gallery.');
+        if (!ok) return;
         try {
             if (storagePath) {
                 await storage.ref(storagePath).delete().catch(e => console.warn('[Delete] Storage delete failed (may already be gone):', e.message));
@@ -1372,7 +1683,8 @@
     }
 
     async function declineQueueItem(key, storagePath) {
-        if (!confirm('Decline and permanently delete this submission?')) return;
+        const ok = await showConfirm('Decline submission?', 'This will permanently delete this submission.');
+        if (!ok) return;
         try {
             if (storagePath) await storage.ref(storagePath).delete().catch(() => {});
             await QUEUE_REF.child(key).remove();

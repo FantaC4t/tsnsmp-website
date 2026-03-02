@@ -100,9 +100,10 @@ body:not(.dark-mode) .hamburger::after {
 .nav-links {
     display: flex;
     list-style: none;
-    gap: 2rem;
+    gap: 1.5rem;
     margin: 0;
     padding: 0;
+    align-items: center;
 }
 
 .nav-links a {
@@ -114,10 +115,50 @@ body:not(.dark-mode) .hamburger::after {
     transition: all 0.3s ease;
 }
 
+.nav-links .nav-icon {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    padding: 0;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    background: rgba(255, 255, 255, 0.05);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    line-height: 1;
+}
+
+.nav-links .nav-icon:hover {
+    color: #fff;
+    background: rgba(22, 196, 196, 0.25);
+    border-color: rgba(22, 196, 196, 0.6);
+}
+
+.nav-icon-img {
+    width: 20px;
+    height: 20px;
+    object-fit: contain;
+    display: block;
+    pointer-events: none;
+}
+
 .nav-links a:hover,
 .nav-links a.active {
     color: var(--s3-teal);
     background: rgba(22, 196, 196, 0.12);
+}
+
+body:not(.dark-mode) .nav-links .nav-icon {
+    background: rgba(0, 0, 0, 0.05);
+    border-color: rgba(0, 0, 0, 0.08);
+    color: #1a1a1a;
+}
+
+body:not(.dark-mode) .nav-links .nav-icon:hover {
+    background: rgba(22, 196, 196, 0.15);
+    color: var(--s3-teal);
 }
 
 .nav-toggle {

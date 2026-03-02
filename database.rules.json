@@ -1,0 +1,20 @@
+{
+  "rules": {
+    "members": {
+      ".read": true,
+      ".write": "auth != null"
+    },
+    "authorizedEmails": {
+      ".read": "auth != null",
+      ".write": "auth != null"
+    },
+    "gallery": {
+      ".read": true,
+      ".write": "auth != null"
+    },
+    "gallery_queue": {
+      ".read": "auth != null",
+      ".write": true
+    }
+  }
+}

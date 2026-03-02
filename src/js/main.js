@@ -44,7 +44,7 @@ window.addEventListener('scroll', () => {
 
 // Smooth scrolling for application button
 function scrollToApplication() {
-    const applicationSection = document.getElementById('application');
+    const applicationSection = document.getElementById('application-section');
     if (applicationSection) {
         applicationSection.scrollIntoView({ 
             behavior: 'smooth' 

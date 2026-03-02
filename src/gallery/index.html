@@ -4,6 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gallery - TSNSMP Server</title>
+    <meta name="description" content="Browse screenshots and highlights from the TSNSMP Minecraft SMP community.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://www.tsnsmp.online/gallery/">
+    <meta property="og:title" content="Gallery - TSNSMP">
+    <meta property="og:description" content="Browse screenshots and highlights from the TSNSMP Minecraft SMP community.">
+    <meta property="og:image" content="https://www.tsnsmp.online/assets/image.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <link rel="canonical" href="https://www.tsnsmp.online/gallery/">
     <link rel="stylesheet" href="../css/base.css">
     <link rel="stylesheet" href="../css/header.css">
     <link rel="stylesheet" href="../css/footer.css">
@@ -135,6 +143,7 @@
             lightboxIndex = i;
             const item = galleryItems[i];
             document.getElementById('lightbox-img').src = item.url;
+            document.getElementById('lightbox-img').alt = item.title || 'Gallery image';
             document.getElementById('lightbox-title').textContent = item.title || '';
             document.getElementById('lightbox-desc').textContent  = item.description || '';
             document.getElementById('lightbox').classList.add('active');
@@ -154,7 +163,6 @@
 
         // Lightbox event listeners (no inline onclick — avoids ghost-click issues)
         document.getElementById('lightbox').addEventListener('click', function(e) {
-            // Only close if clicking the backdrop itself, not children
             if (e.target === this) closeLightbox();
         });
         document.getElementById('lightbox-close-btn').addEventListener('click', closeLightbox);
@@ -173,6 +181,24 @@
             if (e.key === 'ArrowLeft')  shiftLightbox(-1);
             if (e.key === 'ArrowRight') shiftLightbox(1);
         });
+
+        // ── Swipe navigation for mobile lightbox ──
+        (function() {
+            var lb = document.getElementById('lightbox');
+            var touchStartX = 0, touchStartY = 0;
+            lb.addEventListener('touchstart', function(e) {
+                touchStartX = e.changedTouches[0].clientX;
+                touchStartY = e.changedTouches[0].clientY;
+            }, { passive: true });
+            lb.addEventListener('touchend', function(e) {
+                var dx = e.changedTouches[0].clientX - touchStartX;
+                var dy = e.changedTouches[0].clientY - touchStartY;
+                if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy) * 1.5) {
+                    if (dx < 0) shiftLightbox(1);  // swipe left → next
+                    else        shiftLightbox(-1); // swipe right → prev
+                }
+            }, { passive: true });
+        })();
 
         // ── Gallery load (live — updates when mods approve submissions) ──
         function loadGallery() {

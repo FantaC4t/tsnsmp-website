@@ -44,11 +44,11 @@
     </main>
 
     <!-- Lightbox -->
-    <div id="lightbox" class="lightbox" onclick="closeLightbox()">
-        <button class="lightbox-close" onclick="closeLightbox()">✕</button>
-        <button class="lightbox-nav lightbox-prev" onclick="event.stopPropagation(); shiftLightbox(-1)">&#8592;</button>
-        <button class="lightbox-nav lightbox-next" onclick="event.stopPropagation(); shiftLightbox(1)">&#8594;</button>
-        <div class="lightbox-inner" onclick="event.stopPropagation()">
+    <div id="lightbox" class="lightbox">
+        <button class="lightbox-close" id="lightbox-close-btn">✕</button>
+        <button class="lightbox-nav lightbox-prev" id="lightbox-prev-btn">&#8592;</button>
+        <button class="lightbox-nav lightbox-next" id="lightbox-next-btn">&#8594;</button>
+        <div class="lightbox-inner" id="lightbox-inner">
             <img id="lightbox-img" src="" alt="">
             <div class="lightbox-caption">
                 <strong id="lightbox-title"></strong>
@@ -127,9 +127,11 @@
         let galleryItems = [];
         let lightboxIndex = 0;
         let gUploadFile = null;
+        let _lbOpenTime = 0; // guard against ghost clicks
 
         // ── Lightbox ──
         function openLightbox(i) {
+            if (i < 0 || i >= galleryItems.length) return;
             lightboxIndex = i;
             const item = galleryItems[i];
             document.getElementById('lightbox-img').src = item.url;
@@ -137,14 +139,34 @@
             document.getElementById('lightbox-desc').textContent  = item.description || '';
             document.getElementById('lightbox').classList.add('active');
             document.body.style.overflow = 'hidden';
+            _lbOpenTime = Date.now();
         }
         function closeLightbox() {
+            // Ignore ghost/synthetic clicks that fire within 350ms of opening
+            if (Date.now() - _lbOpenTime < 350) return;
             document.getElementById('lightbox').classList.remove('active');
             document.body.style.overflow = '';
         }
         function shiftLightbox(dir) {
+            _lbOpenTime = Date.now(); // reset guard for nav
             openLightbox((lightboxIndex + dir + galleryItems.length) % galleryItems.length);
         }
+
+        // Lightbox event listeners (no inline onclick — avoids ghost-click issues)
+        document.getElementById('lightbox').addEventListener('click', function(e) {
+            // Only close if clicking the backdrop itself, not children
+            if (e.target === this) closeLightbox();
+        });
+        document.getElementById('lightbox-close-btn').addEventListener('click', closeLightbox);
+        document.getElementById('lightbox-prev-btn').addEventListener('click', function(e) {
+            e.stopPropagation(); shiftLightbox(-1);
+        });
+        document.getElementById('lightbox-next-btn').addEventListener('click', function(e) {
+            e.stopPropagation(); shiftLightbox(1);
+        });
+        document.getElementById('lightbox-inner').addEventListener('click', function(e) {
+            e.stopPropagation();
+        });
         document.addEventListener('keydown', e => {
             if (!document.getElementById('lightbox').classList.contains('active')) return;
             if (e.key === 'Escape')     closeLightbox();
@@ -173,8 +195,8 @@
                 document.getElementById('gallery-empty').style.display = 'none';
                 const grid = document.getElementById('gallery-grid');
                 grid.innerHTML = galleryItems.map((item, i) => `
-                    <div class="gallery-card" onclick="openLightbox(${i})">
-                        <img src="${item.url}" alt="${item.title || 'Gallery image'}" loading="lazy">
+                    <div class="gallery-card" data-index="${i}">
+                        <img src="${item.url}" alt="${item.title || 'Gallery image'}" loading="lazy" draggable="false">
                         <div class="gallery-card-overlay">
                             ${item.title       ? `<strong>${item.title}</strong>` : ''}
                             ${item.description ? `<span>${item.description}</span>` : ''}
@@ -187,6 +209,14 @@
             });
         }
         loadGallery();
+
+        // ── Gallery grid click delegation (more reliable than inline onclick) ──
+        document.getElementById('gallery-grid').addEventListener('click', function(e) {
+            const card = e.target.closest('.gallery-card');
+            if (card && card.dataset.index !== undefined) {
+                openLightbox(parseInt(card.dataset.index, 10));
+            }
+        });
 
         // ── Upload modal ──
         function openUploadModal() {

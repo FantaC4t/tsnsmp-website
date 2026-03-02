@@ -123,6 +123,8 @@ body:not(.dark-mode) .gallery-hero h1 {
     background: var(--bg-card);
     border: 1px solid var(--border-color);
     transition: transform .3s cubic-bezier(.34,1.56,.64,1), box-shadow .3s, border-color .3s;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
 }
 .gallery-card:hover {
     transform: translateY(-6px) scale(1.01);
@@ -150,6 +152,7 @@ body:not(.dark-mode) .gallery-hero h1 {
     justify-content: flex-end;
     padding: 1rem;
     opacity: 0;
+    pointer-events: none;
     transition: opacity .25s ease, background .3s;
 }
 .gallery-card:hover .gallery-card-overlay {

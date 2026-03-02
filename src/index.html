@@ -133,19 +133,6 @@
 </div>
 </section>
 
-<!-- Lightbox with navigation -->
-<div class="lightbox" id="lightbox" onclick="closeLightbox()">
-    <button class="lightbox-close" onclick="closeLightbox()">✕</button>
-    <button class="lightbox-nav lightbox-prev" onclick="event.stopPropagation(); shiftLightbox(-1)">&#8592;</button>
-    <button class="lightbox-nav lightbox-next" onclick="event.stopPropagation(); shiftLightbox(1)">&#8594;</button>
-    <div class="lightbox-inner" onclick="event.stopPropagation()">
-        <img id="lightbox-img" class="lightbox-content" src="" alt="Enlarged view" />
-        <div class="lightbox-caption">
-            <strong id="lightbox-title"></strong>
-            <span id="lightbox-desc"></span>
-        </div>
-    </div>
-</div>
 <section class="features">
 <div class="container">
 <h2>Why we think you'll love it here ✨</h2>
@@ -257,6 +244,20 @@
 </section>
 </main>
 
+<!-- Lightbox — must be outside <main> to avoid stacking context issues -->
+<div class="lightbox" id="lightbox">
+    <button class="lightbox-close" id="lightbox-close-btn">✕</button>
+    <button class="lightbox-nav lightbox-prev" id="lightbox-prev-btn">&#8592;</button>
+    <button class="lightbox-nav lightbox-next" id="lightbox-next-btn">&#8594;</button>
+    <div class="lightbox-inner" id="lightbox-inner">
+        <img id="lightbox-img" class="lightbox-content" src="" alt="Enlarged view" />
+        <div class="lightbox-caption">
+            <strong id="lightbox-title"></strong>
+            <span id="lightbox-desc"></span>
+        </div>
+    </div>
+</div>
+
 <script src="js/header.js"></script>
 <script>
         createHeader('home');
@@ -264,6 +265,7 @@
         /* ── Gallery-powered carousel + lightbox ── */
         let galleryItems = [];
         let lightboxIndex = 0;
+        let _lbOpenTime = 0; // guard against mobile ghost clicks
 
         function openLightbox(i) {
             lightboxIndex = i;
@@ -274,15 +276,37 @@
             document.getElementById('lightbox-desc').textContent  = item.description || '';
             document.getElementById('lightbox').classList.add('active');
             document.body.style.overflow = 'hidden';
+            _lbOpenTime = Date.now();
         }
         function closeLightbox() {
+            // Ignore ghost/synthetic clicks that fire within 350ms of opening
+            if (Date.now() - _lbOpenTime < 350) return;
             document.getElementById('lightbox').classList.remove('active');
             document.body.style.overflow = '';
+            /* Resume carousel animation when lightbox closes */
+            var ct = document.getElementById('carouselTrack');
+            if (ct) ct.style.animationPlayState = '';
         }
         function shiftLightbox(dir) {
             if (!galleryItems.length) return;
+            _lbOpenTime = Date.now(); // reset guard for nav
             openLightbox((lightboxIndex + dir + galleryItems.length) % galleryItems.length);
         }
+
+        // Lightbox event listeners (no inline onclick — avoids ghost-click issues)
+        document.getElementById('lightbox').addEventListener('click', function(e) {
+            if (e.target === this) closeLightbox();
+        });
+        document.getElementById('lightbox-close-btn').addEventListener('click', closeLightbox);
+        document.getElementById('lightbox-prev-btn').addEventListener('click', function(e) {
+            e.stopPropagation(); shiftLightbox(-1);
+        });
+        document.getElementById('lightbox-next-btn').addEventListener('click', function(e) {
+            e.stopPropagation(); shiftLightbox(1);
+        });
+        document.getElementById('lightbox-inner').addEventListener('click', function(e) {
+            e.stopPropagation();
+        });
         document.addEventListener('keydown', function(e) {
             const lb = document.getElementById('lightbox');
             if (!lb || !lb.classList.contains('active')) return;
@@ -309,10 +333,12 @@
             function renderTrack(items) {
                 galleryItems = items;
                 if (!items.length) { track.closest('.player-showcase').style.display = 'none'; return; }
-                /* Build items × 2 for seamless loop */
+                /* Build items × 2 for seamless loop — use data-index instead of onclick
+                   because the CSS scroll animation moves elements between mousedown/up,
+                   preventing click events from firing reliably */
                 const html = items.map((item, i) => `
-                    <div class="carousel-item" onclick="openLightbox(${i})">
-                        <img src="${item.url}" alt="${item.title || 'Gallery image'}" loading="lazy" />
+                    <div class="carousel-item" data-index="${i}">
+                        <img src="${item.url}" alt="${item.title || 'Gallery image'}" loading="lazy" draggable="false" />
                         ${item.title ? `<div class="carousel-item-label">${item.title}</div>` : ''}
                     </div>
                 `).join('');
@@ -323,6 +349,45 @@
                 const speed = 50; /* px per second */
                 track.style.animationDuration = (totalWidth / speed) + 's';
             }
+
+            /* Event delegation: handle clicks on carousel items via a static parent.
+               Track pointer movement so we only open lightbox on a tap/click, not a drag. */
+            (function() {
+                const container = track.closest('.carousel-container') || track.parentElement;
+                let pointerStartX = 0, pointerStartY = 0;
+
+                container.addEventListener('pointerdown', function(e) {
+                    pointerStartX = e.clientX;
+                    pointerStartY = e.clientY;
+                    /* Pause animation on touch so the item doesn't slide away */
+                    track.style.animationPlayState = 'paused';
+                }, { passive: true });
+
+                container.addEventListener('pointerup', function(e) {
+                    const dx = Math.abs(e.clientX - pointerStartX);
+                    const dy = Math.abs(e.clientY - pointerStartY);
+                    /* Only count as a tap if pointer barely moved (< 10px) */
+                    if (dx < 10 && dy < 10) {
+                        const card = e.target.closest('.carousel-item');
+                        if (card && card.dataset.index !== undefined) {
+                            openLightbox(parseInt(card.dataset.index, 10));
+                        }
+                    }
+                    /* Resume animation after a short delay */
+                    setTimeout(function() {
+                        if (!document.getElementById('lightbox').classList.contains('active')) {
+                            track.style.animationPlayState = '';
+                        }
+                    }, 300);
+                });
+
+                /* Also resume animation when pointer leaves carousel area */
+                container.addEventListener('pointerleave', function() {
+                    if (!document.getElementById('lightbox').classList.contains('active')) {
+                        track.style.animationPlayState = '';
+                    }
+                }, { passive: true });
+            })();
 
             try {
                 const db = firebase.database();

@@ -3,34 +3,25 @@ function createFooter(currentPage) {
     const prefix = currentPage === 'home' ? './' : '../';
 
     const footer = document.createElement('footer');
+    footer.className = 'site-footer';
     footer.innerHTML = `
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-logo">
-                    <img src="${prefix}assets/big_logo.png" alt="TSNSMP Logo">
-                    <p>A cozy, whitelisted Minecraft SMP.</p>
-                </div>
-                <div class="footer-links">
-                    <h4>Pages</h4>
-                    <ul>
-                        <li><a href="${prefix}">Home</a></li>
-                        <li><a href="${prefix}about/">About</a></li>
-                        <li><a href="${prefix}players/">Players</a></li>
-                        <li><a href="${prefix}gallery/">Gallery</a></li>
-                        <li><a href="${prefix}resources/">Resources</a></li>
-                    </ul>
-                </div>
-                <div class="footer-social">
-                    <h4>Community</h4>
-                    <div class="social-links">
-                        <a href="https://discord.gg/pySpekTJ7E" target="_blank" rel="noopener" class="social-link">Discord</a>
-                        <a href="https://bsky.app/profile/tsnsmp.online" target="_blank" rel="noopener" class="social-link">Bluesky</a>
-                    </div>
-                </div>
+        <div class="footer-inner">
+            <nav class="footer-nav" aria-label="Footer">
+                <a href="${prefix}" data-no-transition>Home</a>
+                <a href="${prefix}about/" data-no-transition>About</a>
+                <a href="${prefix}players/" data-no-transition>Players</a>
+                <a href="${prefix}gallery/" data-no-transition>Gallery</a>
+                <a href="${prefix}resources/" data-no-transition>Resources</a>
+            </nav>
+            <div class="footer-social">
+                <a href="https://discord.gg/pySpekTJ7E" target="_blank" rel="noopener" class="footer-icon" aria-label="Discord">
+                    <img src="${prefix}assets/icons/discord.svg" alt="Discord">
+                </a>
+                <a href="https://bsky.app/profile/tsnsmp.online" target="_blank" rel="noopener" class="footer-icon" aria-label="Bluesky">
+                    <img src="${prefix}assets/icons/bluesky.svg" alt="Bluesky">
+                </a>
             </div>
-            <div class="footer-bottom">
-                <p>&copy; ${new Date().getFullYear()} TSNSMP. Not affiliated with Mojang Studios.</p>
-            </div>
+            <p class="footer-copy">&copy; ${new Date().getFullYear()} TSNSMP &middot; Not affiliated with Mojang Studios.</p>
         </div>
     `;
 

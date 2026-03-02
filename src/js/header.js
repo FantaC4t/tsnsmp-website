@@ -17,7 +17,7 @@ function createHeader(currentPage) {
         <nav class="navbar">
             <div class="nav-brand">
                 <a href="${homePath}">
-                    <img src="${assetsPath}big_logo.png" alt="TSNSMP Logo" class="nav-logo">
+                    <img src="${assetsPath}minecraft_title(1).png" alt="TSNSMP Logo" class="nav-logo">
                     <span class="nav-title">TSNSMP</span>
                 </a>
             </div>

@@ -75,12 +75,13 @@ body:not(.dark-mode) .hamburger::after {
 }
 
 .nav-logo {
-    height: 64px; /* Bigger height */
-    width: auto;  /* Maintain aspect ratio */
-    border-radius: 0; /* NO CIRCLE */
+    height: 110px;
+    width: auto;
+    border-radius: 0;
     filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.3));
     transition: all 0.3s ease;
-    border: none; /* Remove border */
+    border: none;
+    object-fit: contain;
 }
 
 .nav-brand a::before {

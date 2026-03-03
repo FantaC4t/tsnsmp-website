@@ -85,5 +85,19 @@ function handleScroll() {
 
 window.addEventListener('scroll', handleScroll);
 
+// Back-to-top button
+(function () {
+    const btn = document.createElement('button');
+    btn.className = 'back-to-top';
+    btn.id = 'backToTop';
+    btn.setAttribute('aria-label', 'Back to top');
+    btn.textContent = '↑';
+    document.body.appendChild(btn);
+    window.addEventListener('scroll', () => {
+        btn.classList.toggle('visible', window.scrollY > 400);
+    }, { passive: true });
+    btn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+})();
+
 // Export for use in pages
 window.createHeader = createHeader;

@@ -2,13 +2,14 @@
 
 .page-hero {
     position: relative;
-    min-height: 40vh; /* Smaller than home (100vh) */
+    min-height: 40vh;
     display: flex;
     align-items: center;
     justify-content: center;
     overflow: hidden;
     background: var(--bg-primary);
-    padding-top: 120px; /* Increased to clear header */
+    padding-top: 120px;
+    padding-bottom: 3rem;
 }
 
 /* Dynamic Background Mesh (Copied from home.css) */
@@ -42,7 +43,7 @@ body:not(.dark-mode) .hero-bg {
     background-image: 
         linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
         linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
-    background-size: 50px 50px;
+    background-size: 32px 32px;
     mask-image: radial-gradient(circle at center, black 40%, transparent 80%);
     -webkit-mask-image: radial-gradient(circle at center, black 40%, transparent 80%);
     z-index: 1;
@@ -102,7 +103,9 @@ body:not(.dark-mode) .hero-grid {
 }
 
 .hero-content-resources h1 {
-    font-size: 3.5rem;
+    font-size: clamp(2.2rem, 5vw, 3.8rem);
+    letter-spacing: -0.02em;
+    line-height: 1.05;
     margin-bottom: 1rem;
     background: linear-gradient(135deg, #fff 0%, var(--s3-teal) 50%, var(--s3-green) 100%);
     -webkit-background-clip: text;
@@ -125,6 +128,33 @@ body:not(.dark-mode) .hero-content-resources h1 {
     margin: 0 auto;
 }
 
+/* Badge pill above hero h1 */
+.resources-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 5px 16px;
+    background: rgba(22, 196, 196, 0.1);
+    border: 1px solid rgba(22, 196, 196, 0.3);
+    border-radius: 50px;
+    color: var(--s3-teal);
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+}
+
+.resources-badge-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--s3-teal);
+    box-shadow: 0 0 8px rgba(22, 196, 196, 0.7);
+    animation: blink 2s ease-in-out infinite;
+    flex-shrink: 0;
+}
+
 /* Navigation Tabs */
 .resources-nav {
     background: var(--bg-secondary);
@@ -145,12 +175,12 @@ body:not(.dark-mode) .hero-content-resources h1 {
 
 .tab-btn {
     background: transparent;
-    border: 2px solid var(--border-color);
+    border: 1px solid var(--border-color);
     color: var(--text-secondary);
-    padding: 0.8rem 2rem;
+    padding: 0.7rem 1.6rem;
     border-radius: 50px;
     cursor: pointer;
-    font-size: 1.1rem;
+    font-size: 0.95rem;
     font-weight: 600;
     transition: all 0.3s ease;
 }
@@ -205,7 +235,7 @@ body:not(.dark-mode) .hero-content-resources h1 {
 .rule-card {
     background: var(--bg-card);
     border: 1px solid var(--border-color);
-    border-radius: 12px;
+    border-radius: 16px;
     padding: 1.2rem;
     margin-bottom: 0; /* Removed margin since we use grid gap */
     display: flex;
@@ -258,7 +288,7 @@ body:not(.dark-mode) .hero-content-resources h1 {
 .icon-card {
     background: var(--bg-card);
     border: 1px solid var(--border-color);
-    border-radius: 15px;
+    border-radius: 16px;
     padding: 2rem;
     text-align: center;
     transition: transform 0.3s ease;
@@ -353,7 +383,7 @@ iframe {
 .mod-card {
     background: var(--bg-card);
     border: 1px solid var(--border-color);
-    border-radius: 12px;
+    border-radius: 16px;
     padding: 1.1rem 1.25rem;
     display: flex;
     flex-direction: column;

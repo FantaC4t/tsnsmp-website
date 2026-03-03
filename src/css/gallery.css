@@ -65,14 +65,46 @@
     margin-bottom: 1rem;
 }
 
+.gallery-badge-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--s3-teal);
+    box-shadow: 0 0 8px rgba(22,196,196,0.7);
+    animation: blink 2s ease-in-out infinite;
+    flex-shrink: 0;
+}
+
 .gallery-hero h1 {
     font-size: clamp(2.2rem, 5vw, 3.8rem);
     font-weight: 900;
+    letter-spacing: -0.03em;
+    line-height: 1.05;
     background: linear-gradient(135deg, #fff 0%, var(--s3-teal) 50%, var(--s3-green) 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
+    background-size: 200% auto;
+    animation: shimmerTitle 7s linear infinite;
     margin-bottom: .75rem;
+}
+
+@keyframes shimmerTitle {
+    0%   { background-position: 0% center; }
+    100% { background-position: 200% center; }
+}
+
+body:not(.dark-mode) .gallery-hero-bg {
+    background:
+        radial-gradient(circle at 15% 60%, rgba(82,194,40,0.12), transparent 30%),
+        radial-gradient(circle at 85% 25%, rgba(22,196,196,0.12), transparent 30%);
+    opacity: 0.7;
+}
+
+body:not(.dark-mode) .gallery-hero .hero-grid {
+    background-image:
+        linear-gradient(rgba(0,0,0,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,0,0,0.04) 1px, transparent 1px);
 }
 
 body:not(.dark-mode) .gallery-hero h1 {

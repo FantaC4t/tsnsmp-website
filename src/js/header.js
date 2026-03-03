@@ -32,7 +32,7 @@ function createHeader(currentPage) {
                 <li><a href="${resourcesPath}" class="${currentPage === 'resources' ? 'active' : ''}">Resources</a></li>
                 <li><a href="https://bsky.app/profile/tsnsmp.online" target="_blank" rel="noopener" class="nav-icon" aria-label="Follow TSNSMP on Bluesky" title="Follow TSNSMP on Bluesky"><img src="${assetsPath}icons/bluesky.svg" alt="Bluesky" class="nav-icon-img"></a></li>
                 <li><a href="https://discord.gg/pySpekTJ7E" target="_blank" rel="noopener" class="nav-icon" aria-label="Join TSNSMP on Discord" title="Join TSNSMP on Discord"><img src="${assetsPath}icons/discord.svg" alt="Discord" class="nav-icon-img"></a></li>
-                ${localStorage.getItem('tsnsmp_admin') === '1' ? `<li><a href="${prefix}admin/" class="${currentPage === 'admin' ? 'active' : ''}" style="color: var(--s3-teal); font-weight: 700;">⚙️ Admin</a></li>` : ''}
+                <li><a href="${prefix}admin/" class="${currentPage === 'admin' ? 'active' : ''}" style="color: var(--s3-teal); font-weight: 700;">⚙️ Admin</a></li>
             </ul>
             <button class="theme-toggle" aria-label="Toggle dark mode">
                 <span class="theme-icon">🌙</span>

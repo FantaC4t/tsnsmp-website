@@ -132,17 +132,3 @@ function toggleMobileMenu() {
     }
 }
 
-// Prevent right-click on images (optional protection)
-document.addEventListener('DOMContentLoaded', function() {
-    const images = document.querySelectorAll('img');
-    
-    images.forEach(img => {
-        img.addEventListener('contextmenu', function(e) {
-            e.preventDefault();
-        });
-        
-        img.addEventListener('dragstart', function(e) {
-            e.preventDefault();
-        });
-    });
-});

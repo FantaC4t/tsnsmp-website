@@ -27,7 +27,7 @@
             <div class="gallery-hero-bg"></div>
             <div class="hero-grid"></div>
             <div class="container">
-                <div class="gallery-badge">Season 2 Memories</div>
+                <div class="gallery-badge">TSNSMP Gallery</div>
                 <h1>Gallery</h1>
                 <p class="gallery-hero-sub">Screenshots and highlights from the server.</p>
                 <button class="gallery-upload-btn" id="upload-trigger-btn" onclick="openUploadModal()">
@@ -139,6 +139,9 @@
         let gUploadFile = null;
         let _lbOpenTime = 0; // guard against ghost clicks
 
+        // Escape user-supplied strings before injecting into innerHTML (XSS protection)
+        function esc(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
         // ── Lightbox ──
         function openLightbox(i) {
             if (i < 0 || i >= galleryItems.length) return;
@@ -224,11 +227,11 @@
                 const grid = document.getElementById('gallery-grid');
                 grid.innerHTML = galleryItems.map((item, i) => `
                     <div class="gallery-card" data-index="${i}">
-                        <img src="${item.url}" alt="${item.title || 'Gallery image'}" loading="lazy" draggable="false">
+                        <img src="${esc(item.url)}" alt="${esc(item.title || 'Gallery image')}" loading="lazy" draggable="false">
                         <div class="gallery-card-overlay">
-                            ${item.title       ? `<strong>${item.title}</strong>` : ''}
-                            ${item.description ? `<span>${item.description}</span>` : ''}
-                            ${item.uploadedBy  ? `<span style="font-size:.72rem;opacity:.6;margin-top:3px">📸 ${item.uploadedBy}</span>` : ''}
+                            ${item.title       ? `<strong>${esc(item.title)}</strong>` : ''}
+                            ${item.description ? `<span>${esc(item.description)}</span>` : ''}
+                            ${item.uploadedBy  ? `<span style="font-size:.72rem;opacity:.6;margin-top:3px">📸 ${esc(item.uploadedBy)}</span>` : ''}
                         </div>
                     </div>
                 `).join('');

@@ -269,6 +269,9 @@
         let lightboxIndex = 0;
         let _lbOpenTime = 0; // guard against mobile ghost clicks
 
+        // Escape user-supplied strings before injecting into innerHTML (XSS protection)
+        function esc(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
         function openLightbox(i) {
             lightboxIndex = i;
             const item = galleryItems[i];
@@ -359,8 +362,8 @@
                    preventing click events from firing reliably */
                 const html = items.map((item, i) => `
                     <div class="carousel-item" data-index="${i}">
-                        <img src="${item.url}" alt="${item.title || 'Gallery image'}" loading="lazy" draggable="false" />
-                        ${item.title ? `<div class="carousel-item-label">${item.title}</div>` : ''}
+                        <img src="${esc(item.url)}" alt="${esc(item.title || 'Gallery image')}" loading="lazy" draggable="false" />
+                        ${item.title ? `<div class="carousel-item-label">${esc(item.title)}</div>` : ''}
                     </div>
                 `).join('');
                 track.innerHTML = html + html; /* duplicate for infinite scroll */

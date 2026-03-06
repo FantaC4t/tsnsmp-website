@@ -3,9 +3,395 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    
+    <!-- Primary Meta Tags -->
+    <title>TSNSMP | Cozy Minecraft Server</title>
+    <meta name="title" content="TSNSMP | Cozy Minecraft Server">
+    <meta name="description" content="Join TSNSMP, a welcoming Minecraft SMP community! SEASON 3 Applications are LIVE">
+    <meta name="keywords" content="Minecraft, SMP, Minecraft server, survival multiplayer, Minecraft community, whitelist server, TSNSMP, Season 3, friendly server, LGBTQ+ friendly">
+    <meta name="author" content="FantaCat">
+    <meta name="robots" content="index, follow">
+    <meta name="language" content="English">
+    
+    <meta name="image" content="https://www.tsnsmp.online/assets/image.png">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://www.tsnsmp.online/">
+    <meta property="og:title" content="TSNSMP | Cozy Minecraft Server">
+    <meta property="og:description" content="Join TSNSMP, a welcoming Minecraft SMP community! SEASON 3 Applications are LIVE">
+    <meta property="og:image" content="https://www.tsnsmp.online/assets/tsnsmp-og-s3.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="TSNSMP Season 3">
+    <meta property="og:site_name" content="TSNSMP">
+    
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://www.tsnsmp.online/">
+    <meta name="twitter:title" content="TSNSMP | Cozy Minecraft Server">
+    <meta name="twitter:description" content="Join TSNSMP, a welcoming Minecraft SMP community! SEASON 3 Applications are LIVE">
+    <meta name="twitter:image" content="https://www.tsnsmp.online/assets/tsnsmp-og-s3.png">
+    
+    <!-- Additional Meta Tags -->
+    <meta name="theme-color" content="#7B68EE">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="TSNSMP">
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://www.tsnsmp.online/">
+    
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/header.css">
+    <link rel="stylesheet" href="css/footer.css">
+    <link rel="stylesheet" href="css/home.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    
+    <!-- Favicon -->
+    <link rel="icon" href="assets/SMALL%20LOGO.png" type="image/png">
+
 </head>
-<body>
-    <h1>Hello World</h1>
-</body>
-</html>
+<body class="dark-mode">
+<!-- Header injected by JS --><main><!-- Hero Section -->
+<section class="hero">
+<div class="hero-bg"></div>
+<div class="hero-grid"></div>
+<div class="hero-container"><!-- Content -->
+<div class="hero-content">
+<div class="hero-badge">
+<div class="status-indicator"></div>
+<span>Season 3 is Live!</span></div>
+<h1><span class="text-reveal">Welcome to</span><br /><span class="gradient-text">TSNSMP</span></h1>
+<p class="fade-in-up delay-1">Join our fun and friendly survival multiplayer server! Build and explore in our inclusive community! Share creative ideas while making friends!</p>
+<div class="hero-server-stats fade-in-up delay-1">
+<span>⚔️ Survival SMP</span><span class="stat-dot">◆</span><span>🌍 Season 3 Active</span><span class="stat-dot">◆</span><span>🔒 Whitelist Only</span>
+</div>
+<div class="hero-member-badge fade-in-up delay-1" id="heroMemberBadge" style="display:none" aria-live="polite">
+<span class="member-badge-dot"></span>
+<span class="member-badge-text" id="heroMemberCount">0 Members</span>
+</div>
+<div class="hero-actions fade-in-up delay-2">
+    <div class="hero-primary-ctas">
+        <a href="#application-section" class="btn-glow pulse-btn"> <span>🎮 Join Server</span> </a>
+        <a href="about/" class="btn-outline"> 📖 Learn More </a>
+    </div>
+    <div class="hero-social-icons" role="group" aria-label="TSNSMP community links">
+        <a href="https://bsky.app/profile/tsnsmp.online" target="_blank" class="btn-icon" rel="noopener" aria-label="Follow TSNSMP on Bluesky" title="Follow TSNSMP on Bluesky"><img src="assets/icons/bluesky.svg" alt="Bluesky" class="btn-icon-img"></a>
+        <a href="https://discord.gg/pySpekTJ7E" target="_blank" class="btn-icon" rel="noopener" aria-label="Join TSNSMP on Discord" title="Join TSNSMP on Discord"><img src="assets/icons/discord.svg" alt="Discord" class="btn-icon-img"></a>
+    </div>
+</div>
+</div>
+
+<!-- Hero halo: 3D ring of member skins -->
+<div class="hero-halo-wrap" id="heroHaloWrap" aria-hidden="true">
+    <div class="halo-glow"></div>
+    <div class="halo-particles" id="haloParticles"></div>
+    <div class="halo-orbit-ring"></div>
+    <div class="halo-orbit-ring halo-orbit-ring--inner"></div>
+    <div class="skin-halo" id="skinHalo"></div>
+</div>
+
+<!-- Live stream previews (shown when members are streaming on Twitch) -->
+<div class="hero-stream-wrap" id="heroStreamWrap" style="display:none" aria-label="Live member streams">
+    <div class="stream-header">
+        <span class="stream-live-dot"></span>
+        <span class="stream-title">Members Live on Twitch</span>
+    </div>
+    <div class="stream-featured" id="streamFeatured"></div>
+    <div class="stream-switcher" id="streamSwitcher"></div>
+</div>
+
+</div>
+</section>
+<section class="events-section">
+<div class="container">
+<div class="events-wrapper">
+    <div class="events-header">
+        <h2>What's Happening 📅</h2>
+        <p class="events-subtitle">Keep up with what’s going on in the SMP</p>
+    </div>
+    <div class="events-timeline" id="eventsTimeline"></div>
+</div>
+</div>
+</section>
+<!-- Carousel Section — pulls from Firebase Gallery -->
+<section class="player-showcase">
+<div class="container">
+<h2>Check out some awesome builds! 🏗️</h2>
+<p class="section-subtitle">Click any image to expand · Images from our <a href="gallery/" style="color:var(--primary-purple)">gallery</a></p>
+<div class="carousel-container">
+<div class="carousel-track" id="carouselTrack">
+    <!-- Populated dynamically from Firebase gallery -->
+</div>
+</div>
+</div>
+</section>
+
+<section class="features">
+<div class="container">
+<h2>Why we think you'll love it here ✨</h2>
+<div class="features-grid">
+<div class="feature-card">
+<div class="feature-icon">🫂</div>
+<h3>Tight Knit Community</h3>
+<p>Since we don’t have a huge amount of players on our server, that means getting to know each other is easier! Everyone is super inviting and are always happy to make a new friend!</p>
+</div>
+<div class="feature-card">
+<div class="feature-icon">🛡️</div>
+<h3>Carefully Chosen Members</h3>
+<p>We vet all applicants when we receive their form to make sure they align with the values of our server! </p>
+</div>
+<div class="feature-card">
+<div class="feature-icon">🏗️</div>
+<h3>Fun Group Projects</h3>
+<p>From an apocalyptic city to a whimsical forest, players on our server have come together to make fantastic builds!</p>
+</div>
+<div class="feature-card">
+<div class="feature-icon">💬</div>
+<h3>Always Someone To Chat With</h3>
+<p>The server always has someone on and in the voice group chats (thanks to the Simple Voice Mod) where we have fun conversations and goofy shenanigans.</p>
+</div>
+<div class="feature-card">
+<div class="feature-icon">🌱</div>
+<h3>New Start, Grand Adventures</h3>
+<p>Season 3 means a fresh world packed with endless adventures and new memories with friends!</p>
+</div>
+</div>
+</div>
+</section>
+<section class="customization-showcase">
+<div class="container">
+<h2>Make yourself at home with customization! 🎨</h2>
+<div class="customization-grid">
+<div class="custom-feature">
+<div class="feature-icon">🌈</div>
+<h3>Your color, your vibe</h3>
+<p>Seriously, pick ANY color! Hot pink? Neon green? That one specific blue that reminds you of your favorite hoodie? We've got you covered!</p>
+<div class="color-examples"><span style="color: #ff6200; font-weight: bold; text-shadow: 0 0 8px currentColor;">FantaC4t</span> <span style="color: #af2323; font-weight: bold; text-shadow: 0 0 8px currentColor;">Gaqy</span> <span style="color: #2cb7b9; font-weight: bold; text-shadow: 0 0 8px currentColor;">Cyan_caelum</span></div>
+</div>
+<div class="custom-feature">
+<div class="feature-icon">💝</div>
+<h3>Pronouns with style</h3>
+<p>Show your pronouns however feels right - we've got cool styling options and everyone here is respectful about using them correctly!</p>
+<div class="pronoun-examples"><span class="pronoun-badge">they/them</span> <span class="pronoun-badge">she/her</span> <span class="pronoun-badge">he/him</span> <span class="pronoun-badge">she/they</span> <span class="pronoun-badge">any/all</span></div>
+</div>
+<div class="custom-feature">
+<div class="feature-icon">📹</div>
+<h3>Streaming made easy</h3>
+<p>Going live? Hit that toggle and let everyone know! We love supporting our content creators. 🎬</p>
+<div class="toggle-examples">
+<div class="status-example online"><span class="status-indicator"></span> <span>🔴 Streaming now!</span></div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section class="application-section" id="application-section">
+<div class="container">
+<div class="application-content">
+<h2>Join us for Season 3! 🌸</h2>
+<p class="app-subtitle">Whether you're a returning player from a previous season or a new face, we'd love to have you! We're looking for cool people who love Minecraft and want to have fun.</p>
+
+<!-- Base Picking Memo -->
+<div class="app-memo" id="appMemo">
+    <div class="app-memo-icon">🏠</div>
+    <div class="app-memo-body">
+        <strong class="app-memo-title">📌 Base Picking Phase — Until March 7th!</strong>
+        <p>Season 3 is officially underway! Right now we're in the <strong>base picking phase</strong> — hop in, explore the world, and claim your perfect spot before it's gone. Get your application in ASAP to join the fun!</p>
+    </div>
+</div>
+
+<div class="app-layout">
+    <!-- Left column: info -->
+    <div class="app-info-col">
+        <div class="application-requirements">
+            <h3>What we're hoping you bring:</h3>
+            <ul>
+                <li>✨ Chill attitude and respect for other players</li>
+                <li>🏗️ Love for building and collaborating (any skill level!)</li>
+                <li>🎮 Clean record — no griefing or drama</li>
+                <li>🌱 Age 16+ (younger players welcome if mature and/or vouched for)</li>
+                <li>🤝 Commitment to keeping things friendly for everyone</li>
+            </ul>
+        </div>
+        <div class="app-response-note">
+            <span class="app-response-icon">📬</span>
+            <p>We usually get back to applications within a day or two. If you seem like a good fit, we'll slide into your Discord DMs! 😄</p>
+        </div>
+        <div class="app-quick-links">
+            <a href="https://discord.gg/pySpekTJ7E" target="_blank" rel="noopener" class="app-quick-link discord">
+                <img src="assets/icons/discord.svg" alt="" width="18" height="18"> Join our Discord
+            </a>
+            <a href="about/" class="app-quick-link about">
+                📖 Learn more about us
+            </a>
+        </div>
+    </div>
+    <!-- Right column: form -->
+    <div class="app-form-col">
+        <div class="application-form-wrapper"><iframe src="https://docs.google.com/forms/d/e/1FAIpQLScLHcGkmNqaU3GcPOlIGtfzzr_F7H3Kv_dKInJcSAkikZ7vZA/viewform?embedded=true" frameborder="0" marginheight="0" marginwidth="0" title="TSNSMP Application Form">Loading…</iframe></div>
+    </div>
+</div>
+
+</div>
+</div>
+</section>
+</main>
+
+<!-- Lightbox — must be outside <main> to avoid stacking context issues -->
+<div class="lightbox" id="lightbox">
+    <button class="lightbox-close" id="lightbox-close-btn">✕</button>
+    <button class="lightbox-nav lightbox-prev" id="lightbox-prev-btn">&#8592;</button>
+    <button class="lightbox-nav lightbox-next" id="lightbox-next-btn">&#8594;</button>
+    <div class="lightbox-inner" id="lightbox-inner">
+        <img id="lightbox-img" class="lightbox-content" src="" alt="Enlarged view" />
+        <div class="lightbox-caption">
+            <strong id="lightbox-title"></strong>
+            <span id="lightbox-desc"></span>
+        </div>
+    </div>
+</div>
+
+<!-- Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+<script src="js/firebase-config.js"></script>
+<script src="js/header.js"></script>
+<script src="js/footer.js"></script>
+<script>
+        createHeader('home');
+        createFooter('home');
+
+        /* ── Gallery-powered carousel + lightbox ── */
+        let galleryItems = [];
+        let lightboxIndex = 0;
+        let _lbOpenTime = 0; // guard against mobile ghost clicks
+
+        // Escape user-supplied strings before injecting into innerHTML (XSS protection)
+        function esc(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+        function openLightbox(i) {
+            lightboxIndex = i;
+            const item = galleryItems[i];
+            if (!item) return;
+            document.getElementById('lightbox-img').src = item.url;
+            document.getElementById('lightbox-img').alt = item.title || 'Gallery image';
+            document.getElementById('lightbox-title').textContent = item.title || '';
+            document.getElementById('lightbox-desc').textContent  = item.description || '';
+            document.getElementById('lightbox').classList.add('active');
+            document.body.style.overflow = 'hidden';
+            _lbOpenTime = Date.now();
+        }
+        function closeLightbox() {
+            // Ignore ghost/synthetic clicks that fire within 350ms of opening
+            if (Date.now() - _lbOpenTime < 350) return;
+            document.getElementById('lightbox').classList.remove('active');
+            document.body.style.overflow = '';
+            /* Resume carousel animation when lightbox closes */
+            var ct = document.getElementById('carouselTrack');
+            if (ct) ct.style.animationPlayState = '';
+        }
+        function shiftLightbox(dir) {
+            if (!galleryItems.length) return;
+            _lbOpenTime = Date.now(); // reset guard for nav
+            openLightbox((lightboxIndex + dir + galleryItems.length) % galleryItems.length);
+        }
+
+        // Lightbox event listeners (no inline onclick — avoids ghost-click issues)
+        document.getElementById('lightbox').addEventListener('click', function(e) {
+            if (e.target === this) closeLightbox();
+        });
+        document.getElementById('lightbox-close-btn').addEventListener('click', closeLightbox);
+        document.getElementById('lightbox-prev-btn').addEventListener('click', function(e) {
+            e.stopPropagation(); shiftLightbox(-1);
+        });
+        document.getElementById('lightbox-next-btn').addEventListener('click', function(e) {
+            e.stopPropagation(); shiftLightbox(1);
+        });
+        document.getElementById('lightbox-inner').addEventListener('click', function(e) {
+            e.stopPropagation();
+        });
+        document.addEventListener('keydown', function(e) {
+            const lb = document.getElementById('lightbox');
+            if (!lb || !lb.classList.contains('active')) return;
+            if (e.key === 'Escape')     closeLightbox();
+            if (e.key === 'ArrowLeft')  shiftLightbox(-1);
+            if (e.key === 'ArrowRight') shiftLightbox(1);
+        });
+
+        // ── Swipe navigation for mobile lightbox ──
+        (function() {
+            var lb = document.getElementById('lightbox');
+            var touchStartX = 0, touchStartY = 0;
+            lb.addEventListener('touchstart', function(e) {
+                touchStartX = e.changedTouches[0].clientX;
+                touchStartY = e.changedTouches[0].clientY;
+            }, { passive: true });
+            lb.addEventListener('touchend', function(e) {
+                var dx = e.changedTouches[0].clientX - touchStartX;
+                var dy = e.changedTouches[0].clientY - touchStartY;
+                if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy) * 1.5) {
+                    if (dx < 0) shiftLightbox(1);  // swipe left → next
+                    else        shiftLightbox(-1); // swipe right → prev
+                }
+            }, { passive: true });
+        })();
+
+        /* Load gallery images from Firebase into carousel */
+        (function loadCarouselFromGallery() {
+            const track = document.getElementById('carouselTrack');
+            if (!track) return;
+
+            /* Fallback: local images if Firebase is empty/fails */
+            const fallbackImages = [
+                { url: 'assets/all_builds.png', title: 'Aerial Overview', description: 'Server builds from above' },
+                { url: 'assets/gaqster.png',    title: 'Gaqy\'s Build',  description: 'Shopping mall build' },
+                { url: 'assets/blacksnow.png',  title: 'Blacksnow',      description: 'Winter-themed build' },
+                { url: 'assets/loftylena.png',  title: 'LoftyLena',      description: 'Scenic landscape build' },
+                { url: 'assets/cyan.png',       title: 'Cyan',           description: 'Colourful base build' },
+                { url: 'assets/Fantac4t.png',   title: 'FantaC4t',       description: 'Creative build' },
+            ];
+
+            function renderTrack(items) {
+                galleryItems = items;
+                if (!items.length) { track.closest('.player-showcase').style.display = 'none'; return; }
+                /* Build items × 2 for seamless loop — use data-index instead of onclick
+                   because the CSS scroll animation moves elements between mousedown/up,
+                   preventing click events from firing reliably */
+                const html = items.map((item, i) => `
+                    <div class="carousel-item" data-index="${i}">
+                        <img src="${esc(item.url)}" alt="${esc(item.title || 'Gallery image')}" loading="lazy" draggable="false" />
+                        ${item.title ? `<div class="carousel-item-label">${esc(item.title)}</div>` : ''}
+                    </div>
+                `).join('');
+                track.innerHTML = html + html; /* duplicate for infinite scroll */
+
+                /* Re-calc animation duration based on item count */
+                const totalWidth = items.length * (350 + 32); /* item width + gap */
+                const speed = 50; /* px per second */
+                track.style.animationDuration = (totalWidth / speed) + 's';
+            }
+
+            /* Event delegation: handle clicks on carousel items via a static parent.
+               Track pointer movement so we only open lightbox on a tap/click, not a drag. */
+            (function() {
+                const container = track.closest('.carousel-container') || track.parentElement;
+                let pointerStartX = 0, pointerStartY = 0;
+
+                container.addEventListener('pointerdown', function(e) {
+                    pointerStartX = e.clientX;
+                    pointerStartY = e.clientY;
+                    /* Pause animation on touch so the item doesn't slide away */
+                    track.style.animationPlayState = 'paused';
+                }, { passive: true });
+
+                container.addEventListener('pointerup', function(e) {
+                    const dx = Math.abs(e.clientX - pointerStartX);
+                    const dy = Math.abs(e.clientY - pointerStartY);
+                    /* Only count as a tap if pointer barely moved (< 10px) */
+                    if (dx < 10 && dy < 10) {
+                        const card = e.target.closest('.carousel-item');
+                        if (card && card.dataset.index !== undefined) {
+                     

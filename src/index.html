@@ -394,4 +394,415 @@
                     if (dx < 10 && dy < 10) {
                         const card = e.target.closest('.carousel-item');
                         if (card && card.dataset.index !== undefined) {
-                     
+                            openLightbox(parseInt(card.dataset.index, 10));
+                        }
+                    }
+                    /* Resume animation after a short delay */
+                    setTimeout(function() {
+                        if (!document.getElementById('lightbox').classList.contains('active')) {
+                            track.style.animationPlayState = '';
+                        }
+                    }, 300);
+                });
+
+                /* Also resume animation when pointer leaves carousel area */
+                container.addEventListener('pointerleave', function() {
+                    if (!document.getElementById('lightbox').classList.contains('active')) {
+                        track.style.animationPlayState = '';
+                    }
+                }, { passive: true });
+            })();
+
+            try {
+                const db = firebase.database();
+                db.ref('gallery').once('value', snap => {
+                    const items = [];
+                    snap.forEach(child => {
+                        const val = child.val();
+                        if (val && val.url) items.push({ key: child.key, ...val });
+                    });
+                    items.sort((a, b) => (b.uploadedAt || 0) - (a.uploadedAt || 0));
+                    /* Use gallery if it has images, supplement with fallbacks if under 4 */
+                    if (items.length >= 4) {
+                        renderTrack(items);
+                    } else if (items.length > 0) {
+                        /* Merge: gallery first, then enough fallbacks to fill out */
+                        const galleryUrls = new Set(items.map(i => i.url));
+                        const extras = fallbackImages.filter(f => !galleryUrls.has(f.url));
+                        renderTrack([...items, ...extras].slice(0, Math.max(items.length + extras.length, 6)));
+                    } else {
+                        renderTrack(fallbackImages);
+                    }
+                }, () => {
+                    renderTrack(fallbackImages);
+                });
+            } catch(e) {
+                renderTrack(fallbackImages);
+            }
+        })();
+
+        // Season 3 events timeline
+        (function buildEventsTimeline() {
+            const events = [
+                { date: '2026-03-01', label: 'Season 3 Launch 🎉', desc: 'The world is live!', status: 'past' },
+                { date: '2026-03-07', label: 'Base Picking Ends 🏠', desc: 'Last day to claim your spot', status: 'active' },
+                { date: '2026-04-01', label: 'April Event 🌟', desc: 'Details coming soon…', status: 'upcoming' },
+            ];
+
+            const now = new Date();
+            // Auto-determine status
+            events.forEach(ev => {
+                const d = new Date(ev.date + 'T23:59:59');
+                if (ev.status !== 'active') {
+                    ev.status = d < now ? 'past' : 'upcoming';
+                }
+            });
+
+            // Find soonest future/active event for countdown
+            const nextEvent = events.find(ev => ev.status === 'active') || events.find(ev => ev.status === 'upcoming');
+
+            const container = document.getElementById('eventsTimeline');
+            if (!container) return;
+
+            container.innerHTML = events.map((ev, i) => {
+                const d = new Date(ev.date + 'T00:00:00');
+                const monthShort = d.toLocaleString('en-GB', { month: 'short' });
+                const day = d.getDate();
+                const isNext = nextEvent && ev.date === nextEvent.date;
+                const daysAway = isNext ? Math.max(0, Math.ceil((new Date(ev.date + 'T23:59:59') - now) / 86400000)) : null;
+
+                return `
+                <div class="event-card ${ev.status}${isNext ? ' event-next' : ''}" style="animation-delay:${i * .08}s">
+                    <div class="event-date-badge">
+                        <span class="event-month">${monthShort}</span>
+                        <span class="event-day">${day}</span>
+                    </div>
+                    <div class="event-line"><span class="event-dot"></span></div>
+                    <div class="event-body">
+                        <strong class="event-label">${ev.label}</strong>
+                        <span class="event-desc">${ev.desc}</span>
+                        ${isNext && daysAway !== null ? `<span class="event-countdown">${daysAway === 0 ? 'Today!' : daysAway === 1 ? 'Tomorrow!' : daysAway + ' days left'}</span>` : ''}
+                        ${ev.status === 'past' ? '<span class="event-status-done">✓ Done</span>' : ''}
+                    </div>
+                </div>`;
+            }).join('');
+        })();
+
+        /* ── Base picking memo auto-hide after March 7 ── */
+        (function checkMemoExpiry() {
+            const memo = document.getElementById('appMemo');
+            if (!memo) return;
+            const expiry = new Date('March 7, 2026 23:59:59').getTime();
+            if (Date.now() > expiry) memo.style.display = 'none';
+        })();
+
+        /* ── Halo particles ── */
+        (function spawnParticles() {
+            const box = document.getElementById('haloParticles');
+            if (!box) return;
+            for (let i = 0; i < 10; i++) {
+                const dot = document.createElement('span');
+                dot.className = 'halo-dot';
+                dot.style.setProperty('--angle', Math.random() * 360 + 'deg');
+                dot.style.setProperty('--radius', (38 + Math.random() * 62) + '%');
+                dot.style.setProperty('--duration', (4 + Math.random() * 6) + 's');
+                dot.style.setProperty('--delay', (Math.random() * -8) + 's');
+                dot.style.setProperty('--size', (2 + Math.random() * 3) + 'px');
+                box.appendChild(dot);
+            }
+        })();
+
+        /* ── Twitch live-stream detection ── */
+        function extractTwitchUsername(url) {
+            return url.trim().split('/').filter(Boolean).pop();
+        }
+
+        function probeStreamLive(username) {
+            /*  Twitch CDN returns a small ~4 KB placeholder for offline users
+                and a much larger thumbnail (10 KB+) for live users.
+                We fetch the image and check the size to tell the difference. */
+            return new Promise(resolve => {
+                const timer = setTimeout(() => resolve(false), 4000);
+                fetch(`https://static-cdn.jtvnw.net/previews-ttv/live_user_${username.toLowerCase()}-440x248.jpg?cb=${Date.now()}`, { mode: 'cors' })
+                    .then(r => {
+                        if (!r.ok) { clearTimeout(timer); return resolve(false); }
+                        const cl = r.headers.get('content-length');
+                        if (cl && parseInt(cl, 10) < 10000) {
+                            clearTimeout(timer); return resolve(false); /* placeholder */
+                        }
+                        return r.blob();
+                    })
+                    .then(blob => {
+                        clearTimeout(timer);
+                        if (!blob) return; /* already resolved */
+                        resolve(blob.size > 10000); /* real thumbnail > 10 KB */
+                    })
+                    .catch(() => { clearTimeout(timer); resolve(false); });
+            });
+        }
+
+        async function detectLiveStreams(members) {
+            const withTwitch = members
+                .filter(m => m.twitch && m.twitch.trim())
+                .map(m => ({ ...m, twitchUsername: extractTwitchUsername(m.twitch) }));
+            if (!withTwitch.length) return [];
+            const results = await Promise.all(
+                withTwitch.map(async m => (await probeStreamLive(m.twitchUsername)) ? m : null)
+            );
+            return results.filter(Boolean);
+        }
+
+        let currentStreamIdx = 0;
+
+        function renderStreamCards(liveStreams) {
+            const featured  = document.getElementById('streamFeatured');
+            const switcher  = document.getElementById('streamSwitcher');
+            if (!featured) return;
+
+            const parentDomain = location.hostname || 'www.tsnsmp.online';
+
+            function showStream(idx) {
+                currentStreamIdx = idx;
+                const member = liveStreams[idx];
+                featured.innerHTML = '';
+
+                /* Big iframe player */
+                const iframeWrap = document.createElement('div');
+                iframeWrap.className = 'stream-player-wrap';
+
+                const iframe = document.createElement('iframe');
+                iframe.src = `https://player.twitch.tv/?channel=${encodeURIComponent(member.twitchUsername)}&parent=${parentDomain}&muted=true`;
+                iframe.allowFullscreen = true;
+                iframe.setAttribute('frameborder', '0');
+                iframe.setAttribute('scrolling', 'no');
+                iframe.title = `${member.name}'s Twitch stream`;
+                iframeWrap.appendChild(iframe);
+
+                /* Info bar */
+                const info = document.createElement('div');
+                info.className = 'stream-featured-info';
+
+                const avatar = document.createElement('img');
+                avatar.className = 'stream-card-avatar';
+                avatar.src = `https://minotar.net/avatar/${encodeURIComponent(member.name)}/64`;
+                avatar.alt = member.name;
+
+                const meta = document.createElement('div');
+                meta.className = 'stream-card-meta';
+
+                const nameEl = document.createElement('span');
+                nameEl.className = 'stream-card-name';
+                nameEl.textContent = member.name;
+
+                const badge = document.createElement('span');
+                badge.className = 'stream-card-badge';
+                badge.innerHTML = '<span class="live-dot"></span> LIVE';
+
+                meta.appendChild(nameEl);
+                meta.appendChild(badge);
+
+                const link = document.createElement('a');
+                link.className = 'stream-card-link';
+                link.href = member.twitch;
+                link.target = '_blank';
+                link.rel = 'noopener';
+                link.textContent = 'Open on Twitch ↗';
+
+                info.appendChild(avatar);
+                info.appendChild(meta);
+                info.appendChild(link);
+
+                featured.appendChild(iframeWrap);
+                featured.appendChild(info);
+
+                /* Update active tab */
+                if (switcher) {
+                    switcher.querySelectorAll('.stream-tab').forEach((tab, i) => {
+                        tab.classList.toggle('active', i === idx);
+                    });
+                }
+            }
+
+            /* Build switcher tabs (only if 2+) */
+            if (switcher) {
+                switcher.innerHTML = '';
+                if (liveStreams.length > 1) {
+                    liveStreams.forEach((member, i) => {
+                        const tab = document.createElement('button');
+                        tab.className = 'stream-tab' + (i === 0 ? ' active' : '');
+                        tab.onclick = () => showStream(i);
+
+                        const av = document.createElement('img');
+                        av.src = `https://minotar.net/avatar/${encodeURIComponent(member.name)}/48`;
+                        av.alt = member.name;
+                        av.className = 'stream-tab-avatar';
+
+                        const name = document.createElement('span');
+                        name.className = 'stream-tab-name';
+                        name.textContent = member.name;
+
+                        const dot = document.createElement('span');
+                        dot.className = 'stream-tab-dot';
+
+                        tab.appendChild(av);
+                        tab.appendChild(name);
+                        tab.appendChild(dot);
+                        switcher.appendChild(tab);
+                    });
+                }
+            }
+
+            showStream(0);
+        }
+
+        /* ── Skin Halo Ring (shown when no streams are live) ── */
+        function buildSkinRing(ring, allMembers) {
+            if (!ring) return;
+            if (!Array.isArray(allMembers) || allMembers.length === 0) {
+                ring.innerHTML = '<p class="skin-orbit-fallback">Join us to appear here!</p>';
+                return;
+            }
+
+            const RING_SIZE = Math.min(8, allMembers.length);
+            const shuffled  = [...allMembers].sort(() => Math.random() - 0.5);
+            const active    = shuffled.slice(0, RING_SIZE);
+            const reserve   = shuffled.slice(RING_SIZE);
+
+            ring.innerHTML = '';
+            const faces    = [];
+            const faceData = [];
+
+            active.forEach((member, i) => {
+                const face = document.createElement('div');
+                face.className = 'skin-halo-face';
+                face.style.setProperty('--index', i);
+                face.style.setProperty('--total', RING_SIZE);
+                face.style.setProperty('--depth', '0');
+
+                const inner = document.createElement('div');
+                inner.className = 'skin-halo-face-inner';
+
+                const img = document.createElement('img');
+                const safeName = encodeURIComponent(member.name || member.username || `Player${i + 1}`);
+                img.src  = `https://minotar.net/avatar/${safeName}/128`;
+                img.alt  = `${member.name || member.username || 'TSNSMP member'}'s skin`;
+
+                const label = document.createElement('span');
+                label.textContent = member.name || member.username || 'New Member';
+
+                inner.appendChild(img);
+                inner.appendChild(label);
+                face.appendChild(inner);
+                ring.appendChild(face);
+                faces.push(face);
+                faceData.push(member);
+            });
+
+            const total = RING_SIZE;
+
+            const applyDepths = (frontIdx) => {
+                faces.forEach((face, i) => {
+                    const distFwd = (i - frontIdx + total) % total;
+                    let depth;
+                    if      (distFwd === 0) depth = 0;
+                    else if (distFwd === 1) depth = 0.18;
+                    else if (distFwd === 2) depth = 0.36;
+                    else if (distFwd <= Math.floor(total / 2)) {
+                        depth = 0.50 + ((distFwd - 3) / Math.max(1, Math.floor(total / 2) - 3)) * 0.35;
+                    } else {
+                        depth = 1;
+                    }
+                    depth = Math.min(1, depth);
+                    face.style.setProperty('--depth', depth.toFixed(3));
+                    if (distFwd === 0) face.setAttribute('data-front', '');
+                    else               face.removeAttribute('data-front');
+                });
+            };
+
+            const swapHiddenFace = (slotIdx) => {
+                if (reserve.length === 0) return;
+                const rIdx = Math.floor(Math.random() * reserve.length);
+                const newMember = reserve.splice(rIdx, 1)[0];
+                reserve.push(faceData[slotIdx]);
+                faceData[slotIdx] = newMember;
+
+                const face  = faces[slotIdx];
+                const img   = face.querySelector('img');
+                const label = face.querySelector('span');
+                const safeName = encodeURIComponent(newMember.name || newMember.username || 'Player');
+                if (img) {
+                    img.src = `https://minotar.net/avatar/${safeName}/128`;
+                    img.alt = `${newMember.name || newMember.username || 'TSNSMP member'}'s skin`;
+                }
+                if (label) label.textContent = newMember.name || newMember.username || 'New Member';
+            };
+
+            let step = 0;
+            ring.style.transition = 'none';
+            ring.style.transform  = 'rotateX(5deg) rotateY(0deg)';
+            requestAnimationFrame(() => requestAnimationFrame(() => applyDepths(0)));
+
+            setInterval(() => {
+                const nextStep  = step + 1;
+                const nextFront = nextStep % total;
+                const swapSlot  = (nextFront + Math.ceil(total * 0.65)) % total;
+                swapHiddenFace(swapSlot);
+                applyDepths(nextFront);
+                setTimeout(() => {
+                    step = nextStep;
+                    const angle = -(step / total) * 360;
+                    ring.style.transition = 'transform 1.1s cubic-bezier(0.4, 0, 0.2, 1)';
+                    ring.style.transform  = `rotateX(5deg) rotateY(${angle}deg)`;
+                }, 450);
+            }, 2800);
+        }
+
+        /* ── Hero Init: detect live streams → show cards or halo ── */
+        (async function initHeroVisual() {
+            const haloWrap   = document.getElementById('heroHaloWrap');
+            const streamWrap = document.getElementById('heroStreamWrap');
+            const ring       = document.getElementById('skinHalo');
+
+            /* 1. Fetch members from Firebase → fallback to JSON */
+            let members = [];
+            try {
+                const db   = firebase.database();
+                const snap = await db.ref('members').once('value');
+                const raw  = snap.val();
+                members = raw ? (Array.isArray(raw) ? raw : Object.values(raw)) : [];
+            } catch (e) { /* silent */ }
+
+            if (!members.length) {
+                try { members = await fetch('data/members.json').then(r => r.json()); }
+                catch (e) { /* silent */ }
+            }
+
+            if (!members.length) { buildSkinRing(ring, []); return; }
+
+            /* 1b. Show live member count badge */
+            const badge = document.getElementById('heroMemberBadge');
+            const countEl = document.getElementById('heroMemberCount');
+            if (badge && countEl) {
+                countEl.textContent = `${members.length} Members`;
+                badge.style.removeProperty('display');
+            }
+
+            /* 2. Probe for live Twitch streams */
+            let liveStreams = await detectLiveStreams(members);
+
+            if (liveStreams.length > 0) {
+                /* Show stream previews, hide halo */
+                if (haloWrap)   haloWrap.style.display = 'none';
+                if (streamWrap) {
+                    streamWrap.style.removeProperty('display');
+                    renderStreamCards(liveStreams);
+                }
+            } else {
+                /* No live streams — show the skin halo */
+                if (streamWrap) streamWrap.style.display = 'none';
+                buildSkinRing(ring, members);
+            }
+        })();
+    </script>
+</body>
+</html>

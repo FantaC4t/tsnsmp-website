@@ -1076,12 +1076,19 @@
             document.getElementById('confirm-message').textContent = message;
             const modal = document.getElementById('confirm-modal');
             modal.classList.add('active');
-            document.getElementById('confirm-yes').onclick = () => { confirmResolve = null; closeConfirm(); resolve(true); };
+            document.getElementById('confirm-yes').onclick = () => {
+                modal.classList.remove('active');
+                const r = confirmResolve;
+                confirmResolve = null;
+                if (r) r(true);
+            };
         });
     }
     function closeConfirm() {
         document.getElementById('confirm-modal').classList.remove('active');
-        if (confirmResolve) { confirmResolve(false); confirmResolve = null; }
+        const r = confirmResolve;
+        confirmResolve = null;
+        if (r) r(false);
     }
 
     /* ── Search & Filter state ── */

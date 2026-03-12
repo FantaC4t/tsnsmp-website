@@ -1076,7 +1076,7 @@
             document.getElementById('confirm-message').textContent = message;
             const modal = document.getElementById('confirm-modal');
             modal.classList.add('active');
-            document.getElementById('confirm-yes').onclick = () => { closeConfirm(); resolve(true); };
+            document.getElementById('confirm-yes').onclick = () => { confirmResolve = null; closeConfirm(); resolve(true); };
         });
     }
     function closeConfirm() {

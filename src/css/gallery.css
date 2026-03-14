@@ -111,6 +111,38 @@ body:not(.dark-mode) .gallery-hero h1 {
 }
 
 /* ── GALLERY SECTION ── */
+/* ── SEASON FILTER BAR ── */
+.gallery-filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .6rem;
+    justify-content: center;
+    margin-bottom: 2.2rem;
+}
+.gallery-filter-btn {
+    padding: .45rem 1.2rem;
+    border-radius: 999px;
+    border: 1px solid var(--border-color);
+    background: var(--bg-card);
+    color: var(--text-secondary);
+    font-size: .88rem;
+    font-family: inherit;
+    cursor: pointer;
+    transition: background .2s, border-color .2s, color .2s, box-shadow .2s;
+    white-space: nowrap;
+}
+.gallery-filter-btn:hover {
+    border-color: var(--s3-teal);
+    color: var(--text-primary);
+}
+.gallery-filter-btn.active {
+    background: var(--s3-teal);
+    border-color: var(--s3-teal);
+    color: #0f0f23;
+    font-weight: 700;
+    box-shadow: 0 0 14px rgba(22,196,196,.35);
+}
+
 .gallery-section {
     padding: 3.5rem 0 6rem;
 }
@@ -191,6 +223,23 @@ body:not(.dark-mode) .gallery-hero h1 {
     color: rgba(255,255,255,.7);
     font-size: .8rem;
     margin-top: 2px;
+}
+
+/* ── SEASON TAG BADGE ── */
+.gallery-season-tag {
+    position: absolute;
+    top: .65rem;
+    right: .65rem;
+    background: rgba(0,0,0,.65);
+    color: #fff;
+    font-size: .7rem;
+    font-weight: 700;
+    padding: .2rem .52rem;
+    border-radius: 999px;
+    letter-spacing: .03em;
+    backdrop-filter: blur(4px);
+    border: 1px solid rgba(255,255,255,.12);
+    pointer-events: none;
 }
 
 /* ── LIGHTBOX ── */
@@ -414,7 +463,8 @@ body:not(.dark-mode) .gallery-hero h1 {
 .gupload-fields { display: flex; flex-direction: column; gap: .6rem; margin: .4rem 0; }
 .gupload-field  { display: flex; flex-direction: column; gap: 4px; }
 .gupload-field label { font-size: .78rem; font-weight: 600; color: var(--text-secondary); text-transform: uppercase; letter-spacing: .06em; }
-.gupload-field input {
+.gupload-field input,
+.gupload-select {
     background: var(--bg-secondary);
     border: 1px solid var(--border-color);
     border-radius: 8px;
@@ -424,7 +474,9 @@ body:not(.dark-mode) .gallery-hero h1 {
     font-family: inherit;
     transition: border-color .2s;
 }
-.gupload-field input:focus { outline: none; border-color: var(--s3-teal); }
+.gupload-field input:focus,
+.gupload-select:focus { outline: none; border-color: var(--s3-teal); }
+.gupload-select { appearance: none; -webkit-appearance: none; cursor: pointer; }
 
 .gupload-progress-wrap {
     width: 100%; height: 5px;

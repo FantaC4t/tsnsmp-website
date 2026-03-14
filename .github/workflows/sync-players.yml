@@ -1,0 +1,59 @@
+name: Sync Player List
+
+# ──────────────────────────────────────────────────────────────────────────────
+# Triggers:
+#   1. Push to main when player_extras.json is edited  → instant sync after you
+#      update a player's colour / pronouns / role
+#   2. Daily at 06:00 UTC                              → picks up whitelist
+#      changes made on the server side overnight
+#   3. workflow_dispatch                               → manual "Run workflow"
+#      button in the GitHub Actions tab
+# ──────────────────────────────────────────────────────────────────────────────
+# Required repository secrets (Settings → Secrets → Actions):
+#   SFTP_HOST                – your game server's SFTP hostname or IP
+#   SFTP_PORT                – SFTP port (usually 22)
+#   SFTP_USER                – SFTP username
+#   SFTP_PASS                – SFTP password
+#   SFTP_REMOTE_PATH         – path to whitelist.json on the server
+#                              (e.g.  /whitelist.json  or  /home/container/whitelist.json)
+#   FIREBASE_SERVICE_ACCOUNT – paste the ENTIRE contents of your Firebase
+#                              service account JSON as one line
+# ──────────────────────────────────────────────────────────────────────────────
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'scripts/player_extras.json'
+  schedule:
+    - cron: '0 6 * * *'
+  workflow_dispatch:
+
+jobs:
+  sync:
+    name: Sync players → Firebase
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        working-directory: scripts
+        run: npm install
+
+      - name: Run sync script
+        working-directory: scripts
+        env:
+          SFTP_HOST:                ${{ secrets.SFTP_HOST }}
+          SFTP_PORT:                ${{ secrets.SFTP_PORT }}
+          SFTP_USER:                ${{ secrets.SFTP_USER }}
+          SFTP_PASS:                ${{ secrets.SFTP_PASS }}
+          SFTP_REMOTE_PATH:         ${{ secrets.SFTP_REMOTE_PATH }}
+          FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+        run: node sync-players.js

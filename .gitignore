@@ -1,3 +1,10 @@
 *_Zone.Identifier
 .DS_Store
 Thumbs.db
+
+# Sync script dependencies
+scripts/node_modules/
+
+# Never commit service account credentials
+*-service-account.json
+serviceAccount*.json

@@ -40,8 +40,15 @@ function createHeader(currentPage) {
         </nav>
     `;
 
-    // Insert at beginning of body
-    document.body.insertBefore(header, document.body.firstChild);
+    // Insert skip link before header for keyboard users
+    const skipLink = document.createElement('a');
+    skipLink.href = '#main-content';
+    skipLink.className = 'skip-link';
+    skipLink.textContent = 'Skip to main content';
+    document.body.insertBefore(skipLink, document.body.firstChild);
+
+    // Insert at beginning of body (after skip link)
+    document.body.insertBefore(header, skipLink.nextSibling);
 
     // Setup mobile toggle
     const toggle = header.querySelector('.nav-toggle');

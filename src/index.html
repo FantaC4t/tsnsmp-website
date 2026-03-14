@@ -52,12 +52,44 @@
     <link rel="stylesheet" href="css/home.css">
     <link rel="stylesheet" href="css/responsive.css">
     
-    <!-- Favicon -->
+    <!-- Favicon & Manifest -->
     <link rel="icon" href="assets/SMALL%20LOGO.png" type="image/png">
+    <link rel="apple-touch-icon" href="assets/SMALL%20LOGO.png">
+    <link rel="manifest" href="site.webmanifest">
+
+    <!-- JSON-LD Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "Organization",
+          "name": "TSNSMP",
+          "url": "https://www.tsnsmp.online/",
+          "logo": "https://www.tsnsmp.online/assets/SMALL%20LOGO.png",
+          "description": "A cozy, whitelisted Minecraft SMP community.",
+          "sameAs": [
+            "https://discord.gg/5MhJyzMAk5",
+            "https://bsky.app/profile/tsnsmp.online"
+          ]
+        },
+        {
+          "@type": "WebSite",
+          "name": "TSNSMP",
+          "url": "https://www.tsnsmp.online/",
+          "potentialAction": {
+            "@type": "SearchAction",
+            "target": "https://www.tsnsmp.online/players/?search={search_term_string}",
+            "query-input": "required name=search_term_string"
+          }
+        }
+      ]
+    }
+    </script>
 
 </head>
 <body class="dark-mode">
-<!-- Header injected by JS --><main><!-- Hero Section -->
+<!-- Header injected by JS --><main id="main-content"><!-- Hero Section -->
 <section class="hero">
 <div class="hero-bg"></div>
 <div class="hero-grid"></div>

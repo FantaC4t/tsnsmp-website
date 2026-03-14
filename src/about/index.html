@@ -177,58 +177,58 @@
 
                     <div class="htimeline" id="htimeline">
 
-                        <div class="htl-node" onclick="selectNode(this)">
+                        <button class="htl-node" onclick="selectNode(this)" aria-expanded="false">
                             <div class="htl-dot"></div>
                             <div class="htl-label">
                                 <span class="htl-date">Jan 2025</span>
                                 <span class="htl-title">End of an Era</span>
                             </div>
-                        </div>
+                        </button>
 
-                        <div class="htl-node" onclick="selectNode(this)">
+                        <button class="htl-node" onclick="selectNode(this)" aria-expanded="false">
                             <div class="htl-dot"></div>
                             <div class="htl-label">
                                 <span class="htl-date">Jan 2025</span>
                                 <span class="htl-title">✨ The Spark</span>
                             </div>
-                        </div>
+                        </button>
 
-                        <div class="htl-node" onclick="selectNode(this)">
+                        <button class="htl-node" onclick="selectNode(this)" aria-expanded="false">
                             <div class="htl-dot"></div>
                             <div class="htl-label">
                                 <span class="htl-date">Early 2025</span>
                                 <span class="htl-title">🚀 S1 Launches</span>
                             </div>
-                        </div>
+                        </button>
 
-                        <div class="htl-node" onclick="selectNode(this)">
+                        <button class="htl-node" onclick="selectNode(this)" aria-expanded="false">
                             <div class="htl-dot"></div>
                             <div class="htl-label">
                                 <span class="htl-date">Mid 2025</span>
                                 <span class="htl-title">💭 Rethinking</span>
                             </div>
-                        </div>
+                        </button>
 
-                        <div class="htl-node" onclick="selectNode(this)">
+                        <button class="htl-node" onclick="selectNode(this)" aria-expanded="false">
                             <div class="htl-dot"></div>
                             <div class="htl-label">
                                 <span class="htl-date">Jul 2025</span>
                                 <span class="htl-title">🌟 Season 2</span>
                             </div>
-                        </div>
+                        </button>
 
-                        <div class="htl-node" onclick="selectNode(this)">
+                        <button class="htl-node" onclick="selectNode(this)" aria-expanded="false">
                             <div class="htl-dot current"></div>
                             <div class="htl-label">
                                 <span class="htl-date">Mar 2026 · Now</span>
                                 <span class="htl-title">🚀 Season 3</span>
                             </div>
-                        </div>
+                        </button>
 
                     </div>
 
                     <!-- Detail panel, filled by JS -->
-                    <div class="htl-detail-panel" id="htl-panel">
+                    <div class="htl-detail-panel" id="htl-panel" role="region" aria-label="Timeline event detail" aria-live="polite">
                         <p id="htl-detail-text"></p>
                     </div>
 
@@ -261,7 +261,10 @@
             const idx   = Array.from(nodes).indexOf(node);
 
             const wasActive = node.classList.contains('active');
-            nodes.forEach(n => n.classList.remove('active'));
+            nodes.forEach(n => {
+                n.classList.remove('active');
+                n.setAttribute('aria-expanded', 'false');
+            });
 
             if (wasActive) {
                 panel.classList.remove('visible');
@@ -269,6 +272,7 @@
             }
 
             node.classList.add('active');
+            node.setAttribute('aria-expanded', 'true');
             text.innerHTML = htlDetails[idx];
             panel.classList.add('visible');
         }

@@ -75,10 +75,10 @@
     </main>
 
     <!-- Lightbox -->
-    <div id="lightbox" class="lightbox">
-        <button class="lightbox-close" id="lightbox-close-btn">✕</button>
-        <button class="lightbox-nav lightbox-prev" id="lightbox-prev-btn">&#8592;</button>
-        <button class="lightbox-nav lightbox-next" id="lightbox-next-btn">&#8594;</button>
+    <div id="lightbox" class="lightbox" role="dialog" aria-modal="true" aria-labelledby="lightbox-title" aria-hidden="true">
+        <button class="lightbox-close" id="lightbox-close-btn" aria-label="Close image viewer">✕</button>
+        <button class="lightbox-nav lightbox-prev" id="lightbox-prev-btn" aria-label="Previous image">&#8592;</button>
+        <button class="lightbox-nav lightbox-next" id="lightbox-next-btn" aria-label="Next image">&#8594;</button>
         <div class="lightbox-inner" id="lightbox-inner">
             <img id="lightbox-img" src="" alt="">
             <div class="lightbox-caption">
@@ -161,6 +161,7 @@
         let lightboxIndex = 0;
         let gUploadFile = null;
         let _lbOpenTime = 0; // guard against ghost clicks
+        let _lbTrigger = null; // element to return focus to on close
 
         // Escape user-supplied strings before injecting into innerHTML (XSS protection)
         function esc(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
@@ -170,19 +171,27 @@
             if (i < 0 || i >= galleryItems.length) return;
             lightboxIndex = i;
             const item = galleryItems[i];
+            _lbTrigger = document.activeElement;
             document.getElementById('lightbox-img').src = item.url;
             document.getElementById('lightbox-img').alt = item.title || 'Gallery image';
             document.getElementById('lightbox-title').textContent = item.title || '';
             document.getElementById('lightbox-desc').textContent  = item.description || '';
-            document.getElementById('lightbox').classList.add('active');
+            const lb = document.getElementById('lightbox');
+            lb.classList.add('active');
+            lb.setAttribute('aria-hidden', 'false');
             document.body.style.overflow = 'hidden';
             _lbOpenTime = Date.now();
+            document.getElementById('lightbox-close-btn').focus();
         }
         function closeLightbox() {
             // Ignore ghost/synthetic clicks that fire within 350ms of opening
             if (Date.now() - _lbOpenTime < 350) return;
-            document.getElementById('lightbox').classList.remove('active');
+            const lb = document.getElementById('lightbox');
+            lb.classList.remove('active');
+            lb.setAttribute('aria-hidden', 'true');
             document.body.style.overflow = '';
+            /* Return focus to the element that opened the lightbox */
+            if (_lbTrigger && _lbTrigger.focus) { _lbTrigger.focus(); _lbTrigger = null; }
         }
         function shiftLightbox(dir) {
             _lbOpenTime = Date.now(); // reset guard for nav

@@ -194,14 +194,7 @@
 <h2>Join us for Season 3! 🌸</h2>
 <p class="app-subtitle">Whether you're a returning player from a previous season or a new face, we'd love to have you! We're looking for cool people who love Minecraft and want to have fun.</p>
 
-<!-- Base Picking Memo -->
-<div class="app-memo" id="appMemo">
-    <div class="app-memo-icon">🏠</div>
-    <div class="app-memo-body">
-        <strong class="app-memo-title">📌 Base Picking Phase — Until March 7th!</strong>
-        <p>Season 3 is officially underway! Right now we're in the <strong>base picking phase</strong> — hop in, explore the world, and claim your perfect spot before it's gone. Get your application in ASAP to join the fun!</p>
-    </div>
-</div>
+
 
 <div class="app-layout">
     <!-- Left column: info -->
@@ -445,7 +438,7 @@
         (function buildEventsTimeline() {
             const events = [
                 { date: '2026-03-01', label: 'Season 3 Launch 🎉', desc: 'The world is live!', status: 'past' },
-                { date: '2026-03-07', label: 'Base Picking Ends 🏠', desc: 'Last day to claim your spot', status: 'active' },
+                { date: '2026-03-07', label: 'Base Picking Ends 🏠', desc: 'Last day to claim your spot' },
                 { date: '2026-04-01', label: 'April Event 🌟', desc: 'Details coming soon…', status: 'upcoming' },
             ];
 
@@ -488,13 +481,7 @@
             }).join('');
         })();
 
-        /* ── Base picking memo auto-hide after March 7 ── */
-        (function checkMemoExpiry() {
-            const memo = document.getElementById('appMemo');
-            if (!memo) return;
-            const expiry = new Date('March 7, 2026 23:59:59').getTime();
-            if (Date.now() > expiry) memo.style.display = 'none';
-        })();
+
 
         /* ── Halo particles ── */
         (function spawnParticles() {

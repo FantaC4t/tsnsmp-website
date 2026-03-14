@@ -1,91 +1,44 @@
-document.addEventListener('DOMContentLoaded', function() {
-    const themeBtn = document.getElementById('theme-btn');
-    const body = document.body;
-    
-    // Check for saved theme preference or default to dark mode
-    const savedTheme = localStorage.getItem('theme');
-    if (savedTheme) {
-        if (savedTheme === 'light') {
-            body.classList.remove('dark-mode');
-        } else {
-            body.classList.add('dark-mode');
-        }
-    } else {
-        // Default to dark mode
-        body.classList.add('dark-mode');
-    }
-    
-    // Theme toggle button event listener
-    if (themeBtn) {
-        themeBtn.addEventListener('click', function() {
-            body.classList.toggle('dark-mode');
-            
-            // Save theme preference
-            if (body.classList.contains('dark-mode')) {
-                localStorage.setItem('theme', 'dark');
-            } else {
-                localStorage.setItem('theme', 'light');
-            }
-        });
-    }
-});
-
-// Header scroll effect
-window.addEventListener('scroll', () => {
-    const header = document.querySelector('header');
-    if (header) {
-        if (window.scrollY > 100) {
-            header.classList.add('scrolled');
-        } else {
-            header.classList.remove('scrolled');
-        }
-    }
-});
-
-// Smooth scrolling for application button
-function scrollToApplication() {
-    const applicationSection = document.getElementById('application-section');
-    if (applicationSection) {
-        applicationSection.scrollIntoView({ 
-            behavior: 'smooth' 
-        });
-    }
-}
-
-// Add scroll animations
-const observerOptions = {
-    threshold: 0.1,
-    rootMargin: '0px 0px -50px 0px'
-};
-
+// Scroll animations — observer declared at module scope so it's ready before DOMContentLoaded
 const observer = new IntersectionObserver(function(entries) {
     entries.forEach(entry => {
         if (entry.isIntersecting) {
             entry.target.classList.add('animate-in');
+            observer.unobserve(entry.target); // stop watching once animated
         }
     });
-}, observerOptions);
+}, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
 
-// Observe elements for animation
 document.addEventListener('DOMContentLoaded', function() {
-    const animateElements = document.querySelectorAll('.feature-card, .stat-card, .custom-feature, .story-card, .player-showcase-item');
-    
-    animateElements.forEach(el => {
+    const body = document.body;
+
+    // Check for saved theme preference or default to dark mode
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'light') {
+        body.classList.remove('dark-mode');
+    } else {
+        body.classList.add('dark-mode');
+    }
+
+    // Theme toggle button (legacy fallback — header.js handles the main toggle)
+    const themeBtn = document.getElementById('theme-btn');
+    if (themeBtn) {
+        themeBtn.addEventListener('click', function() {
+            body.classList.toggle('dark-mode');
+            localStorage.setItem('theme', body.classList.contains('dark-mode') ? 'dark' : 'light');
+        });
+    }
+
+    // Observe elements for scroll-in animation
+    document.querySelectorAll('.feature-card, .stat-card, .custom-feature, .story-card, .player-showcase-item').forEach(el => {
         observer.observe(el);
     });
-});
 
-// Add floating animation to flowers
-document.addEventListener('DOMContentLoaded', function() {
-    const flowers = document.querySelectorAll('.flower');
-    
-    flowers.forEach((flower, index) => {
+    // Stagger floating animation on flower elements
+    document.querySelectorAll('.flower').forEach((flower, index) => {
         flower.style.animationDelay = `${index * 0.5}s`;
     });
-});
 
-// Page exit transition
-document.addEventListener('DOMContentLoaded', () => {
+    // Page exit transition
     const main = document.querySelector('main');
     document.querySelectorAll('a[href]').forEach(link => {
         const href = link.getAttribute('href');
@@ -100,9 +53,7 @@ document.addEventListener('DOMContentLoaded', () => {
         ) {
             link.addEventListener('click', e => {
                 e.preventDefault();
-                if (main) {
-                    main.style.animation = 'pageExit 0.25s ease forwards';
-                }
+                if (main) main.style.animation = 'pageExit 0.25s ease forwards';
                 setTimeout(() => { window.location.href = href; }, 230);
             });
         }
@@ -123,12 +74,4 @@ Built with love by the TSNSMP team ✨
 window.addEventListener('error', function(e) {
     console.log('Non-critical error caught:', e.message);
 });
-
-// Mobile menu handling (if needed in future)
-function toggleMobileMenu() {
-    const nav = document.querySelector('nav');
-    if (nav) {
-        nav.classList.toggle('mobile-open');
-    }
-}
 

@@ -637,7 +637,7 @@
 
                 const avatar = document.createElement('img');
                 avatar.className = 'stream-card-avatar';
-                avatar.src = `https://minotar.net/avatar/${encodeURIComponent(member.name)}/64`;
+                avatar.src = `https://mc-heads.net/avatar/${encodeURIComponent(member.name)}/64`;
                 avatar.alt = member.name;
 
                 const meta = document.createElement('div');
@@ -686,7 +686,7 @@
                         tab.onclick = () => showStream(i);
 
                         const av = document.createElement('img');
-                        av.src = `https://minotar.net/avatar/${encodeURIComponent(member.name)}/48`;
+                        av.src = `https://mc-heads.net/avatar/${encodeURIComponent(member.name)}/48`;
                         av.alt = member.name;
                         av.className = 'stream-tab-avatar';
 
@@ -737,7 +737,7 @@
 
                 const img = document.createElement('img');
                 const safeName = encodeURIComponent(member.name || member.username || `Player${i + 1}`);
-                img.src  = `https://minotar.net/avatar/${safeName}/128`;
+                img.src  = `https://mc-heads.net/avatar/${safeName}/128`;
                 img.alt  = `${member.name || member.username || 'TSNSMP member'}'s skin`;
 
                 const label = document.createElement('span');
@@ -784,7 +784,7 @@
                 const label = face.querySelector('span');
                 const safeName = encodeURIComponent(newMember.name || newMember.username || 'Player');
                 if (img) {
-                    img.src = `https://minotar.net/avatar/${safeName}/128`;
+                    img.src = `https://mc-heads.net/avatar/${safeName}/128`;
                     img.alt = `${newMember.name || newMember.username || 'TSNSMP member'}'s skin`;
                 }
                 if (label) label.textContent = newMember.name || newMember.username || 'New Member';

@@ -800,6 +800,30 @@
             transition: border-color .2s;
         }
         .gedit-field input:focus { outline: none; border-color: #16C4C4; box-shadow: 0 0 0 3px rgba(22,196,196,.12); }
+        .gedit-field select {
+            padding: 10px 14px;
+            background: var(--bg2);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text);
+            font-size: .95rem; font-family: inherit;
+            transition: border-color .2s;
+            appearance: none; -webkit-appearance: none; cursor: pointer;
+        }
+        .gedit-field select:focus { outline: none; border-color: #16C4C4; box-shadow: 0 0 0 3px rgba(22,196,196,.12); }
+        .admin-season-badge {
+            display: inline-block;
+            font-size: .68rem;
+            font-weight: 700;
+            padding: 1px 7px;
+            border-radius: 999px;
+            background: rgba(22,196,196,.15);
+            color: #16C4C4;
+            border: 1px solid rgba(22,196,196,.3);
+            margin-left: 5px;
+            vertical-align: middle;
+            letter-spacing: .02em;
+        }
         .gedit-actions { display: flex; gap: .75rem; margin-top: 1.4rem; }
         .gedit-actions .btn { flex: 1; justify-content: center; }
     </style>
@@ -1001,6 +1025,15 @@
                         <label>Description</label>
                         <input type="text" id="gallery-desc" placeholder="e.g. Taken by Nightshade_Stars">
                     </div>
+                    <div class="form-group">
+                        <label>Season</label>
+                        <select id="gallery-season">
+                            <option value="">&mdash; Not tagged</option>
+                            <option value="1">&#127807; Season 1</option>
+                            <option value="2">&#9728;&#65039; Season 2</option>
+                            <option value="3">&#128640; Season 3</option>
+                        </select>
+                    </div>
                 </div>
                 <div class="gallery-progress-wrap" id="gallery-progress-wrap" style="display:none">
                     <div class="gallery-progress-bar" id="gallery-progress-bar"></div>
@@ -1049,6 +1082,15 @@
         <div class="gedit-field">
             <label>Uploaded by</label>
             <input type="text" id="gedit-by" maxlength="60">
+        </div>
+        <div class="gedit-field">
+            <label>Season</label>
+            <select id="gedit-season">
+                <option value="">&mdash; Not tagged</option>
+                <option value="1">&#127807; Season 1</option>
+                <option value="2">&#9728;&#65039; Season 2</option>
+                <option value="3">&#128640; Season 3</option>
+            </select>
         </div>
         <div class="gedit-actions">
             <button class="btn btn-green" onclick="saveGalleryEdit()">💾 Save</button>
@@ -1536,13 +1578,16 @@
             },
             async () => {
                 const url = await task.snapshot.ref.getDownloadURL();
-                await GALLERY_REF.push({ title, description: desc, url, storagePath: path, uploadedAt: Date.now() });
+                const seasonRaw = document.getElementById('gallery-season').value;
+                const seasonEntry = seasonRaw ? { season: parseInt(seasonRaw, 10) } : {};
+                await GALLERY_REF.push({ title, description: desc, url, storagePath: path, uploadedAt: Date.now(), ...seasonEntry });
                 showToast('✅ Image uploaded!', 'success');
                 progressWrap.style.display = 'none';
                 progressBar.style.width = '0';
                 clearGalleryFile();
                 document.getElementById('gallery-title').value = '';
                 document.getElementById('gallery-desc').value = '';
+                document.getElementById('gallery-season').value = '';
                 loadGalleryAdmin();
             }
         );
@@ -1561,11 +1606,12 @@
                 grid.innerHTML = '<p style="color:var(--muted);font-size:.9rem;padding:1rem 0">No images yet.</p>';
                 return;
             }
+            const seasonLabel = { 1: '🌱 S1', 2: '☀️ S2', 3: '🚀 S3' };
             grid.innerHTML = items.map(item => `
                 <div class="gallery-admin-item">
                     <img src="${item.url}" alt="${item.title || ''}" loading="lazy">
                     <div class="gallery-admin-item-info">
-                        <strong>${item.title || '(no title)'}</strong>
+                        <strong>${item.title || '(no title)'}${item.season ? ` <span class="admin-season-badge">${seasonLabel[item.season] || 'S' + item.season}</span>` : ''}</strong>
                         <span>${item.description || ''}</span>
                         <span style="font-size:.7rem;opacity:.55">${item.uploadedBy || ''}</span>
                     </div>
@@ -1589,9 +1635,10 @@
             if (!item) { showToast('Item not found', 'error'); return; }
             geditKey = key;
             document.getElementById('gedit-preview').src = item.url;
-            document.getElementById('gedit-title').value = item.title || '';
-            document.getElementById('gedit-desc').value  = item.description || '';
-            document.getElementById('gedit-by').value    = item.uploadedBy || '';
+            document.getElementById('gedit-title').value  = item.title || '';
+            document.getElementById('gedit-desc').value   = item.description || '';
+            document.getElementById('gedit-by').value     = item.uploadedBy || '';
+            document.getElementById('gedit-season').value = item.season ? String(item.season) : '';
             document.getElementById('gedit-modal').classList.add('active');
             document.body.style.overflow = 'hidden';
         });
@@ -1605,11 +1652,15 @@
 
     async function saveGalleryEdit() {
         if (!geditKey) return;
-        const title = document.getElementById('gedit-title').value.trim();
-        const desc  = document.getElementById('gedit-desc').value.trim();
-        const by    = document.getElementById('gedit-by').value.trim();
+        const title     = document.getElementById('gedit-title').value.trim();
+        const desc      = document.getElementById('gedit-desc').value.trim();
+        const by        = document.getElementById('gedit-by').value.trim();
+        const seasonRaw = document.getElementById('gedit-season').value;
+        const updates   = { title, description: desc, uploadedBy: by };
+        if (seasonRaw) updates.season = parseInt(seasonRaw, 10);
+        else           updates.season = null;
         try {
-            await GALLERY_REF.child(geditKey).update({ title, description: desc, uploadedBy: by });
+            await GALLERY_REF.child(geditKey).update(updates);
             showToast('✅ Changes saved', 'success');
             closeGalleryEdit();
             loadGalleryAdmin();
@@ -1675,7 +1726,8 @@
                 url:         item.url,
                 storagePath: item.storagePath  || '',
                 uploadedBy:  item.submittedBy  || 'Anonymous',
-                uploadedAt:  Date.now()
+                uploadedAt:  Date.now(),
+                ...(item.season ? { season: item.season } : {})
             };
             await GALLERY_REF.push(newEntry);
 

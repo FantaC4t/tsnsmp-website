@@ -532,6 +532,18 @@
         }
 
         async function detectLiveStreams(members) {
+            const CACHE_KEY = 'tsnsmp_stream_cache';
+            const CACHE_TTL = 5 * 60 * 1000; // 5 minutes
+
+            // Return cached results if fresh enough
+            try {
+                const cached = JSON.parse(sessionStorage.getItem(CACHE_KEY) || 'null');
+                if (cached && Date.now() - cached.ts < CACHE_TTL) {
+                    const nameSet = new Set(cached.names);
+                    return members.filter(m => nameSet.has(m.name));
+                }
+            } catch(e) { /* ignore corrupt cache */ }
+
             const withTwitch = members
                 .filter(m => m.twitch && m.twitch.trim())
                 .map(m => ({ ...m, twitchUsername: extractTwitchUsername(m.twitch) }));
@@ -539,7 +551,17 @@
             const results = await Promise.all(
                 withTwitch.map(async m => (await probeStreamLive(m.twitchUsername)) ? m : null)
             );
-            return results.filter(Boolean);
+            const liveMembers = results.filter(Boolean);
+
+            // Persist for 5 minutes so navigating back doesn't re-probe
+            try {
+                sessionStorage.setItem(CACHE_KEY, JSON.stringify({
+                    ts: Date.now(),
+                    names: liveMembers.map(m => m.name)
+                }));
+            } catch(e) { /* ignore quota errors */ }
+
+            return liveMembers;
         }
 
         let currentStreamIdx = 0;

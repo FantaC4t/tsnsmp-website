@@ -31,11 +31,6 @@ body:not(.dark-mode) .hero-bg {
     opacity: 0.8;
 }
 
-@keyframes bgPulse {
-    0% { opacity: 0.5; transform: scale(1); }
-    100% { opacity: 1; transform: scale(1.1); }
-}
-
 /* Grid Pattern Overlay */
 .hero-grid {
     position: absolute;

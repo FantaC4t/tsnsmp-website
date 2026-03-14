@@ -23,11 +23,7 @@
         radial-gradient(circle at 15% 60%, rgba(82,194,40,0.12), transparent 30%),
         radial-gradient(circle at 85% 25%, rgba(22,196,196,0.14), transparent 30%);
     filter: blur(55px);
-    animation: galleryBgPulse 10s ease-in-out infinite alternate;
-}
-@keyframes galleryBgPulse {
-    0%   { opacity: .5; transform: scale(1); }
-    100% { opacity: 1;  transform: scale(1.08); }
+    animation: bgPulse 10s ease-in-out infinite alternate;
 }
 
 .hero-grid {
@@ -87,11 +83,6 @@
     background-size: 200% auto;
     animation: shimmerTitle 7s linear infinite;
     margin-bottom: .75rem;
-}
-
-@keyframes shimmerTitle {
-    0%   { background-position: 0% center; }
-    100% { background-position: 200% center; }
 }
 
 body:not(.dark-mode) .gallery-hero-bg {

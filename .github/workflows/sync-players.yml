@@ -16,6 +16,8 @@ name: Sync Player List
 #   SFTP_PASS                – SFTP password
 #   SFTP_WHITELIST_PATH      – path to whitelist.json
 #                              (e.g.  /whitelist.json  or  /home/container/whitelist.json)
+#   SFTP_OPS_PATH            – path to ops.json
+#                              (e.g.  /ops.json  or  /home/container/ops.json)
 #   SFTP_PLAYERDATA_PATH     – path to player_data.json
 #                              (e.g.  /config/playerstatus/player_data.json)
 #   SFTP_PRONOUNS_PATH       – path to pronouns.dat
@@ -59,6 +61,7 @@ jobs:
           SFTP_USER:                ${{ secrets.SFTP_USER }}
           SFTP_PASS:                ${{ secrets.SFTP_PASS }}
           SFTP_WHITELIST_PATH:      ${{ secrets.SFTP_WHITELIST_PATH }}
+          SFTP_OPS_PATH:            ${{ secrets.SFTP_OPS_PATH }}
           SFTP_PLAYERDATA_PATH:     ${{ secrets.SFTP_PLAYERDATA_PATH }}
           SFTP_PRONOUNS_PATH:       ${{ secrets.SFTP_PRONOUNS_PATH }}
           FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}

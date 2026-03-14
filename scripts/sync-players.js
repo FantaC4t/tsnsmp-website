@@ -6,11 +6,13 @@
  * the combined member list to Firebase Realtime Database.
  *
  *   whitelist.json                        → name + UUID (authoritative list)
+ *   ops.json                              → role: ops → "owner", others → "member"
  *   config/playerstatus/player_data.json  → color + twitch link  (keyed by UUID)
  *   world/playerdata/pronouns.dat         → pronouns             (keyed by UUID)
  *
- * player_extras.json (committed to this repo) only needs name + role.
- * All other fields come from the live server data automatically.
+ * player_extras.json (committed to this repo) only needs name.
+ * Role is auto-determined from ops.json; all other fields come from the live
+ * server data automatically.
  *
  * Required GitHub Actions secrets:
  *   SFTP_HOST                – game server SFTP hostname / IP
@@ -18,6 +20,7 @@
  *   SFTP_USER                – SFTP username
  *   SFTP_PASS                – SFTP password
  *   SFTP_WHITELIST_PATH      – path to whitelist.json         (default /whitelist.json)
+ *   SFTP_OPS_PATH            – path to ops.json               (default /ops.json)
  *   SFTP_PLAYERDATA_PATH     – path to player_data.json       (default /config/playerstatus/player_data.json)
  *   SFTP_PRONOUNS_PATH       – path to pronouns.dat           (default /world/playerdata/pronouns.dat)
  *   FIREBASE_SERVICE_ACCOUNT – Firebase service account JSON (full JSON string)
@@ -56,7 +59,7 @@ async function fetchJson(sftp, remotePath, label) {
 }
 
 async function main() {
-    // ── 1. Load player_extras.json (name + role only) ────────────────────────
+    // ── 1. Load player_extras.json (name only) ─────────────────────────────
     const extrasPath = path.join(__dirname, 'player_extras.json');
     const extras     = JSON.parse(fs.readFileSync(extrasPath, 'utf8'));
     // Map lowercase name → extra data
@@ -66,6 +69,7 @@ async function main() {
     // ── 2. SFTP ───────────────────────────────────────────────────────────────
     const sftp = new SftpClient();
     let whitelist   = [];
+    let ops         = [];   // [{ uuid, name, level, bypassesPlayerLimit }]
     let playerData  = {};   // UUID → { color, link, isLive, persist, role }
     let pronounsRaw = {};   // UUID → pronouns string
 
@@ -80,11 +84,15 @@ async function main() {
         console.log('[SFTP]     connected');
 
         const whitelistPath  = process.env.SFTP_WHITELIST_PATH   || '/whitelist.json';
+        const opsPath        = process.env.SFTP_OPS_PATH         || '/ops.json';
         const playerDataPath = process.env.SFTP_PLAYERDATA_PATH  || '/config/playerstatus/player_data.json';
         const pronounsPath   = process.env.SFTP_PRONOUNS_PATH    || '/world/playerdata/pronouns.dat';
 
         const wl = await fetchJson(sftp, whitelistPath,  'whitelist');
         if (wl) whitelist = wl;
+
+        const op = await fetchJson(sftp, opsPath,        'ops');
+        if (op) ops = op;          // [{ uuid, name, level, bypassesPlayerLimit }]
 
         const pd = await fetchJson(sftp, playerDataPath, 'player_data');
         if (pd) playerData = pd;   // { "uuid": { color, link, ... } }
@@ -105,6 +113,10 @@ async function main() {
         if (typeof val === 'string') pronounsMap.set(uuid, val);
         else if (val && typeof val.pronouns === 'string') pronounsMap.set(uuid, val.pronouns);
     }
+
+    // Build ops set — UUIDs present in ops.json become "owner", everyone else is "member"
+    const opsSet = new Set(ops.map(o => o.uuid).filter(Boolean));
+    console.log(`[Ops]      ${opsSet.size} operator(s) → role "owner"`);
 
     // ── 3. Merge ──────────────────────────────────────────────────────────────
     const seen    = new Set();
@@ -133,7 +145,7 @@ async function main() {
         members[key] = stripNulls({
             name:      entry.name,
             uuid,
-            role:      extra.role  || 'member',
+            role:      opsSet.has(uuid) ? 'owner' : 'member',
             color,
             pronouns,
             twitch,
@@ -142,13 +154,13 @@ async function main() {
         seen.add(entry.name.toLowerCase());
     }
 
-    // Players in extras but not on whitelist (offline-mode players, owners, etc.)
+    // Players in extras but not on whitelist (offline-mode players, etc.)
     for (const extra of extras) {
         if (seen.has(extra.name.toLowerCase())) continue;
         const key = safeKey(extra.name);
         members[key] = stripNulls({
             name:     extra.name,
-            role:     extra.role     || 'member',
+            role:     'member',
             color:    extra.color    || null,
             pronouns: extra.pronouns || null,
             twitch:   extra.twitch   || null,
@@ -173,120 +185,3 @@ async function main() {
 }
 
 main().catch(err => { console.error('[Fatal]', err.message || err); process.exit(1); });
-
-
-const SftpClient = require('ssh2-sftp-client');
-const admin      = require('firebase-admin');
-const path       = require('path');
-const os         = require('os');
-const fs         = require('fs');
-
-// Hardcoded — already public in firebase-config.js
-const DB_URL = 'https://tsnplayerlist-default-rtdb.europe-west1.firebasedatabase.app';
-
-/** Remove null / undefined / empty-string fields so Firebase stays clean */
-function stripNulls(obj) {
-    return Object.fromEntries(
-        Object.entries(obj).filter(([, v]) => v !== null && v !== undefined && v !== '')
-    );
-}
-
-/** Firebase keys cannot contain  . # $ [ ]  */
-function safeKey(name) {
-    return name.toLowerCase().replace(/[.#$[\]]/g, '_');
-}
-
-async function main() {
-    // ── 1. Load player_extras.json (committed to repo) ──────────────────────
-    const extrasPath = path.join(__dirname, 'player_extras.json');
-    const extras     = JSON.parse(fs.readFileSync(extrasPath, 'utf8'));
-    const extrasMap  = new Map(extras.map(e => [e.name.toLowerCase(), e]));
-    console.log(`[Extras]   loaded ${extras.length} player extras`);
-
-    // ── 2. SFTP — pull whitelist.json from the game server ──────────────────
-    let whitelist = [];
-    const sftp = new SftpClient();
-    try {
-        await sftp.connect({
-            host:         process.env.SFTP_HOST,
-            port:         parseInt(process.env.SFTP_PORT || '22', 10),
-            username:     process.env.SFTP_USER,
-            password:     process.env.SFTP_PASS,
-            readyTimeout: 12000,
-        });
-        const remotePath = process.env.SFTP_REMOTE_PATH || '/whitelist.json';
-        const tmpPath    = path.join(os.tmpdir(), 'tsnsmp_whitelist.json');
-        await sftp.fastGet(remotePath, tmpPath);
-        whitelist = JSON.parse(fs.readFileSync(tmpPath, 'utf8'));
-        console.log(`[SFTP]     fetched whitelist — ${whitelist.length} entries`);
-    } catch (err) {
-        // Don't abort the sync — extras-only run still updates colours etc.
-        console.warn(`[SFTP]     could not fetch whitelist: ${err.message}`);
-        console.warn('[SFTP]     continuing with player_extras.json only');
-    } finally {
-        await sftp.end().catch(() => {});
-    }
-
-    // ── 3. Merge ─────────────────────────────────────────────────────────────
-    const seen    = new Set();
-    const members = {};
-
-    // Whitelist is authoritative for name + uuid
-    for (const entry of whitelist) {
-        if (!entry.name) continue;
-        const key   = safeKey(entry.name);
-        const extra = extrasMap.get(entry.name.toLowerCase()) || {};
-        members[key] = stripNulls({
-            name:      entry.name,
-            uuid:      entry.uuid     || null,
-            role:      extra.role     || 'member',
-            color:     extra.color    || null,
-            pronouns:  extra.pronouns || null,
-            twitch:    extra.twitch   || null,
-            syncedAt:  Date.now(),
-        });
-        seen.add(entry.name.toLowerCase());
-    }
-
-    // Players in extras but NOT on the whitelist (owners, mods, offline-mode, etc.)
-    for (const extra of extras) {
-        if (seen.has(extra.name.toLowerCase())) continue;
-        const key = safeKey(extra.name);
-        members[key] = stripNulls({
-            name:      extra.name,
-            role:      extra.role     || 'member',
-            color:     extra.color    || null,
-            pronouns:  extra.pronouns || null,
-            twitch:    extra.twitch   || null,
-            syncedAt:  Date.now(),
-        });
-    }
-
-    const total = Object.keys(members).length;
-    console.log(`[Merge]    ${total} members ready to write`);
-
-    // Safety guard — never wipe the database with an empty result
-    if (total === 0) {
-        console.error('[Merge]    result is empty — refusing to overwrite Firebase.');
-        process.exit(1);
-    }
-
-    // ── 4. Write to Firebase ─────────────────────────────────────────────────
-    const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT);
-    admin.initializeApp({
-        credential:  admin.credential.cert(serviceAccount),
-        databaseURL: DB_URL,
-    });
-
-    const db = admin.database();
-    await db.ref('members').set(members);
-    console.log(`[Firebase] /members updated — ${total} entries written`);
-
-    await admin.app().delete();
-    console.log('[Done]');
-}
-
-main().catch(err => {
-    console.error('[Fatal]', err.message || err);
-    process.exit(1);
-});

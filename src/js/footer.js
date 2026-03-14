@@ -14,7 +14,7 @@ function createFooter(currentPage) {
                 <a href="${prefix}resources/" data-no-transition>Resources</a>
             </nav>
             <div class="footer-social">
-                <a href="https://discord.gg/pySpekTJ7E" target="_blank" rel="noopener" class="footer-icon" aria-label="Discord">
+                <a href="https://discord.gg/5MhJyzMAk5" target="_blank" rel="noopener" class="footer-icon" aria-label="Discord">
                     <img src="${prefix}assets/icons/discord.svg" alt="Discord">
                 </a>
                 <a href="https://bsky.app/profile/tsnsmp.online" target="_blank" rel="noopener" class="footer-icon" aria-label="Bluesky">

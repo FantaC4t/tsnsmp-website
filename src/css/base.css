@@ -260,6 +260,37 @@ main {
     box-shadow: 0 4px 20px rgba(82, 194, 40, 0.5);
 }
 
+/* SERVER STATUS PILL */
+.server-status-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: .32rem .85rem;
+    border-radius: 999px;
+    background: rgba(0,0,0,.28);
+    border: 1px solid rgba(255,255,255,.08);
+    font-size: .76rem;
+    font-weight: 600;
+    letter-spacing: .05em;
+    color: var(--text-secondary);
+    backdrop-filter: blur(8px);
+    text-transform: uppercase;
+    transition: opacity .4s;
+}
+.server-status-pill .status-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: rgba(255,255,255,.2);
+    flex-shrink: 0;
+}
+.server-status-pill.online .status-dot {
+    background: #2ECC71;
+    box-shadow: 0 0 6px #2ECC71;
+    animation: blink 2s ease-in-out infinite;
+}
+.server-status-pill.offline .status-dot { background: #e05555; }
+
 /* ─── Skip to Content Link ─── */
 .skip-link {
     position: absolute;

@@ -117,6 +117,12 @@
         <a href="https://discord.gg/5MhJyzMAk5" target="_blank" class="btn-icon" rel="noopener" aria-label="Join TSNSMP on Discord" title="Join TSNSMP on Discord"><img src="assets/icons/discord.svg" alt="Discord" class="btn-icon-img"></a>
     </div>
 </div>
+<div class="hero-server-status fade-in-up delay-3" aria-live="polite">
+    <div class="server-status-pill" id="serverStatusPill" aria-label="Minecraft server status">
+        <span class="status-dot"></span>
+        <span id="serverStatusText">play.tsnsmp.online</span>
+    </div>
+</div>
 </div>
 
 <!-- Hero halo: 3D ring of member skins -->
@@ -291,6 +297,36 @@
 <script>
         createHeader('home');
         createFooter('home');
+
+        /* ── Server status ── */
+        (async function fetchServerStatus() {
+            const CACHE_KEY = 'tsnsmp_srv_status';
+            const TTL = 3 * 60 * 1000;
+            const pill = document.getElementById('serverStatusPill');
+            const text = document.getElementById('serverStatusText');
+            if (!pill) return;
+            function applyStatus(d) {
+                if (d.online) {
+                    pill.classList.add('online');
+                    const n = d.players?.online ?? 0, m = d.players?.max ?? 20;
+                    text.textContent = `${n} / ${m} Online`;
+                } else {
+                    pill.classList.add('offline');
+                    text.textContent = 'Server Offline';
+                }
+            }
+            try {
+                const cached = sessionStorage.getItem(CACHE_KEY);
+                if (cached) {
+                    const { data, ts } = JSON.parse(cached);
+                    if (Date.now() - ts < TTL) { applyStatus(data); return; }
+                }
+                const res  = await fetch('https://api.mcsrvstat.us/3/play.tsnsmp.online');
+                const data = await res.json();
+                sessionStorage.setItem(CACHE_KEY, JSON.stringify({ data, ts: Date.now() }));
+                applyStatus(data);
+            } catch { text.textContent = 'play.tsnsmp.online'; }
+        })();
 
         /* ── Gallery-powered carousel + lightbox ── */
         let galleryItems = [];

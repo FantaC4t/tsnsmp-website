@@ -5,13 +5,34 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Our Community - TSNSMP</title>
     <meta name="description" content="Meet the members of TSNSMP — our cozy, whitelisted Minecraft SMP community.">
+    <meta name="robots" content="index, follow">
+    <meta name="theme-color" content="#7B68EE">
+
+    <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://www.tsnsmp.online/players/">
     <meta property="og:title" content="Our Community - TSNSMP">
     <meta property="og:description" content="Meet the members of TSNSMP — our cozy, whitelisted Minecraft SMP community.">
     <meta property="og:image" content="https://www.tsnsmp.online/assets/tsnsmp-og-s3.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="TSNSMP Season 3">
+    <meta property="og:site_name" content="TSNSMP">
+
+    <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://www.tsnsmp.online/players/">
+    <meta name="twitter:title" content="Our Community - TSNSMP">
+    <meta name="twitter:description" content="Meet the members of TSNSMP — our cozy, whitelisted Minecraft SMP community.">
+    <meta name="twitter:image" content="https://www.tsnsmp.online/assets/tsnsmp-og-s3.png">
+
     <link rel="canonical" href="https://www.tsnsmp.online/players/">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap">
+
     <link rel="stylesheet" href="../css/base.css">
     <link rel="stylesheet" href="../css/header.css">
     <link rel="stylesheet" href="../css/footer.css">
@@ -111,14 +132,16 @@
 
             const skinUrl = `https://minotar.net/armor/body/${member.name}/150.png`;
 
-            const twitchIcon = member.twitch ? `
-                <a href="${member.twitch}" target="_blank" class="twitch-link" title="Watch on Twitch">
+            const safeTwitch = typeof member.twitch === 'string' && member.twitch.startsWith('https://') ? member.twitch : null;
+            const twitchIcon = safeTwitch ? `
+                <a href="${safeTwitch}" target="_blank" class="twitch-link" title="Watch on Twitch">`
                     <svg class="twitch-icon-svg" viewBox="0 0 24 24">
                         <path d="M11.571 4.714h1.715v5.143H11.57zm4.715 0H18v5.143h-1.714zM6 0L1.714 4.286v15.428h5.143V24l4.286-4.286h3.428L22.286 12V0zm14.571 11.143l-3.428 3.428h-3.429l-3 3v-3H6.857V1.714h13.714Z"/>
                     </svg>
                 </a>` : '';
 
-            const nameStyle = member.color ? `style="color: ${member.color}"` : '';
+            const safeColor = typeof member.color === 'string' && /^#[0-9a-fA-F]{3,8}$/.test(member.color) ? member.color : null;
+            const nameStyle = safeColor ? `style="color: ${safeColor}"` : '';
 
             card.innerHTML = `
                 <div class="skin-viewer">

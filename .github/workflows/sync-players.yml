@@ -14,8 +14,12 @@ name: Sync Player List
 #   SFTP_PORT                – SFTP port (usually 22)
 #   SFTP_USER                – SFTP username
 #   SFTP_PASS                – SFTP password
-#   SFTP_REMOTE_PATH         – path to whitelist.json on the server
+#   SFTP_WHITELIST_PATH      – path to whitelist.json
 #                              (e.g.  /whitelist.json  or  /home/container/whitelist.json)
+#   SFTP_PLAYERDATA_PATH     – path to player_data.json
+#                              (e.g.  /config/playerstatus/player_data.json)
+#   SFTP_PRONOUNS_PATH       – path to pronouns.dat
+#                              (e.g.  /world/playerdata/pronouns.dat)
 #   FIREBASE_SERVICE_ACCOUNT – paste the ENTIRE contents of your Firebase
 #                              service account JSON as one line
 # ──────────────────────────────────────────────────────────────────────────────
@@ -54,6 +58,8 @@ jobs:
           SFTP_PORT:                ${{ secrets.SFTP_PORT }}
           SFTP_USER:                ${{ secrets.SFTP_USER }}
           SFTP_PASS:                ${{ secrets.SFTP_PASS }}
-          SFTP_REMOTE_PATH:         ${{ secrets.SFTP_REMOTE_PATH }}
+          SFTP_WHITELIST_PATH:      ${{ secrets.SFTP_WHITELIST_PATH }}
+          SFTP_PLAYERDATA_PATH:     ${{ secrets.SFTP_PLAYERDATA_PATH }}
+          SFTP_PRONOUNS_PATH:       ${{ secrets.SFTP_PRONOUNS_PATH }}
           FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
         run: node sync-players.js

@@ -188,6 +188,11 @@ body:not(.dark-mode) .page-hero h1 {
     50%       { opacity: 0.35; }
 }
 
+@keyframes statusPulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50%      { opacity: 0.5; transform: scale(1.5); }
+}
+
 @keyframes bgPulse {
     0%   { opacity: 0.5; transform: scale(1); }
     100% { opacity: 1;   transform: scale(1.1); }
@@ -222,6 +227,7 @@ body:not(.dark-mode) .page-hero h1 {
 
 main {
     animation: pageEnter 0.4s ease forwards;
+    will-change: transform, opacity;
 }
 
 /* ─── Back-to-Top Button ─── */
@@ -274,6 +280,7 @@ main {
     letter-spacing: .05em;
     color: var(--text-secondary);
     backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
     text-transform: uppercase;
     transition: opacity .4s;
 }
@@ -317,4 +324,11 @@ main {
         transition-duration: 0.01ms !important;
         scroll-behavior: auto !important;
     }
+}
+
+/* Pause all descendant animations when a section is off-screen */
+.paused-offscreen *,
+.paused-offscreen *::before,
+.paused-offscreen *::after {
+    animation-play-state: paused !important;
 }

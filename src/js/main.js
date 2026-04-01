@@ -8,6 +8,19 @@ const observer = new IntersectionObserver(function(entries) {
     });
 }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
 
+// Pause CSS animations in sections that are off-screen to save GPU/CPU
+const pauseObserver = new IntersectionObserver(function(entries) {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            entry.target.style.animationPlayState = '';
+            entry.target.classList.remove('paused-offscreen');
+        } else {
+            entry.target.style.animationPlayState = 'paused';
+            entry.target.classList.add('paused-offscreen');
+        }
+    });
+}, { rootMargin: '100px 0px' });
+
 document.addEventListener('DOMContentLoaded', function() {
     const body = document.body;
 
@@ -31,6 +44,11 @@ document.addEventListener('DOMContentLoaded', function() {
     // Observe elements for scroll-in animation
     document.querySelectorAll('.feature-card, .stat-card, .custom-feature, .story-card, .player-showcase-item').forEach(el => {
         observer.observe(el);
+    });
+
+    // Pause animations in off-screen sections to reduce GPU load
+    document.querySelectorAll('.hero, .player-showcase, .features, .customization-showcase, .application-section, .events-section').forEach(el => {
+        pauseObserver.observe(el);
     });
 
     // Stagger floating animation on flower elements

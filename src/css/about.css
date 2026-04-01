@@ -129,6 +129,7 @@ body:not(.dark-mode) .hero-content-about h1 {
     font-size: 2.2rem;
     filter: drop-shadow(0 0 12px rgba(22, 196, 196, 0.35));
     animation: float 4s ease-in-out infinite;
+    will-change: transform;
 }
 
 .decoration:nth-child(2) { animation-delay: 1.5s; }

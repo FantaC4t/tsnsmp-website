@@ -13,25 +13,26 @@
     margin-top: -70px;
     padding-top: 70px; /* compensate so content isn't hidden behind nav */
     transition: background 0.3s ease;
+    contain: layout style paint;
 }
 
-/* Dynamic Background Mesh */
+/* Dynamic Background Mesh — soft gradients, no runtime filter */
 .hero-bg {
     position: absolute;
     inset: 0;
     z-index: 0;
     background: 
-        radial-gradient(circle at 15% 50%, rgba(82, 194, 40, 0.08), transparent 25%),
-        radial-gradient(circle at 85% 30%, rgba(22, 196, 196, 0.1), transparent 25%);
-    filter: blur(60px);
+        radial-gradient(ellipse 50% 50% at 15% 50%, rgba(82, 194, 40, 0.08), transparent 70%),
+        radial-gradient(ellipse 50% 50% at 85% 30%, rgba(22, 196, 196, 0.1), transparent 70%);
     animation: bgPulse 10s ease-in-out infinite alternate;
+    will-change: transform, opacity;
 }
 
 /* Light Mode Background Adjustment */
 body:not(.dark-mode) .hero-bg {
     background: 
-        radial-gradient(circle at 15% 50%, rgba(82, 194, 40, 0.15), transparent 30%),
-        radial-gradient(circle at 85% 30%, rgba(22, 196, 196, 0.15), transparent 30%);
+        radial-gradient(ellipse 50% 50% at 15% 50%, rgba(82, 194, 40, 0.15), transparent 70%),
+        radial-gradient(ellipse 50% 50% at 85% 30%, rgba(22, 196, 196, 0.15), transparent 70%);
     opacity: 0.8;
 }
 
@@ -92,6 +93,7 @@ body:not(.dark-mode) .hero-grid {
     font-weight: 600;
     margin-bottom: 1.5rem;
     backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
     box-shadow: 0 4px 20px rgba(22, 196, 196, 0.12);
     animation: fadeInDown 1s ease-out;
     letter-spacing: 0.03em;
@@ -124,13 +126,31 @@ body:not(.dark-mode) .hero-badge {
 }
 
 .gradient-text {
+    position: relative;
+    display: inline-block;
     background: linear-gradient(135deg, #fff 0%, var(--primary-purple) 50%, var(--primary-green) 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
     background-size: 200% auto;
     animation: shimmerTitle 6s linear infinite;
-    filter: drop-shadow(0 0 18px rgba(22, 196, 196, 0.45)) drop-shadow(0 0 40px rgba(82,194,40,0.2));
+}
+
+/* Glow applied via pseudo-element so it doesn't break Firefox background-clip animation */
+.gradient-text::after {
+    content: attr(data-text);
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, #fff 0%, var(--primary-purple) 50%, var(--primary-green) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    background-size: 200% auto;
+    animation: shimmerTitle 6s linear infinite;
+    filter: blur(18px) brightness(1.5);
+    opacity: 0.35;
+    z-index: -1;
+    pointer-events: none;
 }
 
 body:not(.dark-mode) .gradient-text {
@@ -205,6 +225,7 @@ body:not(.dark-mode) .hero-member-badge {
     border-radius: 50%;
     box-shadow: 0 0 6px rgba(76,175,80,0.6);
     animation: statusPulse 2s ease-in-out infinite;
+    will-change: transform, opacity;
 }
 
 /* Buttons (Restored & Enhanced) */
@@ -286,11 +307,22 @@ body:not(.dark-mode) .btn-icon {
 }
 
 .pulse-btn {
+    position: relative;
+}
+.pulse-btn::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    box-shadow: 0 4px 25px rgba(22, 196, 196, 0.55), 0 0 40px rgba(22,196,196,0.15);
+    opacity: 0;
     animation: pulseBtn 2.4s ease-in-out infinite;
+    pointer-events: none;
+    will-change: opacity;
 }
 @keyframes pulseBtn {
-    0%, 100% { box-shadow: 0 4px 15px rgba(22, 196, 196, 0.3); }
-    50%      { box-shadow: 0 4px 25px rgba(22, 196, 196, 0.55), 0 0 40px rgba(22,196,196,0.15); }
+    0%, 100% { opacity: 0; }
+    50%      { opacity: 1; }
 }
 
 .btn-outline {
@@ -303,6 +335,7 @@ body:not(.dark-mode) .btn-icon {
     border: 2px solid rgba(22, 196, 196, 0.3);
     transition: all 0.3s ease;
     backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
 }
 
 .btn-outline:hover {
@@ -398,6 +431,7 @@ section h2 {
     background: var(--bg-secondary);
     overflow: hidden;
     position: relative;
+    contain: layout style paint;
 }
 
 .carousel-container {
@@ -413,6 +447,7 @@ section h2 {
     gap: 2rem;
     width: max-content;
     animation: scroll 40s linear infinite;
+    will-change: transform;
 }
 
 .carousel-track:hover {
@@ -433,6 +468,7 @@ section h2 {
     cursor: pointer;
     border: 2px solid var(--border-color);
     transition: transform 0.3s ease, border-color 0.3s ease;
+    will-change: transform;
 }
 
 .carousel-item:hover {
@@ -488,6 +524,7 @@ section h2 {
     pointer-events: none;
     transition: opacity .25s;
     backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
 }
 .lightbox.active {
     opacity: 1;
@@ -974,6 +1011,33 @@ body:not(.dark-mode) .app-response-note {
     position: relative;
 }
 
+/* Empty state */
+.events-empty {
+    text-align: center;
+    padding: 2.5rem 1.5rem;
+    background: var(--bg-card);
+    border: 1px dashed var(--border-color);
+    border-radius: 16px;
+}
+.events-empty-icon {
+    font-size: 2.5rem;
+    display: block;
+    margin-bottom: 0.75rem;
+}
+.events-empty-title {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 0.4rem;
+}
+.events-empty-desc {
+    font-size: 0.92rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    max-width: 400px;
+    margin: 0 auto;
+}
+
 .event-card {
     display: grid;
     grid-template-columns: 56px 28px 1fr;
@@ -1061,11 +1125,22 @@ body:not(.dark-mode) .app-response-note {
 .event-card.event-next .event-dot {
     background: #16C4C4;
     box-shadow: 0 0 0 4px rgba(22,196,196,.18);
+}
+.event-card.active .event-dot::after,
+.event-card.event-next .event-dot::after {
+    content: '';
+    position: absolute;
+    inset: -4px;
+    border-radius: 50%;
+    box-shadow: 0 0 0 8px rgba(22,196,196,.10);
+    opacity: 0;
     animation: eventDotPulse 2s ease-in-out infinite;
+    will-change: opacity;
+    pointer-events: none;
 }
 @keyframes eventDotPulse {
-    0%, 100% { box-shadow: 0 0 0 4px rgba(22,196,196,.18); }
-    50%      { box-shadow: 0 0 0 8px rgba(22,196,196,.10); }
+    0%, 100% { opacity: 0; }
+    50%      { opacity: 1; }
 }
 .event-card.active .event-date-badge,
 .event-card.event-next .event-date-badge {
@@ -1171,6 +1246,7 @@ body:not(.dark-mode) .event-countdown {
     pointer-events: none;
     z-index: 0;
     animation: haloGlowPulse 5s ease-in-out infinite;
+    will-change: transform, opacity;
 }
 @keyframes haloGlowPulse {
     0%, 100% { opacity: .5; transform: scale(1); }
@@ -1217,6 +1293,7 @@ body:not(.dark-mode) .event-countdown {
     pointer-events: none;
     z-index: 0;
     animation: sineWaveRing 4s ease-in-out infinite;
+    will-change: transform, opacity;
 }
 .halo-orbit-ring--inner {
     width: 260px; height: 260px;
@@ -1244,6 +1321,7 @@ body:not(.dark-mode) .event-countdown {
     transform: rotateX(5deg) rotateY(0deg);
     transition: transform 1.1s cubic-bezier(0.4, 0, 0.2, 1);
     z-index: 2;
+    will-change: transform;
 }
 
 /* ── 3D floor rings (spinning + wobble) ── */
@@ -1255,12 +1333,10 @@ body:not(.dark-mode) .event-countdown {
     margin: -220px 0 0 -220px;
     border-radius: 50%;
     border: 1.5px solid rgba(22,196,196,0.40);
-    box-shadow:
-        0 0 18px rgba(22,196,196,0.30),
-        0 0 45px rgba(22,196,196,0.15),
-        inset 0 0 25px rgba(22,196,196,0.06);
+    box-shadow: 0 0 18px rgba(22,196,196,0.25);
     pointer-events: none;
     animation: floorRingWobble 10s ease-in-out infinite;
+    will-change: transform, opacity;
 }
 
 .skin-halo::after {
@@ -1271,12 +1347,10 @@ body:not(.dark-mode) .event-countdown {
     margin: -170px 0 0 -170px;
     border-radius: 50%;
     border: 1px solid rgba(22,196,196,0.28);
-    box-shadow:
-        0 0 12px rgba(22,196,196,0.22),
-        0 0 30px rgba(22,196,196,0.10),
-        inset 0 0 16px rgba(22,196,196,0.04);
+    box-shadow: 0 0 12px rgba(22,196,196,0.18);
     pointer-events: none;
     animation: floorRingWobbleRev 8s ease-in-out 1.5s infinite;
+    will-change: transform, opacity;
 }
 
 /* Outer ring: spins forward while tilt angle oscillates 56°↔68° */
@@ -1328,9 +1402,9 @@ body:not(.dark-mode) .event-countdown {
     justify-content: center;
     gap: 0.45rem;
     text-align: center;
-    filter: brightness(calc(1 - var(--depth, 0) * 0.55));
     opacity: calc(1 - var(--depth, 0));
-    transition: filter 0.55s ease, opacity 0.6s ease;
+    transition: opacity 0.6s ease;
+    will-change: opacity;
 }
 
 .skin-halo-face img {
@@ -1338,7 +1412,7 @@ body:not(.dark-mode) .event-countdown {
     height: 80px;
     border-radius: 10px;
     border: 2px solid rgba(255,255,255,0.25);
-    box-shadow: 0 8px 24px rgba(0,0,0,0.5), 0 0 14px rgba(22,196,196,0.18);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.4);
     background: rgba(0,0,0,0.3);
     display: block;
     image-rendering: pixelated;
@@ -1360,15 +1434,13 @@ body:not(.dark-mode) .event-countdown {
 .skin-halo-face[data-front] .skin-halo-face-inner img {
     box-shadow:
         0 6px 24px rgba(0,0,0,0.55),
-        0 0 18px rgba(22,196,196,0.35),
-        0 0 40px rgba(22,196,196,0.15);
+        0 0 18px rgba(22,196,196,0.35);
     border-color: rgba(22,196,196,0.45);
 }
 body:not(.dark-mode) .skin-halo-face[data-front] .skin-halo-face-inner img {
     box-shadow:
         0 6px 18px rgba(0,0,0,0.2),
-        0 0 14px rgba(22,196,196,0.25),
-        0 0 30px rgba(22,196,196,0.10);
+        0 0 14px rgba(22,196,196,0.25);
     border-color: rgba(22,196,196,0.35);
 }
 body:not(.dark-mode) .halo-glow {

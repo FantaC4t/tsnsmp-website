@@ -15,6 +15,10 @@
     "gallery_queue": {
       ".read": "auth != null",
       ".write": true
+    },
+    "events": {
+      ".read": true,
+      ".write": "auth != null"
     }
   }
 }

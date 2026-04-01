@@ -98,7 +98,7 @@
 <div class="hero-badge">
 <div class="status-indicator"></div>
 <span>Season 3 is Live!</span></div>
-<h1><span class="text-reveal">Welcome to</span><br /><span class="gradient-text">TSNSMP</span></h1>
+<h1><span class="text-reveal">Welcome to</span><br /><span class="gradient-text" data-text="TSNSMP">TSNSMP</span></h1>
 <p class="fade-in-up delay-1">Join our fun and friendly survival multiplayer server! Build and explore in our inclusive community! Share creative ideas while making friends!</p>
 <div class="hero-server-stats fade-in-up delay-1">
 <span>⚔️ Survival SMP</span><span class="stat-dot">◆</span><span>🌍 Season 3 Active</span><span class="stat-dot">◆</span><span>🔒 Whitelist Only</span>
@@ -514,51 +514,68 @@
             }
         })();
 
-        // Season 3 events timeline
+        // Season 3 events timeline  — reads from Firebase
         (function buildEventsTimeline() {
-            const events = [
-                { date: '2026-03-01', label: 'Season 3 Launch 🎉', desc: 'The world is live!', status: 'past' },
-                { date: '2026-03-07', label: 'Base Picking Ends 🏠', desc: 'Last day to claim your spot' },
-                { date: '2026-04-01', label: 'April Event 🌟', desc: 'Details coming soon…', status: 'upcoming' },
-            ];
-
-            const now = new Date();
-            // Auto-determine status
-            events.forEach(ev => {
-                const d = new Date(ev.date + 'T23:59:59');
-                if (ev.status !== 'active') {
-                    ev.status = d < now ? 'past' : 'upcoming';
-                }
-            });
-
-            // Find soonest future/active event for countdown
-            const nextEvent = events.find(ev => ev.status === 'active') || events.find(ev => ev.status === 'upcoming');
-
             const container = document.getElementById('eventsTimeline');
             if (!container) return;
 
-            container.innerHTML = events.map((ev, i) => {
-                const d = new Date(ev.date + 'T00:00:00');
-                const monthShort = d.toLocaleString('en-GB', { month: 'short' });
-                const day = d.getDate();
-                const isNext = nextEvent && ev.date === nextEvent.date;
-                const daysAway = isNext ? Math.max(0, Math.ceil((new Date(ev.date + 'T23:59:59') - now) / 86400000)) : null;
+            const db = firebase.database();
+            db.ref('events').once('value').then(snap => {
+                const data = snap.val();
+                if (!data || Object.keys(data).length === 0) {
+                    container.innerHTML = `
+                    <div class="events-empty">
+                        <span class="events-empty-icon">📡</span>
+                        <p class="events-empty-title">Stay tuned!</p>
+                        <p class="events-empty-desc">No events planned right now — but something's always brewing. Check back soon!</p>
+                    </div>`;
+                    return;
+                }
 
-                return `
-                <div class="event-card ${ev.status}${isNext ? ' event-next' : ''}" style="animation-delay:${i * .08}s">
-                    <div class="event-date-badge">
-                        <span class="event-month">${monthShort}</span>
-                        <span class="event-day">${day}</span>
-                    </div>
-                    <div class="event-line"><span class="event-dot"></span></div>
-                    <div class="event-body">
-                        <strong class="event-label">${ev.label}</strong>
-                        <span class="event-desc">${ev.desc}</span>
-                        ${isNext && daysAway !== null ? `<span class="event-countdown">${daysAway === 0 ? 'Today!' : daysAway === 1 ? 'Tomorrow!' : daysAway + ' days left'}</span>` : ''}
-                        ${ev.status === 'past' ? '<span class="event-status-done">✓ Done</span>' : ''}
-                    </div>
+                const events = Object.values(data).sort((a, b) => a.date.localeCompare(b.date));
+                const now = new Date();
+
+                events.forEach(ev => {
+                    if (!ev.status || ev.status === 'auto') {
+                        const d = new Date(ev.date + 'T23:59:59');
+                        const today = new Date().toISOString().split('T')[0];
+                        ev.status = ev.date === today ? 'active' : (d < now ? 'past' : 'upcoming');
+                    }
+                });
+
+                const nextEvent = events.find(ev => ev.status === 'active') || events.find(ev => ev.status === 'upcoming');
+
+                container.innerHTML = events.map((ev, i) => {
+                    const d = new Date(ev.date + 'T00:00:00');
+                    const monthShort = d.toLocaleString('en-GB', { month: 'short' });
+                    const day = d.getDate();
+                    const isNext = nextEvent && ev.date === nextEvent.date;
+                    const daysAway = isNext ? Math.max(0, Math.ceil((new Date(ev.date + 'T23:59:59') - now) / 86400000)) : null;
+                    const desc = ev.description || ev.desc || '';
+
+                    return `
+                    <div class="event-card ${ev.status}${isNext ? ' event-next' : ''}" style="animation-delay:${i * .08}s">
+                        <div class="event-date-badge">
+                            <span class="event-month">${monthShort}</span>
+                            <span class="event-day">${day}</span>
+                        </div>
+                        <div class="event-line"><span class="event-dot"></span></div>
+                        <div class="event-body">
+                            <strong class="event-label">${ev.label}</strong>
+                            <span class="event-desc">${desc}</span>
+                            ${isNext && daysAway !== null ? `<span class="event-countdown">${daysAway === 0 ? 'Today!' : daysAway === 1 ? 'Tomorrow!' : daysAway + ' days left'}</span>` : ''}
+                            ${ev.status === 'past' ? '<span class="event-status-done">✓ Done</span>' : ''}
+                        </div>
+                    </div>`;
+                }).join('');
+            }).catch(() => {
+                container.innerHTML = `
+                <div class="events-empty">
+                    <span class="events-empty-icon">📡</span>
+                    <p class="events-empty-title">Stay tuned!</p>
+                    <p class="events-empty-desc">No events planned right now — but something's always brewing. Check back soon!</p>
                 </div>`;
-            }).join('');
+            });
         })();
 
 

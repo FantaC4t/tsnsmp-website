@@ -77,6 +77,7 @@ body:not(.dark-mode) .hero-grid {
     text-transform: uppercase;
     margin-bottom: 1.2rem;
     backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
     animation: fadeInDown 0.8s ease-out;
 }
 
@@ -333,6 +334,7 @@ body:not(.dark-mode) .players-missing-notice {
     text-transform: uppercase;
     border: 1px solid transparent;
     backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
     transition: transform 0.25s, box-shadow 0.25s;
 }
 
@@ -504,6 +506,7 @@ body:not(.dark-mode) .players-missing-notice {
     background-size: 200% 100%;
     animation: skeleton-shimmer 1.4s infinite;
     border-radius: 8px;
+    will-change: background-position;
 }
 
 @keyframes skeleton-shimmer {

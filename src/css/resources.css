@@ -62,23 +62,23 @@ body:not(.dark-mode) .hero-grid {
 .shape {
     position: absolute;
     border-radius: 50%;
-    filter: blur(60px);
-    opacity: 0.3;
+    opacity: 0.18;
     animation: floatShape 20s ease-in-out infinite;
+    will-change: transform;
 }
 
 .shape-1 {
-    width: 200px;
-    height: 200px;
-    background: linear-gradient(135deg, #16C4C4, #10AEAE);
+    width: 320px;
+    height: 320px;
+    background: radial-gradient(circle, rgba(22,196,196,0.4), transparent 70%);
     top: 10%;
     left: 5%;
 }
 
 .shape-2 {
-    width: 150px;
-    height: 150px;
-    background: linear-gradient(135deg, #52C228, #8FD96E);
+    width: 270px;
+    height: 270px;
+    background: radial-gradient(circle, rgba(82,194,40,0.4), transparent 70%);
     bottom: 20%;
     right: 10%;
     animation-delay: 5s;
@@ -159,6 +159,7 @@ body:not(.dark-mode) .hero-content-resources h1 {
     z-index: 10;
     border-bottom: 1px solid var(--border-color);
     backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
 }
 
 .resource-tabs {

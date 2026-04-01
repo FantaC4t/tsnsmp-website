@@ -681,6 +681,11 @@
             border-color: rgba(22,196,196,.45);
             color: #16C4C4;
         }
+        .admin-tab-btn.active.orange {
+            background: rgba(255,152,0,.1);
+            border-color: rgba(255,152,0,.45);
+            color: #FF9800;
+        }
 
         /* ── GALLERY ADMIN ── */
         .gallery-file-drop {
@@ -883,6 +888,7 @@
     <div class="admin-tabs">
         <button class="admin-tab-btn active" data-tab="players" onclick="switchTab('players')">👥 Player List</button>
         <button class="admin-tab-btn teal" data-tab="gallery" onclick="switchTab('gallery')">🖼️ Gallery</button>
+        <button class="admin-tab-btn orange" data-tab="events" onclick="switchTab('events')">📅 Events</button>
     </div>
 
     <div class="admin-body">
@@ -1049,6 +1055,57 @@
 
         </div><!-- /tab-gallery -->
 
+        <!-- ══ EVENTS TAB ══ -->
+        <div id="tab-events" style="display:none">
+
+        <div class="panel">
+            <div class="panel-header">
+                <span class="panel-header-icon" style="background:rgba(255,152,0,.15)">📅</span>
+                <h2>Add Event</h2>
+            </div>
+            <div class="panel-body">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Event Name *</label>
+                        <input type="text" id="event-label" placeholder="e.g. Build Contest 🏗️" />
+                    </div>
+                    <div class="form-group">
+                        <label>Date *</label>
+                        <input type="date" id="event-date" />
+                    </div>
+                    <div class="form-group">
+                        <label>Description</label>
+                        <input type="text" id="event-desc" placeholder="Short description" />
+                    </div>
+                    <div class="form-group">
+                        <label>Status</label>
+                        <select id="event-status">
+                            <option value="auto">Auto-detect</option>
+                            <option value="active">Active (highlighted)</option>
+                            <option value="upcoming">Upcoming</option>
+                            <option value="past">Past</option>
+                        </select>
+                    </div>
+                </div>
+                <button class="btn btn-green" onclick="addEvent()" style="margin-top:1rem">📅 Add Event</button>
+            </div>
+        </div>
+
+        <div class="panel">
+            <div class="panel-header">
+                <span class="panel-header-icon" style="background:rgba(255,152,0,.15)">📋</span>
+                <h2>Current Events</h2>
+                <span id="event-count" style="color:var(--muted);font-size:.85rem"></span>
+            </div>
+            <div class="panel-body">
+                <div id="events-admin-list">
+                    <div class="loading">Loading events…</div>
+                </div>
+            </div>
+        </div>
+
+        </div><!-- /tab-events -->
+
     </div>
 </div>
 
@@ -1171,6 +1228,7 @@
         );
         document.getElementById('tab-players').style.display = tab === 'players' ? 'block' : 'none';
         document.getElementById('tab-gallery').style.display = tab === 'gallery' ? 'block' : 'none';
+        document.getElementById('tab-events').style.display  = tab === 'events'  ? 'block' : 'none';
     }
 
     const auth        = firebase.auth();
@@ -1759,6 +1817,122 @@
     firebase.auth().onAuthStateChanged(user => {
         if (user) setTimeout(() => { loadGalleryAdmin(); loadQueueAdmin(); }, 500);
     });
+</script>
+
+<!-- ═══ EVENTS MANAGEMENT ═══ -->
+<script>
+    const EVENTS_REF = db.ref('events');
+
+    async function addEvent() {
+        const label  = document.getElementById('event-label').value.trim();
+        const date   = document.getElementById('event-date').value;
+        const desc   = document.getElementById('event-desc').value.trim();
+        const status = document.getElementById('event-status').value;
+
+        if (!label || !date) return showToast('Name and date are required', 'error');
+
+        try {
+            await EVENTS_REF.push({
+                label,
+                date,
+                description: desc || '',
+                status,
+                createdAt: Date.now()
+            });
+            showToast('📅 Event added!', 'success');
+            document.getElementById('event-label').value = '';
+            document.getElementById('event-date').value  = '';
+            document.getElementById('event-desc').value  = '';
+            document.getElementById('event-status').value = 'auto';
+        } catch (e) {
+            showToast('Failed to add event: ' + e.message, 'error');
+        }
+    }
+
+    async function deleteEvent(key) {
+        const ok = await showConfirm('Delete event?', 'This will permanently remove this event.');
+        if (!ok) return;
+        try {
+            await EVENTS_REF.child(key).remove();
+            showToast('🗑️ Event deleted', 'success');
+        } catch (e) {
+            showToast('Delete failed: ' + e.message, 'error');
+        }
+    }
+
+    async function editEventField(key, field, currentValue) {
+        const newVal = prompt(`Edit ${field}:`, currentValue);
+        if (newVal === null || newVal === currentValue) return;
+        try {
+            await EVENTS_REF.child(key).update({ [field]: newVal });
+            showToast('✏️ Event updated', 'success');
+        } catch (e) {
+            showToast('Update failed: ' + e.message, 'error');
+        }
+    }
+
+    function getEventStatus(event) {
+        if (event.status && event.status !== 'auto') return event.status;
+        const today = new Date().toISOString().split('T')[0];
+        if (event.date === today) return 'active';
+        return event.date > today ? 'upcoming' : 'past';
+    }
+
+    function renderEventsAdmin(snap) {
+        const container = document.getElementById('events-admin-list');
+        const countEl   = document.getElementById('event-count');
+        const data = snap.val();
+
+        if (!data) {
+            container.innerHTML = '<p style="color:var(--muted);text-align:center;padding:2rem">No events yet.</p>';
+            countEl.textContent = '(0)';
+            return;
+        }
+
+        const entries = Object.entries(data).sort((a, b) => {
+            // Sort by date descending (newest first)
+            return b[1].date.localeCompare(a[1].date);
+        });
+
+        countEl.textContent = `(${entries.length})`;
+
+        const statusColors = {
+            active:   '#FF9800',
+            upcoming: '#16C4C4',
+            past:     'var(--muted)'
+        };
+
+        container.innerHTML = entries.map(([key, ev]) => {
+            const st = getEventStatus(ev);
+            const color = statusColors[st] || 'var(--muted)';
+            return `
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:.85rem 1rem;
+                        background:var(--card);border:1px solid var(--border);border-radius:10px;margin-bottom:.5rem;
+                        border-left:3px solid ${color}">
+                <div style="flex:1;min-width:0">
+                    <div style="display:flex;align-items:center;gap:.5rem;flex-wrap:wrap">
+                        <strong style="cursor:pointer" onclick="editEventField('${key}','label','${ev.label.replace(/'/g, "\\'")}')">${ev.label}</strong>
+                        <span style="background:${color}22;color:${color};padding:2px 8px;border-radius:6px;font-size:.75rem;text-transform:uppercase">${st}</span>
+                    </div>
+                    <div style="font-size:.8rem;color:var(--muted);margin-top:.25rem">
+                        📆 <span style="cursor:pointer" onclick="editEventField('${key}','date','${ev.date}')">${ev.date}</span>
+                        ${ev.description ? ` · ${ev.description}` : ''}
+                    </div>
+                </div>
+                <div style="display:flex;gap:.35rem;flex-shrink:0;margin-left:.75rem">
+                    <button onclick="editEventField('${key}','status','${ev.status || 'auto'}')"
+                        style="background:var(--hover);border:1px solid var(--border);color:var(--text);border-radius:6px;padding:4px 8px;cursor:pointer;font-size:.8rem"
+                        title="Change status">⚙️</button>
+                    <button onclick="deleteEvent('${key}')"
+                        style="background:rgba(220,38,38,.1);border:1px solid rgba(220,38,38,.3);color:#ef4444;border-radius:6px;padding:4px 8px;cursor:pointer;font-size:.8rem"
+                        title="Delete">🗑️</button>
+                </div>
+            </div>`;
+        }).join('');
+    }
+
+    // Live listener
+    EVENTS_REF.on('value', renderEventsAdmin);
 </script>
 </body>
 </html>

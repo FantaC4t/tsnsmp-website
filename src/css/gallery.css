@@ -238,6 +238,7 @@ body:not(.dark-mode) .gallery-hero h1 {
     border-radius: 999px;
     letter-spacing: .03em;
     backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
     border: 1px solid rgba(255,255,255,.12);
     pointer-events: none;
 }
@@ -255,6 +256,7 @@ body:not(.dark-mode) .gallery-hero h1 {
     pointer-events: none;
     transition: opacity .25s;
     backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
 }
 .lightbox.active {
     opacity: 1;
@@ -352,6 +354,7 @@ body:not(.dark-mode) .gallery-hero h1 {
     inset: 0;
     background: rgba(0,0,0,.75);
     backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
     z-index: 9000;
     display: flex;
     align-items: center;

@@ -922,10 +922,6 @@ body:not(.dark-mode) .app-response-note {
     border-color: var(--text-secondary);
     transform: translateX(4px);
 }
-.app-quick-link.discord:hover {
-    border-color: #5865F2;
-    color: #5865F2;
-}
 .app-quick-link img {
     width: 18px;
     height: 18px;
@@ -1040,7 +1036,7 @@ body:not(.dark-mode) .app-response-note {
 
 .event-card {
     display: grid;
-    grid-template-columns: 56px 28px 1fr;
+    grid-template-columns: auto 28px 1fr;
     gap: 0 .75rem;
     align-items: start;
     padding: .9rem 0;
@@ -1049,6 +1045,23 @@ body:not(.dark-mode) .app-response-note {
 @keyframes eventFadeIn {
     from { opacity: 0; transform: translateX(-10px); }
     to   { opacity: 1; transform: translateX(0); }
+}
+
+/* Date range wrapper */
+.event-date-range {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    min-width: 52px;
+}
+.event-date-sep {
+    color: var(--text-secondary);
+    font-size: .85rem;
+    font-weight: 600;
+    line-height: 1;
+}
+.event-date-end {
+    opacity: .8;
 }
 
 /* Date badge */

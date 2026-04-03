@@ -82,8 +82,8 @@ document.addEventListener('DOMContentLoaded', function() {
 console.log(`
 🌸 Welcome to TSNSMP! 🌸
 Thanks for checking out our code!
-If you're interested in joining our community, 
-head over to our Discord! 💚
+If you're interested in joining our community,
+check out our website! 💚
 
 Built with love by the TSNSMP team ✨
 `);

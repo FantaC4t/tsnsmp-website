@@ -69,7 +69,6 @@
           "logo": "https://www.tsnsmp.online/assets/SMALL%20LOGO.png",
           "description": "A cozy, whitelisted Minecraft SMP community.",
           "sameAs": [
-            "https://discord.gg/5MhJyzMAk5",
             "https://bsky.app/profile/tsnsmp.online"
           ]
         },
@@ -114,7 +113,6 @@
     </div>
     <div class="hero-social-icons" role="group" aria-label="TSNSMP community links">
         <a href="https://bsky.app/profile/tsnsmp.online" target="_blank" class="btn-icon" rel="noopener" aria-label="Follow TSNSMP on Bluesky" title="Follow TSNSMP on Bluesky"><img src="assets/icons/bluesky.svg" alt="Bluesky" class="btn-icon-img"></a>
-        <a href="https://discord.gg/5MhJyzMAk5" target="_blank" class="btn-icon" rel="noopener" aria-label="Join TSNSMP on Discord" title="Join TSNSMP on Discord"><img src="assets/icons/discord.svg" alt="Discord" class="btn-icon-img"></a>
     </div>
 </div>
 <div class="hero-server-status fade-in-up delay-3" aria-live="polite">
@@ -252,12 +250,9 @@
         </div>
         <div class="app-response-note">
             <span class="app-response-icon">📬</span>
-            <p>We usually get back to applications within a day or two. If you seem like a good fit, we'll slide into your Discord DMs! 😄</p>
+            <p>We usually get back to applications within a day or two. If you seem like a good fit, we'll reach out to you! 😄</p>
         </div>
         <div class="app-quick-links">
-            <a href="https://discord.gg/5MhJyzMAk5" target="_blank" rel="noopener" class="app-quick-link discord">
-                <img src="assets/icons/discord.svg" alt="" width="18" height="18"> Join our Discord
-            </a>
             <a href="about/" class="app-quick-link about">
                 📖 Learn more about us
             </a>
@@ -537,9 +532,14 @@
 
                 events.forEach(ev => {
                     if (!ev.status || ev.status === 'auto') {
-                        const d = new Date(ev.date + 'T23:59:59');
+                        const end = ev.endDate || ev.date;
+                        const dEnd = new Date(end + 'T23:59:59');
                         const today = new Date().toISOString().split('T')[0];
-                        ev.status = ev.date === today ? 'active' : (d < now ? 'past' : 'upcoming');
+                        if (ev.date <= today && today <= end) {
+                            ev.status = 'active';
+                        } else {
+                            ev.status = dEnd < now ? 'past' : 'upcoming';
+                        }
                     }
                 });
 
@@ -549,15 +549,32 @@
                     const d = new Date(ev.date + 'T00:00:00');
                     const monthShort = d.toLocaleString('en-GB', { month: 'short' });
                     const day = d.getDate();
+
+                    let endBadge = '';
+                    if (ev.endDate && ev.endDate !== ev.date) {
+                        const dEnd = new Date(ev.endDate + 'T00:00:00');
+                        const endMonth = dEnd.toLocaleString('en-GB', { month: 'short' });
+                        const endDay = dEnd.getDate();
+                        endBadge = `<span class="event-date-sep">–</span>
+                            <div class="event-date-badge event-date-end">
+                                <span class="event-month">${endMonth}</span>
+                                <span class="event-day">${endDay}</span>
+                            </div>`;
+                    }
+
                     const isNext = nextEvent && ev.date === nextEvent.date;
-                    const daysAway = isNext ? Math.max(0, Math.ceil((new Date(ev.date + 'T23:59:59') - now) / 86400000)) : null;
+                    const countdownEnd = ev.endDate || ev.date;
+                    const daysAway = isNext ? Math.max(0, Math.ceil((new Date(countdownEnd + 'T23:59:59') - now) / 86400000)) : null;
                     const desc = ev.description || ev.desc || '';
 
                     return `
                     <div class="event-card ${ev.status}${isNext ? ' event-next' : ''}" style="animation-delay:${i * .08}s">
-                        <div class="event-date-badge">
-                            <span class="event-month">${monthShort}</span>
-                            <span class="event-day">${day}</span>
+                        <div class="event-date-range">
+                            <div class="event-date-badge">
+                                <span class="event-month">${monthShort}</span>
+                                <span class="event-day">${day}</span>
+                            </div>
+                            ${endBadge}
                         </div>
                         <div class="event-line"><span class="event-dot"></span></div>
                         <div class="event-body">

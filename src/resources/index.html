@@ -47,7 +47,7 @@
                 <div class="shape shape-1"></div>
                 <div class="shape shape-2"></div>
             </div>
-            
+
             <div class="container" style="position: relative; z-index: 2;">
                 <div class="hero-content-resources">
                     <div class="resources-badge">
@@ -59,127 +59,136 @@
                 </div>
             </div>
         </section>
+    </main>
 
-        <section class="resources-nav">
-            <div class="container">
-                <div class="resource-tabs" role="tablist" aria-label="Resource sections">
-                    <button class="tab-btn active" role="tab" aria-selected="true"  aria-controls="rules" id="tab-btn-rules" onclick="switchTab('rules', this)">📜 Rules</button>
-                    <button class="tab-btn" role="tab" aria-selected="false" aria-controls="icons" id="tab-btn-icons" onclick="switchTab('icons', this)">🔰 Icons</button>
-                    <button class="tab-btn" role="tab" aria-selected="false" aria-controls="mods"  id="tab-btn-mods"  onclick="switchTab('mods', this)">🧩 Mods &amp; Features</button>
-                    <button class="tab-btn" role="tab" aria-selected="false" aria-controls="map"   id="tab-btn-map"   onclick="switchTab('map', this)">🗺️ Live Map</button>
-                </div>
+    <nav class="resources-nav">
+        <div class="container">
+            <div class="resource-tabs">
+                <a class="tab-btn active" href="#rules" data-section="rules">📜 Rules</a>
+                <a class="tab-btn" href="#icons" data-section="icons">🔰 Icons</a>
+                <a class="tab-btn" href="#mods" data-section="mods">🧩 Mods &amp; Features</a>
+                <a class="tab-btn" href="#downloads" data-section="downloads">📥 World Downloads</a>
+                <a class="tab-btn" href="#map" data-section="map">🗺️ Live Map</a>
             </div>
-        </section>
+        </div>
+    </nav>
 
-        <section id="rules" class="resource-section active" role="tabpanel" aria-labelledby="tab-btn-rules" tabindex="0">
+    <main id="resources-content">
+        <!-- ══ RULES ══ -->
+        <section id="rules" class="resource-section">
             <div class="container">
-                <div class="rules-container">
+                <div class="section-header">
                     <h2>Server Rules</h2>
-                    <div class="rules-grid">
-                        <div class="rule-card">
-                            <div class="rule-number">1</div>
-                            <div class="rule-content">
-                                <h3>Follow Discord TOS</h3>
-                                <p>We strictly adhere to the <a href="https://discord.com/terms" target="_blank" rel="noopener noreferrer" style="color: #4CAF50;">Discord Terms of Service</a>.</p>
-                            </div>
+                    <p class="section-subtitle">Keep it chill. Keep it fun. Keep it respectful.</p>
+                </div>
+                <div class="rules-grid">
+                    <div class="rule-card">
+                        <div class="rule-number">1</div>
+                        <div class="rule-content">
+                            <h3>Follow Discord TOS</h3>
+                            <p>We strictly adhere to the Discord Terms of Service.</p>
                         </div>
-                        <div class="rule-card">
-                            <div class="rule-number">2</div>
-                            <div class="rule-content">
-                                <h3>No Sensitive Topics</h3>
-                                <p>No IRL politics or religion discussions. We're here to play Minecraft.</p>
-                            </div>
+                    </div>
+                    <div class="rule-card">
+                        <div class="rule-number">2</div>
+                        <div class="rule-content">
+                            <h3>No Sensitive Topics</h3>
+                            <p>No IRL politics or religion discussions. We're here to play Minecraft.</p>
                         </div>
-                        <div class="rule-card">
-                            <div class="rule-number">3</div>
-                            <div class="rule-content">
-                                <h3>Zero Tolerance for Hate</h3>
-                                <p>No racism, homophobia, transphobia, or any form of hate speech.</p>
-                            </div>
+                    </div>
+                    <div class="rule-card">
+                        <div class="rule-number">3</div>
+                        <div class="rule-content">
+                            <h3>Zero Tolerance for Hate</h3>
+                            <p>No racism, homophobia, transphobia, or any form of hate speech.</p>
                         </div>
-                        <div class="rule-card">
-                            <div class="rule-number">4</div>
-                            <div class="rule-content">
-                                <h3>No NSFW Content</h3>
-                                <p>Keep all content appropriate for all ages. No NSFW content of any kind.</p>
-                            </div>
+                    </div>
+                    <div class="rule-card">
+                        <div class="rule-number">4</div>
+                        <div class="rule-content">
+                            <h3>No NSFW Content</h3>
+                            <p>Keep all content appropriate for all ages. No NSFW content of any kind.</p>
                         </div>
-                        <div class="rule-card">
-                            <div class="rule-number">5</div>
-                            <div class="rule-content">
-                                <h3>Fair Play</h3>
-                                <p>No hacking or cheating. QoL mods (like Fullbright, Minimaps) are allowed. Use common sense.</p>
-                            </div>
+                    </div>
+                    <div class="rule-card">
+                        <div class="rule-number">5</div>
+                        <div class="rule-content">
+                            <h3>Fair Play</h3>
+                            <p>No hacking or cheating. QoL mods (like Fullbright, Minimaps) are allowed. Use common sense.</p>
                         </div>
-                        <div class="rule-card">
-                            <div class="rule-number">6</div>
-                            <div class="rule-content">
-                                <h3>Consensual PvP Only</h3>
-                                <p>PvP is allowed only if both parties agree. "Jokingly" attacking people is not okay if they didn't consent.</p>
-                            </div>
+                    </div>
+                    <div class="rule-card">
+                        <div class="rule-number">6</div>
+                        <div class="rule-content">
+                            <h3>Consensual PvP Only</h3>
+                            <p>PvP is allowed only if both parties agree. "Jokingly" attacking people is not okay if they didn't consent.</p>
                         </div>
-                        <div class="rule-card">
-                            <div class="rule-number">7</div>
-                            <div class="rule-content">
-                                <h3>Respect Property</h3>
-                                <p>No griefing and no stealing. Keep the vibes chill and respectful.</p>
-                            </div>
+                    </div>
+                    <div class="rule-card">
+                        <div class="rule-number">7</div>
+                        <div class="rule-content">
+                            <h3>Respect Property</h3>
+                            <p>No griefing and no stealing. Keep the vibes chill and respectful.</p>
                         </div>
-                        <div class="rule-card">
-                            <div class="rule-number">8</div>
-                            <div class="rule-content">
-                                <h3>Stream Friendly</h3>
-                                <p>Keep builds and in-game content friendly. Many of our members stream their gameplay.</p>
-                            </div>
+                    </div>
+                    <div class="rule-card">
+                        <div class="rule-number">8</div>
+                        <div class="rule-content">
+                            <h3>Stream Friendly</h3>
+                            <p>Keep builds and in-game content friendly. Many of our members stream their gameplay.</p>
                         </div>
-                        <div class="rule-card">
-                            <div class="rule-number">9</div>
-                            <div class="rule-content">
-                                <h3>Common Sense</h3>
-                                <p>If it's not listed here, it doesn't mean it's okay. We expect players to use common sense.</p>
-                            </div>
+                    </div>
+                    <div class="rule-card">
+                        <div class="rule-number">9</div>
+                        <div class="rule-content">
+                            <h3>Common Sense</h3>
+                            <p>If it's not listed here, it doesn't mean it's okay. We expect players to use common sense.</p>
                         </div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <section id="icons" class="resource-section" role="tabpanel" aria-labelledby="tab-btn-icons" tabindex="0">
+        <!-- ══ ICONS ══ -->
+        <section id="icons" class="resource-section">
             <div class="container">
-                <h2>Icon Explanations</h2>
-                <div class="icons-grid">
-                    <div class="icon-card">
-                        <div class="icon-display">
-                            <img src="../assets/icons/crown.png" alt="Crown Icon" style="height: 64px;">
+                <div class="section-header">
+                    <h2>Player Icons</h2>
+                    <p class="section-subtitle">These icons appear next to player names in-game — here's what they mean.</p>
+                </div>
+                <div class="icons-showcase">
+                    <div class="icon-card-v2">
+                        <div class="icon-card-v2-visual">
+                            <img src="../assets/icons/owner.png" alt="Owner Icon">
                         </div>
-                        <div class="icon-info">
+                        <div class="icon-card-v2-body">
                             <h3>Owner</h3>
-                            <p>Server administrators and owners.</p>
+                            <p>Server administrators and owners who keep the server running.</p>
                         </div>
                     </div>
-                    <div class="icon-card">
-                        <div class="icon-display">
-                            <img src="../assets/icons/sparkles.png" alt="Sparkles Icon" style="height: 64px;">
+                    <div class="icon-card-v2">
+                        <div class="icon-card-v2-visual">
+                            <img src="../assets/icons/moderator.png" alt="Moderator Icon">
                         </div>
-                        <div class="icon-info">
+                        <div class="icon-card-v2-body">
                             <h3>Moderator / Event Org</h3>
                             <p>Mods and Event Organizers who keep the server fun and safe.</p>
                         </div>
                     </div>
-                    <div class="icon-card">
-                        <div class="icon-display">
-                            <img src="../assets/icons/money.png" alt="Money Icon" style="height: 64px;">
+                    <div class="icon-card-v2">
+                        <div class="icon-card-v2-visual">
+                            <img src="../assets/icons/shareholder.png" alt="Shareholder Icon">
                         </div>
-                        <div class="icon-info">
+                        <div class="icon-card-v2-body">
                             <h3>Shareholder</h3>
                             <p>Paying members who help support the server hosting costs.</p>
                         </div>
                     </div>
-                    <div class="icon-card">
-                        <div class="icon-display">
-                            <img src="../assets/icons/LIVE.png" alt="Live Icon" style="height: 64px;">
+                    <div class="icon-card-v2">
+                        <div class="icon-card-v2-visual icon-card-v2-visual--live">
+                            <img src="../assets/icons/LIVE.png" alt="Live Icon" class="icon-live">
                         </div>
-                        <div class="icon-info">
+                        <div class="icon-card-v2-body">
                             <h3>Live Now</h3>
                             <p>Indicates a player is currently streaming.</p>
                         </div>
@@ -188,316 +197,298 @@
             </div>
         </section>
 
-        <section id="mods" class="resource-section" role="tabpanel" aria-labelledby="tab-btn-mods" tabindex="0">
+        <!-- ══ MODS & FEATURES ══ -->
+        <section id="mods" class="resource-section">
             <div class="container">
-                <div class="mods-container">
+                <div class="section-header">
                     <h2>Mods &amp; Features</h2>
-                    <p class="mods-subtitle">Everything installed on the server — what it does and how to use it.</p>
+                    <p class="section-subtitle">Everything installed on the server — what it does and how to use it.</p>
+                </div>
 
-                    <div class="mod-group">
-                        <h3 class="mod-group-label">⭐ Custom Mods</h3>
-                        <div class="mods-grid">
-
-                            <div class="mod-card mod-card--custom">
-                                <div class="mod-card-top">
-                                    <span class="mod-name">PlayerStatus</span>
-                                    <span class="mod-badge badge--custom">Custom</span>
-                                </div>
-                                <p class="mod-desc">Two handy commands made just for TSNSMP.</p>
-                                <ul class="mod-cmds">
-                                    <li><code>/live</code> — Announce to the server you're going live. Set a stream link with <code>/live link &lt;url&gt;</code>.</li>
-                                    <li><code>/color &lt;hexcode&gt;</code> — Color your name with any RGB hex color.</li>
-                                </ul>
+                <div class="mod-group">
+                    <div class="mod-group-header">
+                        <span class="mod-group-icon">⭐</span>
+                        <h3 class="mod-group-label">Custom Mods</h3>
+                    </div>
+                    <div class="mods-grid">
+                        <div class="mod-card mod-card--custom">
+                            <div class="mod-card-top">
+                                <span class="mod-name">PlayerStatus</span>
+                                <span class="mod-badge badge--custom">Custom</span>
                             </div>
-
+                            <p class="mod-desc">Two handy commands made just for TSNSMP.</p>
+                            <ul class="mod-cmds">
+                                <li><code>/live</code> — Announce to the server you're going live. Set a stream link with <code>/live link &lt;url&gt;</code>.</li>
+                                <li><code>/color &lt;hexcode&gt;</code> — Color your name with any RGB hex color.</li>
+                            </ul>
                         </div>
                     </div>
+                </div>
 
-                    <div class="mod-group">
-                        <h3 class="mod-group-label">🔧 Quality of Life</h3>
-                        <div class="mods-grid">
-
-                            <div class="mod-card">
-                                <div class="mod-card-top">
-                                    <img class="mod-icon" src="https://cdn.modrinth.com/data/SRlzjEBS/9525c545236accda2b3724df7bf8ffe9025112f0.png" alt="" loading="lazy">
-                                    <a class="mod-name mod-link" href="https://modrinth.com/mod/audioplayer" target="_blank" rel="noopener noreferrer">AudioPlayer</a>
-                                </div>
-                                <p class="mod-desc">Put custom sounds on discs, goat horns and note blocks.</p>
+                <div class="mod-group">
+                    <div class="mod-group-header">
+                        <span class="mod-group-icon">🔧</span>
+                        <h3 class="mod-group-label">Quality of Life</h3>
+                    </div>
+                    <div class="mods-grid">
+                        <div class="mod-card">
+                            <div class="mod-card-top">
+                                <img class="mod-icon" src="https://cdn.modrinth.com/data/SRlzjEBS/9525c545236accda2b3724df7bf8ffe9025112f0.png" alt="" loading="lazy">
+                                <a class="mod-name mod-link" href="https://modrinth.com/mod/audioplayer" target="_blank" rel="noopener noreferrer">AudioPlayer</a>
                             </div>
-
-                            <div class="mod-card">
-                                <div class="mod-card-top">
-                                    <img class="mod-icon" src="https://cdn.modrinth.com/data/BITzwT7B/6be9d25207fe2406711546020b48b40980c40f6_96.webp" alt="" loading="lazy">
-                                    <a class="mod-name mod-link" href="https://modrinth.com/plugin/clickvillagers" target="_blank" rel="noopener noreferrer">ClickVillagers</a>
-                                </div>
-                                <p class="mod-desc">Shift + right-click a villager to pick it up. Place it back by placing the villager head — works in boats and minecarts too.</p>
+                            <p class="mod-desc">Put custom sounds on discs, goat horns and note blocks.</p>
+                        </div>
+                        <div class="mod-card">
+                            <div class="mod-card-top">
+                                <img class="mod-icon" src="https://cdn.modrinth.com/data/BITzwT7B/6be9d25207fe2406711546020b48b40980c40f6_96.webp" alt="" loading="lazy">
+                                <a class="mod-name mod-link" href="https://modrinth.com/plugin/clickvillagers" target="_blank" rel="noopener noreferrer">ClickVillagers</a>
                             </div>
-
-                            <div class="mod-card">
-                                <div class="mod-card-top">
-                                    <img class="mod-icon" src="https://cdn.modrinth.com/data/625eK1Si/139ec4d54a8b33afcc465dbc29232a473feead0_96.webp" alt="" loading="lazy">
-                                    <a class="mod-name mod-link" href="https://modrinth.com/mod/kiss-fabric" target="_blank" rel="noopener noreferrer">Kiss Mod</a>
-                                </div>
-                                <p class="mod-desc">Kiss another player.</p>
-                                <ul class="mod-cmds"><li><code>/kiss &lt;player&gt;</code></li></ul>
+                            <p class="mod-desc">Shift + right-click a villager to pick it up. Place it back by placing the villager head — works in boats and minecarts too.</p>
+                        </div>
+                        <div class="mod-card">
+                            <div class="mod-card-top">
+                                <img class="mod-icon" src="https://cdn.modrinth.com/data/625eK1Si/139ec4d54a8b33afcc465dbc29232a473feead0_96.webp" alt="" loading="lazy">
+                                <a class="mod-name mod-link" href="https://modrinth.com/mod/kiss-fabric" target="_blank" rel="noopener noreferrer">Kiss Mod</a>
                             </div>
-
-                            <div class="mod-card">
-                                <div class="mod-card-top">
-                                    <img class="mod-icon" src="https://cdn.modrinth.com/data/yn9u3ypm/a933032aa191fdc43cd439074f5713f8351e7af9.png" alt="" loading="lazy">
-                                    <a class="mod-name mod-link" href="https://modrinth.com/mod/universal-graves" target="_blank" rel="noopener noreferrer">Graves</a>
-                                </div>
-                                <p class="mod-desc">A grave spawns where you die, keeping your items safe.</p>
+                            <p class="mod-desc">Kiss another player.</p>
+                            <ul class="mod-cmds"><li><code>/kiss &lt;player&gt;</code></li></ul>
+                        </div>
+                        <div class="mod-card">
+                            <div class="mod-card-top">
+                                <img class="mod-icon" src="https://cdn.modrinth.com/data/yn9u3ypm/a933032aa191fdc43cd439074f5713f8351e7af9.png" alt="" loading="lazy">
+                                <a class="mod-name mod-link" href="https://modrinth.com/mod/universal-graves" target="_blank" rel="noopener noreferrer">Graves</a>
                             </div>
-
-                            <div class="mod-card">
-                                <div class="mod-card-top">
-                                    <img class="mod-icon" src="https://cdn.modrinth.com/data/1LE7mid6/226891eaa12906cef67bf671eb2204cb3e7a7b22.png" alt="" loading="lazy">
-                                    <a class="mod-name mod-link" href="https://modrinth.com/mod/enhanced-groups" target="_blank" rel="noopener noreferrer">Instant Groups</a>
-                                </div>
-                                <p class="mod-desc">Pull everyone nearby into a Simple Voice Chat open group instantly.</p>
-                                <ul class="mod-cmds"><li><code>/instantgroup &lt;range&gt;</code></li></ul>
+                            <p class="mod-desc">A grave spawns where you die, keeping your items safe.</p>
+                        </div>
+                        <div class="mod-card">
+                            <div class="mod-card-top">
+                                <img class="mod-icon" src="https://cdn.modrinth.com/data/1LE7mid6/226891eaa12906cef67bf671eb2204cb3e7a7b22.png" alt="" loading="lazy">
+                                <a class="mod-name mod-link" href="https://modrinth.com/mod/enhanced-groups" target="_blank" rel="noopener noreferrer">Instant Groups</a>
                             </div>
-
-                            <div class="mod-card">
-                                <div class="mod-card-top">
-                                    <img class="mod-icon" src="https://cdn.modrinth.com/data/13RpG7dA/501cb456e7a651d84b489047ed51aa42234b14b9_96.webp" alt="" loading="lazy">
-                                    <a class="mod-name mod-link" href="https://modrinth.com/mod/image2map" target="_blank" rel="noopener noreferrer">Image2Map</a>
-                                </div>
-                                <p class="mod-desc">Render any image onto maps. Each map is 128×128 px. The URL must point directly to an image file.</p>
-                                <ul class="mod-cmds"><li><code>/image2map create &lt;W&gt; &lt;H&gt; &lt;dither/none&gt; &lt;url&gt;</code></li></ul>
+                            <p class="mod-desc">Pull everyone nearby into a Simple Voice Chat open group instantly.</p>
+                            <ul class="mod-cmds"><li><code>/instantgroup &lt;range&gt;</code></li></ul>
+                        </div>
+                        <div class="mod-card">
+                            <div class="mod-card-top">
+                                <img class="mod-icon" src="https://cdn.modrinth.com/data/13RpG7dA/501cb456e7a651d84b489047ed51aa42234b14b9_96.webp" alt="" loading="lazy">
+                                <a class="mod-name mod-link" href="https://modrinth.com/mod/image2map" target="_blank" rel="noopener noreferrer">Image2Map</a>
                             </div>
-
-                            <div class="mod-card">
-                                <div class="mod-card-top">
-                                    <img class="mod-icon" src="https://cdn.modrinth.com/data/kTwcC3jx/77b4973aee3988249d181a7b98f17a7c8f35ced.png" alt="" loading="lazy">
-                                    <a class="mod-name mod-link" href="https://modrinth.com/datapack/oszoukauas-real-height" target="_blank" rel="noopener noreferrer">RealHeight</a>
-                                </div>
-                                <p class="mod-desc">Change your player height. Limited to 1.2 – 2.2 blocks.</p>
-                                <ul class="mod-cmds"><li><code>/trigger height_menu</code></li></ul>
+                            <p class="mod-desc">Render any image onto maps. Each map is 128×128 px. The URL must point directly to an image file.</p>
+                            <ul class="mod-cmds"><li><code>/image2map create &lt;W&gt; &lt;H&gt; &lt;dither/none&gt; &lt;url&gt;</code></li></ul>
+                        </div>
+                        <div class="mod-card">
+                            <div class="mod-card-top">
+                                <img class="mod-icon" src="https://cdn.modrinth.com/data/kTwcC3jx/77b4973aee3988249d181a7b98f17a7c8f35ced.png" alt="" loading="lazy">
+                                <a class="mod-name mod-link" href="https://modrinth.com/datapack/oszoukauas-real-height" target="_blank" rel="noopener noreferrer">RealHeight</a>
                             </div>
-
-                            <div class="mod-card">
-                                <div class="mod-card-top">
-                                    <img class="mod-icon" src="https://cdn.modrinth.com/data/TnOXNf5e/d8a161534812378a69d5b6d7b7393998a6d1f44.png" alt="" loading="lazy">
-                                    <a class="mod-name mod-link" href="https://modrinth.com/mod/peek" target="_blank" rel="noopener noreferrer">Peek</a>
-                                    <span class="mod-badge badge--client">Client mod needed</span>
-                                </div>
-                                <p class="mod-desc">Shows an item preview on shulker boxes without opening them.</p>
+                            <p class="mod-desc">Change your player height. Limited to 1.2 – 2.2 blocks.</p>
+                            <ul class="mod-cmds"><li><code>/trigger height_menu</code></li></ul>
+                        </div>
+                        <div class="mod-card">
+                            <div class="mod-card-top">
+                                <img class="mod-icon" src="https://cdn.modrinth.com/data/TnOXNf5e/d8a161534812378a69d5b6d7b7393998a6d1f44.png" alt="" loading="lazy">
+                                <a class="mod-name mod-link" href="https://modrinth.com/mod/peek" target="_blank" rel="noopener noreferrer">Peek</a>
+                                <span class="mod-badge badge--client">Client mod needed</span>
                             </div>
-
-                            <div class="mod-card">
-                                <div class="mod-card-top">
-                                    <img class="mod-icon" src="https://cdn.modrinth.com/data/EXzIPtJo/b9984c91f53225fb1f7167593942d85fe2b0b45e_96.webp" alt="" loading="lazy">
-                                    <a class="mod-name mod-link" href="https://modrinth.com/mod/replanting-crops" target="_blank" rel="noopener noreferrer">Replanting Crops</a>
-                                </div>
-                                <p class="mod-desc">Break crops with a hoe and they replant themselves automatically.</p>
+                            <p class="mod-desc">Shows an item preview on shulker boxes without opening them.</p>
+                        </div>
+                        <div class="mod-card">
+                            <div class="mod-card-top">
+                                <img class="mod-icon" src="https://cdn.modrinth.com/data/EXzIPtJo/b9984c91f53225fb1f7167593942d85fe2b0b45e_96.webp" alt="" loading="lazy">
+                                <a class="mod-name mod-link" href="https://modrinth.com/mod/replanting-crops" target="_blank" rel="noopener noreferrer">Replanting Crops</a>
                             </div>
-
-                            <div class="mod-card">
-                                <div class="mod-card-top">
-                                    <img class="mod-icon" src="https://cdn.modrinth.com/data/DuUMFIfX/d8a4745dbaf7525dcea2c00dccdd557f3b26e70_96.webp" alt="" loading="lazy">
-                                    <a class="mod-name mod-link" href="https://modrinth.com/datapack/mastercutter" target="_blank" rel="noopener noreferrer">MasterCutter</a>
-                                </div>
-                                <p class="mod-desc">500+ new stonecutter recipes — woodcutting, stripping, recycling and more.</p>
+                            <p class="mod-desc">Break crops with a hoe and they replant themselves automatically.</p>
+                        </div>
+                        <div class="mod-card">
+                            <div class="mod-card-top">
+                                <img class="mod-icon" src="https://cdn.modrinth.com/data/DuUMFIfX/d8a4745dbaf7525dcea2c00dccdd557f3b26e70_96.webp" alt="" loading="lazy">
+                                <a class="mod-name mod-link" href="https://modrinth.com/datapack/mastercutter" target="_blank" rel="noopener noreferrer">MasterCutter</a>
                             </div>
-
-                            <div class="mod-card">
-                                <div class="mod-card-top">
-                                    <a class="mod-name mod-link" href="https://modrinth.com/datapack/formatname" target="_blank" rel="noopener noreferrer">FormatName</a>
-                                </div>
-                                <p class="mod-desc">Tweak name colors and add effects to your items.</p>
-                                <ul class="mod-cmds"><li><code>/trigger FormatName</code></li></ul>
+                            <p class="mod-desc">500+ new stonecutter recipes — woodcutting, stripping, recycling and more.</p>
+                        </div>
+                        <div class="mod-card">
+                            <div class="mod-card-top">
+                                <a class="mod-name mod-link" href="https://modrinth.com/datapack/formatname" target="_blank" rel="noopener noreferrer">FormatName</a>
                             </div>
-
-                            <div class="mod-card">
-                                <div class="mod-card-top">
-                                    <img class="mod-icon" src="https://cdn.modrinth.com/data/ncsAPvAb/11fd4aa1a66094826b131ece789bce856cd6c1d_96.webp" alt="" loading="lazy">
-                                    <a class="mod-name mod-link" href="https://modrinth.com/mod/noweatherskip" target="_blank" rel="noopener noreferrer">NoWeatherSkip</a>
-                                </div>
-                                <p class="mod-desc">Sleeping no longer skips rain/thunder — weather plays out naturally.</p>
+                            <p class="mod-desc">Tweak name colors and add effects to your items.</p>
+                            <ul class="mod-cmds"><li><code>/trigger FormatName</code></li></ul>
+                        </div>
+                        <div class="mod-card">
+                            <div class="mod-card-top">
+                                <img class="mod-icon" src="https://cdn.modrinth.com/data/ncsAPvAb/11fd4aa1a66094826b131ece789bce856cd6c1d_96.webp" alt="" loading="lazy">
+                                <a class="mod-name mod-link" href="https://modrinth.com/mod/noweatherskip" target="_blank" rel="noopener noreferrer">NoWeatherSkip</a>
                             </div>
-
+                            <p class="mod-desc">Sleeping no longer skips rain/thunder — weather plays out naturally.</p>
                         </div>
                     </div>
+                </div>
 
-                    <div class="mod-group">
-                        <h3 class="mod-group-label">🏗️ Decoration &amp; Building</h3>
-                        <div class="mods-grid">
-
-                            <div class="mod-card">
-                                <div class="mod-card-top">
-                                    <img class="mod-icon" src="https://cdn.modrinth.com/data/l6VVh2KR/b7db183ddfb1812dbc4b20058204ef66cfd928c.png" alt="" loading="lazy">
-                                    <a class="mod-name mod-link" href="https://modrinth.com/datapack/better-hanging-signs" target="_blank" rel="noopener noreferrer">Better Hanging Signs</a>
-                                </div>
-                                <p class="mod-desc">Place item frames on hanging signs to display items on them.</p>
+                <div class="mod-group">
+                    <div class="mod-group-header">
+                        <span class="mod-group-icon">🏗️</span>
+                        <h3 class="mod-group-label">Decoration &amp; Building</h3>
+                    </div>
+                    <div class="mods-grid">
+                        <div class="mod-card">
+                            <div class="mod-card-top">
+                                <img class="mod-icon" src="https://cdn.modrinth.com/data/l6VVh2KR/b7db183ddfb1812dbc4b20058204ef66cfd928c.png" alt="" loading="lazy">
+                                <a class="mod-name mod-link" href="https://modrinth.com/datapack/better-hanging-signs" target="_blank" rel="noopener noreferrer">Better Hanging Signs</a>
                             </div>
-
-                            <div class="mod-card">
-                                <div class="mod-card-top">
-                                    <img class="mod-icon" src="https://cdn.modrinth.com/data/nNI4DwbW/a66878d4dc706260d1009d36d385cdaded45ab4c_96.webp" alt="" loading="lazy">
-                                    <a class="mod-name mod-link" href="https://modrinth.com/mod/flourish" target="_blank" rel="noopener noreferrer">Flourish</a>
-                                </div>
-                                <p class="mod-desc">Bonemeal small flowers to spread them, like in Bedrock Edition.</p>
+                            <p class="mod-desc">Place item frames on hanging signs to display items on them.</p>
+                        </div>
+                        <div class="mod-card">
+                            <div class="mod-card-top">
+                                <img class="mod-icon" src="https://cdn.modrinth.com/data/bbGCtEvb/005eb8a0a3b751e6a595757743a7032353776f44_96.webp" alt="" loading="lazy">
+                                <a class="mod-name mod-link" href="https://modrinth.com/mod/armor-statues" target="_blank" rel="noopener noreferrer">Armor Statues</a>
                             </div>
-
-                            <div class="mod-card">
-                                <div class="mod-card-top">
-                                    <img class="mod-icon" src="https://cdn.modrinth.com/data/bbGCtEvb/005eb8a0a3b751e6a595757743a7032353776f44_96.webp" alt="" loading="lazy">
-                                    <a class="mod-name mod-link" href="https://modrinth.com/mod/armor-statues" target="_blank" rel="noopener noreferrer">Armor Statues</a>
-                                </div>
-                                <p class="mod-desc">Full armor stand customization via a signed book named "Statues".</p>
+                            <p class="mod-desc">Full armor stand customization via a signed book named "Statues".</p>
+                        </div>
+                        <div class="mod-card">
+                            <div class="mod-card-top">
+                                <img class="mod-icon" src="https://cdn.modrinth.com/data/zJIYJfn8/290af39b71a85c4e90ea0ba98e52bb4753316b9b_96.webp" alt="" loading="lazy">
+                                <a class="mod-name mod-link" href="https://modrinth.com/datapack/catenary" target="_blank" rel="noopener noreferrer">Catenary</a>
                             </div>
-
-                            <div class="mod-card">
-                                <div class="mod-card-top">
-                                    <img class="mod-icon" src="https://cdn.modrinth.com/data/zJIYJfn8/290af39b71a85c4e90ea0ba98e52bb4753316b9b_96.webp" alt="" loading="lazy">
-                                    <a class="mod-name mod-link" href="https://modrinth.com/datapack/catenary" target="_blank" rel="noopener noreferrer">Catenary</a>
-                                </div>
-                                <p class="mod-desc">Add hanging chain/rope decorations between two points. Also works as a rideable zipline.</p>
+                            <p class="mod-desc">Add hanging chain/rope decorations between two points. Also works as a rideable zipline.</p>
+                        </div>
+                        <div class="mod-card">
+                            <div class="mod-card-top">
+                                <span class="mod-name">Painting Picker</span>
                             </div>
-
-                            <div class="mod-card">
-                                <div class="mod-card-top">
-                                    <img class="mod-icon" src="https://cdn.modrinth.com/data/q3tICGpu/98bc12999bad53ef5b25803da72d9c63881f830.png" alt="" loading="lazy">
-                                    <a class="mod-name mod-link" href="https://modrinth.com/mod/wiretap" target="_blank" rel="noopener noreferrer">Wiretap</a>
-                                </div>
-                                <p class="mod-desc">Craft a microphone and speaker block for in-world voice chat (requires Simple Voice Chat).</p>
+                            <p class="mod-desc">Choose exactly which painting you want using the stonecutter.</p>
+                        </div>
+                        <div class="mod-card">
+                            <div class="mod-card-top">
+                                <img class="mod-icon" src="https://cdn.modrinth.com/data/wN3RC3Zr/d78a566d53c274b83b1407dc2adb1b8abe684e6_96.webp" alt="" loading="lazy">
+                                <a class="mod-name mod-link" href="https://modrinth.com/datapack/gm4-rope-ladders" target="_blank" rel="noopener noreferrer">Rope Ladders</a>
                             </div>
-
-                            <div class="mod-card">
-                                <div class="mod-card-top">
-                                    <span class="mod-name">Painting Picker</span>
-                                </div>
-                                <p class="mod-desc">Choose exactly which painting you want using the stonecutter.</p>
+                            <p class="mod-desc">Craft and hang rope ladders that dangle downward.</p>
+                        </div>
+                        <div class="mod-card">
+                            <div class="mod-card-top">
+                                <img class="mod-icon" src="https://cdn.modrinth.com/data/K5IRddrD/18a1bc4b28d8a3a154160db75a3d6a72868a9fe4.png" alt="" loading="lazy">
+                                <a class="mod-name mod-link" href="https://modrinth.com/datapack/invisible-frames" target="_blank" rel="noopener noreferrer">Invisible Frames</a>
                             </div>
-
-                            <div class="mod-card">
-                                <div class="mod-card-top">
-                                    <img class="mod-icon" src="https://cdn.modrinth.com/data/wN3RC3Zr/d78a566d53c274b83b1407dc2adb1b8abe684e6_96.webp" alt="" loading="lazy">
-                                    <a class="mod-name mod-link" href="https://modrinth.com/datapack/gm4-rope-ladders" target="_blank" rel="noopener noreferrer">Rope Ladders</a>
-                                </div>
-                                <p class="mod-desc">Craft and hang rope ladders that dangle downward.</p>
+                            <p class="mod-desc">Toggle item frame visibility with Crouch + Right-click.</p>
+                        </div>
+                        <div class="mod-card">
+                            <div class="mod-card-top">
+                                <img class="mod-icon" src="https://cdn.modrinth.com/data/cCStmVIN/9684ec94b146503cb4ab0210b367cbb313c68da_96.webp" alt="" loading="lazy">
+                                <a class="mod-name mod-link" href="https://modrinth.com/datapack/banner-flags" target="_blank" rel="noopener noreferrer">Banner Flags</a>
                             </div>
-
-                            <div class="mod-card">
-                                <div class="mod-card-top">
-                                    <img class="mod-icon" src="https://cdn.modrinth.com/data/K5IRddrD/18a1bc4b28d8a3a154160db75a3d6a72868a9fe4.png" alt="" loading="lazy">
-                                    <a class="mod-name mod-link" href="https://modrinth.com/datapack/invisible-frames" target="_blank" rel="noopener noreferrer">Invisible Frames</a>
-                                </div>
-                                <p class="mod-desc">Toggle item frame visibility with Crouch + Right-click.</p>
+                            <p class="mod-desc">Convert banners into decorative flags.</p>
+                        </div>
+                        <div class="mod-card">
+                            <div class="mod-card-top">
+                                <img class="mod-icon" src="https://cdn.modrinth.com/data/pcN1B3cK/a56e9fdafce9068aaf042f0720a0eaba8629278_96.webp" alt="" loading="lazy">
+                                <a class="mod-name mod-link" href="https://modrinth.com/datapack/banner-bedsheet" target="_blank" rel="noopener noreferrer">Banner Bedsheets</a>
                             </div>
-
-                            <div class="mod-card">
-                                <div class="mod-card-top">
-                                    <img class="mod-icon" src="https://cdn.modrinth.com/data/cCStmVIN/9684ec94b146503cb4ab0210b367cbb313c68da_96.webp" alt="" loading="lazy">
-                                    <a class="mod-name mod-link" href="https://modrinth.com/datapack/banner-flags" target="_blank" rel="noopener noreferrer">Banner Flags</a>
-                                </div>
-                                <p class="mod-desc">Convert banners into decorative flags.</p>
+                            <p class="mod-desc">Convert banners into bedsheets.</p>
+                        </div>
+                        <div class="mod-card">
+                            <div class="mod-card-top">
+                                <img class="mod-icon" src="https://cdn.modrinth.com/data/cPfmk5E3/9234e8723d1a1b2e4b2e4e4337b4d93b03ce7bcf.jpeg" alt="" loading="lazy">
+                                <a class="mod-name mod-link" href="https://modrinth.com/datapack/gardeners-dream" target="_blank" rel="noopener noreferrer">Gardener's Dream</a>
                             </div>
-
-                            <div class="mod-card">
-                                <div class="mod-card-top">
-                                    <img class="mod-icon" src="https://cdn.modrinth.com/data/pcN1B3cK/a56e9fdafce9068aaf042f0720a0eaba8629278_96.webp" alt="" loading="lazy">
-                                    <a class="mod-name mod-link" href="https://modrinth.com/datapack/banner-bedsheet" target="_blank" rel="noopener noreferrer">Banner Bedsheets</a>
-                                </div>
-                                <p class="mod-desc">Convert banners into bedsheets.</p>
+                            <p class="mod-desc">Extra decoration options for flower pots and decorative pots.</p>
+                        </div>
+                        <div class="mod-card">
+                            <div class="mod-card-top">
+                                <a class="mod-name mod-link" href="https://modrinth.com/datapack/silk-touch-budding-amethyst" target="_blank" rel="noopener noreferrer">Silk Touch Budding Amethyst</a>
                             </div>
-
-                            <div class="mod-card">
-                                <div class="mod-card-top">
-                                    <img class="mod-icon" src="https://cdn.modrinth.com/data/cPfmk5E3/9234e8723d1a1b2e4b2e4e4337b4d93b03ce7bcf.jpeg" alt="" loading="lazy">
-                                    <a class="mod-name mod-link" href="https://modrinth.com/datapack/gardeners-dream" target="_blank" rel="noopener noreferrer">Gardener's Dream</a>
-                                </div>
-                                <p class="mod-desc">Extra decoration options for flower pots and decorative pots.</p>
+                            <p class="mod-desc">Mine budding amethyst with Silk Touch to keep it intact.</p>
+                        </div>
+                        <div class="mod-card">
+                            <div class="mod-card-top">
+                                <a class="mod-name mod-link" href="https://modrinth.com/datapack/cauldron-concrete-and-mud" target="_blank" rel="noopener noreferrer">Cauldron Concrete &amp; Mud</a>
                             </div>
-
-                            <div class="mod-card">
-                                <div class="mod-card-top">
-                                    <a class="mod-name mod-link" href="https://modrinth.com/datapack/silk-touch-budding-amethyst" target="_blank" rel="noopener noreferrer">Silk Touch Budding Amethyst</a>
-                                </div>
-                                <p class="mod-desc">Mine budding amethyst with Silk Touch to keep it intact.</p>
+                            <p class="mod-desc">Drop dirt or concrete powder into a water cauldron to get mud or wet concrete powder.</p>
+                        </div>
+                        <div class="mod-card">
+                            <div class="mod-card-top">
+                                <a class="mod-name mod-link" href="https://modrinth.com/datapack/craftable-vegan-ink" target="_blank" rel="noopener noreferrer">Craftable Vegan Ink</a>
                             </div>
-
-                            <div class="mod-card">
-                                <div class="mod-card-top">
-                                    <a class="mod-name mod-link" href="https://modrinth.com/datapack/cauldron-concrete-and-mud" target="_blank" rel="noopener noreferrer">Cauldron Concrete &amp; Mud</a>
-                                </div>
-                                <p class="mod-desc">Drop dirt or concrete powder into a water cauldron to get mud or wet concrete powder.</p>
-                            </div>
-
-                            <div class="mod-card">
-                                <div class="mod-card-top">
-                                    <a class="mod-name mod-link" href="https://modrinth.com/datapack/craftable-vegan-ink" target="_blank" rel="noopener noreferrer">Craftable Vegan Ink</a>
-                                </div>
-                                <p class="mod-desc">Several crafting recipes for black dye that don't require ink sacs.</p>
-                            </div>
-
+                            <p class="mod-desc">Several crafting recipes for black dye that don't require ink sacs.</p>
                         </div>
                     </div>
+                </div>
 
-                    <div class="mod-group">
-                        <h3 class="mod-group-label">🐦 Mobs &amp; Creatures</h3>
-                        <div class="mods-grid">
-
-                            <div class="mod-card">
-                                <div class="mod-card-top">
-                                    <img class="mod-icon" src="https://cdn.modrinth.com/data/RTBZXjdc/d2751566d9dcd9bfe41cfaba0f8642df15756d9_96.webp" alt="" loading="lazy">
-                                    <a class="mod-name mod-link" href="https://modrinth.com/datapack/swift-ghasts" target="_blank" rel="noopener noreferrer">Swift Ghasts</a>
-                                </div>
-                                <p class="mod-desc">Upgrade a ghast harness in a smithing table (harness + netherite upgrade template + wind charge) to make it faster.</p>
+                <div class="mod-group">
+                    <div class="mod-group-header">
+                        <span class="mod-group-icon">🐦</span>
+                        <h3 class="mod-group-label">Mobs &amp; Creatures</h3>
+                    </div>
+                    <div class="mods-grid">
+                        <div class="mod-card">
+                            <div class="mod-card-top">
+                                <img class="mod-icon" src="https://cdn.modrinth.com/data/RTBZXjdc/d2751566d9dcd9bfe41cfaba0f8642df15756d9_96.webp" alt="" loading="lazy">
+                                <a class="mod-name mod-link" href="https://modrinth.com/datapack/swift-ghasts" target="_blank" rel="noopener noreferrer">Swift Ghasts</a>
                             </div>
-
-                            <div class="mod-card">
-                                <div class="mod-card-top">
-                                    <img class="mod-icon" src="https://cdn.modrinth.com/data/LnG7iWcI/c152d1ba0eececfc052344cef4cdb03956856ef6_96.webp" alt="" loading="lazy">
-                                    <a class="mod-name mod-link" href="https://modrinth.com/datapack/happy-ghast-stopper" target="_blank" rel="noopener noreferrer">Happy Ghast Stopper</a>
-                                </div>
-                                <p class="mod-desc">Rename a harness to <code>STOP</code> (case-sensitive) and equip it on a Happy Ghast to stop it from wandering.</p>
+                            <p class="mod-desc">Upgrade a ghast harness in a smithing table (harness + netherite upgrade template + wind charge) to make it faster.</p>
+                        </div>
+                        <div class="mod-card">
+                            <div class="mod-card-top">
+                                <img class="mod-icon" src="https://cdn.modrinth.com/data/LnG7iWcI/c152d1ba0eececfc052344cef4cdb03956856ef6_96.webp" alt="" loading="lazy">
+                                <a class="mod-name mod-link" href="https://modrinth.com/datapack/happy-ghast-stopper" target="_blank" rel="noopener noreferrer">Happy Ghast Stopper</a>
                             </div>
-
+                            <p class="mod-desc">Rename a harness to <code>STOP</code> (case-sensitive) and equip it on a Happy Ghast to stop it from wandering.</p>
                         </div>
                     </div>
+                </div>
 
-                    <div class="mod-group">
-                        <h3 class="mod-group-label">✨ Enchantments</h3>
-                        <div class="mods-grid">
-
-                            <div class="mod-card">
-                                <div class="mod-card-top">
-                                    <img class="mod-icon" src="https://cdn.modrinth.com/data/OhduvhIc/f9c333a18b2c11a5fb063de8e86db8b76094c66.png" alt="" loading="lazy">
-                                    <a class="mod-name mod-link" href="https://modrinth.com/datapack/ly-veinminer-enchantment" target="_blank" rel="noopener noreferrer">Veinminer</a>
-                                    <span class="mod-badge badge--optional">Optional</span>
-                                </div>
-                                <p class="mod-desc">An enchantment that lets you vein-mine ores in one hit. Completely optional to use.</p>
+                <div class="mod-group">
+                    <div class="mod-group-header">
+                        <span class="mod-group-icon">✨</span>
+                        <h3 class="mod-group-label">Enchantments</h3>
+                    </div>
+                    <div class="mods-grid">
+                        <div class="mod-card">
+                            <div class="mod-card-top">
+                                <img class="mod-icon" src="https://cdn.modrinth.com/data/OhduvhIc/f9c333a18b2c11a5fb063de8e86db8b76094c66.png" alt="" loading="lazy">
+                                <a class="mod-name mod-link" href="https://modrinth.com/datapack/ly-veinminer-enchantment" target="_blank" rel="noopener noreferrer">Veinminer</a>
+                                <span class="mod-badge badge--optional">Optional</span>
                             </div>
-
-                            <div class="mod-card">
-                                <div class="mod-card-top">
-                                    <img class="mod-icon" src="https://cdn.modrinth.com/data/cqIcXVf5/0e1b2779d8be6a1010e74f71cd8cd4a3b91095a.png" alt="" loading="lazy">
-                                    <a class="mod-name mod-link" href="https://modrinth.com/datapack/magnetic-enchantment" target="_blank" rel="noopener noreferrer">Magnetic</a>
-                                    <span class="mod-badge badge--optional">Optional</span>
-                                </div>
-                                <p class="mod-desc">An enchantment that auto-collects nearby drops. Completely optional to use.</p>
+                            <p class="mod-desc">An enchantment that lets you vein-mine ores in one hit. Completely optional to use.</p>
+                        </div>
+                        <div class="mod-card">
+                            <div class="mod-card-top">
+                                <img class="mod-icon" src="https://cdn.modrinth.com/data/cqIcXVf5/0e1b2779d8be6a1010e74f71cd8cd4a3b91095a.png" alt="" loading="lazy">
+                                <a class="mod-name mod-link" href="https://modrinth.com/datapack/magnetic-enchantment" target="_blank" rel="noopener noreferrer">Magnetic</a>
+                                <span class="mod-badge badge--optional">Optional</span>
                             </div>
-
+                            <p class="mod-desc">An enchantment that auto-collects nearby drops. Completely optional to use.</p>
                         </div>
                     </div>
+                </div>
 
+            </div>
+        </section>
+
+        <!-- ══ WORLD DOWNLOADS ══ -->
+        <section id="downloads" class="resource-section">
+            <div class="container">
+                <div class="section-header">
+                    <h2>World Downloads</h2>
+                    <p class="section-subtitle">Download past world saves to explore on your own.</p>
+                </div>
+                <div id="downloads-grid" class="downloads-grid">
+                    <p class="downloads-empty">No world downloads available yet.</p>
                 </div>
             </div>
         </section>
 
-        <section id="map" class="resource-section" role="tabpanel" aria-labelledby="tab-btn-map" tabindex="0">
+        <!-- ══ LIVE MAP ══ -->
+        <section id="map" class="resource-section">
             <div class="container">
-                <h2>Live Server Map</h2>
-                <p class="map-note">View the world in real-time! (Note: May take a moment to load)</p>
+                <div class="section-header">
+                    <h2>Live Server Map</h2>
+                    <p class="section-subtitle">View the world in real-time — may take a moment to load.</p>
+                </div>
                 <div class="map-container">
                     <iframe src="https://map.tsnsmp.online" title="TSNSMP Live Map" allowfullscreen></iframe>
                 </div>
             </div>
         </section>
-    </main>
+    </main><!-- /resources-content -->
 
     <script src="../js/header.js"></script>
     <script src="../js/footer.js"></script>
@@ -505,19 +496,64 @@
     <script>
         createHeader('resources');
         createFooter('resources');
+    </script>
+    <script>
+        /* ── Scroll-spy for nav highlights ── */
+        const navLinks = document.querySelectorAll('.resource-tabs a');
+        const sections = document.querySelectorAll('.resource-section');
 
-        function switchTab(tabId, btn) {
-            document.querySelectorAll('.resource-section').forEach(s => {
-                s.classList.remove('active');
+        const scrollSpy = new IntersectionObserver(entries => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    navLinks.forEach(a => a.classList.toggle('active', a.dataset.section === entry.target.id));
+                }
             });
-            document.querySelectorAll('.tab-btn').forEach(b => {
-                b.classList.remove('active');
-                b.setAttribute('aria-selected', 'false');
+        }, { rootMargin: '-40% 0px -55% 0px' });
+
+        sections.forEach(s => scrollSpy.observe(s));
+
+        // Smooth-scroll on nav click
+        navLinks.forEach(a => {
+            a.addEventListener('click', e => {
+                e.preventDefault();
+                const target = document.getElementById(a.dataset.section);
+                if (target) {
+                    const navH = document.querySelector('.resources-nav').offsetHeight;
+                    const y = target.getBoundingClientRect().top + window.scrollY - navH - 12;
+                    window.scrollTo({ top: y, behavior: 'smooth' });
+                }
             });
-            document.getElementById(tabId).classList.add('active');
-            btn.classList.add('active');
-            btn.setAttribute('aria-selected', 'true');
-        }
+        });
+    </script>
+
+    <!-- Firebase SDK (for world downloads) -->
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+    <script src="../js/firebase-config.js"></script>
+    <script>
+        /* ── World Downloads from Firebase ── */
+        const db = firebase.database();
+        const DOWNLOADS_REF = db.ref('worldDownloads');
+
+        DOWNLOADS_REF.on('value', snap => {
+            const container = document.getElementById('downloads-grid');
+            const data = snap.val();
+
+            if (!data) {
+                container.innerHTML = '<p class="downloads-empty">No world downloads available yet.</p>';
+                return;
+            }
+
+            const entries = Object.values(data).sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+
+            container.innerHTML = entries.map(dl => `
+                <a class="download-card" href="${dl.url}" target="_blank" rel="noopener noreferrer">
+                    <span class="download-icon">📥</span>
+                    <span class="download-title">${dl.title}</span>
+                    <span class="download-arrow">↗</span>
+                </a>
+            `).join('');
+        });
     </script>
 </body>
 </html>

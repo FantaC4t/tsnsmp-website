@@ -889,6 +889,7 @@
         <button class="admin-tab-btn active" data-tab="players" onclick="switchTab('players')">👥 Player List</button>
         <button class="admin-tab-btn teal" data-tab="gallery" onclick="switchTab('gallery')">🖼️ Gallery</button>
         <button class="admin-tab-btn orange" data-tab="events" onclick="switchTab('events')">📅 Events</button>
+        <button class="admin-tab-btn" data-tab="downloads" onclick="switchTab('downloads')" style="border-color:rgba(22,196,196,.35);color:var(--s3-teal,#16C4C4)">📥 World Downloads</button>
     </div>
 
     <div class="admin-body">
@@ -1070,8 +1071,12 @@
                         <input type="text" id="event-label" placeholder="e.g. Build Contest 🏗️" />
                     </div>
                     <div class="form-group">
-                        <label>Date *</label>
+                        <label>Start Date *</label>
                         <input type="date" id="event-date" />
+                    </div>
+                    <div class="form-group">
+                        <label>End Date</label>
+                        <input type="date" id="event-end-date" />
                     </div>
                     <div class="form-group">
                         <label>Description</label>
@@ -1105,6 +1110,44 @@
         </div>
 
         </div><!-- /tab-events -->
+
+        <!-- ══ WORLD DOWNLOADS TAB ══ -->
+        <div id="tab-downloads" style="display:none">
+
+        <div class="panel">
+            <div class="panel-header">
+                <span class="panel-header-icon" style="background:rgba(22,196,196,.15)">📥</span>
+                <h2>Add World Download</h2>
+            </div>
+            <div class="panel-body">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Title *</label>
+                        <input type="text" id="dl-title" placeholder="e.g. Season 2 World" />
+                    </div>
+                    <div class="form-group">
+                        <label>Download URL *</label>
+                        <input type="url" id="dl-url" placeholder="https://drive.google.com/..." />
+                    </div>
+                </div>
+                <button class="btn btn-green" onclick="addDownload()" style="margin-top:1rem">📥 Add Download</button>
+            </div>
+        </div>
+
+        <div class="panel">
+            <div class="panel-header">
+                <span class="panel-header-icon" style="background:rgba(22,196,196,.15)">📋</span>
+                <h2>Current Downloads</h2>
+                <span id="dl-count" style="color:var(--muted);font-size:.85rem"></span>
+            </div>
+            <div class="panel-body">
+                <div id="downloads-admin-list">
+                    <div class="loading">Loading downloads…</div>
+                </div>
+            </div>
+        </div>
+
+        </div><!-- /tab-downloads -->
 
     </div>
 </div>
@@ -1229,6 +1272,7 @@
         document.getElementById('tab-players').style.display = tab === 'players' ? 'block' : 'none';
         document.getElementById('tab-gallery').style.display = tab === 'gallery' ? 'block' : 'none';
         document.getElementById('tab-events').style.display  = tab === 'events'  ? 'block' : 'none';
+        document.getElementById('tab-downloads').style.display = tab === 'downloads' ? 'block' : 'none';
     }
 
     const auth        = firebase.auth();
@@ -1824,26 +1868,31 @@
     const EVENTS_REF = db.ref('events');
 
     async function addEvent() {
-        const label  = document.getElementById('event-label').value.trim();
-        const date   = document.getElementById('event-date').value;
-        const desc   = document.getElementById('event-desc').value.trim();
-        const status = document.getElementById('event-status').value;
+        const label   = document.getElementById('event-label').value.trim();
+        const date    = document.getElementById('event-date').value;
+        const endDate = document.getElementById('event-end-date').value;
+        const desc    = document.getElementById('event-desc').value.trim();
+        const status  = document.getElementById('event-status').value;
 
         if (!label || !date) return showToast('Name and date are required', 'error');
+        if (endDate && endDate < date) return showToast('End date must be on or after start date', 'error');
 
         try {
-            await EVENTS_REF.push({
+            const payload = {
                 label,
                 date,
                 description: desc || '',
                 status,
                 createdAt: Date.now()
-            });
+            };
+            if (endDate) payload.endDate = endDate;
+            await EVENTS_REF.push(payload);
             showToast('📅 Event added!', 'success');
-            document.getElementById('event-label').value = '';
-            document.getElementById('event-date').value  = '';
-            document.getElementById('event-desc').value  = '';
-            document.getElementById('event-status').value = 'auto';
+            document.getElementById('event-label').value    = '';
+            document.getElementById('event-date').value     = '';
+            document.getElementById('event-end-date').value = '';
+            document.getElementById('event-desc').value     = '';
+            document.getElementById('event-status').value   = 'auto';
         } catch (e) {
             showToast('Failed to add event: ' + e.message, 'error');
         }
@@ -1874,7 +1923,8 @@
     function getEventStatus(event) {
         if (event.status && event.status !== 'auto') return event.status;
         const today = new Date().toISOString().split('T')[0];
-        if (event.date === today) return 'active';
+        const end = event.endDate || event.date;
+        if (event.date <= today && today <= end) return 'active';
         return event.date > today ? 'upcoming' : 'past';
     }
 
@@ -1915,7 +1965,7 @@
                         <span style="background:${color}22;color:${color};padding:2px 8px;border-radius:6px;font-size:.75rem;text-transform:uppercase">${st}</span>
                     </div>
                     <div style="font-size:.8rem;color:var(--muted);margin-top:.25rem">
-                        📆 <span style="cursor:pointer" onclick="editEventField('${key}','date','${ev.date}')">${ev.date}</span>
+                        📆 <span style="cursor:pointer" onclick="editEventField('${key}','date','${ev.date}')">${ev.date}</span>${ev.endDate ? ` → <span style="cursor:pointer" onclick="editEventField('${key}','endDate','${ev.endDate}')">${ev.endDate}</span>` : ''}
                         ${ev.description ? ` · ${ev.description}` : ''}
                     </div>
                 </div>
@@ -1933,6 +1983,85 @@
 
     // Live listener
     EVENTS_REF.on('value', renderEventsAdmin);
+
+    /* ── World Downloads ── */
+    const DOWNLOADS_REF = db.ref('worldDownloads');
+
+    async function addDownload() {
+        const title = document.getElementById('dl-title').value.trim();
+        const url   = document.getElementById('dl-url').value.trim();
+
+        if (!title || !url) return showToast('Title and URL are required', 'error');
+
+        try {
+            await DOWNLOADS_REF.push({ title, url, createdAt: Date.now() });
+            showToast('📥 Download added!', 'success');
+            document.getElementById('dl-title').value = '';
+            document.getElementById('dl-url').value   = '';
+        } catch (e) {
+            showToast('Failed to add download: ' + e.message, 'error');
+        }
+    }
+
+    async function deleteDownload(key) {
+        const ok = await showConfirm('Delete download?', 'This will permanently remove this world download.');
+        if (!ok) return;
+        try {
+            await DOWNLOADS_REF.child(key).remove();
+            showToast('🗑️ Download deleted', 'success');
+        } catch (e) {
+            showToast('Delete failed: ' + e.message, 'error');
+        }
+    }
+
+    async function editDownloadField(key, field, currentValue) {
+        const newVal = prompt(`Edit ${field}:`, currentValue);
+        if (newVal === null || newVal === currentValue) return;
+        try {
+            await DOWNLOADS_REF.child(key).update({ [field]: newVal });
+            showToast('✏️ Download updated', 'success');
+        } catch (e) {
+            showToast('Update failed: ' + e.message, 'error');
+        }
+    }
+
+    function renderDownloadsAdmin(snap) {
+        const container = document.getElementById('downloads-admin-list');
+        const countEl   = document.getElementById('dl-count');
+        const data = snap.val();
+
+        if (!data) {
+            container.innerHTML = '<p style="color:var(--muted);text-align:center;padding:2rem">No downloads yet.</p>';
+            countEl.textContent = '(0)';
+            return;
+        }
+
+        const entries = Object.entries(data).sort((a, b) => (b[1].createdAt || 0) - (a[1].createdAt || 0));
+        countEl.textContent = `(${entries.length})`;
+
+        container.innerHTML = entries.map(([key, dl]) => `
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:.85rem 1rem;
+                        background:var(--card);border:1px solid var(--border);border-radius:10px;margin-bottom:.5rem;
+                        border-left:3px solid #16C4C4">
+                <div style="flex:1;min-width:0">
+                    <strong style="cursor:pointer" onclick="editDownloadField('${key}','title','${dl.title.replace(/'/g, "\\'")}')">📥 ${dl.title}</strong>
+                    <div style="font-size:.8rem;color:var(--muted);margin-top:.25rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">
+                        🔗 <a href="${dl.url}" target="_blank" rel="noopener noreferrer" style="color:#16C4C4">${dl.url}</a>
+                    </div>
+                </div>
+                <div style="display:flex;gap:.35rem;flex-shrink:0;margin-left:.75rem">
+                    <button onclick="editDownloadField('${key}','url','${dl.url.replace(/'/g, "\\'")}')"
+                        style="background:var(--hover);border:1px solid var(--border);color:var(--text);border-radius:6px;padding:4px 8px;cursor:pointer;font-size:.8rem"
+                        title="Edit URL">✏️</button>
+                    <button onclick="deleteDownload('${key}')"
+                        style="background:rgba(220,38,38,.1);border:1px solid rgba(220,38,38,.3);color:#ef4444;border-radius:6px;padding:4px 8px;cursor:pointer;font-size:.8rem"
+                        title="Delete">🗑️</button>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    DOWNLOADS_REF.on('value', renderDownloadsAdmin);
 </script>
 </body>
 </html>

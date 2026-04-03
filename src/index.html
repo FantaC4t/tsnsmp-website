@@ -260,6 +260,7 @@
     </div>
     <!-- Right column: form -->
     <div class="app-form-col">
+        <a href="https://docs.google.com/forms/d/e/1FAIpQLScLHcGkmNqaU3GcPOlIGtfzzr_F7H3Kv_dKInJcSAkikZ7vZA/viewform" target="_blank" rel="noopener noreferrer" class="open-new-tab-btn">Open form in new tab ↗</a>
         <div class="application-form-wrapper"><iframe src="https://docs.google.com/forms/d/e/1FAIpQLScLHcGkmNqaU3GcPOlIGtfzzr_F7H3Kv_dKInJcSAkikZ7vZA/viewform?embedded=true" frameborder="0" marginheight="0" marginwidth="0" title="TSNSMP Application Form">Loading…</iframe></div>
     </div>
 </div>
@@ -563,9 +564,20 @@
                     }
 
                     const isNext = nextEvent && ev.date === nextEvent.date;
-                    const countdownEnd = ev.endDate || ev.date;
-                    const daysAway = isNext ? Math.max(0, Math.ceil((new Date(countdownEnd + 'T23:59:59') - now) / 86400000)) : null;
+                    const daysToStart = isNext ? Math.max(0, Math.ceil((new Date(ev.date + 'T00:00:00') - now) / 86400000)) : null;
+                    const isActive = ev.status === 'active';
+                    const endTarget = ev.endDate || ev.date;
+                    const daysToEnd = isActive ? Math.max(0, Math.ceil((new Date(endTarget + 'T23:59:59') - now) / 86400000)) : null;
                     const desc = ev.description || ev.desc || '';
+
+                    let countdownHtml = '';
+                    if (isActive && daysToEnd !== null) {
+                        const txt = daysToEnd === 0 ? 'Ends today!' : daysToEnd === 1 ? 'Ends tomorrow!' : daysToEnd + ' days remaining';
+                        countdownHtml = `<span class="event-countdown event-countdown-active">${txt}</span>`;
+                    } else if (isNext && daysToStart !== null) {
+                        const txt = daysToStart === 0 ? 'Today!' : daysToStart === 1 ? 'Tomorrow!' : daysToStart + ' days left';
+                        countdownHtml = `<span class="event-countdown">${txt}</span>`;
+                    }
 
                     return `
                     <div class="event-card ${ev.status}${isNext ? ' event-next' : ''}" style="animation-delay:${i * .08}s">
@@ -580,7 +592,7 @@
                         <div class="event-body">
                             <strong class="event-label">${ev.label}</strong>
                             <span class="event-desc">${desc}</span>
-                            ${isNext && daysAway !== null ? `<span class="event-countdown">${daysAway === 0 ? 'Today!' : daysAway === 1 ? 'Tomorrow!' : daysAway + ' days left'}</span>` : ''}
+                            ${countdownHtml}
                             ${ev.status === 'past' ? '<span class="event-status-done">✓ Done</span>' : ''}
                         </div>
                     </div>`;

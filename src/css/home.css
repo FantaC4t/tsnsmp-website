@@ -1201,6 +1201,17 @@ body:not(.dark-mode) .app-response-note {
     margin-top: 4px;
     letter-spacing: .02em;
 }
+.event-countdown-active {
+    color: #52C228;
+    background: rgba(82,194,40,.1);
+    border-color: rgba(82,194,40,.3);
+    box-shadow: 0 0 8px rgba(82,194,40,.2), 0 0 20px rgba(82,194,40,.08);
+    animation: greenGlow 2s ease-in-out infinite;
+}
+@keyframes greenGlow {
+    0%, 100% { box-shadow: 0 0 8px rgba(82,194,40,.2), 0 0 20px rgba(82,194,40,.08); }
+    50%      { box-shadow: 0 0 12px rgba(82,194,40,.35), 0 0 28px rgba(82,194,40,.15); }
+}
 .event-status-done {
     font-size: .72rem;
     font-weight: 700;
@@ -1221,6 +1232,12 @@ body:not(.dark-mode) .event-countdown {
     color: #0A9090;
     background: rgba(22,196,196,.06);
     border-color: rgba(22,196,196,.18);
+}
+body:not(.dark-mode) .event-countdown-active {
+    color: #3A9018;
+    background: rgba(82,194,40,.08);
+    border-color: rgba(82,194,40,.25);
+    box-shadow: 0 0 8px rgba(82,194,40,.15), 0 0 16px rgba(82,194,40,.06);
 }
 
 @media (max-width: 600px) {

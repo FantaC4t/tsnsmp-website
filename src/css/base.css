@@ -298,6 +298,27 @@ main {
 }
 .server-status-pill.offline .status-dot { background: #e05555; }
 
+/* Open in new tab button */
+.open-new-tab-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    padding: 0.45rem 1rem;
+    margin-bottom: 0.75rem;
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--s3-teal);
+    background: rgba(22,196,196,0.08);
+    border: 1px solid rgba(22,196,196,0.25);
+    border-radius: 8px;
+    text-decoration: none;
+    transition: background 0.2s ease, border-color 0.2s ease;
+}
+.open-new-tab-btn:hover {
+    background: rgba(22,196,196,0.15);
+    border-color: var(--s3-teal);
+}
+
 /* ─── Skip to Content Link ─── */
 .skip-link {
     position: absolute;

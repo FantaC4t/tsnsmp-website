@@ -92,6 +92,7 @@
 <section class="hero">
 <div class="hero-bg"></div>
 <div class="hero-grid"></div>
+<div class="hero-gallery-backdrop" id="heroGalleryBackdrop" aria-hidden="true"></div>
 <div class="hero-container"><!-- Content -->
 <div class="hero-content">
 <div class="hero-badge">
@@ -144,21 +145,23 @@
 
 </div>
 </section>
-<section class="events-section">
+
+<section class="events-section reveal">
 <div class="container">
 <div class="events-wrapper">
     <div class="events-header">
-        <h2>What's Happening 📅</h2>
+        <h2>What's Happening <span class="emoji">📅</span></h2>
         <p class="events-subtitle">Keep up with what’s going on in the SMP</p>
     </div>
     <div class="events-timeline" id="eventsTimeline"></div>
 </div>
 </div>
 </section>
+
 <!-- Carousel Section — pulls from Firebase Gallery -->
-<section class="player-showcase">
+<section class="player-showcase reveal">
 <div class="container">
-<h2>Check out some awesome builds! 🏗️</h2>
+<h2>Check out some awesome builds! <span class="emoji">🏗️</span></h2>
 <p class="section-subtitle">Click any image to expand · Images from our <a href="gallery/" style="color:var(--primary-purple)">gallery</a></p>
 <div class="carousel-container">
 <div class="carousel-track" id="carouselTrack">
@@ -168,9 +171,14 @@
 </div>
 </section>
 
-<section class="features">
+<!-- Wave divider -->
+<div class="section-divider">
+  <svg viewBox="0 0 1440 80" preserveAspectRatio="none"><path d="M0,40 C360,80 720,0 1080,40 C1260,60 1380,50 1440,40 L1440,80 L0,80Z" fill="var(--bg-primary)"/><path d="M0,52 C320,72 640,20 960,52 C1120,68 1320,42 1440,52 L1440,80 L0,80Z" fill="var(--bg-primary)" opacity="0.5"/></svg>
+</div>
+
+<section class="features reveal">
 <div class="container">
-<h2>Why we think you'll love it here ✨</h2>
+<h2>Why we think you'll love it here <span class="emoji">✨</span></h2>
 <div class="features-grid">
 <div class="feature-card">
 <div class="feature-icon">🫂</div>
@@ -200,9 +208,10 @@
 </div>
 </div>
 </section>
-<section class="customization-showcase">
+
+<section class="customization-showcase reveal">
 <div class="container">
-<h2>Make yourself at home with customization! 🎨</h2>
+<h2>Make yourself at home with customization! <span class="emoji">🎨</span></h2>
 <div class="customization-grid">
 <div class="custom-feature">
 <div class="feature-icon">🌈</div>
@@ -227,10 +236,16 @@
 </div>
 </div>
 </section>
-<section class="application-section" id="application-section">
+
+<!-- Wave divider -->
+<div class="section-divider">
+  <svg viewBox="0 0 1440 80" preserveAspectRatio="none"><path d="M0,40 C360,80 720,0 1080,40 C1260,60 1380,50 1440,40 L1440,80 L0,80Z" fill="var(--bg-primary)"/><path d="M0,52 C320,72 640,20 960,52 C1120,68 1320,42 1440,52 L1440,80 L0,80Z" fill="var(--bg-primary)" opacity="0.5"/></svg>
+</div>
+
+<section class="application-section reveal" id="application-section">
 <div class="container">
 <div class="application-content">
-<h2>Join us for Season 3! 🌸</h2>
+<h2>Join us for Season 3! <span class="emoji">🌸</span></h2>
 <p class="app-subtitle">Whether you're a returning player from a previous season or a new face, we'd love to have you! We're looking for cool people who love Minecraft and want to have fun.</p>
 
 
@@ -438,9 +453,43 @@
                 track.innerHTML = html + html; /* duplicate for infinite scroll */
 
                 /* Re-calc animation duration based on item count */
-                const totalWidth = items.length * (350 + 32); /* item width + gap */
+                const totalWidth = items.length * (420 + 32); /* item width + gap */
                 const speed = 50; /* px per second */
                 track.style.animationDuration = (totalWidth / speed) + 's';
+
+                /* Populate hero gallery backdrop with random images */
+                populateHeroBackdrop(items);
+            }
+
+            /* Hero gallery backdrop: floating dimmed images behind hero content */
+            function populateHeroBackdrop(items) {
+                const backdrop = document.getElementById('heroGalleryBackdrop');
+                if (!backdrop || !items.length) return;
+                /* Pick up to 5 random images */
+                const shuffled = items.slice().sort(function() { return 0.5 - Math.random(); });
+                const picks = shuffled.slice(0, Math.min(5, items.length));
+                /* Predefined positions to avoid overlap */
+                const positions = [
+                    { top: '8%',  left: '5%',  w: 220 },
+                    { top: '55%', left: '2%',  w: 180 },
+                    { top: '12%', right: '4%', w: 200 },
+                    { top: '60%', right: '6%', w: 190 },
+                    { top: '35%', left: '12%', w: 160 },
+                ];
+                picks.forEach(function(item, i) {
+                    var pos = positions[i];
+                    var img = document.createElement('img');
+                    img.src = item.url;
+                    img.alt = '';
+                    img.draggable = false;
+                    img.className = 'hero-backdrop-img';
+                    img.style.width = pos.w + 'px';
+                    img.style.top = pos.top;
+                    if (pos.left) img.style.left = pos.left;
+                    if (pos.right) img.style.right = pos.right;
+                    img.style.animationDelay = (i * 2.5) + 's';
+                    backdrop.appendChild(img);
+                });
             }
 
             /* Event delegation: handle clicks on carousel items via a static parent.
@@ -535,7 +584,7 @@
                     if (!ev.status || ev.status === 'auto') {
                         const end = ev.endDate || ev.date;
                         const dEnd = new Date(end + 'T23:59:59');
-                        const today = new Date().toISOString().split('T')[0];
+                        const today = now.getFullYear() + '-' + String(now.getMonth() + 1).padStart(2, '0') + '-' + String(now.getDate()).padStart(2, '0');
                         if (ev.date <= today && today <= end) {
                             ev.status = 'active';
                         } else {
@@ -580,7 +629,7 @@
                     }
 
                     return `
-                    <div class="event-card ${ev.status}${isNext ? ' event-next' : ''}" style="animation-delay:${i * .08}s">
+                    <div class="event-card ${ev.status}${isNext ? ' event-next' : ''}" style="--delay:${i * .08}s">
                         <div class="event-date-range">
                             <div class="event-date-badge">
                                 <span class="event-month">${monthShort}</span>
@@ -937,6 +986,39 @@
                 if (streamWrap) streamWrap.style.display = 'none';
                 buildSkinRing(ring, members);
             }
+        })();
+
+        /* ── Scroll-reveal: animate sections into view ── */
+        (function initReveal() {
+            const els = document.querySelectorAll('.reveal');
+            if (!els.length) return;
+            const io = new IntersectionObserver(function(entries) {
+                entries.forEach(function(e) {
+                    if (e.isIntersecting) {
+                        e.target.classList.add('revealed');
+                        io.unobserve(e.target);
+                    }
+                });
+            }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+            els.forEach(function(el) { io.observe(el); });
+        })();
+
+        /* ── Staggered feature card reveal ── */
+        (function initStaggerCards() {
+            const cards = document.querySelectorAll('.feature-card, .custom-feature');
+            if (!cards.length) return;
+            const io = new IntersectionObserver(function(entries) {
+                entries.forEach(function(e) {
+                    if (e.isIntersecting) {
+                        e.target.classList.add('card-visible');
+                        io.unobserve(e.target);
+                    }
+                });
+            }, { threshold: 0.15, rootMargin: '0px 0px -30px 0px' });
+            cards.forEach(function(card, i) {
+                card.style.transitionDelay = (i * 0.08) + 's';
+                io.observe(card);
+            });
         })();
     </script>
 </body>

@@ -1037,6 +1037,12 @@
                             <option value="3">&#128640; Season 3</option>
                         </select>
                     </div>
+                    <div class="form-group">
+                        <label>Uploaded by</label>
+                        <select id="gallery-uploader">
+                            <option value="">&mdash; Unknown</option>
+                        </select>
+                    </div>
                 </div>
                 <div class="gallery-progress-wrap" id="gallery-progress-wrap" style="display:none">
                     <div class="gallery-progress-bar" id="gallery-progress-bar"></div>
@@ -1177,7 +1183,9 @@
         </div>
         <div class="gedit-field">
             <label>Uploaded by</label>
-            <input type="text" id="gedit-by" maxlength="60">
+            <select id="gedit-by">
+                <option value="">&mdash; Unknown</option>
+            </select>
         </div>
         <div class="gedit-field">
             <label>Season</label>
@@ -1380,6 +1388,7 @@
             membersCache = raw ? (Array.isArray(raw) ? raw : Object.values(raw)) : [];
             renderTable();
             renderStats();
+            populateUploaderDropdowns();
             document.getElementById('member-count').textContent = `${membersCache.length} members`;
             document.getElementById('seed-banner').style.display = membersCache.length === 0 ? 'flex' : 'none';
         }, e => {
@@ -1652,6 +1661,19 @@
         document.getElementById('gallery-drop-zone').style.display = 'flex';
     }
 
+    function populateUploaderDropdowns() {
+        const ids = ['gallery-uploader', 'gedit-by'];
+        ids.forEach(id => {
+            const sel = document.getElementById(id);
+            if (!sel) return;
+            const prev = sel.value;
+            const opts = '<option value="">&mdash; Unknown</option>' +
+                membersCache.map(m => `<option value="${m.name}">${m.name}</option>`).join('');
+            sel.innerHTML = opts;
+            if (prev) sel.value = prev;
+        });
+    }
+
     async function uploadGalleryImage() {
         if (!galleryFileObj) { showToast('Please select an image first', 'error'); return; }
         const title = document.getElementById('gallery-title').value.trim();
@@ -1678,7 +1700,9 @@
                 const url = await task.snapshot.ref.getDownloadURL();
                 const seasonRaw = document.getElementById('gallery-season').value;
                 const seasonEntry = seasonRaw ? { season: parseInt(seasonRaw, 10) } : {};
-                await GALLERY_REF.push({ title, description: desc, url, storagePath: path, uploadedAt: Date.now(), ...seasonEntry });
+                const uploader = document.getElementById('gallery-uploader').value;
+                const uploaderEntry = uploader ? { uploadedBy: uploader } : {};
+                await GALLERY_REF.push({ title, description: desc, url, storagePath: path, uploadedAt: Date.now(), ...seasonEntry, ...uploaderEntry });
                 showToast('✅ Image uploaded!', 'success');
                 progressWrap.style.display = 'none';
                 progressBar.style.width = '0';
@@ -1686,6 +1710,7 @@
                 document.getElementById('gallery-title').value = '';
                 document.getElementById('gallery-desc').value = '';
                 document.getElementById('gallery-season').value = '';
+                document.getElementById('gallery-uploader').value = '';
                 loadGalleryAdmin();
             }
         );
@@ -1918,7 +1943,8 @@
 
     function getEventStatus(event) {
         if (event.status && event.status !== 'auto') return event.status;
-        const today = new Date().toISOString().split('T')[0];
+        const now = new Date();
+        const today = now.getFullYear() + '-' + String(now.getMonth() + 1).padStart(2, '0') + '-' + String(now.getDate()).padStart(2, '0');
         const end = event.endDate || event.date;
         if (event.date <= today && today <= end) return 'active';
         return event.date > today ? 'upcoming' : 'past';

@@ -1,10 +1,22 @@
 /* ── Footer ── */
 .site-footer {
     margin-top: auto;
-    border-top: 1px solid var(--border-color);
+    border-top: none;
     background: var(--bg-secondary);
     color: var(--text-secondary);
     font-size: 0.85rem;
+    position: relative;
+}
+
+/* Gradient accent line replacing plain border */
+.site-footer::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 10%;
+    right: 10%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(22, 196, 196, 0.3), rgba(82, 194, 40, 0.2), transparent);
 }
 
 .footer-inner {
@@ -29,11 +41,13 @@
     color: var(--text-primary);
     text-decoration: none;
     letter-spacing: 0.02em;
-    transition: color 0.2s;
+    font-weight: 500;
+    transition: color 0.2s, transform 0.2s;
 }
 
 .footer-nav a:hover {
     color: var(--s3-teal);
+    transform: translateY(-1px);
 }
 
 /* ─ Social icons ─ */

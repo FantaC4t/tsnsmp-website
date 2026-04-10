@@ -628,6 +628,13 @@
                         countdownHtml = `<span class="event-countdown">${txt}</span>`;
                     }
 
+                    let timeChangeBadge = '';
+                    if (ev.timeChange === 'extended') {
+                        timeChangeBadge = '<span class="event-time-change event-extended">⏳ Extended</span>';
+                    } else if (ev.timeChange === 'shortened') {
+                        timeChangeBadge = '<span class="event-time-change event-shortened">⏩ Shortened</span>';
+                    }
+
                     return `
                     <div class="event-card ${ev.status}${isNext ? ' event-next' : ''}" style="--delay:${i * .08}s">
                         <div class="event-date-range">
@@ -640,6 +647,7 @@
                         <div class="event-line"><span class="event-dot"></span></div>
                         <div class="event-body">
                             <strong class="event-label">${ev.label}</strong>
+                            ${timeChangeBadge}
                             <span class="event-desc">${desc}</span>
                             ${countdownHtml}
                             ${ev.status === 'past' ? '<span class="event-status-done">✓ Done</span>' : ''}

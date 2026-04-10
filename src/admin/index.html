@@ -831,6 +831,48 @@
         }
         .gedit-actions { display: flex; gap: .75rem; margin-top: 1.4rem; }
         .gedit-actions .btn { flex: 1; justify-content: center; }
+
+        /* ── EVENT EDIT MODAL ── */
+        .eedit-backdrop {
+            position: fixed; inset: 0;
+            background: rgba(0,0,0,.65);
+            display: flex; align-items: center; justify-content: center;
+            z-index: 999; backdrop-filter: blur(4px);
+            opacity: 0; pointer-events: none; transition: opacity .2s;
+        }
+        .eedit-backdrop.active { opacity: 1; pointer-events: all; }
+        .eedit-box {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 18px;
+            padding: 2rem;
+            width: 100%; max-width: 480px;
+            box-shadow: 0 24px 60px rgba(0,0,0,.5);
+            transform: scale(.95); transition: transform .2s;
+        }
+        .eedit-backdrop.active .eedit-box { transform: scale(1); }
+        .eedit-box h3 { font-size: 1.1rem; margin-bottom: 1.2rem; }
+        .eedit-field { display: flex; flex-direction: column; gap: 5px; margin-bottom: .9rem; }
+        .eedit-field label { font-size: .78rem; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; font-weight: 600; }
+        .eedit-field input,
+        .eedit-field select {
+            padding: 10px 14px;
+            background: var(--bg2);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text);
+            font-size: .95rem; font-family: inherit;
+            transition: border-color .2s;
+            appearance: none; -webkit-appearance: none;
+        }
+        .eedit-field input:focus,
+        .eedit-field select:focus { outline: none; border-color: #FF9800; box-shadow: 0 0 0 3px rgba(255,152,0,.12); }
+        .eedit-field input[type="date"] { cursor: pointer; }
+        .eedit-actions { display: flex; gap: .75rem; margin-top: 1.4rem; }
+        .eedit-actions .btn { flex: 1; justify-content: center; }
+        .eedit-timechange-hint {
+            font-size: .75rem; color: var(--muted); margin-top: 2px;
+        }
     </style>
     <script src="../js/header.js"></script>
     <!-- Firebase SDK -->
@@ -1203,6 +1245,51 @@
     </div>
 </div>
 
+<!-- Event Edit Modal -->
+<div id="eedit-modal" class="eedit-backdrop" onclick="if(event.target===this)closeEventEdit()">
+    <div class="eedit-box">
+        <h3>✏️ Edit Event</h3>
+        <div class="eedit-field">
+            <label>Event Name</label>
+            <input type="text" id="eedit-label" maxlength="100">
+        </div>
+        <div class="eedit-field">
+            <label>Start Date</label>
+            <input type="date" id="eedit-date">
+        </div>
+        <div class="eedit-field">
+            <label>End Date</label>
+            <input type="date" id="eedit-end-date">
+        </div>
+        <div class="eedit-field">
+            <label>Description</label>
+            <input type="text" id="eedit-desc" maxlength="160">
+        </div>
+        <div class="eedit-field">
+            <label>Status</label>
+            <select id="eedit-status">
+                <option value="auto">Auto-detect</option>
+                <option value="active">Active (highlighted)</option>
+                <option value="upcoming">Upcoming</option>
+                <option value="past">Past</option>
+            </select>
+        </div>
+        <div class="eedit-field">
+            <label>Time Change</label>
+            <select id="eedit-timechange">
+                <option value="">None</option>
+                <option value="extended">⏳ Extended</option>
+                <option value="shortened">⏩ Shortened</option>
+            </select>
+            <span class="eedit-timechange-hint">Shows a badge on the home page if the event duration was changed.</span>
+        </div>
+        <div class="eedit-actions">
+            <button class="btn btn-green" onclick="saveEventEdit()">💾 Save</button>
+            <button class="btn btn-ghost" onclick="closeEventEdit()">Cancel</button>
+        </div>
+    </div>
+</div>
+
 <script>
     createHeader('admin');
 
@@ -1263,6 +1350,7 @@
         if (e.key === 'Escape') {
             // Close any open modal or cancel editing
             if (document.getElementById('confirm-modal').classList.contains('active')) { closeConfirm(); return; }
+            if (document.getElementById('eedit-modal').classList.contains('active')) { closeEventEdit(); return; }
             if (document.getElementById('gedit-modal').classList.contains('active')) { closeGalleryEdit(); return; }
             // Cancel inline edit if one is active
             if (document.querySelector('.edit-row')) { renderTable(); }
@@ -1930,12 +2018,69 @@
         }
     }
 
-    async function editEventField(key, field, currentValue) {
-        const newVal = prompt(`Edit ${field}:`, currentValue);
-        if (newVal === null || newVal === currentValue) return;
+    /* ── Event Edit Modal ── */
+    let editingEventKey = null;
+    let editingEventOriginalEndDate = null;
+
+    function openEventEdit(key, ev) {
+        editingEventKey = key;
+        editingEventOriginalEndDate = ev.originalEndDate || ev.endDate || ev.date;
+        document.getElementById('eedit-label').value      = ev.label || '';
+        document.getElementById('eedit-date').value       = ev.date || '';
+        document.getElementById('eedit-end-date').value   = ev.endDate || '';
+        document.getElementById('eedit-desc').value       = ev.description || '';
+        document.getElementById('eedit-status').value     = ev.status || 'auto';
+        document.getElementById('eedit-timechange').value = ev.timeChange || '';
+        document.getElementById('eedit-modal').classList.add('active');
+    }
+
+    function closeEventEdit() {
+        document.getElementById('eedit-modal').classList.remove('active');
+        editingEventKey = null;
+    }
+
+    async function saveEventEdit() {
+        if (!editingEventKey) return;
+        const label     = document.getElementById('eedit-label').value.trim();
+        const date      = document.getElementById('eedit-date').value;
+        const endDate   = document.getElementById('eedit-end-date').value;
+        const desc      = document.getElementById('eedit-desc').value.trim();
+        const status    = document.getElementById('eedit-status').value;
+        let timeChange  = document.getElementById('eedit-timechange').value;
+
+        if (!label || !date) return showToast('Name and date are required', 'error');
+        if (endDate && endDate < date) return showToast('End date must be on or after start date', 'error');
+
+        // Auto-detect time change if the end date was modified
+        const effectiveNewEnd = endDate || date;
+        const effectiveOrigEnd = editingEventOriginalEndDate || date;
+        if (!timeChange && effectiveNewEnd !== effectiveOrigEnd) {
+            timeChange = effectiveNewEnd > effectiveOrigEnd ? 'extended' : 'shortened';
+        }
+
+        const payload = {
+            label,
+            date,
+            description: desc,
+            status,
+        };
+        if (endDate) {
+            payload.endDate = endDate;
+        } else {
+            payload.endDate = null; // remove if cleared
+        }
+        // Store original end date on first edit so future comparisons work
+        if (!editingEventOriginalEndDate || editingEventOriginalEndDate === date) {
+            // first time setting, save current as original
+        } else {
+            payload.originalEndDate = editingEventOriginalEndDate;
+        }
+        payload.timeChange = timeChange || null;
+
         try {
-            await EVENTS_REF.child(key).update({ [field]: newVal });
+            await EVENTS_REF.child(editingEventKey).update(payload);
             showToast('✏️ Event updated', 'success');
+            closeEventEdit();
         } catch (e) {
             showToast('Update failed: ' + e.message, 'error');
         }
@@ -1977,24 +2122,31 @@
         container.innerHTML = entries.map(([key, ev]) => {
             const st = getEventStatus(ev);
             const color = statusColors[st] || 'var(--muted)';
+            const tcBadge = ev.timeChange === 'extended'
+                ? '<span style="background:rgba(255,152,0,.15);color:#FF9800;padding:2px 8px;border-radius:6px;font-size:.7rem;font-weight:700">⏳ EXTENDED</span>'
+                : ev.timeChange === 'shortened'
+                ? '<span style="background:rgba(22,196,196,.15);color:#16C4C4;padding:2px 8px;border-radius:6px;font-size:.7rem;font-weight:700">⏩ SHORTENED</span>'
+                : '';
+            const evJson = JSON.stringify(ev).replace(/'/g, '&#39;').replace(/"/g, '&quot;');
             return `
             <div style="display:flex;align-items:center;justify-content:space-between;padding:.85rem 1rem;
                         background:var(--card);border:1px solid var(--border);border-radius:10px;margin-bottom:.5rem;
                         border-left:3px solid ${color}">
                 <div style="flex:1;min-width:0">
                     <div style="display:flex;align-items:center;gap:.5rem;flex-wrap:wrap">
-                        <strong style="cursor:pointer" onclick="editEventField('${key}','label','${ev.label.replace(/'/g, "\\'")}')">${ev.label}</strong>
+                        <strong>${esc(ev.label)}</strong>
                         <span style="background:${color}22;color:${color};padding:2px 8px;border-radius:6px;font-size:.75rem;text-transform:uppercase">${st}</span>
+                        ${tcBadge}
                     </div>
                     <div style="font-size:.8rem;color:var(--muted);margin-top:.25rem">
-                        📆 <span style="cursor:pointer" onclick="editEventField('${key}','date','${ev.date}')">${ev.date}</span>${ev.endDate ? ` → <span style="cursor:pointer" onclick="editEventField('${key}','endDate','${ev.endDate}')">${ev.endDate}</span>` : ''}
-                        ${ev.description ? ` · ${ev.description}` : ''}
+                        📆 ${ev.date}${ev.endDate ? ' → ' + ev.endDate : ''}
+                        ${ev.description ? ' · ' + esc(ev.description) : ''}
                     </div>
                 </div>
                 <div style="display:flex;gap:.35rem;flex-shrink:0;margin-left:.75rem">
-                    <button onclick="editEventField('${key}','status','${ev.status || 'auto'}')"
+                    <button onclick='openEventEdit("${key}", JSON.parse(this.dataset.ev))' data-ev="${evJson}"
                         style="background:var(--hover);border:1px solid var(--border);color:var(--text);border-radius:6px;padding:4px 8px;cursor:pointer;font-size:.8rem"
-                        title="Change status">⚙️</button>
+                        title="Edit event">✏️</button>
                     <button onclick="deleteEvent('${key}')"
                         style="background:rgba(220,38,38,.1);border:1px solid rgba(220,38,38,.3);color:#ef4444;border-radius:6px;padding:4px 8px;cursor:pointer;font-size:.8rem"
                         title="Delete">🗑️</button>

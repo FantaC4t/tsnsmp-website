@@ -1531,6 +1531,26 @@ body:not(.dark-mode) .app-response-note {
     color: var(--primary-green);
     opacity: .7;
 }
+.event-time-change {
+    display: inline-flex;
+    align-items: center;
+    font-size: .68rem;
+    font-weight: 700;
+    padding: 2px 9px;
+    border-radius: 20px;
+    width: fit-content;
+    letter-spacing: .02em;
+}
+.event-extended {
+    color: #FF9800;
+    background: rgba(255,152,0,.1);
+    border: 1px solid rgba(255,152,0,.25);
+}
+.event-shortened {
+    color: #16C4C4;
+    background: rgba(22,196,196,.1);
+    border: 1px solid rgba(22,196,196,.25);
+}
 
 /* light mode */
 body:not(.dark-mode) .event-card.active .event-date-badge,
@@ -1551,6 +1571,16 @@ body:not(.dark-mode) .event-countdown-active {
     background: rgba(82,194,40,.08);
     border-color: rgba(82,194,40,.25);
     box-shadow: 0 0 8px rgba(82,194,40,.15), 0 0 16px rgba(82,194,40,.06);
+}
+body:not(.dark-mode) .event-extended {
+    color: #C77600;
+    background: rgba(255,152,0,.08);
+    border-color: rgba(255,152,0,.2);
+}
+body:not(.dark-mode) .event-shortened {
+    color: #0A9090;
+    background: rgba(22,196,196,.06);
+    border-color: rgba(22,196,196,.18);
 }
 
 @media (max-width: 600px) {

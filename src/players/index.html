@@ -181,6 +181,11 @@
             const safeColor = typeof member.color === 'string' && /^#[0-9a-fA-F]{3,8}$/.test(member.color) ? member.color : null;
             const nameStyle = safeColor ? `style="color: ${safeColor}"` : '';
 
+            // Normalize role for display and class
+            let role = (member.role || '').toLowerCase();
+            if (role === 'owner') role = 'staff';
+            if (role === 'mod' || role === 'admin') role = 'trialstaff';
+            let roleLabel = role === 'trialstaff' ? 'Trial Staff' : (role === 'staff' ? 'Staff' : role.charAt(0).toUpperCase() + role.slice(1));
             card.innerHTML = `
                 <div class="skin-viewer">
                     <img src="${skinUrl}" alt="${member.name}" class="skin-image" loading="lazy"
@@ -192,18 +197,24 @@
                         ${twitchIcon}
                     </div>
                     ${member.pronouns ? `<div class="player-pronouns">${member.pronouns}</div>` : ''}
-                    <div class="player-role role-${member.role}">${member.role.toUpperCase()}</div>
+                    <div class="player-role role-${role}">${roleLabel}</div>
                 </div>
             `;
             return card;
         }
 
-        const ROLE_ORDER = ['owner', 'admin', 'mod', 'member', 'imposter'];
+        const ROLE_ORDER = ['staff', 'trialstaff', 'member', 'imposter'];
 
         function renderPlayers(members) {
             members = [...members].sort((a, b) => {
-                const ai = ROLE_ORDER.indexOf(a.role?.toLowerCase());
-                const bi = ROLE_ORDER.indexOf(b.role?.toLowerCase());
+                let ar = (a.role || '').toLowerCase();
+                let br = (b.role || '').toLowerCase();
+                if (ar === 'owner') ar = 'staff';
+                if (ar === 'mod' || ar === 'admin') ar = 'trialstaff';
+                if (br === 'owner') br = 'staff';
+                if (br === 'mod' || br === 'admin') br = 'trialstaff';
+                const ai = ROLE_ORDER.indexOf(ar);
+                const bi = ROLE_ORDER.indexOf(br);
                 const av = ai === -1 ? ROLE_ORDER.length : ai;
                 const bv = bi === -1 ? ROLE_ORDER.length : bi;
                 return av - bv;

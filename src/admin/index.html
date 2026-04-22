@@ -316,9 +316,8 @@
         .form-group select option { background: var(--bg2); }
 
         /* Coloured role options */
-        select#add-role option[value="owner"]   { color: #ff6b6b; }
-        select#add-role option[value="admin"]   { color: #e056fd; }
-        select#add-role option[value="mod"]     { color: #69f0ae; }
+        select#add-role option[value="staff"]   { color: #ff6b6b; }
+        select#add-role option[value="trialstaff"]   { color: #69f0ae; }
         select#add-role option[value="member"]  { color: #84ffff; }
         select#add-role option[value="imposter"]{ color: #e0e0e0; }
 
@@ -368,9 +367,8 @@
             text-transform: uppercase;
             letter-spacing: .05em;
         }
-        .role-owner    { background: rgba(255,85,85,.15);  color: #ff6b6b; border: 1px solid rgba(255,85,85,.3); }
-        .role-admin    { background: rgba(189,0,189,.15);  color: #e056fd; border: 1px solid rgba(189,0,189,.3); }
-        .role-mod      { background: rgba(0,230,118,.15);  color: #69f0ae; border: 1px solid rgba(0,230,118,.3); }
+        .role-staff    { background: rgba(255,85,85,.15);  color: #ff6b6b; border: 1px solid rgba(255,85,85,.3); }
+        .role-trialstaff { background: rgba(0,230,118,.15);  color: #69f0ae; border: 1px solid rgba(0,230,118,.3); }
         .role-member   { background: rgba(0,229,255,.1);   color: #84ffff; border: 1px solid rgba(0,229,255,.25); }
         .role-imposter { background: rgba(255,255,255,.08);color: #e0e0e0; border: 1px solid rgba(255,255,255,.2); }
 
@@ -543,9 +541,8 @@
             font-weight: 600;
         }
         .stat-total  .admin-stat-number { color: var(--text); }
-        .stat-owner  .admin-stat-number { color: #ff6b6b; }
-        .stat-admin  .admin-stat-number { color: #e056fd; }
-        .stat-mod    .admin-stat-number { color: #69f0ae; }
+        .stat-staff  .admin-stat-number { color: #ff6b6b; }
+        .stat-trialstaff  .admin-stat-number { color: #69f0ae; }
         .stat-member .admin-stat-number { color: #84ffff; }
 
         /* ── CONFIRM MODAL ── */
@@ -967,9 +964,8 @@
                                 <label>Role *</label>
                                 <select id="add-role">
                                     <option value="member">Member</option>
-                                    <option value="mod">Mod</option>
-                                    <option value="admin">Admin</option>
-                                    <option value="owner">Owner</option>
+                                    <option value="trialstaff">Trial Staff</option>
+                                    <option value="staff">Staff</option>
                                     <option value="imposter">Imposter</option>
                                 </select>
                             </div>
@@ -1010,9 +1006,8 @@
                 </div>
                 <div class="role-filter-pills" id="role-filters">
                     <button class="role-filter-pill active" data-role="all" onclick="setRoleFilter('all')">All</button>
-                    <button class="role-filter-pill" data-role="owner" onclick="setRoleFilter('owner')">Owner</button>
-                    <button class="role-filter-pill" data-role="admin" onclick="setRoleFilter('admin')">Admin</button>
-                    <button class="role-filter-pill" data-role="mod" onclick="setRoleFilter('mod')">Mod</button>
+                    <button class="role-filter-pill" data-role="staff" onclick="setRoleFilter('staff')">Staff</button>
+                    <button class="role-filter-pill" data-role="trialstaff" onclick="setRoleFilter('trialstaff')">Trial Staff</button>
                     <button class="role-filter-pill" data-role="member" onclick="setRoleFilter('member')">Member</button>
                 </div>
             </div>
@@ -1380,16 +1375,17 @@
     function renderStats() {
         const container = document.getElementById('admin-stats');
         if (!container) return;
-        const counts = { total: membersCache.length, owner: 0, admin: 0, mod: 0, member: 0 };
+        const counts = { total: membersCache.length, staff: 0, trialstaff: 0, member: 0 };
         membersCache.forEach(m => {
-            const r = (m.role || '').toLowerCase();
+            let r = (m.role || '').toLowerCase();
+            if (r === 'owner') r = 'staff';
+            if (r === 'mod' || r === 'admin') r = 'staff';
             if (counts.hasOwnProperty(r)) counts[r]++;
         });
         container.innerHTML = [
             { cls: 'stat-total',  n: counts.total,  l: 'Total' },
-            { cls: 'stat-owner',  n: counts.owner,  l: 'Owners' },
-            { cls: 'stat-admin',  n: counts.admin,  l: 'Admins' },
-            { cls: 'stat-mod',    n: counts.mod,    l: 'Mods' },
+            { cls: 'stat-staff',  n: counts.staff,  l: 'Staff' },
+            { cls: 'stat-trialstaff',  n: counts.trialstaff,  l: 'Trial Staff' },
             { cls: 'stat-member', n: counts.member, l: 'Members' },
         ].map(s => `
             <div class="admin-stat-card ${s.cls}">
@@ -1530,7 +1526,7 @@
         await MEMBERS_REF.set(membersCache);
     }
 
-    const ROLE_ORDER = ['owner', 'admin', 'mod', 'member', 'imposter'];
+    const ROLE_ORDER = ['staff', 'trialstaff', 'member', 'imposter'];
 
     function renderTable() {
         const countEl = document.getElementById('member-count-inline');
@@ -1542,8 +1538,14 @@
         }
 
         const sorted = [...membersCache].sort((a, b) => {
-            const ai = ROLE_ORDER.indexOf(a.role?.toLowerCase());
-            const bi = ROLE_ORDER.indexOf(b.role?.toLowerCase());
+            let ar = (a.role || '').toLowerCase();
+            let br = (b.role || '').toLowerCase();
+            if (ar === 'owner') ar = 'staff';
+            if (ar === 'mod' || ar === 'admin') ar = 'trialstaff';
+            if (br === 'owner') br = 'staff';
+            if (br === 'mod' || br === 'admin') br = 'trialstaff';
+            const ai = ROLE_ORDER.indexOf(ar);
+            const bi = ROLE_ORDER.indexOf(br);
             return (ai === -1 ? ROLE_ORDER.length : ai) - (bi === -1 ? ROLE_ORDER.length : bi);
         });
 
@@ -1650,7 +1652,7 @@
             <td><input id="edit-name" value="${m.name}" /></td>
             <td>
                 <select id="edit-role">
-                    ${['member','mod','admin','owner','imposter'].map(r =>
+                    ${['member','trialstaff','staff','imposter'].map(r =>
                         `<option ${m.role===r?'selected':''}>${r}</option>`
                     ).join('')}
                 </select>

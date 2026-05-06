@@ -3,11 +3,17 @@
 .under-construction {
     padding: 4rem 0;
     text-align: center;
+    background: var(--surface-warm);
 }
 
 .construction-content {
     max-width: 800px;
     margin: 0 auto;
+    border: 1px solid rgba(0,0,0,0.10);
+    border-radius: 14px;
+    padding: 2rem;
+    background: var(--surface-soft);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.10);
 }
 
 .construction-animation {
@@ -27,6 +33,7 @@
 .construction-blocks {
     display: flex;
     gap: 0.5rem;
+    justify-content: center;
 }
 
 .construction-blocks .block {
@@ -56,9 +63,10 @@
 }
 
 .construction-content h2 {
-    color: var(--primary-purple);
+    color: var(--text-primary);
     font-size: 2.5rem;
     margin-bottom: 1.5rem;
+    font-family: 'DynaPuff', cursive;
 }
 
 .construction-content p {
@@ -69,12 +77,12 @@
 }
 
 .construction-features {
-    background: var(--bg-card);
-    border-radius: var(--border-radius);
+    background: var(--surface-warm);
+    border-radius: 14px;
     padding: 2rem;
     margin-bottom: 3rem;
-    border: 1px solid var(--border-color);
-    box-shadow: var(--shadow);
+    border: 1px solid rgba(0,0,0,0.10);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.10);
 }
 
 .feature-preview h3 {
@@ -111,4 +119,12 @@
     font-size: 1.1rem;
     text-decoration: none;
     display: inline-block;
+    border-radius: 32px 24px 34px 28px/28px 34px 24px 32px;
+    border: 2px dashed rgba(34,34,34,0.2);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.10);
+    background: var(--surface-soft);
+    color: var(--text-primary);
+    font-family: 'DynaPuff', cursive;
 }
+
+

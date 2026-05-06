@@ -6,14 +6,15 @@
 /* ── HERO ── */
 .players-hero {
     position: relative;
-    min-height: 44vh;
+    min-height: 28vh;
     display: flex;
     align-items: center;
     justify-content: center;
     overflow: hidden;
     background: var(--bg-primary);
-    padding-top: 120px;
-    padding-bottom: 3rem;
+    padding-top: 1.5rem;
+    padding-bottom: 1.75rem;
+    font-family: 'DynaPuff', cursive;
 }
 
 .hero-bg {
@@ -61,23 +62,22 @@ body:not(.dark-mode) .hero-grid {
     text-align: center;
 }
 
-/* Season badge pill */
+/* Season badge */
 .players-season-badge {
     display: inline-flex;
     align-items: center;
-    gap: 8px;
-    padding: 6px 18px;
-    background: rgba(22,196,196,0.1);
-    border: 1px solid rgba(22,196,196,0.35);
-    border-radius: 50px;
+    gap: 9px;
+    padding: 7px 18px;
+    background: transparent;
+    border: 2px solid var(--s3-teal);
+    border-radius: 6px 12px 8px 10px / 10px 8px 12px 6px;
     color: var(--s3-teal);
-    font-size: 0.78rem;
+    font-size: 1.1rem;
+    font-family: var(--font-display);
     font-weight: 700;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    margin-bottom: 1.2rem;
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
+    letter-spacing: 0.04em;
+    margin-bottom: 1.25rem;
+    box-shadow: 2px 3px 0 var(--s3-teal);
     animation: fadeInDown 0.8s ease-out;
 }
 
@@ -86,33 +86,23 @@ body:not(.dark-mode) .hero-grid {
     height: 7px;
     border-radius: 50%;
     background: var(--s3-teal);
-    box-shadow: 0 0 8px var(--s3-teal);
+    box-shadow: 0 0 8px rgba(22,196,196,0.7);
     animation: blink 2s ease-in-out infinite;
+    flex-shrink: 0;
 }
 
 
 
 .players-hero h1 {
-    font-size: clamp(2.6rem, 5.5vw, 4.4rem);
-    font-weight: 900;
+    font-size: clamp(1.8rem, 8vw, 5.8rem);
+    font-weight: 700;
+    font-family: var(--font-display);
     line-height: 1.05;
-    letter-spacing: -0.03em;
-    margin-bottom: 1.1rem;
-    background: linear-gradient(135deg, #fff 0%, var(--s3-teal) 45%, var(--s3-green) 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    background-size: 200% auto;
-    animation: shimmerTitle 7s linear infinite;
-    filter: drop-shadow(0 0 30px rgba(22,196,196,0.3));
-}
-
-body:not(.dark-mode) .players-hero h1 {
-    background: linear-gradient(135deg, #0A8A8A 0%, var(--s3-green) 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    filter: none;
+    letter-spacing: 0.01em;
+    margin-bottom: 0.4rem;
+    color: var(--text-primary);
+    text-shadow: 0 2px 24px rgba(73,183,198,0.18);
+    word-break: break-word;
 }
 
 .players-hero-subtitle {
@@ -121,7 +111,7 @@ body:not(.dark-mode) .players-hero h1 {
     margin: 0 auto;
     font-size: 1rem;
     line-height: 1.7;
-    animation: fadeInUp 0.9s ease-out 0.2s both;
+    animation: fadeInUp 0.4s cubic-bezier(0.22, 1, 0.36, 1) 0.1s both;
     text-align: center;
 }
 
@@ -131,48 +121,79 @@ body:not(.dark-mode) .players-hero h1 {
     padding: 2.5rem 0 1rem;
 }
 
-.players-search input {
+.players-search-note {
+    position: relative;
+    isolation: isolate;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: 14px 22px 16px 22px;
     width: 100%;
-    max-width: 400px;
-    padding: 13px 22px 13px 44px;
-    background: var(--bg-card);
-    border: 1px solid var(--border-color);
-    border-radius: 50px;
-    color: var(--text-primary);
-    font-size: 0.95rem;
-    font-family: inherit;
-    transition: border-color 0.2s, box-shadow 0.2s;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2316C4C4' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3Cpath d='m21 21-4.35-4.35'/%3E%3C/svg%3E");
-    background-repeat: no-repeat;
-    background-position: 16px center;
-    background-size: 16px;
+    max-width: 520px;
 }
 
-.players-search input::placeholder { color: var(--text-secondary); opacity: 0.6; }
+/* Hand-painted notecard background */
+.players-search-note::before {
+    content: '';
+    position: absolute;
+    inset: -3px;
+    background: linear-gradient(to bottom, #d4b800 0%, #d4b800 18%, #fef9d4 18%);
+    border-radius: 4px 3px 5px 3px / 3px 5px 3px 4px;
+    filter: url(#sticky-squiggle) drop-shadow(2px 4px 8px rgba(0,0,0,0.35));
+    z-index: -1;
+}
+
+.players-search-label {
+    font-family: var(--font-handwriting);
+    font-size: 1.05rem;
+    color: #3a3000;
+    padding-left: 4px;
+    pointer-events: none;
+    user-select: none;
+    filter: url(#chalkText);
+}
+
+.players-search input {
+    width: 100%;
+    padding: 6px 10px 6px 10px;
+    background: transparent;
+    border: none;
+    border-bottom: 2px solid rgba(0,0,0,0.25);
+    color: #1a1400;
+    font-size: 1.15rem;
+    font-family: var(--font-handwriting);
+    transition: border-bottom-color 0.2s;
+    filter: url(#chalkText);
+}
+
+.players-search input::placeholder { color: rgba(0,0,0,0.4); }
 
 .players-search input:focus {
     outline: none;
-    border-color: var(--s3-teal);
-    box-shadow: 0 0 0 3px rgba(22,196,196,0.15), 0 4px 20px rgba(22,196,196,0.08);
+    border-bottom-color: rgba(0,0,0,0.6);
 }
 
-body:not(.dark-mode) .players-search input {
-    background-color: #fff;
-    border-color: rgba(0,0,0,0.12);
+/* Dark mode: notecard is always the same yellow — text just needs to stay dark ink */
+body.dark-mode .players-search-note::before {
+    box-shadow: 0 0 0 0; /* extra specificity anchor */
 }
+body.dark-mode .players-search-label { color: #3a3000; }
+body.dark-mode .players-search input { color: #1a1400; }
+body.dark-mode .players-search input::placeholder { color: rgba(0,0,0,0.4); }
 
 /* ── NOTICE ── */
 .players-missing-notice {
     text-align: center;
+    font-family: var(--font-handwriting);
+    font-size: 1rem;
     color: var(--text-secondary);
-    font-size: 0.88rem;
     line-height: 1.6;
     max-width: 520px;
     margin: 0.5rem auto 0;
     padding: 10px 20px;
     background: rgba(22,196,196,0.05);
-    border: 1px solid rgba(22,196,196,0.15);
-    border-radius: 12px;
+    border: 1.5px dashed rgba(22,196,196,0.2);
+    border-radius: 8px 13px 10px 14px / 13px 8px 14px 10px;
 }
 
 .players-missing-notice strong { color: var(--text-primary); }
@@ -182,73 +203,96 @@ body:not(.dark-mode) .players-missing-notice {
     border-color: rgba(22,196,196,0.2);
 }
 
+.players-list {
+    padding: 2rem 0;
+}
+
 /* ── GRID ── */
 .players-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
-    gap: 1.6rem;
-    padding: 2.2rem 0 7rem;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 2.2rem;
+    padding: 2.5rem 0 7rem;
 }
 
-/* ── PLAYER CARD ── */
+/* ── PLAYER CARD — polaroid photo style ── */
 .player-card {
-    background: var(--bg-card);
-    border: 1px solid var(--border-color);
-    border-radius: 20px;
-    padding: 2rem 1.2rem 1.5rem;
+    background: #fdfaf4;
+    border: none;
+    border-radius: 3px;
+    padding: 1rem 1rem 1.5rem;
     text-align: center;
     position: relative;
-    overflow: hidden;
     display: flex;
     flex-direction: column;
     align-items: center;
     transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1),
-                border-color 0.3s,
                 box-shadow 0.3s;
     cursor: default;
+    box-shadow:
+        0 1px 2px rgba(0,0,0,0.1),
+        4px 6px 0 rgba(0,0,0,0.08),
+        6px 10px 24px rgba(0,0,0,0.20);
+    font-family: 'DynaPuff', cursive;
+    color: #1a1a1a;
 }
 
-/* top accent bar — removed */
+/* Pushpin at top of each card */
+.player-card::before {
+    content: '';
+    position: absolute;
+    top: -11px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 38% 38%, #ff6b6b, #c0392b);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.4), inset 0 1px 2px rgba(255,255,255,0.3);
+    z-index: 3;
+    pointer-events: none;
+}
 
-/* inner glow wash */
+/* Alternating micro-rotations */
+.player-card:nth-child(4n+1) { transform: rotate(-2.2deg); }
+.player-card:nth-child(4n+2) { transform: rotate(1.8deg); }
+.player-card:nth-child(4n+3) { transform: rotate(-1.2deg); }
+.player-card:nth-child(4n)   { transform: rotate(2.5deg); }
+
+/* Folded corner */
 .player-card::after {
     content: '';
     position: absolute;
-    inset: 0;
-    background: radial-gradient(ellipse at 50% 60%, rgba(22,196,196,0.08) 0%, transparent 70%);
-    opacity: 0;
-    transition: opacity 0.35s;
+    bottom: 0;
+    right: 0;
+    width: 20px;
+    height: 20px;
+    background: linear-gradient(225deg, rgba(0,0,0,0.10) 50%, transparent 50%);
     pointer-events: none;
-    z-index: 0;
+    z-index: 1;
 }
 
 .player-card:hover {
-    transform: translateY(-10px) scale(1.015);
-    border-color: var(--s3-teal);
+    transform: translateY(-12px) rotate(0deg) scale(1.04);
     box-shadow:
-        0 20px 50px rgba(0,0,0,0.25),
-        0 0 0 1px rgba(22,196,196,0.2),
-        0 0 30px rgba(22,196,196,0.1);
+        4px 6px 0 rgba(0,0,0,0.10),
+        0 20px 40px rgba(0,0,0,0.28);
 }
-
-.player-card:hover::after { opacity: 1; }
 
 /* ── SKIN ── */
 .skin-viewer {
-    width: 115px;
-    height: 210px;
-    margin-bottom: 1.2rem;
+    width: 110px;
+    height: 200px;
+    margin-bottom: 0.9rem;
     position: relative;
     z-index: 2;
-    filter: drop-shadow(0 6px 18px rgba(0,0,0,0.35));
-    transition: transform 0.35s cubic-bezier(0.34,1.56,0.64,1),
-                filter 0.35s;
+    filter: drop-shadow(0 4px 12px rgba(0,0,0,0.30));
+    transition: transform 0.35s cubic-bezier(0.34,1.56,0.64,1), filter 0.35s;
 }
 
 .player-card:hover .skin-viewer {
-    transform: scale(1.08) translateY(-4px);
-    filter: drop-shadow(0 6px 12px rgba(22,196,196,0.3))
-            drop-shadow(0 4px 14px rgba(82,194,40,0.18));
+    transform: scale(1.07) translateY(-4px);
+    filter: drop-shadow(0 6px 16px rgba(0,0,0,0.40));
 }
 
 .skin-image {
@@ -270,10 +314,11 @@ body:not(.dark-mode) .players-missing-notice {
 }
 
 .player-name {
-    font-size: 1.05rem;
-    font-weight: 800;
-    color: var(--text-primary);
-    letter-spacing: 0.4px;
+    font-size: 1.25rem;
+    font-weight: 700;
+    font-family: var(--font-display);
+    color: #1a1a1a; /* overridden by inline style when member has a color */
+    letter-spacing: 0.04em;
     line-height: 1.2;
     display: flex;
     flex-direction: column;
@@ -282,96 +327,131 @@ body:not(.dark-mode) .players-missing-notice {
     width: 100%;
     overflow-wrap: break-word;
     text-align: center;
-    text-shadow:
-        -1px -1px 0 #000,
-         1px -1px 0 #000,
-        -1px  1px 0 #000,
-         1px  1px 0 #000,
-         0 2px 6px rgba(0,0,0,0.55);
+    text-shadow: none;
+}
+
+/* In dark mode, names with no custom colour need to be readable on white card */
+.player-name--no-color {
+    color: #1a1a1a !important;
+}
+
+/* ── STICKY NOTE CHIPS (pronouns, role, twitch) ── */
+.player-chips {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    margin-top: 6px;
 }
 
 .player-pronouns {
-    font-size: 0.8rem;
-    font-style: italic;
-    color: var(--text-secondary);
-    opacity: 0.75;
-    background: rgba(255,255,255,0.05);
-    border: 1px solid rgba(255,255,255,0.07);
-    padding: 2px 10px;
-    border-radius: 20px;
+    font-family: var(--font-handwriting);
+    font-size: 1rem;
+    font-style: normal;
+    color: #2a2a1a;
+    background: transparent;
+    padding: 3px 10px;
+    border-radius: 2px;
+    transform: rotate(-1.2deg);
+    display: inline-block;
+    position: relative;
+    isolation: isolate;
+}
+
+.player-pronouns::before {
+    content: '';
+    position: absolute;
+    inset: -2px;
+    background: linear-gradient(to bottom, #d4b800 0%, #d4b800 20%, #fef08a 20%);
+    border-radius: 3px 2px 4px 2px / 2px 3px 2px 4px;
+    filter: url(#sticky-squiggle) drop-shadow(1px 3px 4px rgba(0,0,0,0.2));
+    z-index: -1;
 }
 
 /* ── TWITCH ── */
 .twitch-link {
-    color: #9146FF;
+    color: #5a1fa0;
+    background: transparent;
     display: inline-flex;
     align-items: center;
     justify-content: center;
     text-decoration: none;
-    transition: transform 0.2s, filter 0.2s;
+    padding: 3px 8px;
+    border-radius: 2px;
+    transform: rotate(1deg);
+    transition: transform 0.2s;
+    position: relative;
+    isolation: isolate;
+}
+
+.twitch-link::before {
+    content: '';
+    position: absolute;
+    inset: -2px;
+    background: linear-gradient(to bottom, #a855f7 0%, #a855f7 20%, #d8b4fe 20%);
+    border-radius: 2px 3px 2px 4px / 4px 2px 3px 2px;
+    filter: url(#sticky-squiggle) drop-shadow(1px 3px 4px rgba(0,0,0,0.2));
+    z-index: -1;
 }
 
 .twitch-link:hover {
-    transform: scale(1.25);
-    filter: drop-shadow(0 0 8px #9146FF);
+    transform: rotate(0deg) scale(1.1);
 }
 
 .twitch-icon-svg {
-    width: 17px;
-    height: 17px;
+    width: 15px;
+    height: 15px;
     fill: currentColor;
 }
 
-/* ── ROLE BADGES ── */
+/* ── ROLE BADGES — sticky note style ── */
 .player-role {
     display: inline-block;
-    margin-top: 8px;
-    padding: 3px 13px;
-    border-radius: 20px;
-    font-size: 0.7rem;
-    font-weight: 800;
-    letter-spacing: 1.2px;
-    text-transform: uppercase;
-    border: 1px solid transparent;
-    backdrop-filter: blur(4px);
-    -webkit-backdrop-filter: blur(4px);
-    transition: transform 0.25s, box-shadow 0.25s;
+    padding: 3px 12px;
+    border-radius: 2px;
+    font-family: var(--font-handwriting);
+    font-size: 1rem;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+    text-transform: none;
+    background: transparent;
+    transition: transform 0.25s;
+    transform: rotate(1.5deg);
+    position: relative;
+    isolation: isolate;
 }
 
-.player-card:hover .player-role { transform: scale(1.06); }
-
-.role-owner {
-    background: linear-gradient(135deg, rgba(255,85,85,0.12), rgba(255,85,85,0.28));
-    color: #ff7070;
-    border-color: rgba(255,85,85,0.45);
-    box-shadow: 0 0 12px rgba(255,85,85,0.15);
+.player-role::before {
+    content: '';
+    position: absolute;
+    inset: -2px;
+    border-radius: 3px 2px 4px 2px / 2px 4px 2px 3px;
+    filter: url(#sticky-squiggle) drop-shadow(1px 3px 4px rgba(0,0,0,0.2));
+    z-index: -1;
 }
 
-.role-admin {
-    background: linear-gradient(135deg, rgba(189,0,189,0.12), rgba(189,0,189,0.28));
-    color: #e056fd;
-    border-color: rgba(189,0,189,0.45);
-    box-shadow: 0 0 12px rgba(189,0,189,0.15);
+.player-card:hover .player-role {
+    transform: rotate(0deg) scale(1.07);
 }
 
-.role-mod {
-    background: linear-gradient(135deg, rgba(82,194,40,0.12), rgba(82,194,40,0.28));
-    color: #7EE84B;
-    border-color: rgba(82,194,40,0.5);
-    box-shadow: 0 0 12px rgba(82,194,40,0.15);
-}
+/* Each role: colour on the chip text + rotation */
+.role-owner      { color: #7f1d1d; transform: rotate(-2deg); }
+.role-admin      { color: #4c1d95; transform: rotate(1.8deg); }
+.role-mod        { color: #14532d; transform: rotate(-1.5deg); }
+.role-member     { color: #0c4a6e; transform: rotate(2deg); }
+.role-staff      { color: #78350f; transform: rotate(-1.8deg); }
+.role-trialstaff { color: #1e1b4b; transform: rotate(1.2deg); }
+.role-imposter   { color: #374151; transform: rotate(-2.2deg); }
 
-.role-member {
-    background: linear-gradient(135deg, rgba(22,196,196,0.08), rgba(22,196,196,0.2));
-    color: #5CE8E8;
-    border-color: rgba(22,196,196,0.35);
-}
-
-.role-imposter {
-    background: linear-gradient(135deg, rgba(255,255,255,0.05), rgba(255,255,255,0.14));
-    color: #d0d0d0;
-    border-color: rgba(255,255,255,0.25);
-}
+/* Squiggly background via ::before — darker adhesive strip at top + note body */
+.role-owner::before      { background: linear-gradient(to bottom, #f87171 0%, #f87171 20%, #fca5a5 20%); }
+.role-admin::before      { background: linear-gradient(to bottom, #c084fc 0%, #c084fc 20%, #d8b4fe 20%); }
+.role-mod::before        { background: linear-gradient(to bottom, #4ade80 0%, #4ade80 20%, #86efac 20%); }
+.role-member::before     { background: linear-gradient(to bottom, #38bdf8 0%, #38bdf8 20%, #bae6fd 20%); }
+.role-staff::before      { background: linear-gradient(to bottom, #facc15 0%, #facc15 20%, #fde68a 20%); }
+.role-trialstaff::before { background: linear-gradient(to bottom, #818cf8 0%, #818cf8 20%, #c7d2fe 20%); }
+.role-imposter::before   { background: linear-gradient(to bottom, #9ca3af 0%, #9ca3af 20%, #e5e7eb 20%); }
 
 /* ═══════════════════════════════════════════════
    7UpPup GLITCH CARD
@@ -515,12 +595,18 @@ body:not(.dark-mode) .players-missing-notice {
 }
 
 /* ── LIGHT MODE ── */
+/* Keep polaroid cards white in dark mode */
+body.dark-mode .player-card {
+    background: #fdfaf4;
+    border: none;
+}
+
 body:not(.dark-mode) .players-hero { background: #f0f4f5; }
 
 body:not(.dark-mode) .player-card {
     background: #fff;
-    border-color: rgba(0,0,0,0.08);
-    box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+    border-color: rgba(0,0,0,0.14);
+    box-shadow: 3px 4px 0 rgba(0,0,0,0.08), 0 4px 20px rgba(0,0,0,0.05);
 }
 
 body:not(.dark-mode) .player-card:hover {
@@ -549,21 +635,19 @@ body:not(.dark-mode) .player-name[style*="color"] {
          1px  1px 0 #fff;
 }
 
-body:not(.dark-mode) .player-pronouns {
-    background: rgba(0,0,0,0.04);
-    border-color: rgba(0,0,0,0.06);
-    color: #666;
-}
-
-body:not(.dark-mode) .role-owner  { color: #c62828; background: rgba(198,40,40,0.08);   border-color: rgba(198,40,40,0.25); }
-body:not(.dark-mode) .role-admin  { color: #7b1fa2; background: rgba(123,31,162,0.08);  border-color: rgba(123,31,162,0.25); }
-body:not(.dark-mode) .role-mod    { color: #2e7d32; background: rgba(46,125,50,0.08);   border-color: rgba(46,125,50,0.25); }
-body:not(.dark-mode) .role-member { color: #00838f; background: rgba(0,131,143,0.08);   border-color: rgba(0,131,143,0.25); }
+/* Pronouns and role chips use the same rich pastel sticky-note colours in both modes */
 
 /* ── RESPONSIVE ── */
+@media (max-width: 900px) {
+    .players-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 1.6rem;
+    }
+}
+
 @media (max-width: 600px) {
     .players-grid {
-        grid-template-columns: repeat(auto-fill, minmax(155px, 1fr));
+        grid-template-columns: repeat(2, minmax(0, 1fr));
         gap: 1rem;
     }
 
@@ -574,3 +658,6 @@ body:not(.dark-mode) .role-member { color: #00838f; background: rgba(0,131,143,0
 
     .players-hero { min-height: 36vh; padding-top: 100px; }
 }
+
+
+

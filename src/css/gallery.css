@@ -6,14 +6,15 @@
 /* ── HERO ── */
 .gallery-hero {
     position: relative;
-    min-height: 38vh;
+    min-height: 28vh;
     display: flex;
     align-items: center;
     justify-content: center;
     overflow: hidden;
     background: var(--bg-primary);
-    padding-top: 120px;
+    padding-top: 3.5rem;
     padding-bottom: 3rem;
+    font-family: 'DynaPuff', cursive;
 }
 
 .gallery-hero-bg {
@@ -48,17 +49,19 @@
 .gallery-badge {
     display: inline-flex;
     align-items: center;
-    gap: 8px;
-    padding: 5px 16px;
-    background: rgba(22,196,196,0.1);
-    border: 1px solid rgba(22,196,196,0.3);
-    border-radius: 50px;
+    gap: 9px;
+    padding: 7px 18px;
+    background: transparent;
+    border: 2px solid var(--s3-teal);
+    border-radius: 6px 12px 8px 10px / 10px 8px 12px 6px;
     color: var(--s3-teal);
-    font-size: .75rem;
+    font-size: 1.1rem;
+    font-family: var(--font-display);
     font-weight: 700;
-    letter-spacing: .1em;
-    text-transform: uppercase;
-    margin-bottom: 1rem;
+    letter-spacing: 0.04em;
+    margin-bottom: 1.25rem;
+    box-shadow: 2px 3px 0 var(--s3-teal);
+    animation: fadeInDown 0.8s ease-out;
 }
 
 .gallery-badge-dot {
@@ -72,17 +75,15 @@
 }
 
 .gallery-hero h1 {
-    font-size: clamp(2.2rem, 5vw, 3.8rem);
-    font-weight: 900;
-    letter-spacing: -0.03em;
+    font-size: clamp(1.8rem, 8vw, 5.8rem);
+    font-weight: 700;
+    font-family: var(--font-display);
+    letter-spacing: 0.01em;
     line-height: 1.05;
-    background: linear-gradient(135deg, #fff 0%, var(--s3-teal) 50%, var(--s3-green) 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    background-size: 200% auto;
-    animation: shimmerTitle 7s linear infinite;
-    margin-bottom: .75rem;
+    color: var(--text-primary);
+    text-shadow: 0 2px 24px rgba(73,183,198,0.18);
+    margin-bottom: 0.4rem;
+    word-break: break-word;
 }
 
 body:not(.dark-mode) .gallery-hero-bg {
@@ -98,12 +99,7 @@ body:not(.dark-mode) .gallery-hero .hero-grid {
         linear-gradient(90deg, rgba(0,0,0,0.04) 1px, transparent 1px);
 }
 
-body:not(.dark-mode) .gallery-hero h1 {
-    background: linear-gradient(135deg, #0A8A8A 0%, var(--s3-green) 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-}
+
 
 .gallery-hero-sub {
     color: var(--text-secondary);
@@ -115,32 +111,93 @@ body:not(.dark-mode) .gallery-hero h1 {
 .gallery-filters {
     display: flex;
     flex-wrap: wrap;
-    gap: .6rem;
+    gap: 1.2rem;
     justify-content: center;
-    margin-bottom: 2.2rem;
+    margin-bottom: 3rem;
+    padding-top: 1rem; /* room for tape strips */
 }
+
+/* ── Sticky-note style season buttons ── */
 .gallery-filter-btn {
-    padding: .45rem 1.2rem;
-    border-radius: 999px;
-    border: 1px solid var(--border-color);
-    background: var(--bg-card);
-    color: var(--text-secondary);
-    font-size: .88rem;
-    font-family: inherit;
-    cursor: pointer;
-    transition: background .2s, border-color .2s, color .2s, box-shadow .2s;
-    white-space: nowrap;
-}
-.gallery-filter-btn:hover {
-    border-color: var(--s3-teal);
-    color: var(--text-primary);
-}
-.gallery-filter-btn.active {
-    background: var(--s3-teal);
-    border-color: var(--s3-teal);
-    color: #0f0f23;
+    position: relative;
+    padding: .85rem 1.4rem 1rem;
+    border-radius: 2px 3px 4px 2px;
+    border: none;
+    font-family: var(--font-handwriting);
+    font-size: 1.1rem;
     font-weight: 700;
-    box-shadow: 0 0 14px rgba(22,196,196,.35);
+    cursor: pointer;
+    transition: transform .2s cubic-bezier(.34,1.56,.64,1), box-shadow .2s;
+    white-space: nowrap;
+    /* sticky note shadow — offset so it looks like paper resting on a surface */
+    box-shadow: 3px 4px 0 rgba(0,0,0,0.18), 0 6px 16px rgba(0,0,0,0.10);
+    /* Tape strip at top via ::before */
+}
+
+/* Tape strip */
+.gallery-filter-btn::before {
+    content: '';
+    position: absolute;
+    top: -10px;
+    left: calc(50% - 20px);
+    width: 40px;
+    height: 13px;
+    background: rgba(215, 190, 120, 0.65);
+    border-radius: 2px;
+    transform: rotate(-1deg);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.13);
+    pointer-events: none;
+}
+
+/* Per-season sticky note colors */
+/* All — warm yellow */
+.gallery-filter-btn[data-season="all"] {
+    background: #f7e96b;
+    color: #3a2e00;
+    transform: rotate(-1.5deg);
+}
+/* Season 1 — mint green */
+.gallery-filter-btn[data-season="1"] {
+    background: #b8f0c8;
+    color: #0d3318;
+    transform: rotate(1.2deg);
+}
+/* Season 2 — peach/orange */
+.gallery-filter-btn[data-season="2"] {
+    background: #ffc9a0;
+    color: #3d1200;
+    transform: rotate(-0.8deg);
+}
+/* Season 3 — lavender */
+.gallery-filter-btn[data-season="3"] {
+    background: #c8c3f0;
+    color: #1a1540;
+    transform: rotate(1.5deg);
+}
+
+.gallery-filter-btn:hover {
+    transform: translateY(-4px) rotate(0deg) scale(1.04);
+    box-shadow: 4px 8px 0 rgba(0,0,0,0.20), 0 10px 24px rgba(0,0,0,0.12);
+}
+
+/* Active state — push down like it's been pressed/stuck */
+.gallery-filter-btn.active {
+    transform: rotate(0deg) scale(0.97);
+    box-shadow: 1px 2px 0 rgba(0,0,0,0.22), 0 2px 8px rgba(0,0,0,0.14);
+    font-weight: 700;
+    outline: 2.5px solid rgba(0,0,0,0.25);
+    outline-offset: 1px;
+}
+
+/* Override per-season hover so active doesn't jump */
+.gallery-filter-btn[data-season="all"].active  { background: #f7e96b; color: #3a2e00; }
+.gallery-filter-btn[data-season="1"].active    { background: #b8f0c8; color: #0d3318; }
+.gallery-filter-btn[data-season="2"].active    { background: #ffc9a0; color: #3d1200; }
+.gallery-filter-btn[data-season="3"].active    { background: #c8c3f0; color: #1a1540; }
+
+.gallery-filter-btn:focus-visible {
+    outline: 2px solid currentColor;
+    outline-offset: 3px;
 }
 
 .gallery-section {
@@ -170,37 +227,68 @@ body:not(.dark-mode) .gallery-hero h1 {
 /* ── CARD ── */
 .gallery-card {
     position: relative;
-    border-radius: 16px;
-    overflow: hidden;
+    border-radius: 18px 24px 20px 16px / 16px 20px 24px 18px;
+    overflow: visible; /* allow tape strip to poke out */
     cursor: pointer;
     aspect-ratio: 16 / 10;
-    background: var(--bg-card);
-    border: 1px solid var(--border-color);
+    background: var(--surface-warm);
+    border: 2px dashed rgba(34,34,34,0.22);
     transition: transform .3s cubic-bezier(.34,1.56,.64,1), box-shadow .3s, border-color .3s;
     touch-action: manipulation;
     -webkit-tap-highlight-color: transparent;
+    box-shadow: 3px 5px 0 rgba(0,0,0,0.15), 0 4px 16px rgba(0,0,0,0.10);
 }
-.gallery-card:hover {
-    transform: translateY(-6px) scale(1.01);
-    border-color: var(--s3-teal);
-    box-shadow:
-        0 16px 40px rgba(0,0,0,.3),
-        0 0 0 1px rgba(22,196,196,.15),
-        0 0 20px rgba(22,196,196,.08);
-}
+
+/* clip the image but not the tape strip */
 .gallery-card img {
     width: 100%;
     height: 100%;
     object-fit: cover;
     display: block;
+    border-radius: 16px 22px 18px 14px / 14px 18px 22px 16px;
+    overflow: hidden;
     transition: transform .4s ease;
+}
+
+/* Tape strip across the top of each polaroid */
+.gallery-card::before {
+    content: '';
+    position: absolute;
+    top: -10px;
+    left: calc(50% - 28px);
+    width: 56px;
+    height: 15px;
+    background: rgba(215, 190, 120, 0.62);
+    border-radius: 2px 3px 3px 2px;
+    z-index: 3;
+    pointer-events: none;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.13);
+}
+
+/* Alternating micro-rotations */
+.gallery-card:nth-child(3n+1) { transform: rotate(-1.2deg); }
+.gallery-card:nth-child(3n+2) { transform: rotate(0.8deg); }
+.gallery-card:nth-child(3n)   { transform: rotate(-0.4deg); }
+
+/* nth-child tape angles vary slightly */
+.gallery-card:nth-child(even)::before { transform: rotate(1.5deg); }
+.gallery-card:nth-child(3n)::before   { transform: rotate(-1deg); }
+
+.gallery-card:hover {
+    transform: translateY(-8px) rotate(0deg) scale(1.02);
+    border-color: rgba(22,196,196,0.5);
+    box-shadow:
+        5px 8px 0 rgba(0,0,0,0.14),
+        0 14px 30px rgba(22,196,196,0.15);
 }
 .gallery-card:hover img { transform: scale(1.05); }
 
 .gallery-card-overlay {
     position: absolute;
     inset: 0;
-    background: linear-gradient(to top, rgba(0,0,0,.82) 0%, rgba(0,0,0,.45) 55%, rgba(0,0,0,.15) 100%);
+    border-radius: 16px 22px 18px 14px / 14px 18px 22px 16px;
+    overflow: hidden;
+    background: linear-gradient(to top, rgba(34,34,34,0.75) 0%, rgba(34,34,34,0.4) 55%, rgba(34,34,34,0.12) 100%);
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
@@ -225,23 +313,37 @@ body:not(.dark-mode) .gallery-hero h1 {
     margin-top: 2px;
 }
 
-/* ── SEASON TAG BADGE ── */
+/* ── SEASON TAG BADGE (on each photo card) ── */
 .gallery-season-tag {
     position: absolute;
     top: .65rem;
     right: .65rem;
-    background: rgba(0,0,0,.65);
-    color: #fff;
-    font-size: .7rem;
+    font-family: var(--font-handwriting);
+    font-size: .9rem;
     font-weight: 700;
-    padding: .2rem .52rem;
-    border-radius: 999px;
-    letter-spacing: .03em;
-    backdrop-filter: blur(4px);
-    -webkit-backdrop-filter: blur(4px);
-    border: 1px solid rgba(255,255,255,.12);
+    padding: .3rem .75rem .35rem;
+    border-radius: 2px 3px 3px 2px;
+    pointer-events: none;
+    box-shadow: 2px 3px 0 rgba(0,0,0,0.18);
+    transform: rotate(1.8deg);
+}
+/* Tape strip on each card tag */
+.gallery-season-tag::before {
+    content: '';
+    position: absolute;
+    top: -8px;
+    left: calc(50% - 14px);
+    width: 28px;
+    height: 10px;
+    background: rgba(215, 190, 120, 0.65);
+    border-radius: 2px;
+    transform: rotate(-1deg);
     pointer-events: none;
 }
+/* Per-season tag colors matching the filter buttons */
+.gallery-season-tag[data-season="1"] { background: #b8f0c8; color: #0d3318; }
+.gallery-season-tag[data-season="2"] { background: #ffc9a0; color: #3d1200; }
+.gallery-season-tag[data-season="3"] { background: #c8c3f0; color: #1a1540; }
 
 /* ── LIGHTBOX ── */
 .lightbox {
@@ -274,8 +376,9 @@ body:not(.dark-mode) .gallery-hero h1 {
     max-width: 100%;
     max-height: 78vh;
     object-fit: contain;
-    border-radius: 14px;
-    box-shadow: 0 24px 80px rgba(0,0,0,.6);
+    border-radius: 26px;
+    border: 3px dashed rgba(34,34,34,0.25);
+    box-shadow: 8px 12px 24px rgba(0,0,0,.45);
 }
 .lightbox-caption {
     display: flex;
@@ -290,18 +393,18 @@ body:not(.dark-mode) .gallery-hero h1 {
 .lightbox-close {
     position: fixed;
     top: 1.2rem; right: 1.4rem;
-    background: rgba(255,255,255,.12);
-    border: 1px solid rgba(255,255,255,.18);
+    background: rgba(255,255,255,0.12);
+    border: 2px dashed rgba(255,255,255,0.3);
     color: #fff;
-    width: 38px; height: 38px;
+    width: 42px; height: 42px;
     border-radius: 50%;
     font-size: 1.1rem;
     cursor: pointer;
-    transition: background .2s;
+    transition: background .2s, transform .2s;
     display: flex; align-items: center; justify-content: center;
     z-index: 10000;
 }
-.lightbox-close:hover { background: rgba(255,255,255,.25); }
+.lightbox-close:hover { background: rgba(255,255,255,.25); transform: scale(1.05); }
 
 .lightbox-nav {
     position: fixed;
@@ -329,23 +432,40 @@ body:not(.dark-mode) .gallery-hero h1 {
 
 /* ── UPLOAD BUTTON ── */
 .gallery-upload-btn {
+    position: relative;
+    isolation: isolate;
     margin-top: 1.5rem;
-    padding: 10px 24px;
-    background: linear-gradient(135deg, rgba(22,196,196,0.15), rgba(82,194,40,0.15));
-    border: 1px solid rgba(22,196,196,0.45);
-    border-radius: 50px;
-    color: var(--s3-teal);
-    font-size: .88rem;
+    padding: 10px 28px 12px;
+    background: transparent;
+    border: none;
+    border-radius: 0;
+    color: #3a3000;
+    font-family: var(--font-handwriting);
+    font-size: 1.1rem;
     font-weight: 700;
-    letter-spacing: .05em;
     cursor: pointer;
-    transition: background .2s, border-color .2s, transform .2s, box-shadow .2s;
+    transition: transform .2s cubic-bezier(.34,1.56,.64,1), filter .2s;
+    filter: url(#chalkText);
+    transform: rotate(-1deg);
 }
+
+.gallery-upload-btn::before {
+    content: '';
+    position: absolute;
+    inset: -3px;
+    background: linear-gradient(to bottom, #d4b800 0%, #d4b800 18%, #fef08a 18%);
+    border-radius: 3px 2px 4px 3px / 2px 4px 3px 2px;
+    filter: url(#sticky-squiggle) drop-shadow(2px 4px 8px rgba(0,0,0,0.30));
+    z-index: -1;
+    transition: filter .2s;
+}
+
 .gallery-upload-btn:hover {
-    background: linear-gradient(135deg, rgba(22,196,196,0.28), rgba(82,194,40,0.22));
-    border-color: var(--s3-teal);
-    transform: translateY(-2px);
-    box-shadow: 0 8px 24px rgba(22,196,196,0.15);
+    transform: rotate(0deg) translateY(-4px) scale(1.05);
+}
+
+.gallery-upload-btn:hover::before {
+    filter: url(#sticky-squiggle) drop-shadow(3px 7px 14px rgba(0,0,0,0.35));
 }
 
 /* ── UPLOAD MODAL ── */
@@ -528,3 +648,6 @@ body:not(.dark-mode) .gallery-hero h1 {
 @media (max-width: 520px) {
     .gupload-box { padding: 1.6rem 1.2rem; border-radius: 16px; }
 }
+
+
+

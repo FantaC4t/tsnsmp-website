@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -25,7 +25,7 @@
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DynaPuff:wght@400;500;600;700&family=Luckiest+Guy&family=Poppins:wght@300;400;500;600;700;800;900&display=swap">
 
     <link rel="stylesheet" href="../css/base.css">
     <link rel="stylesheet" href="../css/header.css">
@@ -37,6 +37,16 @@
     <link rel="manifest" href="../site.webmanifest">
 </head>
 <body class="dark-mode">
+
+<!-- Hidden SVG filter: squiggly hand-drawn edges -->
+<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" style="position:absolute;width:0;height:0;overflow:hidden;pointer-events:none">
+  <defs>
+    <filter id="sticky-squiggle" x="-10%" y="-15%" width="120%" height="130%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.038 0.062" numOctaves="2" seed="9" result="noise"/>
+      <feDisplacementMap in="SourceGraphic" in2="noise" scale="4" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+  </defs>
+</svg>
     <!-- Header injected by JS -->
     
     <main id="main-content">
@@ -50,11 +60,7 @@
 
             <div class="container" style="position: relative; z-index: 2;">
                 <div class="hero-content-resources">
-                    <div class="resources-badge">
-                        <span class="resources-badge-dot"></span>
-                        Season 3 · Community Resources
-                    </div>
-                    <h1>Server Resources</h1>
+                    <h1><span class="gradient-text" data-text="Server Resources">Server Resources</span></h1>
                     <p>Everything you need to know about playing on TSNSMP</p>
                 </div>
             </div>
@@ -93,7 +99,7 @@
                         <div class="rule-number">2</div>
                         <div class="rule-content">
                             <h3>No Sensitive Topics</h3>
-                            <p>No IRL politics or religion discussions. We're here to play Minecraft.</p>
+                            <p>Please be mindful when speaking about sensitive topics, religion, politics etc, keep drama out of the server.</p>
                         </div>
                     </div>
                     <div class="rule-card">

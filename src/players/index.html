@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -31,7 +31,7 @@
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DynaPuff:wght@400;500;600;700&family=Luckiest+Guy&family=Poppins:wght@300;400;500;600;700;800;900&display=swap">
 
     <link rel="stylesheet" href="../css/base.css">
     <link rel="stylesheet" href="../css/header.css">
@@ -43,6 +43,16 @@
     <link rel="manifest" href="../site.webmanifest">
 </head>
 <body class="dark-mode">
+
+<!-- Hidden SVG filter: squiggly hand-drawn edges for sticky note chips -->
+<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" style="position:absolute;width:0;height:0;overflow:hidden;pointer-events:none">
+  <defs>
+    <filter id="sticky-squiggle" x="-10%" y="-15%" width="120%" height="130%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.038 0.062" numOctaves="2" seed="9" result="noise"/>
+      <feDisplacementMap in="SourceGraphic" in2="noise" scale="4" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+  </defs>
+</svg>
     
     <!-- Header injected by JS -->
     
@@ -51,27 +61,21 @@
             <div class="hero-bg"></div>
             <div class="hero-grid"></div>
             <div class="container">
-                <div class="players-season-badge">
-                    <span class="players-season-badge-dot"></span>
-                    Season 3 Active
-                </div>
-                <h1>Meet the Community</h1>
+                <h1><span class="gradient-text" data-text="Meet the Community">Meet the Community</span></h1>
                 <p class="players-hero-subtitle">
                     The amazing people who make TSNSMP special.
                 </p>
-                <div style="margin-top:.8rem" aria-live="polite">
-                    <div class="server-status-pill" id="serverStatusPill" aria-label="Minecraft server status">
-                        <span class="status-dot"></span>
-                        <span id="serverStatusText">play.tsnsmp.online</span>
-                    </div>
-                </div>
+
             </div>
         </section>
 
         <section class="players-list">
             <div class="container">
                 <div class="players-search">
-                    <input type="text" id="player-search" placeholder="Search players..." autocomplete="off" />
+                    <div class="players-search-note">
+                        <label class="players-search-label" for="player-search">🔍 who are you looking for?</label>
+                        <input type="text" id="player-search" placeholder="Type a name..." autocomplete="off" />
+                    </div>
                 </div>
                 <p class="players-missing-notice">
                     👋 Member but not listed? DM <strong>Our Staff</strong> to be added — PLEASE include your <strong>color</strong>, <strong>pronouns</strong>, and <strong>Twitch link</strong> if you have one!
@@ -96,35 +100,7 @@
         createHeader('players');
         createFooter('players');
 
-        /* ── Server status ── */
-        (async function fetchServerStatus() {
-            const CACHE_KEY = 'tsnsmp_srv_status';
-            const TTL = 3 * 60 * 1000;
-            const pill = document.getElementById('serverStatusPill');
-            const text = document.getElementById('serverStatusText');
-            if (!pill) return;
-            function applyStatus(d) {
-                if (d.online) {
-                    pill.classList.add('online');
-                    const n = d.players?.online ?? 0, m = d.players?.max ?? 20;
-                    text.textContent = `${n} / ${m} Online`;
-                } else {
-                    pill.classList.add('offline');
-                    text.textContent = 'Server Offline';
-                }
-            }
-            try {
-                const cached = sessionStorage.getItem(CACHE_KEY);
-                if (cached) {
-                    const { data, ts } = JSON.parse(cached);
-                    if (Date.now() - ts < TTL) { applyStatus(data); return; }
-                }
-                const res  = await fetch('https://api.mcsrvstat.us/3/play.tsnsmp.online');
-                const data = await res.json();
-                sessionStorage.setItem(CACHE_KEY, JSON.stringify({ data, ts: Date.now() }));
-                applyStatus(data);
-            } catch { text.textContent = 'play.tsnsmp.online'; }
-        })();
+
 
         const grid = document.getElementById('players-grid');
 
@@ -180,6 +156,7 @@
 
             const safeColor = typeof member.color === 'string' && /^#[0-9a-fA-F]{3,8}$/.test(member.color) ? member.color : null;
             const nameStyle = safeColor ? `style="color: ${safeColor}"` : '';
+            const nameClass = safeColor ? 'player-name' : 'player-name player-name--no-color';
 
             // Normalize role for display and class
             let role = (member.role || '').toLowerCase();
@@ -192,12 +169,12 @@
                          onerror="this.src='https://minotar.net/armor/body/Steve/150.png'">
                 </div>
                 <div class="player-info">
-                    <div class="player-name" ${nameStyle}>
-                        ${member.name}
+                    <div class="${nameClass}" ${nameStyle}>${member.name}</div>
+                    <div class="player-chips">
                         ${twitchIcon}
+                        ${member.pronouns ? `<div class="player-pronouns">${member.pronouns}</div>` : ''}
+                        <div class="player-role role-${role}">${roleLabel}</div>
                     </div>
-                    ${member.pronouns ? `<div class="player-pronouns">${member.pronouns}</div>` : ''}
-                    <div class="player-role role-${role}">${roleLabel}</div>
                 </div>
             `;
             return card;

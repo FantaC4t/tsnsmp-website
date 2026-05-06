@@ -9,34 +9,40 @@
 
 html {
     scroll-behavior: smooth;
+    scroll-padding-top: 100px;
+    overflow-x: hidden;
+    font-size: 14px;
 }
+
+/* Hand-drawn font from Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=DynaPuff:wght@400;500;600;700&family=Luckiest+Guy&display=swap');
 
 :root {
     /* ── Season 3 Brand Palette ── */
-    --s3-teal:   #16C4C4;  /* sky / primary ambient accent */
-    --s3-green:  #52C228;  /* TSN SMP block letters */
-    --s3-red:    #E53200;  /* SEASON 3 text */
-    --s3-orange: #FF6622;  /* SEASON 3 highlight */
-    --s3-gold:   #AACC00;  /* letter highlight / trim */
+    --s3-teal:   #49B7C6;  /* soft teal accent */
+    --s3-green:  #67BB7A;  /* pastel green */
+    --s3-red:    #D35D54;  /* warm accent */
+    --s3-orange: #F58F5D;  /* soft highlight */
+    --s3-gold:   #D4C56A;  /* warm trim */
 
     /* Light Mode Colors */
-    --primary-green: #3aad1a;   /* S3 vivid green */
-    --secondary-green: #52C228; /* S3 bright green  */
-    --light-green: #8FD96E;
-    --primary-purple: #16C4C4;  /* S3 teal — replaces purple as ambient accent */
-    --secondary-purple: #10AEAE;
-    --light-purple: #7DE0E0;
-    --light-bg: #f8f9fa;
-    --light-text: #2c3e50;
-    --light-card-bg: #ffffff;
+    --primary-green: #5BBF8F;   /* friendly moss green */
+    --secondary-green: #8FD2AB; /* pastel leaf green */
+    --light-green: #AEDBA4;
+    --primary-purple: #7D83C2;  /* muted purple-teal blend */
+    --secondary-purple: #8AA2D8;
+    --light-purple: #9CC8E7;
+    --light-bg: #faf4eb;
+    --light-text: #2f2d2a;
+    --light-card-bg: #fffdf5;
     
     /* Dark Mode Colors */
-    --dark-bg: #0f0f23;
-    --dark-secondary-bg: #1a1a2e;
-    --dark-card-bg: #16213e;
-    --dark-text: #e8e9ea;
-    --dark-text-secondary: #b0b3b8;
-    --dark-border: #3a3b3c;
+    --dark-bg: #12101A;
+    --dark-secondary-bg: #1f1d2d;
+    --dark-card-bg: #211f2d;
+    --dark-text: #efe8dd;
+    --dark-text-secondary: #b9aea3;
+    --dark-border: #3a3639;
     
     /* Current theme variables */
     --bg-primary: var(--dark-bg);
@@ -45,12 +51,26 @@ html {
     --text-primary: var(--dark-text);
     --text-secondary: var(--dark-text-secondary);
     --border-color: var(--dark-border);
+    --surface: #fffdf5;
+    --surface-soft: #fffbe7;
+    --surface-warm: #fff8e7;
+    --surface-border: rgba(34, 34, 34, 0.18);
+    --surface-shadow: 4px 6px 0 rgba(0, 0, 0, 0.12);
     
-    --shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-    --shadow-heavy: 0 8px 32px rgba(0, 0, 0, 0.4);
-    --border-radius: 15px;
+    --shadow: 0 4px 20px rgba(0, 0, 0, 0.18);
+    --shadow-heavy: 0 8px 32px rgba(0, 0, 0, 0.28);
+    --border-radius: 18px;
     --transition: all 0.3s ease;
+    --panel-bg: var(--bg-card);
+    --panel-border: var(--border-color);
+    --panel-shadow: var(--shadow);
+    --text-color: #efe8dd;
+    --header-bg: rgba(18, 16, 26, 0.92);
+    --font-display: 'Luckiest Guy', cursive;
+    --font-handwriting: 'DynaPuff', cursive;
+    --font-body: 'DynaPuff', cursive;
 }
+
 
 /* Light Mode */
 body:not(.dark-mode) {
@@ -65,14 +85,130 @@ body:not(.dark-mode) {
 }
 
 body {
-    font-family: 'Poppins', sans-serif;
+    font-family: var(--font-body);
     line-height: 1.6;
     color: var(--text-primary);
-    background: var(--bg-primary);
+    background: radial-gradient(circle at top left, rgba(74, 213, 212, 0.16), transparent 30%),
+                radial-gradient(circle at bottom right, rgba(103, 187, 122, 0.15), transparent 25%),
+                var(--bg-primary) url('https://www.transparenttextures.com/patterns/paper-fibers.png');
     min-height: 100vh;
     position: relative;
     overflow-x: hidden;
     transition: var(--transition);
+    background-blend-mode: multiply;
+}
+
+body.dark-mode {
+    background: radial-gradient(circle at top left, rgba(103, 187, 122, 0.12), transparent 22%),
+                radial-gradient(circle at bottom right, rgba(77, 134, 214, 0.12), transparent 18%),
+                linear-gradient(180deg, #14101d 0%, #1e1830 68%), url('https://www.transparenttextures.com/patterns/asfalt-dark.png');
+    background-blend-mode: multiply;
+    --bg-secondary: #1b1630;
+    --bg-card: #201c2f;
+    --text-primary: #efe8dd;
+    --text-secondary: #b9aea3;
+    --border-color: rgba(255,255,255,0.12);
+    --surface: rgba(255,255,255,0.05);
+    --surface-soft: rgba(255,255,255,0.04);
+    --surface-warm: rgba(255,255,255,0.06);
+    --surface-border: rgba(255,255,255,0.12);
+    --surface-shadow: 4px 6px 0 rgba(255,255,255,0.08);
+    --panel-bg: var(--bg-card);
+    --panel-border: var(--border-color);
+    --panel-shadow: var(--shadow);
+}
+
+body.dark-mode .site-footer,
+body.dark-mode .back-to-top,
+body.dark-mode .gupload-close,
+body.dark-mode .gupload-box,
+body.dark-mode .gupload-drop,
+body.dark-mode .tab-btn {
+    background: var(--surface);
+    border-color: var(--surface-border);
+    box-shadow: var(--surface-shadow);
+}
+
+body.dark-mode .site-header,
+body.dark-mode .site-header.scrolled {
+    background: #1a1828;
+}
+
+body.dark-mode .theme-toggle {
+    color: var(--text-primary);
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-display);
+    letter-spacing: 0.04em;
+}
+
+h1, h2, h3, h4, h5, h6,
+.hero-badge, .about-badge, .gallery-badge, .players-season-badge,
+.resources-badge, .hero-member-badge,
+.btn-glow, .btn-outline,
+.article-tag, .aside-header,
+.chapter-num, .chapter-title,
+.htl-date, .htl-title,
+.gallery-filter-btn, .gallery-season-tag,
+.player-name, .skin-halo-face span:not(.polaroid-live-dot) {
+    filter: url(#chalkText);
+}
+
+h2 {
+    position: relative;
+    display: inline-block;
+    margin-bottom: 1rem;
+}
+
+/* ── Site-wide page fold corner ──
+   Place a <span class="page-fold" aria-hidden="true"></span> as the last
+   child of any position:relative card to get a turned-up bottom-right corner */
+.page-fold {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 0;
+    height: 0;
+    display: block;
+    pointer-events: none;
+    z-index: 10;
+    /* Dark shadow wedge — the "underside" of the lifted corner */
+    border-style: solid;
+    border-width: 0 0 30px 30px;
+    border-color: transparent transparent rgba(0,0,0,0.18) transparent;
+}
+/* The top face of the fold — matches the page background */
+.page-fold::before {
+    content: '';
+    position: absolute;
+    bottom: -30px;
+    right: 0;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 30px 30px 0 0;
+    border-color: var(--bg-primary) transparent transparent transparent;
+}
+
+
+
+body.dark-mode .btn-secondary {
+    background: linear-gradient(45deg, #7b80b8, #94afcf);
+}
+
+body.dark-mode .card,
+body.dark-mode .footer-nav a,
+body.dark-mode .construction-content,
+body.dark-mode .construction-features,
+body.dark-mode .aside-cta,
+body.dark-mode .rule-card,
+body.dark-mode .icon-card-v2,
+body.dark-mode .gallery-card,
+body.dark-mode .gupload-box {
+    background: var(--panel-bg);
+    border-color: var(--panel-border);
+    box-shadow: var(--panel-shadow);
 }
 
 .flower-bg {
@@ -91,38 +227,80 @@ body {
 
 .dark-mode .flower-bg {
     background-image: 
-        radial-gradient(circle at 20% 80%, rgba(22, 196, 196, 0.25) 0%, transparent 50%),
-        radial-gradient(circle at 80% 20%, rgba(82, 194, 40, 0.25) 0%, transparent 50%),
-        radial-gradient(circle at 40% 40%, rgba(156, 39, 176, 0.15) 0%, transparent 50%);
+        radial-gradient(circle at 20% 80%, rgba(103, 187, 122, 0.24) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(211, 93, 84, 0.18) 0%, transparent 50%),
+        radial-gradient(circle at 40% 40%, rgba(212, 197, 106, 0.12) 0%, transparent 50%);
 }
 
 .container {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 0 20px;
+    padding: 0 2rem;
 }
 
 /* Shared Button Styles */
 .btn-primary, .btn-secondary {
     padding: 15px 30px;
-    border: none;
-    border-radius: var(--border-radius);
+    border: 2.5px solid #222;
+    border-radius: 16px; /* Irregular radius */
     font-size: 1.1rem;
+    font-family: 'DynaPuff', cursive;
     font-weight: 600;
     cursor: pointer;
     transition: var(--transition);
-    text-transform: uppercase;
-    letter-spacing: 1px;
+    text-transform: none;
+    letter-spacing: 0.5px;
     position: relative;
     overflow: hidden;
     text-decoration: none;
     display: inline-block;
+    box-shadow: 2px 4px 0 #222, 0 4px 20px rgba(82, 194, 40, 0.2);
+    background-blend-mode: multiply;
 }
 
 .btn-primary {
     background: linear-gradient(45deg, var(--primary-green), var(--secondary-green));
     color: white;
     box-shadow: 0 4px 20px rgba(82, 194, 40, 0.4);
+}
+
+/* ── Shared gradient title text ── */
+.gradient-text {
+    position: relative;
+    display: inline-block;
+    background: linear-gradient(135deg, #ffffff 0%, var(--s3-teal) 40%, var(--primary-purple) 70%, var(--s3-green) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    background-size: auto;
+}
+
+.gradient-text::after {
+    content: attr(data-text);
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, #fff 0%, var(--primary-purple) 50%, var(--primary-green) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    filter: blur(18px) brightness(1.5);
+    opacity: 0.35;
+    z-index: -1;
+    pointer-events: none;
+}
+
+body:not(.dark-mode) .gradient-text {
+    background: linear-gradient(135deg, var(--primary-purple) 0%, var(--primary-green) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    background-size: auto;
+    animation: none;
+}
+
+body:not(.dark-mode) .gradient-text::after {
+    animation: none;
+    opacity: 0;
 }
 
 .btn-primary:hover {
@@ -143,12 +321,25 @@ body {
 
 /* Shared Card Styles */
 .card {
-    background: var(--bg-card);
-    border-radius: var(--border-radius);
+    background: var(--surface);
+    border-radius: 16px;
     padding: 2rem;
-    border: 1px solid var(--border-color);
-    box-shadow: var(--shadow);
+    border: 2.5px solid var(--surface-border);
+    box-shadow: var(--surface-shadow), var(--shadow);
+    font-family: 'DynaPuff', cursive;
+    position: relative;
     transition: var(--transition);
+}
+
+/* Hand-drawn border effect for cards */
+.card::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border: 2px dashed rgba(255,255,255,0.12);
+    border-radius: 16px;
+    pointer-events: none;
+    opacity: 0.25;
 }
 
 .card:hover {
@@ -393,14 +584,13 @@ main {
 .feature-card,
 .custom-feature {
     opacity: 0;
-    transform: translateY(28px) scale(0.97);
     transition: opacity 0.55s cubic-bezier(0.22, 1, 0.36, 1),
-                transform 0.55s cubic-bezier(0.22, 1, 0.36, 1),
-                border-color 0.3s ease,
-                box-shadow 0.3s ease;
+                transform 0.25s ease,
+                border-color 0.25s ease,
+                box-shadow 0.25s ease;
 }
 .feature-card.card-visible,
 .custom-feature.card-visible {
     opacity: 1;
-    transform: translateY(0) scale(1);
 }
+

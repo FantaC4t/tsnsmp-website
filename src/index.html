@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -7,8 +7,8 @@
     <!-- Primary Meta Tags -->
     <title>TSNSMP | Cozy Minecraft Server</title>
     <meta name="title" content="TSNSMP | Cozy Minecraft Server">
-    <meta name="description" content="Join TSNSMP, a welcoming Minecraft SMP community! SEASON 3 Applications are LIVE">
-    <meta name="keywords" content="Minecraft, SMP, Minecraft server, survival multiplayer, Minecraft community, whitelist server, TSNSMP, Season 3, friendly server, LGBTQ+ friendly">
+    <meta name="description" content="Cozy whitelist Minecraft SMP with Season 3 applications open. Join a friendly community for building, exploring, and streaming together.">
+    <meta name="keywords" content="Minecraft, SMP, Minecraft server, survival multiplayer, Minecraft community, whitelist server, TSNSMP, Season 3, friendly server, inclusive community">
     <meta name="author" content="FantaCat">
     <meta name="robots" content="index, follow">
     <meta name="language" content="English">
@@ -17,7 +17,7 @@
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://www.tsnsmp.online/">
     <meta property="og:title" content="TSNSMP | Cozy Minecraft Server">
-    <meta property="og:description" content="Join TSNSMP, a welcoming Minecraft SMP community! SEASON 3 Applications are LIVE">
+    <meta property="og:description" content="Cozy whitelist Minecraft SMP with Season 3 applications open. Join a friendly community for building, exploring, and streaming together.">
     <meta property="og:image" content="https://www.tsnsmp.online/assets/tsnsmp-og-s3.png">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
@@ -28,7 +28,7 @@
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:url" content="https://www.tsnsmp.online/">
     <meta name="twitter:title" content="TSNSMP | Cozy Minecraft Server">
-    <meta name="twitter:description" content="Join TSNSMP, a welcoming Minecraft SMP community! SEASON 3 Applications are LIVE">
+    <meta name="twitter:description" content="Cozy whitelist Minecraft SMP with Season 3 applications open. Join a friendly community for building, exploring, and streaming together.">
     <meta name="twitter:image" content="https://www.tsnsmp.online/assets/tsnsmp-og-s3.png">
     
     <!-- Additional Meta Tags -->
@@ -43,7 +43,7 @@
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DynaPuff:wght@400;500;600;700&family=Luckiest+Guy&family=Poppins:wght@300;400;500;600;700;800;900&display=swap">
 
     <!-- Stylesheets -->
     <link rel="stylesheet" href="css/base.css">
@@ -88,48 +88,67 @@
 
 </head>
 <body class="dark-mode">
+
+<!-- Hidden SVG filter: squiggly hand-drawn edges -->
+<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" style="position:absolute;width:0;height:0;overflow:hidden;pointer-events:none">
+  <defs>
+    <filter id="sticky-squiggle" x="-10%" y="-15%" width="120%" height="130%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.038 0.062" numOctaves="2" seed="9" result="noise"/>
+      <feDisplacementMap in="SourceGraphic" in2="noise" scale="4" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+    <!-- Larger scale variant for big card elements -->
+    <filter id="card-squiggle" x="-6%" y="-8%" width="112%" height="116%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.022 0.036" numOctaves="2" seed="5" result="noise"/>
+      <feDisplacementMap in="SourceGraphic" in2="noise" scale="10" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+  </defs>
+</svg>
+
 <!-- Header injected by JS --><main id="main-content"><!-- Hero Section -->
 <section class="hero">
 <div class="hero-bg"></div>
 <div class="hero-grid"></div>
 <div class="hero-gallery-backdrop" id="heroGalleryBackdrop" aria-hidden="true"></div>
+<!-- Hand-drawn doodle decorations -->
+<div class="hero-doodles" aria-hidden="true">
+    <svg class="doodle doodle-star" viewBox="0 0 24 24" fill="none" style="top:13%;right:11%;width:26px" xmlns="http://www.w3.org/2000/svg"><path d="M12 2L13.6 8.6L20 10L13.6 11.4L12 18L10.4 11.4L4 10L10.4 8.6Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/></svg>
+    <svg class="doodle doodle-star doodle-star--sm" viewBox="0 0 24 24" fill="none" style="bottom:30%;left:5%;width:16px" xmlns="http://www.w3.org/2000/svg"><path d="M12 2L13.6 8.6L20 10L13.6 11.4L12 18L10.4 11.4L4 10L10.4 8.6Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/></svg>
+    <svg class="doodle doodle-cross" viewBox="0 0 20 20" fill="none" style="top:65%;right:18%;width:18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 2.5 L10 17.5 M2.5 10 L17.5 10" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+    <svg class="doodle doodle-squiggle" viewBox="0 0 80 16" fill="none" style="bottom:16%;right:7%;width:68px" xmlns="http://www.w3.org/2000/svg"><path d="M2 8C10 3 18 13 26 8C34 3 42 13 50 8C58 3 66 13 74 8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" fill="none"/></svg>
+    <svg class="doodle doodle-dots" viewBox="0 0 44 10" fill="none" style="top:80%;left:10%;width:52px" xmlns="http://www.w3.org/2000/svg"><circle cx="5" cy="5" r="2.2" fill="currentColor" opacity="0.8"/><circle cx="22" cy="5" r="2.2" fill="currentColor" opacity="0.55"/><circle cx="39" cy="5" r="2.2" fill="currentColor" opacity="0.3"/></svg>
+</div>
 <div class="hero-container"><!-- Content -->
 <div class="hero-content">
 <div class="hero-badge">
 <div class="status-indicator"></div>
-<span>Season 3 is Live!</span></div>
+<span>Season 3 - LIVE NOW</span></div>
 <h1><span class="text-reveal">Welcome to</span><br /><span class="gradient-text" data-text="TSNSMP">TSNSMP</span></h1>
-<p class="fade-in-up delay-1">Join our fun and friendly survival multiplayer server! Build and explore in our inclusive community! Share creative ideas while making friends!</p>
+<div class="hero-underline" aria-hidden="true"><svg viewBox="0 0 280 12" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none"><path d="M2 9C28 4 56 12 84 7C112 3 140 12 168 7C196 3 224 12 252 7C265 5 274 8 278 7" stroke="url(#heroUGrad)" stroke-width="2.5" stroke-linecap="round" fill="none"/><defs><linearGradient id="heroUGrad" x1="0" x2="1" y1="0" y2="0"><stop offset="0%" stop-color="#7D83C2"/><stop offset="50%" stop-color="#49B7C6"/><stop offset="100%" stop-color="#67BB7A"/></linearGradient></defs></svg></div>
+<p class="fade-in-up delay-1">Join our cozy survival SMP — build, explore, and make friends with a welcoming (but slightly unhinged) community. If you feel you would fit in! MAKE SURE TO APPLY!
+</p>
 <div class="hero-server-stats fade-in-up delay-1">
-<span>⚔️ Survival SMP</span><span class="stat-dot">◆</span><span>🌍 Season 3 Active</span><span class="stat-dot">◆</span><span>🔒 Whitelist Only</span>
+<span>⚔️ 1.21.11 Server </span><span class="stat-dot">◆</span><span>🌍 Season 3 Live</span><span class="stat-dot">◆</span><span>🔒 Kept And Private Community</span>
 </div>
+<div class="hero-note fade-in-up delay-1">Keep in mind, the server is kept private to ensure a safe and enjoyable experience for all members. The mods on the server are not required on your side but can definetly improve the experience. check for all the mods we have in the resources tab!</div>
 <div class="hero-member-badge fade-in-up delay-1" id="heroMemberBadge" style="display:none" aria-live="polite">
 <span class="member-badge-dot"></span>
 <span class="member-badge-text" id="heroMemberCount">0 Members</span>
 </div>
 <div class="hero-actions fade-in-up delay-2">
     <div class="hero-primary-ctas">
-        <a href="#application-section" class="btn-glow pulse-btn"> <span>🎮 Join Server</span> </a>
-        <a href="about/" class="btn-outline"> 📖 Learn More </a>
+        <a href="#application-section" class="btn-glow pulse-btn"> <span>🎫 Apply Now</span> </a>
+        <a href="about/" class="btn-outline"> 👋 Meet TSNSMP </a>
     </div>
     <div class="hero-social-icons" role="group" aria-label="TSNSMP community links">
         <a href="https://bsky.app/profile/tsnsmp.online" target="_blank" class="btn-icon" rel="noopener" aria-label="Follow TSNSMP on Bluesky" title="Follow TSNSMP on Bluesky"><img src="assets/icons/bluesky.svg" alt="Bluesky" class="btn-icon-img"></a>
     </div>
 </div>
-<div class="hero-server-status fade-in-up delay-3" aria-live="polite">
-    <div class="server-status-pill" id="serverStatusPill" aria-label="Minecraft server status">
-        <span class="status-dot"></span>
-        <span id="serverStatusText">play.tsnsmp.online</span>
-    </div>
-</div>
+
 </div>
 
-<!-- Hero halo: 3D ring of member skins -->
+<!-- Polaroid scatter board of member skins -->
 <div class="hero-halo-wrap" id="heroHaloWrap" aria-hidden="true">
-    <div class="halo-glow"></div>
-    <div class="halo-particles" id="haloParticles"></div>
-    <div class="halo-orbit-ring"></div>
-    <div class="halo-orbit-ring halo-orbit-ring--inner"></div>
+    <p class="polaroid-hint" aria-hidden="false">Here's some of our amazing members — if they have a <span class="hint-live-dot"></span> glowing red dot, they're live on Twitch!</p>
     <div class="skin-halo" id="skinHalo"></div>
 </div>
 
@@ -151,14 +170,14 @@
 <div class="events-wrapper">
     <div class="events-header">
         <h2>What's Happening <span class="emoji">📅</span></h2>
-        <p class="events-subtitle">Keep up with what’s going on in the SMP</p>
+        <p class="events-subtitle">Keep up with what's going on in the SMP</p>
     </div>
     <div class="events-timeline" id="eventsTimeline"></div>
 </div>
 </div>
 </section>
 
-<!-- Carousel Section — pulls from Firebase Gallery -->
+<!-- Carousel Section - pulls from Firebase Gallery -->
 <section class="player-showcase reveal">
 <div class="container">
 <h2>Check out some awesome builds! <span class="emoji">🏗️</span></h2>
@@ -177,39 +196,55 @@
 </div>
 
 <section class="features reveal">
+<div class="section-doodles" aria-hidden="true">
+    <svg class="sec-doodle sec-doodle--spiral" viewBox="0 0 40 40" fill="none" style="top:8%;left:2%" xmlns="http://www.w3.org/2000/svg"><path d="M20 20C20 20 24 16 26 20C28 24 24 28 20 28C14 28 10 22 12 16C14 10 22 8 28 12" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" fill="none"/></svg>
+    <svg class="sec-doodle sec-doodle--arrow" viewBox="0 0 36 24" fill="none" style="bottom:12%;right:3%" xmlns="http://www.w3.org/2000/svg"><path d="M2 12C8 8 16 6 24 8M24 8L19 4M24 8L20 13" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <svg class="sec-doodle sec-doodle--star" viewBox="0 0 24 24" fill="none" style="top:20%;right:6%" xmlns="http://www.w3.org/2000/svg"><path d="M12 2L13.6 8.6L20 10L13.6 11.4L12 18L10.4 11.4L4 10L10.4 8.6Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>
+    <svg class="sec-doodle sec-doodle--underline" viewBox="0 0 90 12" fill="none" style="bottom:18%;left:4%" xmlns="http://www.w3.org/2000/svg"><path d="M2 8C18 3 36 12 54 7C66 4 78 9 88 7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+</div>
 <div class="container">
 <h2>Why we think you'll love it here <span class="emoji">✨</span></h2>
 <div class="features-grid">
 <div class="feature-card">
 <div class="feature-icon">🫂</div>
 <h3>Tight Knit Community</h3>
-<p>Since we don’t have a huge amount of players on our server, that means getting to know each other is easier! Everyone is super inviting and are always happy to make a new friend!</p>
+<p>With a smaller player base, it's easy to actually get to know people. Everyone is friendly, welcoming, and happy to hang out.</p>
+<span class="page-fold" aria-hidden="true"></span>
 </div>
 <div class="feature-card">
 <div class="feature-icon">🛡️</div>
 <h3>Carefully Chosen Members</h3>
-<p>We vet all applicants when we receive their form to make sure they align with the values of our server! </p>
+<p>Every application is reviewed so the server stays welcoming, safe, and drama-free.</p>
+<span class="page-fold" aria-hidden="true"></span>
 </div>
 <div class="feature-card">
 <div class="feature-icon">🏗️</div>
 <h3>Fun Group Projects</h3>
 <p>From an apocalyptic city to a whimsical forest, players on our server have come together to make fantastic builds!</p>
+<span class="page-fold" aria-hidden="true"></span>
 </div>
 <div class="feature-card">
 <div class="feature-icon">💬</div>
 <h3>Always Someone To Chat With</h3>
-<p>The server always has someone on and in the voice group chats (thanks to the Simple Voice Mod) where we have fun conversations and goofy shenanigans.</p>
+<p>There's usually someone online, and voice chat is great for hangouts, laughs, and group adventures.</p>
+<span class="page-fold" aria-hidden="true"></span>
 </div>
 <div class="feature-card">
 <div class="feature-icon">🌱</div>
 <h3>New Start, Grand Adventures</h3>
-<p>Season 3 means a fresh world packed with endless adventures and new memories with friends!</p>
+<p>Season 3 brings a fresh world with new goals, new builds, and plenty of chances to make memories together.</p>
+<span class="page-fold" aria-hidden="true"></span>
 </div>
 </div>
 </div>
 </section>
 
 <section class="customization-showcase reveal">
+<div class="section-doodles" aria-hidden="true">
+    <svg class="sec-doodle sec-doodle--cross" viewBox="0 0 20 20" fill="none" style="top:10%;left:3%" xmlns="http://www.w3.org/2000/svg"><path d="M10 2.5L10 17.5M2.5 10L17.5 10" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+    <svg class="sec-doodle sec-doodle--sparkle" viewBox="0 0 32 32" fill="none" style="top:15%;right:4%" xmlns="http://www.w3.org/2000/svg"><path d="M16 4V8M16 24V28M4 16H8M24 16H28M7.8 7.8L10.6 10.6M21.4 21.4L24.2 24.2M7.8 24.2L10.6 21.4M21.4 10.6L24.2 7.8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+    <svg class="sec-doodle sec-doodle--squiggle" viewBox="0 0 80 16" fill="none" style="bottom:14%;right:5%" xmlns="http://www.w3.org/2000/svg"><path d="M2 8C10 3 18 13 26 8C34 3 42 13 50 8C58 3 66 13 74 8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+</div>
 <div class="container">
 <h2>Make yourself at home with customization! <span class="emoji">🎨</span></h2>
 <div class="customization-grid">
@@ -218,20 +253,23 @@
 <h3>Your color, your vibe</h3>
 <p>Seriously, pick ANY color! Hot pink? Neon green? That one specific blue that reminds you of your favorite hoodie? We've got you covered!</p>
 <div class="color-examples"><span style="color: #ff6200; font-weight: bold; text-shadow: 0 0 8px currentColor;">FantaC4t</span> <span style="color: #af2323; font-weight: bold; text-shadow: 0 0 8px currentColor;">Gaqy</span> <span style="color: #2cb7b9; font-weight: bold; text-shadow: 0 0 8px currentColor;">Cyan_caelum</span></div>
+<span class="page-fold" aria-hidden="true"></span>
 </div>
 <div class="custom-feature">
 <div class="feature-icon">💝</div>
 <h3>Pronouns with style</h3>
-<p>Show your pronouns however feels right - we've got cool styling options and everyone here is respectful about using them correctly!</p>
+<p>Share your pronouns your way — we keep the space respectful and welcoming for everyone.</p>
 <div class="pronoun-examples"><span class="pronoun-badge">they/them</span> <span class="pronoun-badge">she/her</span> <span class="pronoun-badge">he/him</span> <span class="pronoun-badge">she/they</span> <span class="pronoun-badge">any/all</span></div>
+<span class="page-fold" aria-hidden="true"></span>
 </div>
 <div class="custom-feature">
 <div class="feature-icon">📹</div>
 <h3>Streaming made easy</h3>
-<p>Going live? Hit that toggle and let everyone know! We love supporting our content creators. 🎬</p>
+<p>If you stream, we help your content stand out — share your channel and the community can tune in.</p>
 <div class="toggle-examples">
 <div class="status-example online"><span class="status-indicator"></span> <span>🔴 Streaming now!</span></div>
 </div>
+<span class="page-fold" aria-hidden="true"></span>
 </div>
 </div>
 </div>
@@ -243,29 +281,33 @@
 </div>
 
 <section class="application-section reveal" id="application-section">
+<div class="section-doodles" aria-hidden="true">
+    <svg class="sec-doodle sec-doodle--heart" viewBox="0 0 28 26" fill="none" style="top:6%;left:3%" xmlns="http://www.w3.org/2000/svg"><path d="M14 23C14 23 3 16 3 9C3 6 5.5 4 8.5 4C11 4 13 5.5 14 7C15 5.5 17 4 19.5 4C22.5 4 25 6 25 9C25 16 14 23 14 23Z" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <svg class="sec-doodle sec-doodle--arrow" viewBox="0 0 36 24" fill="none" style="top:30%;right:3%" xmlns="http://www.w3.org/2000/svg"><path d="M2 12C8 8 16 6 24 8M24 8L19 4M24 8L20 13" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <svg class="sec-doodle sec-doodle--dots" viewBox="0 0 44 10" fill="none" style="bottom:10%;left:2%" xmlns="http://www.w3.org/2000/svg"><circle cx="5" cy="5" r="2.2" fill="currentColor" opacity="0.9"/><circle cx="22" cy="5" r="2.2" fill="currentColor" opacity="0.6"/><circle cx="39" cy="5" r="2.2" fill="currentColor" opacity="0.3"/></svg>
+    <svg class="sec-doodle sec-doodle--star" viewBox="0 0 24 24" fill="none" style="bottom:20%;right:5%" xmlns="http://www.w3.org/2000/svg"><path d="M12 2L13.6 8.6L20 10L13.6 11.4L12 18L10.4 11.4L4 10L10.4 8.6Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>
+</div>
 <div class="container">
 <div class="application-content">
 <h2>Join us for Season 3! <span class="emoji">🌸</span></h2>
-<p class="app-subtitle">Whether you're a returning player from a previous season or a new face, we'd love to have you! We're looking for cool people who love Minecraft and want to have fun.</p>
-
-
+<p class="app-subtitle">Whether you're a returning player or new here, we'd love to meet you. Apply if you want to build, explore, play with amazing and wonderful people.</p>
 
 <div class="app-layout">
     <!-- Left column: info -->
     <div class="app-info-col">
         <div class="application-requirements">
-            <h3>What we're hoping you bring:</h3>
+            <h3>What we look for in applicants:</h3>
             <ul>
-                <li>✨ Chill attitude and respect for other players</li>
-                <li>🏗️ Love for building and collaborating (any skill level!)</li>
-                <li>🎮 Clean record — no griefing or drama</li>
-                <li>🌱 Age 16+ (younger players welcome if mature and/or vouched for)</li>
-                <li>🤝 Commitment to keeping things friendly for everyone</li>
+                <li>✨ A positive attitude and respect for everyone</li>
+                <li>🏗️ A willingness to build, collaborate, and help others. Skill level doesnt matter! We accept EVERYONE!</li>
+                <li>🚫 No griefing, drama, or toxic behavior, keep the server positively vibed and not toxic</li>
+                <li>🌱 Age 18+ (younger applicants welcome if mature or vouched for) we do our best to accommodate everyone and dont want to be held responsible for more minors.</li>
+                <li>🤝 Someone who wants to keep the server friendly and fun and is willing to meet new friends!</li>
             </ul>
         </div>
         <div class="app-response-note">
             <span class="app-response-icon">📬</span>
-            <p>We usually get back to applications within a day or two. If you seem like a good fit, we'll reach out to you! 😄</p>
+            <p>Our Process of application is simple and straightforward. All members get a notification on discord and discuss wether or not we want someone.</p>
         </div>
         <div class="app-quick-links">
             <a href="about/" class="app-quick-link about">
@@ -273,10 +315,11 @@
             </a>
         </div>
     </div>
+    
     <!-- Right column: form -->
     <div class="app-form-col">
         <a href="https://docs.google.com/forms/d/e/1FAIpQLScLHcGkmNqaU3GcPOlIGtfzzr_F7H3Kv_dKInJcSAkikZ7vZA/viewform" target="_blank" rel="noopener noreferrer" class="open-new-tab-btn">Open form in new tab ↗</a>
-        <div class="application-form-wrapper"><iframe src="https://docs.google.com/forms/d/e/1FAIpQLScLHcGkmNqaU3GcPOlIGtfzzr_F7H3Kv_dKInJcSAkikZ7vZA/viewform?embedded=true" frameborder="0" marginheight="0" marginwidth="0" title="TSNSMP Application Form">Loading…</iframe></div>
+        <div class="application-form-wrapper"><iframe src="https://docs.google.com/forms/d/e/1FAIpQLScLHcGkmNqaU3GcPOlIGtfzzr_F7H3Kv_dKInJcSAkikZ7vZA/viewform?embedded=true" frameborder="0" marginheight="0" marginwidth="0" title="TSNSMP Application Form">Loading...</iframe></div>
     </div>
 </div>
 
@@ -285,7 +328,7 @@
 </section>
 </main>
 
-<!-- Lightbox — must be outside <main> to avoid stacking context issues -->
+<!-- Lightbox - must be outside <main> to avoid stacking context issues -->
 <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-labelledby="lightbox-title" aria-hidden="true">
     <button class="lightbox-close" id="lightbox-close-btn" aria-label="Close image viewer">✕</button>
     <button class="lightbox-nav lightbox-prev" id="lightbox-prev-btn" aria-label="Previous image">&#8592;</button>
@@ -309,37 +352,9 @@
         createHeader('home');
         createFooter('home');
 
-        /* ── Server status ── */
-        (async function fetchServerStatus() {
-            const CACHE_KEY = 'tsnsmp_srv_status';
-            const TTL = 3 * 60 * 1000;
-            const pill = document.getElementById('serverStatusPill');
-            const text = document.getElementById('serverStatusText');
-            if (!pill) return;
-            function applyStatus(d) {
-                if (d.online) {
-                    pill.classList.add('online');
-                    const n = d.players?.online ?? 0, m = d.players?.max ?? 20;
-                    text.textContent = `${n} / ${m} Online`;
-                } else {
-                    pill.classList.add('offline');
-                    text.textContent = 'Server Offline';
-                }
-            }
-            try {
-                const cached = sessionStorage.getItem(CACHE_KEY);
-                if (cached) {
-                    const { data, ts } = JSON.parse(cached);
-                    if (Date.now() - ts < TTL) { applyStatus(data); return; }
-                }
-                const res  = await fetch('https://api.mcsrvstat.us/3/play.tsnsmp.online');
-                const data = await res.json();
-                sessionStorage.setItem(CACHE_KEY, JSON.stringify({ data, ts: Date.now() }));
-                applyStatus(data);
-            } catch { text.textContent = 'play.tsnsmp.online'; }
-        })();
 
-        /* ── Gallery-powered carousel + lightbox ── */
+
+        /* -- Gallery-powered carousel + lightbox -- */
         let galleryItems = [];
         let lightboxIndex = 0;
         let _lbOpenTime = 0; // guard against mobile ghost clicks
@@ -383,7 +398,7 @@
             openLightbox((lightboxIndex + dir + galleryItems.length) % galleryItems.length);
         }
 
-        // Lightbox event listeners (no inline onclick — avoids ghost-click issues)
+        // Lightbox event listeners (no inline onclick - avoids ghost-click issues)
         document.getElementById('lightbox').addEventListener('click', function(e) {
             if (e.target === this) closeLightbox();
         });
@@ -405,7 +420,7 @@
             if (e.key === 'ArrowRight') shiftLightbox(1);
         });
 
-        // ── Swipe navigation for mobile lightbox ──
+        // -- Swipe navigation for mobile lightbox --
         (function() {
             var lb = document.getElementById('lightbox');
             var touchStartX = 0, touchStartY = 0;
@@ -441,7 +456,7 @@
             function renderTrack(items) {
                 galleryItems = items;
                 if (!items.length) { track.closest('.player-showcase').style.display = 'none'; return; }
-                /* Build items × 2 for seamless loop — use data-index instead of onclick
+                /* Build items - 2 for seamless loop - use data-index instead of onclick
                    because the CSS scroll animation moves elements between mousedown/up,
                    preventing click events from firing reliably */
                 const html = items.map((item, i) => `
@@ -559,7 +574,7 @@
             }
         })();
 
-        // Season 3 events timeline  — reads from Firebase
+        // Season 3 events timeline - reads from Firebase
         (function buildEventsTimeline() {
             const container = document.getElementById('eventsTimeline');
             if (!container) return;
@@ -605,7 +620,7 @@
                         const dEnd = new Date(ev.endDate + 'T00:00:00');
                         const endMonth = dEnd.toLocaleString('en-GB', { month: 'short' });
                         const endDay = dEnd.getDate();
-                        endBadge = `<span class="event-date-sep">–</span>
+                        endBadge = `<span class="event-date-sep">→</span>
                             <div class="event-date-badge event-date-end">
                                 <span class="event-month">${endMonth}</span>
                                 <span class="event-day">${endDay}</span>
@@ -630,28 +645,23 @@
 
                     let timeChangeBadge = '';
                     if (ev.timeChange === 'extended') {
-                        timeChangeBadge = '<span class="event-time-change event-extended">⏳ Extended</span>';
+                        timeChangeBadge = '<span class="event-time-change event-extended">⏰ Extended</span>';
                     } else if (ev.timeChange === 'shortened') {
-                        timeChangeBadge = '<span class="event-time-change event-shortened">⏩ Shortened</span>';
+                        timeChangeBadge = '<span class="event-time-change event-shortened">⏱️ Shortened</span>';
                     }
 
                     return `
                     <div class="event-card ${ev.status}${isNext ? ' event-next' : ''}" style="--delay:${i * .08}s">
-                        <div class="event-date-range">
-                            <div class="event-date-badge">
-                                <span class="event-month">${monthShort}</span>
-                                <span class="event-day">${day}</span>
-                            </div>
-                            ${endBadge}
+                        <div class="event-date-badge">
+                            <span class="event-month">${monthShort}</span>
+                            <span class="event-day">${day}</span>
+                            ${ev.endDate && ev.endDate !== ev.date ? (() => { const dEnd = new Date(ev.endDate + 'T00:00:00'); return `<span class="event-date-sep">&rarr;</span><span class="event-month">${dEnd.toLocaleString('en-GB',{month:'short'})}</span><span class="event-day">${dEnd.getDate()}</span>`; })() : ''}
                         </div>
-                        <div class="event-line"><span class="event-dot"></span></div>
-                        <div class="event-body">
-                            <strong class="event-label">${ev.label}</strong>
-                            ${timeChangeBadge}
-                            <span class="event-desc">${desc}</span>
-                            ${countdownHtml}
-                            ${ev.status === 'past' ? '<span class="event-status-done">✓ Done</span>' : ''}
-                        </div>
+                        <strong class="event-label">${ev.label}</strong>
+                        ${timeChangeBadge}
+                        <span class="event-desc">${desc}</span>
+                        ${countdownHtml}
+                        ${ev.status === 'past' ? '<span class="event-status-done">✅ Done</span>' : ''}
                     </div>`;
                 }).join('');
             }).catch(() => {
@@ -666,23 +676,7 @@
 
 
 
-        /* ── Halo particles ── */
-        (function spawnParticles() {
-            const box = document.getElementById('haloParticles');
-            if (!box) return;
-            for (let i = 0; i < 10; i++) {
-                const dot = document.createElement('span');
-                dot.className = 'halo-dot';
-                dot.style.setProperty('--angle', Math.random() * 360 + 'deg');
-                dot.style.setProperty('--radius', (38 + Math.random() * 62) + '%');
-                dot.style.setProperty('--duration', (4 + Math.random() * 6) + 's');
-                dot.style.setProperty('--delay', (Math.random() * -8) + 's');
-                dot.style.setProperty('--size', (2 + Math.random() * 3) + 'px');
-                box.appendChild(dot);
-            }
-        })();
-
-        /* ── Twitch live-stream detection ── */
+        /* -- Twitch live-stream detection -- */
         function extractTwitchUsername(url) {
             return url.trim().split('/').filter(Boolean).pop();
         }
@@ -847,7 +841,7 @@
             showStream(0);
         }
 
-        /* ── Skin Halo Ring (shown when no streams are live) ── */
+        /* -- Polaroid scatter board (shown when no streams are live) -- */
         function buildSkinRing(ring, allMembers) {
             if (!ring) return;
             if (!Array.isArray(allMembers) || allMembers.length === 0) {
@@ -855,21 +849,99 @@
                 return;
             }
 
-            const RING_SIZE = Math.min(8, allMembers.length);
+            const MAX_SHOWN = Math.min(12, allMembers.length);
             const shuffled  = [...allMembers].sort(() => Math.random() - 0.5);
-            const active    = shuffled.slice(0, RING_SIZE);
-            const reserve   = shuffled.slice(RING_SIZE);
+            const active    = shuffled.slice(0, MAX_SHOWN);
+            const reserve   = shuffled.slice(MAX_SHOWN);
 
             ring.innerHTML = '';
             const faces    = [];
             const faceData = [];
 
+            /* -- Shared hover info popup -- */
+            let ppEl = document.getElementById('polaroidPopup');
+            if (!ppEl) {
+                ppEl = document.createElement('div');
+                ppEl.id = 'polaroidPopup';
+                ppEl.className = 'polaroid-popup';
+                document.body.appendChild(ppEl);
+                ppEl.addEventListener('mouseenter', () => clearTimeout(ppHideTimer));
+                ppEl.addEventListener('mouseleave', () => ppEl.classList.remove('is-visible'));
+            }
+            let ppHideTimer;
+
+            function esc(s) {
+                return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+            }
+
+            function showPopup(face, m) {
+                if (!m) return;
+                clearTimeout(ppHideTimer);
+                let html = '<div class="pp-name">' + esc(m.name || m.username || '') + '</div>';
+                if (m.pronouns) html += '<div class="pp-pronouns">' + esc(m.pronouns) + '</div>';
+                if (m.isLive && m.twitchUsername) {
+                    const thumb = 'https://static-cdn.jtvnw.net/previews-ttv/live_user_' + m.twitchUsername.toLowerCase() + '-440x248.jpg';
+                    html += '<div class="pp-thumb-wrap"><img class="pp-thumb" src="' + thumb + '" alt="Live preview" loading="lazy"></div>';
+                }
+                if (m.twitch) {
+                    const cls = m.isLive ? ' is-live' : '';
+                    const lbl = m.isLive ? 'Live: Watch Now' : 'Twitch Channel';
+                    html += '<a class="pp-twitch' + cls + '" href="' + esc(m.twitch) + '" target="_blank" rel="noopener noreferrer">' + lbl + '</a>';
+                }
+                if (!m.pronouns && !m.twitch) {
+                    html += '<div class="pp-pronouns" style="opacity:0.6">No extra info</div>';
+                }
+                ppEl.innerHTML = html;
+                const r = face.getBoundingClientRect();
+                const isMobile = window.innerWidth < 600;
+                if (isMobile) {
+                    /* Position directly above the card */
+                    const pw = Math.min(220, window.innerWidth - 16);
+                    let lx = r.left + r.width / 2 - pw / 2;
+                    lx = Math.max(8, Math.min(lx, window.innerWidth - pw - 8));
+                    ppEl.style.width = pw + 'px';
+                    ppEl.style.left = lx + 'px';
+                    ppEl.style.top  = (r.top + window.scrollY) + 'px';
+                    ppEl.style.transform = 'translateY(calc(-100% - 8px))';
+                } else {
+                    const gap = 10, pw = 200;
+                    ppEl.style.width = '';
+                    ppEl.style.transform = '';
+                    let lx = r.right + gap;
+                    let ty = r.top + r.height / 2 - 80;
+                    if (lx + pw > window.innerWidth - 8) lx = r.left - pw - gap;
+                    ty = Math.max(8, Math.min(ty, window.innerHeight - 280));
+                    ppEl.style.left = lx + 'px';
+                    ppEl.style.top  = ty + 'px';
+                }
+                ppEl.classList.add('is-visible');
+            }
+
+            function hidePopup() {
+                ppHideTimer = setTimeout(() => ppEl.classList.remove('is-visible'), 100);
+            }
+
+            /* Click outside any face → dismiss popup */
+            document.addEventListener('click', function(e) {
+                if (ppEl.classList.contains('is-visible') && !e.target.closest('.skin-halo-face') && !e.target.closest('#polaroidPopup')) {
+                    ppEl.classList.remove('is-visible');
+                    ppEl._anchor = null;
+                }
+            });
+
+            /* Scroll → dismiss popup (require real movement to avoid iOS micro-scroll on tap) */
+            let _ppScrollY = window.scrollY;
+            window.addEventListener('scroll', function() {
+                if (Math.abs(window.scrollY - _ppScrollY) > 10 && ppEl.classList.contains('is-visible')) {
+                    ppEl.classList.remove('is-visible');
+                    ppEl._anchor = null;
+                }
+                _ppScrollY = window.scrollY;
+            }, { passive: true });
+
             active.forEach((member, i) => {
                 const face = document.createElement('div');
                 face.className = 'skin-halo-face';
-                face.style.setProperty('--index', i);
-                face.style.setProperty('--total', RING_SIZE);
-                face.style.setProperty('--depth', '0');
 
                 const inner = document.createElement('div');
                 inner.className = 'skin-halo-face-inner';
@@ -882,80 +954,122 @@
                 const label = document.createElement('span');
                 label.textContent = member.name || member.username || 'New Member';
 
+                /* static glint streak */
+                const glint = document.createElement('div');
+                glint.className = 'polaroid-glint';
+
+                /* live dot badge if streaming */
+                if (member.isLive) {
+                    const liveDot = document.createElement('span');
+                    liveDot.className = 'polaroid-live-dot';
+                    inner.appendChild(liveDot);
+                }
+
                 inner.appendChild(img);
                 inner.appendChild(label);
+                inner.appendChild(glint);
                 face.appendChild(inner);
+
+                /* pin live members so they are never rotated out */
+                if (member.isLive) {
+                    face.classList.add('is-pinned');
+                    face.dataset.pinned = 'true';
+                }
+
+                face._member = member;
+                face.addEventListener('mouseenter', () => showPopup(face, face._member));
+                face.addEventListener('mouseleave', hidePopup);
+                /* Click/tap: live members on mobile open stream directly; otherwise toggle popup */
+                face.addEventListener('click', function() {
+                    const m = face._member;
+                    if (window.innerWidth < 600 && m && m.isLive && m.twitch) {
+                        window.open(m.twitch, '_blank', 'noopener,noreferrer');
+                        return;
+                    }
+                    if (ppEl.classList.contains('is-visible') && ppEl._anchor === face) {
+                        ppEl.classList.remove('is-visible');
+                        ppEl._anchor = null;
+                    } else {
+                        ppEl._anchor = face;
+                        showPopup(face, face._member);
+                    }
+                });
+
                 ring.appendChild(face);
                 faces.push(face);
                 faceData.push(member);
             });
 
-            const total = RING_SIZE;
+            if (reserve.length === 0) return;
 
-            const applyDepths = (frontIdx) => {
-                faces.forEach((face, i) => {
-                    const distFwd = (i - frontIdx + total) % total;
-                    let depth;
-                    if      (distFwd === 0) depth = 0;
-                    else if (distFwd === 1) depth = 0.18;
-                    else if (distFwd === 2) depth = 0.36;
-                    else if (distFwd <= Math.floor(total / 2)) {
-                        depth = 0.50 + ((distFwd - 3) / Math.max(1, Math.floor(total / 2) - 3)) * 0.35;
-                    } else {
-                        depth = 1;
-                    }
-                    depth = Math.min(1, depth);
-                    face.style.setProperty('--depth', depth.toFixed(3));
-                    if (distFwd === 0) face.setAttribute('data-front', '');
-                    else               face.removeAttribute('data-front');
-                });
-            };
+            const EXIT_DIRS = ['left', 'right', 'up'];
+            const ENTER_OPP = { left: 'right', right: 'left', up: 'down' };
+            let swapping = false;
 
-            const swapHiddenFace = (slotIdx) => {
-                if (reserve.length === 0) return;
-                const rIdx = Math.floor(Math.random() * reserve.length);
+            function swapFace(slotIdx) {
+                const rIdx      = Math.floor(Math.random() * reserve.length);
                 const newMember = reserve.splice(rIdx, 1)[0];
                 reserve.push(faceData[slotIdx]);
                 faceData[slotIdx] = newMember;
 
-                const face  = faces[slotIdx];
-                const img   = face.querySelector('img');
-                const label = face.querySelector('span');
-                const safeName = encodeURIComponent(newMember.name || newMember.username || 'Player');
-                if (img) {
-                    img.src = `https://mc-heads.net/avatar/${safeName}/128`;
-                    img.alt = `${newMember.name || newMember.username || 'TSNSMP member'}'s skin`;
-                }
-                if (label) label.textContent = newMember.name || newMember.username || 'New Member';
-            };
+                const face     = faces[slotIdx];
+                const inner    = face.querySelector('.skin-halo-face-inner');
+                const exitDir  = EXIT_DIRS[Math.floor(Math.random() * EXIT_DIRS.length)];
+                const enterDir = ENTER_OPP[exitDir];
 
-            let step = 0;
-            ring.style.transition = 'none';
-            ring.style.transform  = 'rotateX(5deg) rotateY(0deg)';
-            requestAnimationFrame(() => requestAnimationFrame(() => applyDepths(0)));
+                inner.classList.add(`polaroid-exit-${exitDir}`);
+
+                setTimeout(() => {
+                    /* update content while card is off-screen */
+                    const img     = face.querySelector('img');
+                    const label   = face.querySelector('.skin-halo-face-inner > span');
+                    const safeName = encodeURIComponent(newMember.name || newMember.username || 'Player');
+                    if (img) {
+                        img.src = `https://mc-heads.net/avatar/${safeName}/128`;
+                        img.alt = `${newMember.name || newMember.username || 'TSNSMP member'}'s skin`;
+                    }
+                    if (label)   label.textContent = newMember.name || newMember.username || 'New Member';
+                    face._member = newMember;
+                    /* sync live dot */
+                    const liveDot = inner.querySelector('.polaroid-live-dot');
+                    if (newMember.isLive && !liveDot) {
+                        const dot = document.createElement('span');
+                        dot.className = 'polaroid-live-dot';
+                        inner.appendChild(dot);
+                    } else if (!newMember.isLive && liveDot) {
+                        liveDot.remove();
+                    }
+
+                    inner.classList.remove(`polaroid-exit-${exitDir}`);
+                    inner.classList.add(`polaroid-enter-${enterDir}`);
+
+                    setTimeout(() => {
+                        inner.classList.remove(`polaroid-enter-${enterDir}`);
+                        swapping = false;
+                    }, 500);
+                }, 400);
+            }
 
             setInterval(() => {
-                const nextStep  = step + 1;
-                const nextFront = nextStep % total;
-                const swapSlot  = (nextFront + Math.ceil(total * 0.65)) % total;
-                swapHiddenFace(swapSlot);
-                applyDepths(nextFront);
-                setTimeout(() => {
-                    step = nextStep;
-                    const angle = -(step / total) * 360;
-                    ring.style.transition = 'transform 1.1s cubic-bezier(0.4, 0, 0.2, 1)';
-                    ring.style.transform  = `rotateX(5deg) rotateY(${angle}deg)`;
-                }, 450);
-            }, 2800);
+                if (swapping) return;
+                /* only swap non-pinned (non-live) slots */
+                const available = faces.map((_, i) => i).filter(i => faces[i].dataset.pinned !== 'true');
+                if (!available.length) return;
+                swapping = true;
+                swapFace(available[Math.floor(Math.random() * available.length)]);
+            }, 3600);
         }
 
-        /* ── Hero Init: detect live streams → show cards or halo ── */
+        /* -- Hero Init: always show polaroids; pin live streamers first -- */
         (async function initHeroVisual() {
             const haloWrap   = document.getElementById('heroHaloWrap');
             const streamWrap = document.getElementById('heroStreamWrap');
             const ring       = document.getElementById('skinHalo');
 
-            /* 1. Fetch members from Firebase → fallback to JSON */
+            /* Always hide the stream embed panel - we use polaroid live badges instead */
+            if (streamWrap) streamWrap.style.display = 'none';
+
+            /* 1. Fetch members from Firebase ? fallback to JSON */
             let members = [];
             try {
                 const db   = firebase.database();
@@ -972,31 +1086,32 @@
             if (!members.length) { buildSkinRing(ring, []); return; }
 
             /* 1b. Show live member count badge */
-            const badge = document.getElementById('heroMemberBadge');
+            const badge   = document.getElementById('heroMemberBadge');
             const countEl = document.getElementById('heroMemberCount');
             if (badge && countEl) {
                 countEl.textContent = `${members.length} Members`;
                 badge.style.removeProperty('display');
             }
 
-            /* 2. Probe for live Twitch streams */
-            let liveStreams = await detectLiveStreams(members);
+            /* 2. Probe for live streams - mark each member.isLive */
+            const liveStreams = await detectLiveStreams(members);
+            const liveMap = new Map(liveStreams.map(s => [(s.name || s.username || '').toLowerCase(), s.twitchUsername || '']));
+            members.forEach(m => {
+                const key = (m.name || m.username || '').toLowerCase();
+                m.isLive = liveMap.has(key);
+                if (m.isLive) m.twitchUsername = liveMap.get(key);
+                if (!m.twitchUsername && m.twitch) m.twitchUsername = extractTwitchUsername(m.twitch);
+            });
 
-            if (liveStreams.length > 0) {
-                /* Show stream previews, hide halo */
-                if (haloWrap)   haloWrap.style.display = 'none';
-                if (streamWrap) {
-                    streamWrap.style.removeProperty('display');
-                    renderStreamCards(liveStreams);
-                }
-            } else {
-                /* No live streams — show the skin halo */
-                if (streamWrap) streamWrap.style.display = 'none';
-                buildSkinRing(ring, members);
-            }
+            /* 3. Sort: live members first, then shuffle the rest */
+            const live    = members.filter(m => m.isLive);
+            const nonLive = members.filter(m => !m.isLive).sort(() => Math.random() - 0.5);
+            const sorted  = [...live, ...nonLive];
+
+            buildSkinRing(ring, sorted);
         })();
 
-        /* ── Scroll-reveal: animate sections into view ── */
+        /* -- Scroll-reveal: animate sections into view -- */
         (function initReveal() {
             const els = document.querySelectorAll('.reveal');
             if (!els.length) return;
@@ -1011,7 +1126,7 @@
             els.forEach(function(el) { io.observe(el); });
         })();
 
-        /* ── Staggered feature card reveal ── */
+        /* -- Staggered feature card reveal -- */
         (function initStaggerCards() {
             const cards = document.querySelectorAll('.feature-card, .custom-feature');
             if (!cards.length) return;
@@ -1020,6 +1135,8 @@
                     if (e.isIntersecting) {
                         e.target.classList.add('card-visible');
                         io.unobserve(e.target);
+                        var delayMs = parseFloat(e.target.style.transitionDelay || 0) * 1000;
+                        setTimeout(function() { e.target.style.transitionDelay = '0s'; }, delayMs + 600);
                     }
                 });
             }, { threshold: 0.15, rootMargin: '0px 0px -30px 0px' });
@@ -1031,3 +1148,4 @@
     </script>
 </body>
 </html>
+

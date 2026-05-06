@@ -90,6 +90,6 @@ Built with love by the TSNSMP team ✨
 
 // Error handling for missing elements
 window.addEventListener('error', function(e) {
-    console.log('Non-critical error caught:', e.message);
+    console.error('Non-critical error caught:', e.message);
 });
 

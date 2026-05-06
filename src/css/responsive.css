@@ -58,7 +58,7 @@
         padding: 0 16px;
     }
     .hero h1 {
-        font-size: 2.4rem;
+        font-size: clamp(1.6rem, 8vw, 2.4rem);
     }
     .hero p {
         font-size: 1.05rem;

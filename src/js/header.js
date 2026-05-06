@@ -25,16 +25,16 @@ function createHeader(currentPage) {
                 <span class="hamburger"></span>
             </button>
             <ul class="nav-links">
-                <li><a href="${homePath}" class="${currentPage === 'home' ? 'active' : ''}">Home</a></li>
-                <li><a href="${aboutPath}" class="${currentPage === 'about' ? 'active' : ''}">About</a></li>
-                <li><a href="${playersPath}" class="${currentPage === 'players' ? 'active' : ''}">Players</a></li>
-                <li><a href="${galleryPath}" class="${currentPage === 'gallery' ? 'active' : ''}">Gallery</a></li>
-                <li><a href="${resourcesPath}" class="${currentPage === 'resources' ? 'active' : ''}">Resources</a></li>
+                <li><a href="${homePath}" class="${currentPage === 'home' ? 'active' : ''}" ${currentPage === 'home' ? 'aria-current="page"' : ''}>Home</a></li>
+                <li><a href="${aboutPath}" class="${currentPage === 'about' ? 'active' : ''}" ${currentPage === 'about' ? 'aria-current="page"' : ''}>About</a></li>
+                <li><a href="${playersPath}" class="${currentPage === 'players' ? 'active' : ''}" ${currentPage === 'players' ? 'aria-current="page"' : ''}>Players</a></li>
+                <li><a href="${galleryPath}" class="${currentPage === 'gallery' ? 'active' : ''}" ${currentPage === 'gallery' ? 'aria-current="page"' : ''}>Gallery</a></li>
+                <li><a href="${resourcesPath}" class="${currentPage === 'resources' ? 'active' : ''}" ${currentPage === 'resources' ? 'aria-current="page"' : ''}>Resources</a></li>
                 <li><a href="https://bsky.app/profile/tsnsmp.online" target="_blank" rel="noopener" class="nav-icon" aria-label="Follow TSNSMP on Bluesky" title="Follow TSNSMP on Bluesky"><img src="${assetsPath}icons/bluesky.svg" alt="Bluesky" class="nav-icon-img"></a></li>
-                <li><a href="${prefix}admin/" class="${currentPage === 'admin' ? 'active' : ''}" style="color: var(--s3-teal); font-weight: 700;">⚙️ Admin</a></li>
+                <li><a href="${prefix}admin/" class="nav-admin-link ${currentPage === 'admin' ? 'active' : ''}" ${currentPage === 'admin' ? 'aria-current="page"' : ''}>⚙️ Admin</a></li>
             </ul>
             <button class="theme-toggle" aria-label="Toggle dark mode">
-                <span class="theme-icon">🌙</span>
+                <span class="theme-icon" aria-hidden="true">🌙</span>
             </button>
         </nav>
     `;
@@ -57,6 +57,12 @@ function createHeader(currentPage) {
         const isOpen = navLinks.classList.toggle('open');
         toggle.classList.toggle('active');
         toggle.setAttribute('aria-expanded', String(isOpen));
+        if (isOpen) {
+            const firstLink = navLinks.querySelector('a');
+            if (firstLink) firstLink.focus();
+        } else {
+            toggle.focus();
+        }
     });
 
     // Setup theme toggle
@@ -76,6 +82,21 @@ function createHeader(currentPage) {
 
     // Initialize scroll check
     handleScroll();
+
+    // Inject chalk SVG filter for heading text
+    const chalkSvg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    chalkSvg.setAttribute('style', 'position:absolute;width:0;height:0;overflow:hidden');
+    chalkSvg.setAttribute('aria-hidden', 'true');
+    chalkSvg.innerHTML = `
+        <defs>
+            <filter id="chalkText">
+                <feTurbulence type="turbulence" baseFrequency="0.015 0.022" numOctaves="3" seed="3" result="turb">
+                    <animate attributeName="seed" values="1;5;2;8;3;7;1" dur="4s" repeatCount="indefinite"/>
+                </feTurbulence>
+                <feDisplacementMap in="SourceGraphic" in2="turb" scale="3" xChannelSelector="R" yChannelSelector="G"/>
+            </filter>
+        </defs>`;
+    document.body.appendChild(chalkSvg);
 }
 
 function handleScroll() {

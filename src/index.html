@@ -43,6 +43,8 @@
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <!-- Skin API -->
+    <link rel="preconnect" href="https://minotar.net" crossorigin>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DynaPuff:wght@400;500;600;700&family=Luckiest+Guy&family=Poppins:wght@300;400;500;600;700;800;900&display=swap">
 
     <!-- Stylesheets -->
@@ -1114,6 +1116,19 @@
             const live    = members.filter(m => m.isLive);
             const nonLive = members.filter(m => !m.isLive).sort(() => Math.random() - 0.5);
             const sorted  = [...live, ...nonLive];
+
+            /* 4. Preload the first batch of skins concurrently so they hit cache
+               before buildSkinRing touches the DOM. 3 s timeout = safety net. */
+            const MAX_PRELOAD = Math.min(12, sorted.length);
+            await Promise.race([
+                Promise.all(sorted.slice(0, MAX_PRELOAD).map(m => new Promise(resolve => {
+                    const url = `https://minotar.net/helm/${encodeURIComponent(m.name || m.username || 'Player')}/128`;
+                    const pi  = new Image();
+                    pi.onload = pi.onerror = resolve;
+                    pi.src = url;
+                }))),
+                new Promise(resolve => setTimeout(resolve, 3000))
+            ]);
 
             buildSkinRing(ring, sorted);
         })();

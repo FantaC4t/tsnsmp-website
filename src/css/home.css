@@ -126,7 +126,7 @@ body:not(.dark-mode) .hero-grid {
     align-items: flex-start;
     text-align: left;
     max-width: 680px;
-    overflow: hidden;
+    overflow: visible;
 }
 
 .hero-visual {display:none}

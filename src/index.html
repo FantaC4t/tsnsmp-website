@@ -770,7 +770,7 @@
 
                 const avatar = document.createElement('img');
                 avatar.className = 'stream-card-avatar';
-                avatar.src = `https://mc-heads.net/avatar/${encodeURIComponent(member.name)}/64`;
+                avatar.src = `https://minotar.net/helm/${encodeURIComponent(member.name)}/64`;
                 avatar.alt = member.name;
 
                 const meta = document.createElement('div');
@@ -819,7 +819,7 @@
                         tab.onclick = () => showStream(i);
 
                         const av = document.createElement('img');
-                        av.src = `https://mc-heads.net/avatar/${encodeURIComponent(member.name)}/48`;
+                        av.src = `https://minotar.net/helm/${encodeURIComponent(member.name)}/48`;
                         av.alt = member.name;
                         av.className = 'stream-tab-avatar';
 
@@ -948,7 +948,7 @@
 
                 const img = document.createElement('img');
                 const safeName = encodeURIComponent(member.name || member.username || `Player${i + 1}`);
-                img.src  = `https://mc-heads.net/avatar/${safeName}/128`;
+                img.src  = `https://minotar.net/helm/${safeName}/128`;
                 img.alt  = `${member.name || member.username || 'TSNSMP member'}'s skin`;
 
                 const label = document.createElement('span');
@@ -1021,13 +1021,9 @@
 
                 setTimeout(() => {
                     /* update content while card is off-screen */
-                    const img     = face.querySelector('img');
-                    const label   = face.querySelector('.skin-halo-face-inner > span');
+                    const img      = face.querySelector('img');
+                    const label    = face.querySelector('.skin-halo-face-inner > span');
                     const safeName = encodeURIComponent(newMember.name || newMember.username || 'Player');
-                    if (img) {
-                        img.src = `https://mc-heads.net/avatar/${safeName}/128`;
-                        img.alt = `${newMember.name || newMember.username || 'TSNSMP member'}'s skin`;
-                    }
                     if (label)   label.textContent = newMember.name || newMember.username || 'New Member';
                     face._member = newMember;
                     /* sync live dot */
@@ -1040,13 +1036,24 @@
                         liveDot.remove();
                     }
 
-                    inner.classList.remove(`polaroid-exit-${exitDir}`);
-                    inner.classList.add(`polaroid-enter-${enterDir}`);
+                    function doEnter() {
+                        inner.classList.remove(`polaroid-exit-${exitDir}`);
+                        inner.classList.add(`polaroid-enter-${enterDir}`);
+                        setTimeout(() => {
+                            inner.classList.remove(`polaroid-enter-${enterDir}`);
+                            swapping = false;
+                        }, 500);
+                    }
 
-                    setTimeout(() => {
-                        inner.classList.remove(`polaroid-enter-${enterDir}`);
-                        swapping = false;
-                    }, 500);
+                    if (img) {
+                        /* Preload the new skin; only slide in once it's ready */
+                        const preload = new Image();
+                        preload.onload  = () => { img.src = preload.src; img.alt = `${newMember.name || newMember.username || 'TSNSMP member'}'s skin`; doEnter(); };
+                        preload.onerror = () => { img.src = preload.src; doEnter(); }; /* still swap on error */
+                        preload.src = `https://minotar.net/helm/${safeName}/128`;
+                    } else {
+                        doEnter();
+                    }
                 }, 400);
             }
 

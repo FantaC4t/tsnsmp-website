@@ -84,16 +84,22 @@ function createHeader(currentPage) {
     handleScroll();
 
     // Inject chalk SVG filter for heading text (animation managed by a11y.js)
+    // Check reduce-motion preference before injecting so no wobbly frame
+    // occurs even before a11y.js runs its requestAnimationFrame cleanup.
+    const reduceMotionSaved = localStorage.getItem('reduceMotion');
+    const reduceMotionOS    = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const skipAnimate       = reduceMotionSaved !== null ? reduceMotionSaved === 'true' : reduceMotionOS;
+
     const chalkSvg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
     chalkSvg.setAttribute('style', 'position:absolute;width:0;height:0;overflow:hidden');
     chalkSvg.setAttribute('aria-hidden', 'true');
     chalkSvg.innerHTML = `
         <defs>
             <filter id="chalkText">
-                <feTurbulence type="turbulence" baseFrequency="0.015 0.022" numOctaves="3" seed="3" result="turb">
-                    <animate attributeName="seed" values="1;5;2;8;3;7;1" dur="4s" repeatCount="indefinite"/>
+                <feTurbulence type="turbulence" baseFrequency="0.015 0.022" numOctaves="3" seed="3" result="turb">${skipAnimate ? '' : `
+                    <animate attributeName="seed" values="1;5;2;8;3;7;1" dur="4s" repeatCount="indefinite"/>`}
                 </feTurbulence>
-                <feDisplacementMap in="SourceGraphic" in2="turb" scale="3" xChannelSelector="R" yChannelSelector="G"/>
+                <feDisplacementMap in="SourceGraphic" in2="turb" scale="${skipAnimate ? '0' : '3'}" xChannelSelector="R" yChannelSelector="G"/>
             </filter>
         </defs>`;
     document.body.appendChild(chalkSvg);

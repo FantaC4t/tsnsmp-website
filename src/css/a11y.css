@@ -243,8 +243,9 @@ body:not(.dark-mode) .a11y-panel-title   { color: #2f2d2a; }
 body:not(.dark-mode) .a11y-row-label     { color: #6c757d; }
 body:not(.dark-mode) .a11y-close         { color: #6c757d; }
 body:not(.dark-mode) .a11y-close:hover   { background: rgba(0, 0, 0, 0.05); color: #2f2d2a; }
-body:not(.dark-mode) .a11y-size-btn      { background: rgba(0,0,0,0.04); border-color: #dee2e6; color: #6c757d; }
-body:not(.dark-mode) .a11y-size-btn:hover { background: rgba(22,196,196,0.1); }
+body:not(.dark-mode) .a11y-size-btn                    { background: rgba(0,0,0,0.04); border-color: #dee2e6; color: #6c757d; }
+body:not(.dark-mode) .a11y-size-btn:hover               { background: rgba(22,196,196,0.1); }
+body:not(.dark-mode) .a11y-size-btn[aria-pressed="true"] { background: var(--s3-teal, #49B7C6); border-color: var(--s3-teal, #49B7C6); color: #fff; }
 body:not(.dark-mode) .a11y-switch-track  { background: rgba(0,0,0,0.08); border-color: #dee2e6; }
 body:not(.dark-mode) .a11y-switch-thumb  { background: #9ca3af; }
 body:not(.dark-mode) .a11y-reset-btn     { background: rgba(0,0,0,0.03); border-color: #dee2e6; color: #6c757d; }
@@ -302,18 +303,20 @@ body.a11y-dyslexia * {
 }
 
 /* ── Reduce motion (JS-toggled class, mirrors prefers-reduced-motion) */
+/* Use animation:none (not just duration:0.01ms) so already-started animations
+   are fully cancelled rather than just slowed — prevents pageEnter flash */
 body.reduce-motion *,
 body.reduce-motion *::before,
 body.reduce-motion *::after {
-    animation-duration:       0.01ms !important;
-    animation-iteration-count: 1     !important;
-    transition-duration:      0.01ms !important;
+    animation:        none   !important;
+    transition-duration: 0.01ms !important;
     scroll-behavior:          auto   !important;
 }
 
 body.reduce-motion .reveal,
 body.reduce-motion .feature-card,
-body.reduce-motion .custom-feature {
+body.reduce-motion .custom-feature,
+body.reduce-motion .fade-in-up {
     opacity: 1 !important;
     transform: none !important;
 }

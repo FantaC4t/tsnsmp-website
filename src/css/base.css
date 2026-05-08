@@ -540,6 +540,7 @@ main {
     }
     .reveal { opacity: 1 !important; transform: none !important; }
     .feature-card, .custom-feature { opacity: 1 !important; transform: none !important; }
+    .fade-in-up { opacity: 1 !important; transform: none !important; }
 }
 
 /* Pause all descendant animations when a section is off-screen */

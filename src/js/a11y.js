@@ -54,10 +54,25 @@
     function applyReduceMotion(value) {
         document.body.classList.toggle('reduce-motion', value);
         localStorage.setItem(KEYS.reduceMotion, String(value));
+        applyReduceMotionSvg(value);
+    }
 
-        // Manage the chalk SVG animation element
+    // Separated so it can retry — createHeader() injects the chalk SVG in the
+    // next inline script block, after a11y.js has already run applyAll().
+    function applyReduceMotionSvg(value) {
         var turb = document.querySelector('#chalkText feTurbulence');
-        if (!turb) return;
+        if (!turb) {
+            // SVG not injected yet — retry on the next animation frame
+            if (value) {
+                requestAnimationFrame(function () { applyReduceMotionSvg(true); });
+            }
+            return;
+        }
+
+        // Set displacement scale: 0 = no squiggle at all, 3 = normal
+        var disp = document.querySelector('#chalkText feDisplacementMap');
+        if (disp) disp.setAttribute('scale', value ? '0' : '3');
+
         var anim = turb.querySelector('animate');
         if (value) {
             if (anim) anim.parentNode.removeChild(anim);
@@ -91,7 +106,7 @@
         applyTextSize(loadStr(KEYS.textSize, 'default'));
         if (loadBool(KEYS.highContrast, false))   document.body.classList.add('a11y-high-contrast');
         if (loadBool(KEYS.dyslexia,     false))   applyDyslexia(true);
-        if (loadBool(KEYS.reduceMotion, false))   document.body.classList.add('reduce-motion');
+        if (loadBool(KEYS.reduceMotion, false))   applyReduceMotion(true);
         if (loadBool(KEYS.highlightLinks, false)) document.body.classList.add('a11y-highlight-links');
     }
 

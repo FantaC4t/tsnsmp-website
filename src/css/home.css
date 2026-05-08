@@ -732,6 +732,32 @@ body:not(.dark-mode) .btn-outline {
 /* Hide on small screens — they'd overlap content */
 @media (max-width: 768px) {
     .section-doodles { display: none; }
+
+    /* ── Mobile perf: kill expensive decorative animations ────────
+       Multiple simultaneous infinite animations + blur filters cause
+       noticeable jank on mid-range phones.                          */
+
+    /* Stop floating blurred backdrop images — biggest GPU cost */
+    .hero-backdrop-img {
+        display: none;
+    }
+
+    /* Stop hero doodle animations; keep them visible but static */
+    .hero-doodles .doodle {
+        animation: none;
+        will-change: auto;
+    }
+
+    /* Stop ambient background pulse */
+    .hero-bg {
+        animation: none;
+        will-change: auto;
+    }
+
+    /* Stop member badge pulse dot (cheap but contributes) */
+    .member-badge-dot {
+        animation: none;
+    }
 }
 
 /* === SECTIONS & CONTENT STYLING === */

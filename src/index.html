@@ -45,7 +45,12 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <!-- Skin API -->
     <link rel="preconnect" href="https://minotar.net" crossorigin>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DynaPuff:wght@400;500;600;700&family=Luckiest+Guy&family=Poppins:wght@300;400;500;600;700;800;900&display=swap">
+    <!-- Firebase DB -->
+    <link rel="preconnect" href="https://tsnplayerlist-default-rtdb.europe-west1.firebasedatabase.app" crossorigin>
+    <link rel="dns-prefetch" href="https://www.gstatic.com">
+    <!-- Non-blocking Google Fonts: parsed & applied after render, no layout delay -->
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=DynaPuff:wght@400;500;600;700&family=Luckiest+Guy&family=Poppins:wght@300;400;500;600;700;800;900&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DynaPuff:wght@400;500;600;700&family=Luckiest+Guy&family=Poppins:wght@300;400;500;600;700;800;900&display=swap"></noscript>
 
     <!-- Stylesheets -->
     <link rel="stylesheet" href="css/base.css">
@@ -322,7 +327,7 @@
     <!-- Right column: form -->
     <div class="app-form-col">
         <a href="https://docs.google.com/forms/d/e/1FAIpQLScLHcGkmNqaU3GcPOlIGtfzzr_F7H3Kv_dKInJcSAkikZ7vZA/viewform" target="_blank" rel="noopener noreferrer" class="open-new-tab-btn">Open form in new tab ↗</a>
-        <div class="application-form-wrapper"><iframe src="https://docs.google.com/forms/d/e/1FAIpQLScLHcGkmNqaU3GcPOlIGtfzzr_F7H3Kv_dKInJcSAkikZ7vZA/viewform?embedded=true" frameborder="0" marginheight="0" marginwidth="0" title="TSNSMP Application Form">Loading...</iframe></div>
+        <div class="application-form-wrapper"><iframe src="https://docs.google.com/forms/d/e/1FAIpQLScLHcGkmNqaU3GcPOlIGtfzzr_F7H3Kv_dKInJcSAkikZ7vZA/viewform?embedded=true" frameborder="0" marginheight="0" marginwidth="0" loading="lazy" title="TSNSMP Application Form">Loading...</iframe></div>
     </div>
 </div>
 
@@ -449,12 +454,12 @@
 
             /* Fallback: local images if Firebase is empty/fails */
             const fallbackImages = [
-                { url: 'assets/all_builds.png', title: 'Aerial Overview', description: 'Server builds from above' },
-                { url: 'assets/gaqster.png',    title: 'Gaqy\'s Build',  description: 'Shopping mall build' },
-                { url: 'assets/blacksnow.png',  title: 'Blacksnow',      description: 'Winter-themed build' },
-                { url: 'assets/loftylena.png',  title: 'LoftyLena',      description: 'Scenic landscape build' },
-                { url: 'assets/cyan.png',       title: 'Cyan',           description: 'Colourful base build' },
-                { url: 'assets/Fantac4t.png',   title: 'FantaC4t',       description: 'Creative build' },
+                { url: 'assets/all_builds.jpg', title: 'Aerial Overview', description: 'Server builds from above' },
+                { url: 'assets/gaqster.jpg',    title: 'Gaqy\'s Build',  description: 'Shopping mall build' },
+                { url: 'assets/blacksnow.jpg',  title: 'Blacksnow',      description: 'Winter-themed build' },
+                { url: 'assets/loftylena.jpg',  title: 'LoftyLena',      description: 'Scenic landscape build' },
+                { url: 'assets/cyan.jpg',       title: 'Cyan',           description: 'Colourful base build' },
+                { url: 'assets/Fantac4t.jpg',   title: 'FantaC4t',       description: 'Creative build' },
             ];
 
             function renderTrack(items) {

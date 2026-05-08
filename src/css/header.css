@@ -308,7 +308,8 @@ body:not(.dark-mode) .nav-links .nav-icon:hover {
 
     .nav-links.open {
         /* === SHOW WHEN OPEN === */
-        max-height: 400px; /* Enough height for all links */
+        max-height: 80dvh; /* Enough for all links even at large font scales */
+        overflow-y: auto;  /* Scroll if it somehow still overflows */
         padding: 1rem; /* Add padding back only when open */
         opacity: 1;
         visibility: visible;
@@ -318,6 +319,7 @@ body:not(.dark-mode) .nav-links .nav-icon:hover {
         display: block;
         padding: 1rem;
         text-align: center;
+        font-size: clamp(0.85rem, 2.5vw + 0.5rem, 1.1rem);
     }
 
     /* === MOBILE LIGHT MODE FIXES === */

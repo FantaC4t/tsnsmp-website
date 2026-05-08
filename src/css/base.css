@@ -149,9 +149,7 @@ h1, h2, h3, h4, h5, h6,
 .btn-glow, .btn-outline,
 .article-tag, .aside-header,
 .chapter-num, .chapter-title,
-.htl-date, .htl-title,
-.gallery-filter-btn, .gallery-season-tag,
-.player-name, .skin-halo-face span:not(.polaroid-live-dot) {
+.htl-date, .htl-title {
     filter: url(#chalkText);
 }
 

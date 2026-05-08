@@ -444,8 +444,7 @@ body:not(.dark-mode) .gallery-hero .hero-grid {
     font-size: 1.1rem;
     font-weight: 700;
     cursor: pointer;
-    transition: transform .2s cubic-bezier(.34,1.56,.64,1), filter .2s;
-    filter: url(#chalkText);
+    transition: transform .2s cubic-bezier(.34,1.56,.64,1);
     transform: rotate(-1deg);
 }
 

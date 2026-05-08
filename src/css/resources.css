@@ -124,7 +124,6 @@ body:not(.dark-mode) .hero-grid {
     white-space: nowrap;
     text-decoration: none;
     transform: rotate(-1.5deg);
-    filter: url(#chalkText);
 }
 .tab-btn::before {
     content: '';
@@ -219,7 +218,6 @@ body:not(.dark-mode) .hero-grid {
     padding: 14px 16px 16px;
     display: flex; gap: 0.85rem; align-items: flex-start;
     transition: transform 0.25s cubic-bezier(.34,1.56,.64,1);
-    filter: url(#chalkText);
 }
 .rule-card::before {
     content: '';
@@ -353,7 +351,6 @@ body.dark-mode .icon-card-v2-body p  { color: #a0a09a; }
     font-size: 1.1rem; font-weight: 800; letter-spacing: 0.04em;
     color: var(--text-primary);
     margin: 0;
-    filter: url(#chalkText);
 }
 
 .mods-grid {
@@ -411,7 +408,6 @@ a.mod-link:hover { opacity: 0.65; }
 .mod-badge {
     font-size: 0.7rem; font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase;
     padding: 1px 7px; border-radius: 2px;
-    filter: url(#chalkText);
 }
 .badge--custom   { background: #bbf7d0; color: #14532d; }
 .badge--client   { background: #bfdbfe; color: #1e3a5f; }
@@ -458,7 +454,6 @@ a.mod-link:hover { opacity: 0.65; }
     text-decoration: none;
     color: #1a1400;
     transition: transform 0.25s cubic-bezier(.34,1.56,.64,1);
-    filter: url(#chalkText);
     transform: rotate(-1deg);
 }
 .download-card:nth-child(even) { transform: rotate(0.8deg); }

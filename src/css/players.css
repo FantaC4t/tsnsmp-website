@@ -150,7 +150,6 @@ body:not(.dark-mode) .hero-grid {
     padding-left: 4px;
     pointer-events: none;
     user-select: none;
-    filter: url(#chalkText);
 }
 
 .players-search input {
@@ -163,7 +162,6 @@ body:not(.dark-mode) .hero-grid {
     font-size: 1.15rem;
     font-family: var(--font-handwriting);
     transition: border-bottom-color 0.2s;
-    filter: url(#chalkText);
 }
 
 .players-search input::placeholder { color: rgba(0,0,0,0.4); }

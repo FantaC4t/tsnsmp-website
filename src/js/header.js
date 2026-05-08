@@ -83,7 +83,7 @@ function createHeader(currentPage) {
     // Initialize scroll check
     handleScroll();
 
-    // Inject chalk SVG filter for heading text
+    // Inject chalk SVG filter for heading text (animation managed by a11y.js)
     const chalkSvg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
     chalkSvg.setAttribute('style', 'position:absolute;width:0;height:0;overflow:hidden');
     chalkSvg.setAttribute('aria-hidden', 'true');

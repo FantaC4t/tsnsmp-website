@@ -5,3 +5,10 @@ Thumbs.db
 # Never commit service account credentials
 *-service-account.json
 serviceAccount*.json
+
+# wrangler files
+.wrangler
+.dev.vars*
+!.dev.vars.example
+.env*
+!.env.example

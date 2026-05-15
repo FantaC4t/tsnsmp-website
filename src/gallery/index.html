@@ -45,6 +45,28 @@
     <link rel="icon" href="../assets/SMALL%20LOGO.png" type="image/png">
     <link rel="apple-touch-icon" href="../assets/SMALL%20LOGO.png">
     <link rel="manifest" href="../site.webmanifest">
+
+    <!-- JSON-LD Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://www.tsnsmp.online/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Gallery",
+          "item": "https://www.tsnsmp.online/gallery/"
+        }
+      ]
+    }
+    </script>
 </head>
 <body class="dark-mode">
 
@@ -66,7 +88,7 @@
             <div class="container">
                 <h1><span class="gradient-text" data-text="Gallery">Gallery</span></h1>
                 <p class="gallery-hero-sub">Screenshots and highlights from the server.</p>
-                <button class="gallery-upload-btn" id="upload-trigger-btn" onclick="openUploadModal()">
+                <button type="button" class="gallery-upload-btn" id="upload-trigger-btn" onclick="openUploadModal()">
                     📸 Submit a Screenshot
                 </button>
                 <div style="margin-top:.75rem">
@@ -79,10 +101,10 @@
             <div class="container">
                 <!-- Season filter bar -->
                 <div class="gallery-filters" role="group" aria-label="Filter by season">
-                    <button class="gallery-filter-btn active" data-season="all">All</button>
-                    <button class="gallery-filter-btn" data-season="1">🌱 Season 1</button>
-                    <button class="gallery-filter-btn" data-season="2">☀️ Season 2</button>
-                    <button class="gallery-filter-btn" data-season="3">🚀 Season 3</button>
+                    <button type="button" class="gallery-filter-btn active" data-season="all">All</button>
+                    <button type="button" class="gallery-filter-btn" data-season="1">🌱 Season 1</button>
+                    <button type="button" class="gallery-filter-btn" data-season="2">☀️ Season 2</button>
+                    <button type="button" class="gallery-filter-btn" data-season="3">🚀 Season 3</button>
                 </div>
                 <div id="gallery-loading" class="gallery-status">Loading images…</div>
                 <div id="gallery-empty" class="gallery-status" style="display:none">
@@ -96,9 +118,9 @@
 
     <!-- Lightbox -->
     <div id="lightbox" class="lightbox" role="dialog" aria-modal="true" aria-labelledby="lightbox-title" aria-hidden="true">
-        <button class="lightbox-close" id="lightbox-close-btn" aria-label="Close image viewer">✕</button>
-        <button class="lightbox-nav lightbox-prev" id="lightbox-prev-btn" aria-label="Previous image">&#8592;</button>
-        <button class="lightbox-nav lightbox-next" id="lightbox-next-btn" aria-label="Next image">&#8594;</button>
+        <button type="button" class="lightbox-close" id="lightbox-close-btn" aria-label="Close image viewer">✕</button>
+        <button type="button" class="lightbox-nav lightbox-prev" id="lightbox-prev-btn" aria-label="Previous image">&#8592;</button>
+        <button type="button" class="lightbox-nav lightbox-next" id="lightbox-next-btn" aria-label="Next image">&#8594;</button>
         <div class="lightbox-inner" id="lightbox-inner">
             <img id="lightbox-img" src="" alt="">
             <div class="lightbox-caption">
@@ -111,7 +133,7 @@
     <!-- Upload Modal -->
     <div id="upload-modal" class="gupload-backdrop" onclick="handleBackdropClick(event)">
         <div class="gupload-box">
-            <button class="gupload-close" onclick="closeUploadModal()">✕</button>
+            <button type="button" class="gupload-close" onclick="closeUploadModal()">✕</button>
 
             <!-- Upload form (no auth required) -->
             <div id="gupload-step-form">
@@ -126,7 +148,7 @@
                 </div>
                 <div id="gupload-preview-wrap" style="display:none;position:relative;max-width:100%;margin:.5rem 0">
                     <img id="gupload-preview-img" src="" alt="Preview" style="width:100%;border-radius:10px;display:block;max-height:220px;object-fit:contain;background:#111">
-                    <button onclick="clearGUpload()" style="position:absolute;top:6px;right:6px;background:rgba(0,0,0,.7);border:none;color:#fff;width:26px;height:26px;border-radius:50%;cursor:pointer;font-size:.85rem">✕</button>
+                    <button type="button" onclick="clearGUpload()" style="position:absolute;top:6px;right:6px;background:rgba(0,0,0,.7);border:none;color:#fff;width:26px;height:26px;border-radius:50%;cursor:pointer;font-size:.85rem">✕</button>
                 </div>
                 <div class="gupload-fields">
                     <div class="gupload-field">
@@ -155,7 +177,7 @@
                     <div class="gupload-progress-bar" id="gupload-progress-bar"></div>
                 </div>
                 <div class="gupload-actions">
-                    <button class="gupload-btn-submit" onclick="submitGUpload()">📤 Submit for Review</button>
+                    <button type="button" class="gupload-btn-submit" onclick="submitGUpload()">📤 Submit for Review</button>
                 </div>
                 <p id="gupload-form-error" style="color:#e05555;font-size:.85rem;margin-top:.6rem;text-align:center;display:none"></p>
             </div>
@@ -165,7 +187,7 @@
                 <div style="font-size:3.5rem;margin-bottom:.75rem">✅</div>
                 <h2 style="margin-bottom:.5rem">Submitted!</h2>
                 <p style="color:var(--text-secondary);font-size:.9rem;margin-bottom:1.5rem">Your screenshot has been submitted for review.<br>A mod will approve it soon.</p>
-                <button class="gupload-btn-submit" onclick="closeUploadModal()">Done</button>
+                <button type="button" class="gupload-btn-submit" onclick="closeUploadModal()">Done</button>
             </div>
         </div>
     </div>
@@ -313,9 +335,7 @@
 
         // ── Gallery load (live — updates when mods approve submissions) ──
         function loadGallery() {
-            console.log('[Gallery] Attaching live listener to /gallery...');
             db.ref('gallery').on('value', snap => {
-                console.log('[Gallery] Snapshot received, num children:', snap.numChildren());
                 document.getElementById('gallery-loading').style.display = 'none';
                 allItems = [];
                 snap.forEach(child => {

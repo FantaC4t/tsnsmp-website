@@ -14,7 +14,7 @@ function createFooter(currentPage) {
                 <a href="${prefix}resources/" data-no-transition>Resources</a>
             </nav>
             <div class="footer-social">
-                <a href="https://bsky.app/profile/tsnsmp.online" target="_blank" rel="noopener" class="footer-icon" aria-label="Bluesky">
+                <a href="https://bsky.app/profile/tsnsmp.online" target="_blank" rel="noopener noreferrer" class="footer-icon" aria-label="Bluesky">
                     <img src="${prefix}assets/icons/bluesky.svg" alt="Bluesky">
                 </a>
             </div>

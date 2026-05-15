@@ -30,7 +30,7 @@ function createHeader(currentPage) {
                 <li><a href="${playersPath}" class="${currentPage === 'players' ? 'active' : ''}" ${currentPage === 'players' ? 'aria-current="page"' : ''}>Players</a></li>
                 <li><a href="${galleryPath}" class="${currentPage === 'gallery' ? 'active' : ''}" ${currentPage === 'gallery' ? 'aria-current="page"' : ''}>Gallery</a></li>
                 <li><a href="${resourcesPath}" class="${currentPage === 'resources' ? 'active' : ''}" ${currentPage === 'resources' ? 'aria-current="page"' : ''}>Resources</a></li>
-                <li><a href="https://bsky.app/profile/tsnsmp.online" target="_blank" rel="noopener" class="nav-icon" aria-label="Follow TSNSMP on Bluesky" title="Follow TSNSMP on Bluesky"><img src="${assetsPath}icons/bluesky.svg" alt="Bluesky" class="nav-icon-img"></a></li>
+                <li><a href="https://bsky.app/profile/tsnsmp.online" target="_blank" rel="noopener noreferrer" class="nav-icon" aria-label="Follow TSNSMP on Bluesky" title="Follow TSNSMP on Bluesky"><img src="${assetsPath}icons/bluesky.svg" alt="Bluesky" class="nav-icon-img"></a></li>
                 <li><a href="${prefix}admin/" class="nav-admin-link ${currentPage === 'admin' ? 'active' : ''}" ${currentPage === 'admin' ? 'aria-current="page"' : ''}>⚙️ Admin</a></li>
             </ul>
             <button class="theme-toggle" aria-label="Toggle dark mode">
@@ -68,10 +68,18 @@ function createHeader(currentPage) {
     // Setup theme toggle
     const themeBtn = header.querySelector('.theme-toggle');
     const themeIcon = themeBtn.querySelector('.theme-icon');
+
+    function updateThemeLabel() {
+        const isDark = document.body.classList.contains('dark-mode');
+        themeBtn.setAttribute('aria-label', isDark ? 'Switch to light mode' : 'Switch to dark mode');
+    }
+
     themeBtn.addEventListener('click', () => {
         document.body.classList.toggle('dark-mode');
-        themeIcon.textContent = document.body.classList.contains('dark-mode') ? '🌙' : '☀️';
-        localStorage.setItem('theme', document.body.classList.contains('dark-mode') ? 'dark' : 'light');
+        const isDark = document.body.classList.contains('dark-mode');
+        themeIcon.textContent = isDark ? '🌙' : '☀️';
+        localStorage.setItem('theme', isDark ? 'dark' : 'light');
+        updateThemeLabel();
     });
 
     // Load saved theme
@@ -79,6 +87,7 @@ function createHeader(currentPage) {
         document.body.classList.remove('dark-mode');
         themeIcon.textContent = '☀️';
     }
+    updateThemeLabel();
 
     // Initialize scroll check
     handleScroll();

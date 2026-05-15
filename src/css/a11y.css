@@ -5,8 +5,8 @@
 /* ── Trigger button ─────────────────────────────────────────────── */
 #a11y-widget {
     position: fixed;
-    bottom: 2rem;
-    left: 2rem;
+    bottom: max(2rem, env(safe-area-inset-bottom, 0px));
+    left: max(2rem, env(safe-area-inset-left, 0px));
     z-index: 9998;
     font-family: var(--font-body, 'DynaPuff', cursive);
     font-size: 14px;
@@ -328,4 +328,17 @@ body.a11y-highlight-links a:not([class*="btn"]):not(.nav-icon):not(.skip-link):n
     outline: 1.5px dashed currentColor;
     outline-offset: 2px;
     border-radius: 2px;
+}
+
+/* ── Mobile overrides ───────────────────────────────────────────── */
+@media (max-width: 576px) {
+    #a11y-trigger {
+        width: 52px;
+        height: 52px;
+        font-size: 12px;
+    }
+    #a11y-panel {
+        width: 260px;
+        bottom: calc(100% + 8px);
+    }
 }

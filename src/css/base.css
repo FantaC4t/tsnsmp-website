@@ -14,8 +14,8 @@ html {
     font-size: 14px;
 }
 
-/* Hand-drawn font from Google Fonts */
-@import url('https://fonts.googleapis.com/css2?family=DynaPuff:wght@400;500;600;700&family=Luckiest+Guy&display=swap');
+body.dark-mode  { color-scheme: dark; }
+body:not(.dark-mode) { color-scheme: light; }
 
 :root {
     /* ── Season 3 Brand Palette ── */

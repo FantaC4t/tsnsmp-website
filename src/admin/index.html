@@ -49,7 +49,7 @@
         <h1>🔐 TSNSMP Admin</h1>
         <p>Members management — authorised access only</p>
         <div class="login-error" id="login-error">Access denied.</div>
-        <button class="btn-google" onclick="loginWithGoogle()">
+        <button type="button" class="btn-google" onclick="loginWithGoogle()">
             <svg width="18" height="18" viewBox="0 0 48 48">
                 <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
                 <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
@@ -75,17 +75,17 @@
                     <img class="admin-user-avatar" id="admin-user-avatar" src="" alt="">
                     <span id="admin-user-name"></span>
                 </div>
-                <button class="btn btn-ghost" onclick="logout()">Log out</button>
+                <button type="button" class="btn btn-ghost" onclick="logout()">Log out</button>
             </div>
         </div>
     </div>
 
     <!-- Tab bar -->
     <div class="admin-tabs">
-        <button class="admin-tab-btn active" data-tab="players" onclick="switchTab('players')">👥 Player List</button>
-        <button class="admin-tab-btn" data-tab="gallery" onclick="switchTab('gallery')">🖼️ Gallery</button>
-        <button class="admin-tab-btn" data-tab="events" onclick="switchTab('events')">📅 Events</button>
-        <button class="admin-tab-btn" data-tab="downloads" onclick="switchTab('downloads')">📥 World Downloads</button>
+        <button type="button" class="admin-tab-btn active" data-tab="players" onclick="switchTab('players')">👥 Player List</button>
+        <button type="button" class="admin-tab-btn" data-tab="gallery" onclick="switchTab('gallery')">🖼️ Gallery</button>
+        <button type="button" class="admin-tab-btn" data-tab="events" onclick="switchTab('events')">📅 Events</button>
+        <button type="button" class="admin-tab-btn" data-tab="downloads" onclick="switchTab('downloads')">📥 World Downloads</button>
     </div>
 
     <div class="admin-body">
@@ -99,7 +99,7 @@
         <!-- Seed banner — only shown when members.json is empty -->
         <div class="seed-banner" id="seed-banner" style="display:none">
             <p>⚡ No members found. Click to load the default member list.</p>
-            <button class="btn btn-primary" onclick="seedMembers()">Load Default Members</button>
+            <button type="button" class="btn btn-primary" onclick="seedMembers()">Load Default Members</button>
         </div>
 
         <!-- Add member -->
@@ -148,7 +148,7 @@
                                 <input type="text" id="add-twitch" placeholder="https://twitch.tv/..." />
                             </div>
                         </div>
-                        <button class="btn btn-green" onclick="addMember()">➕ Add to Roster</button>
+                        <button type="button" class="btn btn-green" onclick="addMember()">➕ Add to Roster</button>
                     </div>
                 </div>
             </div>
@@ -166,10 +166,10 @@
                     <input class="member-search" id="member-search" type="text" placeholder="Search members…" oninput="filterMembers()">
                 </div>
                 <div class="role-filter-pills" id="role-filters">
-                    <button class="role-filter-pill active" data-role="all" onclick="setRoleFilter('all')">All</button>
-                    <button class="role-filter-pill" data-role="staff" onclick="setRoleFilter('staff')">Staff</button>
-                    <button class="role-filter-pill" data-role="trialstaff" onclick="setRoleFilter('trialstaff')">Trial Staff</button>
-                    <button class="role-filter-pill" data-role="member" onclick="setRoleFilter('member')">Member</button>
+                    <button type="button" class="role-filter-pill active" data-role="all" onclick="setRoleFilter('all')">All</button>
+                    <button type="button" class="role-filter-pill" data-role="staff" onclick="setRoleFilter('staff')">Staff</button>
+                    <button type="button" class="role-filter-pill" data-role="trialstaff" onclick="setRoleFilter('trialstaff')">Trial Staff</button>
+                    <button type="button" class="role-filter-pill" data-role="member" onclick="setRoleFilter('member')">Member</button>
                 </div>
             </div>
             <div class="table-scroll" id="members-container">
@@ -215,7 +215,7 @@
                 </div>
                 <div class="gallery-file-preview" id="gallery-file-preview" style="display:none">
                     <img id="gallery-preview-img" src="" alt="Preview">
-                    <button class="gallery-clear-btn" onclick="clearGalleryFile()">✕</button>
+                    <button type="button" class="gallery-clear-btn" onclick="clearGalleryFile()">✕</button>
                 </div>
                 <div class="form-grid" style="margin-top:1rem">
                     <div class="form-group">
@@ -245,7 +245,7 @@
                 <div class="gallery-progress-wrap" id="gallery-progress-wrap" style="display:none">
                     <div class="gallery-progress-bar" id="gallery-progress-bar"></div>
                 </div>
-                <button class="btn btn-primary" onclick="uploadGalleryImage()" style="margin-top:1rem">📤 Upload Image</button>
+                <button type="button" class="btn btn-primary" onclick="uploadGalleryImage()" style="margin-top:1rem">📤 Upload Image</button>
 
                 <h3 style="margin:2rem 0 .75rem;font-size:.9rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em">Existing Images</h3>
                 <div class="gallery-admin-grid" id="gallery-admin-grid">
@@ -292,7 +292,7 @@
                         </select>
                     </div>
                 </div>
-                <button class="btn btn-green" onclick="addEvent()" style="margin-top:1rem">📅 Add Event</button>
+                <button type="button" class="btn btn-green" onclick="addEvent()" style="margin-top:1rem">📅 Add Event</button>
             </div>
         </div>
 
@@ -330,7 +330,7 @@
                         <input type="url" id="dl-url" placeholder="https://drive.google.com/..." />
                     </div>
                 </div>
-                <button class="btn btn-green" onclick="addDownload()" style="margin-top:1rem">📥 Add Download</button>
+                <button type="button" class="btn btn-green" onclick="addDownload()" style="margin-top:1rem">📥 Add Download</button>
             </div>
         </div>
 
@@ -360,8 +360,8 @@
         <h3 id="confirm-title">Are you sure?</h3>
         <p id="confirm-message">This action cannot be undone.</p>
         <div class="confirm-actions">
-            <button class="btn btn-danger" id="confirm-yes">Confirm</button>
-            <button class="btn btn-ghost" onclick="closeConfirm()">Cancel</button>
+            <button type="button" class="btn btn-danger" id="confirm-yes">Confirm</button>
+            <button type="button" class="btn btn-ghost" onclick="closeConfirm()">Cancel</button>
         </div>
     </div>
 </div>
@@ -395,8 +395,8 @@
             </select>
         </div>
         <div class="gedit-actions">
-            <button class="btn btn-green" onclick="saveGalleryEdit()">💾 Save</button>
-            <button class="btn btn-ghost" onclick="closeGalleryEdit()">Cancel</button>
+            <button type="button" class="btn btn-green" onclick="saveGalleryEdit()">💾 Save</button>
+            <button type="button" class="btn btn-ghost" onclick="closeGalleryEdit()">Cancel</button>
         </div>
     </div>
 </div>
@@ -440,8 +440,8 @@
             <span class="eedit-timechange-hint">Shows a badge on the home page if the event duration was changed.</span>
         </div>
         <div class="eedit-actions">
-            <button class="btn btn-green" onclick="saveEventEdit()">💾 Save</button>
-            <button class="btn btn-ghost" onclick="closeEventEdit()">Cancel</button>
+            <button type="button" class="btn btn-green" onclick="saveEventEdit()">💾 Save</button>
+            <button type="button" class="btn btn-ghost" onclick="closeEventEdit()">Cancel</button>
         </div>
     </div>
 </div>
@@ -714,7 +714,7 @@
             const realIdx = membersCache.findIndex(c => c === m);
             const safeName = esc(m.name);
             const safePronouns = esc(m.pronouns || '—');
-            const safeTwitch = m.twitch ? `<a href="${esc(m.twitch)}" target="_blank" rel="noopener" style="color:#9146FF">${esc(m.twitch.replace('https://www.twitch.tv/',''))}</a>` : '—';
+            const safeTwitch = m.twitch ? `<a href="${esc(m.twitch)}" target="_blank" rel="noopener noreferrer" style="color:#9146FF">${esc(m.twitch.replace('https://www.twitch.tv/',''))}</a>` : '—';
             return `
             <tr id="row-${realIdx}">
                 <td>

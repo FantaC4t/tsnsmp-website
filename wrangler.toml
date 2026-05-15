@@ -1,0 +1,7 @@
+name = "tsnsmp-website"
+compatibility_date = "2025-05-15"
+main = "worker.js"
+
+[assets]
+directory = "./src"
+binding = "ASSETS"

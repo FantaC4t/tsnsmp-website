@@ -382,6 +382,7 @@
                 <div class="apply-field">
                     <label class="apply-label" for="apply-plans">What are your plans for the server? <span class="req">*</span></label>
                     <textarea class="apply-textarea" id="apply-plans" name="plans" required placeholder="Tell us what you'd like to build, do, or explore…" maxlength="2000"></textarea>
+                    <span class="apply-char-count" id="apply-plans-count" aria-live="polite">0 / 2000</span>
                 </div>
 
                 <div class="apply-field">
@@ -397,6 +398,20 @@
                 <div class="apply-field">
                     <label class="apply-label" for="apply-mob">If you were to be born as any mob from Minecraft, which mob would it be and why? <span class="req">*</span></label>
                     <textarea class="apply-textarea" id="apply-mob" name="mob" required placeholder="Any mob — be creative!" maxlength="2000"></textarea>
+                    <span class="apply-char-count" id="apply-mob-count" aria-live="polite">0 / 2000</span>
+                </div>
+
+                <div class="apply-field">
+                    <label class="apply-label">How did you find out about TSNSMP? <span class="req">*</span></label>
+                    <div class="apply-radio-group" role="radiogroup" aria-required="true">
+                        <label class="apply-radio-label"><input type="radio" name="referral" value="Friend / Word of mouth" required> 👥 Friend / Word of mouth</label>
+                        <label class="apply-radio-label"><input type="radio" name="referral" value="Bluesky"> 🦋 Bluesky</label>
+                        <label class="apply-radio-label"><input type="radio" name="referral" value="Member streaming"> 🎥 Member streaming</label>
+                        <label class="apply-radio-label"><input type="radio" name="referral" value="Modrinth"> 🟩 Modrinth</label>
+                        <label class="apply-radio-label"><input type="radio" name="referral" value="Search engine"> 🔍 Search engine</label>
+                        <label class="apply-radio-label"><input type="radio" name="referral" value="Other"> ✏️ Other…</label>
+                    </div>
+                    <input class="apply-input apply-referral-other" id="apply-referral-other" name="referral_other" type="text" placeholder="How did you find us? Tell us more…" maxlength="200" style="display:none;margin-top:10px">
                 </div>
 
                 <div class="apply-status" id="applyStatus" role="alert" aria-live="polite"></div>
@@ -1508,13 +1523,38 @@
             const status = document.getElementById('applyStatus');
             if (!form) return;
 
+            /* Show/hide "Other" text field for the referral question */
+            form.querySelectorAll('[name="referral"]').forEach(function(r) {
+                r.addEventListener('change', function() {
+                    const otherInput = document.getElementById('apply-referral-other');
+                    if (!otherInput) return;
+                    const show = r.value === 'Other';
+                    otherInput.style.display = show ? '' : 'none';
+                    otherInput.required = show;
+                    if (show) otherInput.focus();
+                });
+            });
+
+            /* Character counters for textareas */
+            form.querySelectorAll('.apply-textarea').forEach(function(ta) {
+                const counter = document.getElementById(ta.id + '-count');
+                if (!counter) return;
+                const max = parseInt(ta.getAttribute('maxlength'), 10) || 0;
+                function updateCount() {
+                    const len = ta.value.length;
+                    counter.textContent = len + ' / ' + max;
+                    counter.classList.toggle('apply-char-count--near', len >= Math.floor(max * 0.85));
+                }
+                ta.addEventListener('input', updateCount);
+            });
+
             form.addEventListener('submit', async function(e) {
                 e.preventDefault();
 
-                /* Validate required radio (browser validity doesn't cover radio groups without one checked) */
-                if (!form.querySelector('[name="creator"]:checked')) {
+                /* Validate required radio groups (browser validity doesn't cover these) */
+                if (!form.querySelector('[name="creator"]:checked') || !form.querySelector('[name="referral"]:checked')) {
                     status.className = 'apply-status error';
-                    status.textContent = '❌ Please answer all required questions (including the content creator one).';
+                    status.textContent = '❌ Please answer all required questions (including the multiple choice ones).';
                     status.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
                     return;
                 }
@@ -1524,29 +1564,34 @@
                 status.className = 'apply-status';
                 status.textContent = '';
 
-                const fd       = new FormData(form);
-                const mc       = (fd.get('mc')       || '').trim();
-                const age      = (fd.get('age')      || '').trim();
-                const discord  = (fd.get('discord')  || '').trim();
-                const socials  = (fd.get('socials')  || '').trim();
-                const pronouns = (fd.get('pronouns') || '').trim();
-                const timezone = (fd.get('timezone') || '').trim();
-                const plans    = (fd.get('plans')    || '').trim();
-                const creator  = (fd.get('creator')  || '').trim();
-                const mob      = (fd.get('mob')      || '').trim();
+                const fd           = new FormData(form);
+                const mc           = (fd.get('mc')            || '').trim();
+                const age          = (fd.get('age')           || '').trim();
+                const discord      = (fd.get('discord')       || '').trim();
+                const socials      = (fd.get('socials')       || '').trim();
+                const pronouns     = (fd.get('pronouns')      || '').trim();
+                const timezone     = (fd.get('timezone')      || '').trim();
+                const plans        = (fd.get('plans')         || '').trim();
+                const creator      = (fd.get('creator')       || '').trim();
+                const mob          = (fd.get('mob')           || '').trim();
+                const referral     = (fd.get('referral')      || '').trim();
+                const referralOther= (fd.get('referral_other')|| '').trim();
+                const referralDisplay = referral === 'Other' && referralOther
+                    ? `Other: ${referralOther}` : referral;
 
                 function trunc(s, n) { return (s || '—').substring(0, n) || '—'; }
 
                 const fields = [
-                    { name: 'Minecraft Nickname', value: trunc(mc, 1024),       inline: false },
-                    { name: 'Age',                value: trunc(age, 256),        inline: true  },
-                    { name: 'Discord',            value: trunc(discord, 256),    inline: true  },
-                    { name: 'Other Socials',      value: trunc(socials, 1024),   inline: false },
-                    { name: 'Pronouns',           value: trunc(pronouns, 256),   inline: true  },
-                    { name: 'Timezone',           value: trunc(timezone, 256),   inline: true  },
-                    { name: 'Plans for the Server',            value: trunc(plans, 1024),   inline: false },
-                    { name: 'Content Creator?',                value: trunc(creator, 256),  inline: false },
-                    { name: 'If born as a Minecraft mob…',     value: trunc(mob, 1024),     inline: false },
+                    { name: 'Minecraft Nickname',          value: trunc(mc, 1024),              inline: false },
+                    { name: 'Age',                         value: trunc(age, 256),               inline: true  },
+                    { name: 'Discord',                     value: trunc(discord, 256),           inline: true  },
+                    { name: 'Other Socials',               value: trunc(socials, 1024),          inline: false },
+                    { name: 'Pronouns',                    value: trunc(pronouns, 256),          inline: true  },
+                    { name: 'Timezone',                    value: trunc(timezone, 256),          inline: true  },
+                    { name: 'Plans for the Server',        value: trunc(plans, 1024),            inline: false },
+                    { name: 'Content Creator?',            value: trunc(creator, 256),           inline: true  },
+                    { name: 'How did they find TSNSMP?',   value: trunc(referralDisplay, 256),   inline: true  },
+                    { name: 'If born as a Minecraft mob…', value: trunc(mob, 1024),              inline: false },
                 ];
 
                 const payload = {

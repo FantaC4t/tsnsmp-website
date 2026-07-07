@@ -6,7 +6,7 @@ export default {
             return handleSubmit(request, env);
         }
 
-        // All other requests: serve static files from ./src
+        // All other requests: serve the Astro build output from ./dist
         return env.ASSETS.fetch(request);
     }
 };

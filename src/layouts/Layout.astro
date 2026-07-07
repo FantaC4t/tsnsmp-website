@@ -1,0 +1,155 @@
+---
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import '../styles/base.css';
+import '../styles/header.css';
+import '../styles/footer.css';
+import '../styles/responsive.css';
+import '../styles/a11y.css';
+
+interface Props {
+  title: string;
+  description: string;
+  path: string;
+  ogTitle?: string;
+  ogImage?: string;
+  currentPage: string;
+  robots?: string;
+}
+
+const {
+  title,
+  description,
+  path,
+  ogTitle = title,
+  ogImage = 'https://www.tsnsmp.online/assets/tsnsmp-og-s3.png',
+  currentPage,
+  robots = 'index, follow',
+} = Astro.props;
+
+const canonical = `https://www.tsnsmp.online${path}`;
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Primary Meta Tags -->
+    <title>{title}</title>
+    <meta name="description" content={description}>
+    <meta name="author" content="FantaCat">
+    <meta name="robots" content={robots}>
+    <meta name="language" content="English">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content={canonical}>
+    <meta property="og:title" content={ogTitle}>
+    <meta property="og:description" content={description}>
+    <meta property="og:image" content={ogImage}>
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="TSNSMP Season 3">
+    <meta property="og:site_name" content="TSNSMP">
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content={canonical}>
+    <meta name="twitter:title" content={ogTitle}>
+    <meta name="twitter:description" content={description}>
+    <meta name="twitter:image" content={ogImage}>
+
+    <!-- Additional Meta Tags -->
+    <meta name="theme-color" content="#7B68EE">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="TSNSMP">
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href={canonical}>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <!-- Skin API -->
+    <link rel="preconnect" href="https://minotar.net" crossorigin>
+    <!-- OpenDyslexic font (used by a11y widget if enabled) -->
+    <link rel="preconnect" href="https://fonts.cdnfonts.com" crossorigin>
+    <!-- Firebase DB -->
+    <link rel="preconnect" href="https://tsnplayerlist-default-rtdb.europe-west1.firebasedatabase.app" crossorigin>
+    <link rel="dns-prefetch" href="https://www.gstatic.com">
+    <!-- Non-blocking Google Fonts: parsed & applied after render, no layout delay -->
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=DynaPuff:wght@400;500;600;700&family=Luckiest+Guy&family=Poppins:wght@300;400;500;600;700;800;900&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DynaPuff:wght@400;500;600;700&family=Luckiest+Guy&family=Poppins:wght@300;400;500;600;700;800;900&display=swap"></noscript>
+
+    <!-- Favicon & Manifest -->
+    <link rel="icon" href="/assets/SMALL%20LOGO.png" type="image/png">
+    <link rel="apple-touch-icon" href="/assets/SMALL%20LOGO.png">
+    <link rel="manifest" href="/site.webmanifest">
+
+    <!-- JSON-LD Structured Data -->
+    <script type="application/ld+json" is:inline set:html={JSON.stringify({
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "Organization",
+          "name": "TSNSMP",
+          "url": "https://www.tsnsmp.online/",
+          "logo": "https://www.tsnsmp.online/assets/SMALL%20LOGO.png",
+          "description": "A cozy, whitelisted Minecraft SMP community.",
+          "sameAs": ["https://bsky.app/profile/tsnsmp.online"]
+        },
+        {
+          "@type": "WebSite",
+          "name": "TSNSMP",
+          "url": "https://www.tsnsmp.online/",
+          "potentialAction": {
+            "@type": "SearchAction",
+            "target": "https://www.tsnsmp.online/players/?search={search_term_string}",
+            "query-input": "required name=search_term_string"
+          }
+        }
+      ]
+    })} />
+
+    <slot name="head" />
+</head>
+<body class="dark-mode">
+
+<!-- Hidden SVG filter: squiggly hand-drawn edges -->
+<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" style="position:absolute;width:0;height:0;overflow:hidden;pointer-events:none">
+  <defs>
+    <filter id="sticky-squiggle" x="-10%" y="-15%" width="120%" height="130%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.038 0.062" numOctaves="2" seed="9" result="noise"/>
+      <feDisplacementMap in="SourceGraphic" in2="noise" scale="4" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+    <!-- Larger scale variant for big card elements -->
+    <filter id="card-squiggle" x="-6%" y="-8%" width="112%" height="116%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.022 0.036" numOctaves="2" seed="5" result="noise"/>
+      <feDisplacementMap in="SourceGraphic" in2="noise" scale="10" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+  </defs>
+</svg>
+
+<a href="#main-content" class="skip-link">Skip to main content</a>
+
+<Header currentPage={currentPage} />
+
+<slot />
+
+<Footer />
+
+<script src="../scripts/a11y.js"></script>
+<script src="../scripts/main.js"></script>
+<!--
+  Shared by the home and gallery pages (no-ops on pages without a #lightbox).
+  Stays classic + is:inline: pages import Firebase as real ES modules now, but
+  this one is simple enough (no ordering dependency on anything else) that
+  there's no reason to route it through Vite — kept as a plain global.
+-->
+<script src="/js/lightbox.js" is:inline></script>
+
+</body>
+</html>

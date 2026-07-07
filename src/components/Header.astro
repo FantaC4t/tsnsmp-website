@@ -1,0 +1,139 @@
+---
+import { Image } from 'astro:assets';
+import navLogo from '../assets/minecraft_title(1).png';
+
+interface Props {
+  currentPage: string;
+}
+
+const { currentPage } = Astro.props;
+
+const navLinks = [
+  { page: 'home', href: '/', label: 'Home' },
+  { page: 'about', href: '/about/', label: 'About' },
+  { page: 'players', href: '/players/', label: 'Players' },
+  { page: 'gallery', href: '/gallery/', label: 'Gallery' },
+  { page: 'resources', href: '/resources/', label: 'Resources' },
+];
+---
+
+<header class="site-header">
+    <nav class="navbar">
+        <div class="nav-brand">
+            <a href="/">
+                <Image src={navLogo} alt="TSNSMP Logo" class="nav-logo" width={280} height={280} loading="eager" />
+                <span class="nav-title">TSNSMP</span>
+            </a>
+        </div>
+        <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+            <span class="hamburger"></span>
+        </button>
+        <ul class="nav-links">
+            {navLinks.map(link => (
+                <li>
+                    <a
+                        href={link.href}
+                        class={link.page === currentPage ? 'active' : ''}
+                        aria-current={link.page === currentPage ? 'page' : undefined}
+                    >{link.label}</a>
+                </li>
+            ))}
+            <li><a href="https://bsky.app/profile/tsnsmp.online" target="_blank" rel="noopener noreferrer" class="nav-icon" aria-label="Follow TSNSMP on Bluesky" title="Follow TSNSMP on Bluesky"><img src="/assets/icons/bluesky.svg" alt="Bluesky" class="nav-icon-img"></a></li>
+            <li><a href="/admin/" class={`nav-admin-link ${currentPage === 'admin' ? 'active' : ''}`} aria-current={currentPage === 'admin' ? 'page' : undefined}>⚙️ Admin</a></li>
+        </ul>
+        <button class="theme-toggle" aria-label="Toggle dark mode">
+            <span class="theme-icon" aria-hidden="true">🌙</span>
+        </button>
+    </nav>
+</header>
+
+<button class="back-to-top" id="backToTop" aria-label="Back to top">↑</button>
+
+<!-- Hidden SVG filter for chalk-style heading text (animation managed by a11y.js) -->
+<svg id="chalkTextFilterSvg" style="position:absolute;width:0;height:0;overflow:hidden" aria-hidden="true">
+    <defs>
+        <filter id="chalkText">
+            <feTurbulence type="turbulence" baseFrequency="0.015 0.022" numOctaves="3" seed="3" result="turb"></feTurbulence>
+            <feDisplacementMap in="SourceGraphic" in2="turb" scale="3" xChannelSelector="R" yChannelSelector="G"></feDisplacementMap>
+        </filter>
+    </defs>
+</svg>
+
+<script>
+    function handleScroll() {
+        const header = document.querySelector('.site-header');
+        if (header) {
+            header.classList.toggle('scrolled', window.scrollY > 20);
+        }
+    }
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    handleScroll();
+
+    // Mobile nav toggle
+    const toggle = document.querySelector('.nav-toggle');
+    const navLinksEl = document.querySelector('.nav-links');
+    if (toggle && navLinksEl) {
+        toggle.addEventListener('click', () => {
+            const isOpen = navLinksEl.classList.toggle('open');
+            toggle.classList.toggle('active');
+            toggle.setAttribute('aria-expanded', String(isOpen));
+            if (isOpen) {
+                const firstLink = navLinksEl.querySelector('a');
+                if (firstLink instanceof HTMLElement) firstLink.focus();
+            } else {
+                toggle.focus();
+            }
+        });
+    }
+
+    // Theme toggle + persisted preference
+    const themeBtn = document.querySelector('.theme-toggle');
+    const themeIcon = themeBtn?.querySelector('.theme-icon');
+
+    function updateThemeLabel() {
+        const isDark = document.body.classList.contains('dark-mode');
+        themeBtn?.setAttribute('aria-label', isDark ? 'Switch to light mode' : 'Switch to dark mode');
+    }
+
+    if (localStorage.getItem('theme') === 'light') {
+        document.body.classList.remove('dark-mode');
+        if (themeIcon) themeIcon.textContent = '☀️';
+    }
+    updateThemeLabel();
+
+    themeBtn?.addEventListener('click', () => {
+        document.body.classList.toggle('dark-mode');
+        const isDark = document.body.classList.contains('dark-mode');
+        if (themeIcon) themeIcon.textContent = isDark ? '🌙' : '☀️';
+        localStorage.setItem('theme', isDark ? 'dark' : 'light');
+        updateThemeLabel();
+    });
+
+    // Back-to-top button
+    const backToTop = document.getElementById('backToTop');
+    if (backToTop) {
+        window.addEventListener('scroll', () => {
+            backToTop.classList.toggle('visible', window.scrollY > 400);
+        }, { passive: true });
+        backToTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+    }
+
+    // Chalk-text SVG filter animation, skipped under reduced-motion preference
+    const reduceMotionSaved = localStorage.getItem('reduceMotion');
+    const reduceMotionOS = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const skipAnimate = reduceMotionSaved !== null ? reduceMotionSaved === 'true' : reduceMotionOS;
+
+    if (!skipAnimate) {
+        const turb = document.querySelector('#chalkText feTurbulence');
+        if (turb) {
+            const animate = document.createElementNS('http://www.w3.org/2000/svg', 'animate');
+            animate.setAttribute('attributeName', 'seed');
+            animate.setAttribute('values', '1;5;2;8;3;7;1');
+            animate.setAttribute('dur', '4s');
+            animate.setAttribute('repeatCount', 'indefinite');
+            turb.appendChild(animate);
+        }
+    } else {
+        document.querySelector('#chalkText feDisplacementMap')?.setAttribute('scale', '0');
+    }
+</script>

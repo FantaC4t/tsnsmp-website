@@ -5,3 +5,12 @@ Thumbs.db
 # Never commit service account credentials
 *-service-account.json
 serviceAccount*.json
+
+# Astro / Node build tooling
+node_modules/
+dist/
+.astro/
+npm-debug.log*
+
+# Wrangler local state
+.wrangler/

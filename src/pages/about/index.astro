@@ -1,0 +1,190 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import '../../styles/about.css';
+---
+
+<Layout
+    title="About - TSNSMP Server"
+    description="Learn the story behind TSNSMP — from four friends turning heartbreak into a thriving Minecraft SMP community."
+    path="/about/"
+    ogTitle="About - TSNSMP"
+    currentPage="about"
+>
+<Fragment slot="head">
+    <script type="application/ld+json" is:inline set:html={JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.tsnsmp.online/" },
+        { "@type": "ListItem", "position": 2, "name": "About", "item": "https://www.tsnsmp.online/about/" }
+      ]
+    })} />
+</Fragment>
+
+<main id="main-content">
+    <section class="page-hero">
+        <div class="hero-bg"></div>
+        <div class="hero-grid"></div>
+        <div class="hero-doodles" aria-hidden="true">
+            <svg class="doodle doodle-star" viewBox="0 0 24 24" fill="none" style="top:20%;right:11%;width:22px" xmlns="http://www.w3.org/2000/svg"><path d="M12 2L13.6 8.6L20 10L13.6 11.4L12 18L10.4 11.4L4 10L10.4 8.6Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>
+            <svg class="doodle doodle-star doodle-star--sm" viewBox="0 0 24 24" fill="none" style="top:28%;left:7%;width:15px" xmlns="http://www.w3.org/2000/svg"><path d="M12 2L13.6 8.6L20 10L13.6 11.4L12 18L10.4 11.4L4 10L10.4 8.6Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>
+            <svg class="doodle doodle-cross" viewBox="0 0 20 20" fill="none" style="top:65%;right:8%;width:16px" xmlns="http://www.w3.org/2000/svg"><path d="M10 2.5L10 17.5M2.5 10L17.5 10" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+            <svg class="doodle doodle-squiggle" viewBox="0 0 80 16" fill="none" style="bottom:22%;left:5%;width:58px" xmlns="http://www.w3.org/2000/svg"><path d="M2 8C10 3 18 13 26 8C34 3 42 13 50 8C58 3 66 13 74 8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+            <svg class="doodle doodle-dots" viewBox="0 0 52 10" fill="none" style="top:55%;left:10%;width:40px" xmlns="http://www.w3.org/2000/svg"><circle cx="5" cy="5" r="2" fill="currentColor" opacity="0.9"/><circle cx="26" cy="5" r="2" fill="currentColor" opacity="0.6"/><circle cx="47" cy="5" r="2" fill="currentColor" opacity="0.3"/></svg>
+        </div>
+        <div class="container">
+            <div class="hero-content-about">
+                <h1><span class="gradient-text" data-text="Our Story">Our Story</span></h1>
+                <p>How four friends turned heartbreak into a thriving community 💚</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="about-content">
+        <div class="container">
+
+            <!-- ══ TOP HALF: Article + Compact Stats ══ -->
+            <div class="about-top">
+
+                <article class="story-article">
+                    <header class="article-header">
+                        <h2>The story of TSN</h2>
+                        <p class="article-lead">"Sometimes the best things in life start with something going wrong" - Sun Tzu, i think</p>
+                    </header>
+
+                    <section class="article-chapter">
+                        <div class="chapter-label">
+                            <span class="chapter-num">01</span>
+                            <span class="chapter-title">The Beginning</span>
+                        </div>
+                        <h3>How We Started</h3>
+                        <p>Back in January of 2025 an SMP we played on was unexpectedly shut down. It was very upsetting as we really enjoyed playing with each other and it was a lotta fun.</p>
+                        <p>Then Felix said, "We should just make our own server". At first it was just a joke: <em>"Us? Running a server? Yeah right"</em> But after contemplating for a while we thought "What's stopping us?" So we started the Temporary Server Name SMP, which would later be shortened to TSN.</p>
+                        <p>We spent countless days and nights preparing a modpack and picking out the best datapacks to create seamless bedrock player compatibility with Java as it was a part of what we wanted. And in the end we managed to create an amazing experience for everyone involved.</p>
+                    </section>
+
+                    <div class="article-divider"></div>
+
+                    <section class="article-chapter">
+                        <div class="chapter-label">
+                            <span class="chapter-num">02</span>
+                            <span class="chapter-title">The Growth Spurt</span>
+                        </div>
+                        <h3>Server launch</h3>
+                        <p>Season 1 was crazy. We invited a few of our friends, they invited their friends to play, and suddenly we had this massive playerbase! It was incredible to see how many people wanted to play on our server and the energy was amazing, but after a while it got a bit overwhelming. We felt like we didn't know anyone on our own server anymore and everyone was doing their own thing.</p>
+                        <p>With season 1 getting stale and us wanting to move on, both as a minecraft world and as people we wanted to start fresh and pick members a bit better after season 1 had a bit of mishaps with griefing. </p>
+                    </section>
+
+                    <div class="article-divider"></div>
+
+                    <section class="article-chapter">
+                        <div class="chapter-label">
+                            <span class="chapter-num">03</span>
+                            <span class="chapter-title">The Reset</span>
+                        </div>
+                        <h3>Getting Our Groove Back</h3>
+                        <p>Around July 2025 we decided to start over, we were very happy with how season 1 went overall but we wanted to get that tight-knit vibe back. So as we launched season 2 we decided to add an application feature where the members of the server can first look at who the people are that want to join and decide together if we think they would add to the good vibes of the group. ❤️</p>
+                        <p>Season 2 also brought a natural shift in who was steering the ship. Felix and BlueRat became less available and less invested as life pulled them in other directions, and that's totally okay! The server found new owners who were just as passionate, and the community kept thriving without missing a beat.</p>
+                    </section>
+                </article>
+                <span class="page-fold" aria-hidden="true"></span>
+
+                <!-- Compact facts panel -->
+                <div class="aside-wrap">
+                <aside class="about-aside">
+                    <div class="aside-header">Quick Facts</div>
+                    <dl class="stat-list">
+                        <div class="stat-row">
+                            <span class="stat-icon">🗓️</span>
+                            <dt>S3 Started</dt>
+                            <dd>March 2026</dd>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-icon">👑</span>
+                            <dt>Founders</dt>
+                            <dd>Felix, Gaqy, FantaC4t, BlueRat</dd>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-icon">⚙️</span>
+                            <dt>Version</dt>
+                            <dd>1.21.11</dd>
+                        </div>
+                    </dl>
+                    <a href="/players/" class="aside-cta">Meet the Members →</a>
+                </aside>
+                <span class="page-fold" aria-hidden="true"></span>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- ══ SEASON TIMELINE ══ -->
+    <section class="season-timeline-section">
+        <div class="container">
+            <div class="timeline-heading">
+                <h2>Season History</h2>
+            </div>
+            <div class="season-timeline">
+
+                <div class="season-card season-card--s1">
+                    <div class="season-card-header">
+                        <span class="season-badge">S1</span>
+                        <div class="season-meta">
+                            <span class="season-name">Season One</span>
+                            <span class="season-dates">Jan 2025 – Jul 2025</span>
+                        </div>
+                    </div>
+                    <ul class="season-highlights">
+                        <li>🌱 Server founded by 4 friends</li>
+                        <li>📈 Huge unexpected growth</li>
+                        <li>🏗️ Vanilla+ modpack &amp; datapacks</li>
+                        <li>🤝 Open invites to all friends</li>
+                    </ul>
+                    <div class="season-footer-note">The wild west era</div>
+                </div>
+
+                <div class="timeline-arrow" aria-hidden="true">→</div>
+
+                <div class="season-card season-card--s2">
+                    <div class="season-card-header">
+                        <span class="season-badge">S2</span>
+                        <div class="season-meta">
+                            <span class="season-name">Season Two</span>
+                            <span class="season-dates">Jul 2025 – Mar 2026</span>
+                        </div>
+                    </div>
+                    <ul class="season-highlights">
+                        <li>📝 Applications introduced</li>
+                        <li>🔒 Whitelist-only access</li>
+                        <li>🔄 New owners stepped up</li>
+                        <li>🧩 Custom mods developed</li>
+                        <li>💚 Tight-knit community restored</li>
+                    </ul>
+                    <div class="season-footer-note">Quality over quantity</div>
+                </div>
+
+                <div class="timeline-arrow" aria-hidden="true">→</div>
+
+                <div class="season-card season-card--s3 season-card--active">
+                    <div class="season-card-header">
+                        <span class="season-badge">S3</span>
+                        <div class="season-meta">
+                            <span class="season-name">Season Three</span>
+                            <span class="season-dates">Mar 2026 – Now</span>
+                        </div>
+                    </div>
+                    <ul class="season-highlights">
+                        <li>🌐 Website launched</li>
+                        <li>📡 Bluemap live map</li>
+                        <li>🎙️ Members streaming</li>
+                        <li>🚀 Bigger than ever</li>
+                    </ul>
+                    <div class="season-footer-note season-footer-note--live"><span class="tl-live-dot"></span> Currently live</div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+</main>
+</Layout>

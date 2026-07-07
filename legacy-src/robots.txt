@@ -1,8 +1,0 @@
-User-agent: *
-Allow: /
-
-Disallow: /admin/
-Disallow: /og-generator/
-Disallow: /og-setup/
-
-Sitemap: https://www.tsnsmp.online/sitemap.xml

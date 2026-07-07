@@ -2,6 +2,14 @@ name = "tsnsmp-website"
 compatibility_date = "2025-05-15"
 main = "worker.js"
 
+# Runs automatically before `wrangler deploy`/`wrangler dev` (and before
+# Cloudflare's own git-integration builds, if that's how this is deployed) —
+# without this, a deploy would ship whatever is already sitting in ./dist
+# instead of building fresh from source.
+[build]
+command = "npm run build"
+
 [assets]
-directory = "./src"
+directory = "./dist"
 binding = "ASSETS"
+not_found_handling = "404-page"

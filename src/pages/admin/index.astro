@@ -1,0 +1,1406 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import '../../styles/admin.css';
+---
+
+<Layout
+    title="TSNSMP Admin"
+    description="TSNSMP admin panel — members management."
+    path="/admin/"
+    currentPage="admin"
+    robots="noindex, nofollow"
+>
+
+<!-- ── LOGIN GATE ── -->
+<div id="login-gate">
+    <div class="login-box">
+        <a class="login-back" href="/">← Back to site</a>
+        <h1>🔐 TSNSMP Admin</h1>
+        <p>Members management — authorised access only</p>
+        <div class="login-error" id="login-error">Access denied.</div>
+        <button type="button" class="btn-google" onclick="loginWithGoogle()">
+            <svg width="18" height="18" viewBox="0 0 48 48">
+                <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
+                <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
+                <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/>
+                <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
+            </svg>
+            Continue with Google
+        </button>
+
+    </div>
+</div>
+
+<!-- ── ADMIN PANEL ── -->
+<div id="admin-panel">
+    <div class="admin-hero">
+        <div class="admin-hero-bg"></div>
+        <div class="admin-hero-grid"></div>
+        <div class="admin-hero-content">
+            <h1 class="admin-hero-title">🛠️ TSNSMP Admin</h1>
+            <div class="admin-hero-meta">
+                <span class="admin-member-count" id="member-count"></span>
+                <div class="admin-user" id="admin-user" style="display:none">
+                    <img class="admin-user-avatar" id="admin-user-avatar" src="" alt="">
+                    <span id="admin-user-name"></span>
+                </div>
+                <button type="button" class="btn btn-ghost" onclick="logout()">Log out</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tab bar -->
+    <div class="admin-tabs">
+        <button type="button" class="admin-tab-btn active" data-tab="players" onclick="switchTab('players')">👥 Player List</button>
+        <button type="button" class="admin-tab-btn" data-tab="gallery" onclick="switchTab('gallery')">🖼️ Gallery</button>
+        <button type="button" class="admin-tab-btn" data-tab="events" onclick="switchTab('events')">📅 Events</button>
+        <button type="button" class="admin-tab-btn" data-tab="downloads" onclick="switchTab('downloads')">📥 World Downloads</button>
+    </div>
+
+    <div class="admin-body">
+
+        <!-- ══ PLAYER LIST TAB ══ -->
+        <div id="tab-players">
+
+        <!-- Stat cards -->
+        <div class="admin-stats" id="admin-stats"></div>
+
+        <!-- Seed banner — only shown when members.json is empty -->
+        <div class="seed-banner" id="seed-banner" style="display:none">
+            <p>⚡ No members found. Click to load the default member list.</p>
+            <button type="button" class="btn btn-primary" onclick="seedMembers()">Load Default Members</button>
+        </div>
+
+        <!-- Add member -->
+        <div class="panel">
+            <div class="panel-header">
+                <span class="panel-header-icon green">➕</span>
+                <h2>Add Member</h2>
+            </div>
+            <div class="panel-body">
+                <div class="add-form-layout">
+                    <div class="skin-preview-wrap">
+                        <img class="skin-preview-img" id="skin-preview" src="https://minotar.net/armor/body/Steve/60.png" alt="Skin preview">
+                        <span class="skin-preview-name" id="skin-preview-name" style="color: #7B68EE">Preview</span>
+                    </div>
+                    <div class="form-fields">
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label>Minecraft Username *</label>
+                                <input type="text" id="add-name" placeholder="e.g. FantaC4t"
+                                    oninput="updatePreview()" />
+                            </div>
+                            <div class="form-group">
+                                <label>Role *</label>
+                                <select id="add-role">
+                                    <option value="member">Member</option>
+                                    <option value="trialstaff">Trial Staff</option>
+                                    <option value="staff">Staff</option>
+                                    <option value="imposter">Imposter</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Pronouns</label>
+                                <input type="text" id="add-pronouns" placeholder="e.g. they/them" />
+                            </div>
+                            <div class="form-group">
+                                <label>Name Color</label>
+                                <div class="color-row">
+                                    <input type="color" id="add-color-pick" value="#7B68EE"
+                                        oninput="document.getElementById('add-color-text').value=this.value; updatePreview()" />
+                                    <input type="text" id="add-color-text" placeholder="#7B68EE"
+                                        oninput="document.getElementById('add-color-pick').value=this.value||'#7B68EE'; updatePreview()" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>Twitch URL</label>
+                                <input type="text" id="add-twitch" placeholder="https://twitch.tv/..." />
+                            </div>
+                        </div>
+                        <button type="button" class="btn btn-green" onclick="addMember()">➕ Add to Roster</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Current members -->
+        <div class="panel">
+            <div class="panel-header">
+                <span class="panel-header-icon purple">👥</span>
+                <h2>Current Members</h2>
+                <span style="font-size:.8rem;color:var(--muted)" id="member-count-inline"></span>
+            </div>
+            <div class="member-search-wrap">
+                <div class="search-icon-wrap">
+                    <input class="member-search" id="member-search" type="text" placeholder="Search members…" oninput="filterMembers()">
+                </div>
+                <div class="role-filter-pills" id="role-filters">
+                    <button type="button" class="role-filter-pill active" data-role="all" onclick="setRoleFilter('all')">All</button>
+                    <button type="button" class="role-filter-pill" data-role="staff" onclick="setRoleFilter('staff')">Staff</button>
+                    <button type="button" class="role-filter-pill" data-role="trialstaff" onclick="setRoleFilter('trialstaff')">Trial Staff</button>
+                    <button type="button" class="role-filter-pill" data-role="member" onclick="setRoleFilter('member')">Member</button>
+                </div>
+            </div>
+            <div class="table-scroll" id="members-container">
+                <div class="loading">Loading members…</div>
+            </div>
+        </div>
+
+        </div><!-- /tab-players -->
+
+        <!-- ══ GALLERY TAB ══ -->
+        <div id="tab-gallery" style="display:none">
+
+        <!-- Submission Queue -->
+        <div class="panel">
+            <div class="panel-header">
+                <span class="panel-header-icon yellow">📥</span>
+                <h2>Submission Queue</h2>
+                <span id="queue-count"></span>
+            </div>
+            <div class="panel-body">
+                <div class="gallery-admin-grid" id="queue-admin-grid">
+                    <div class="loading">Loading queue…</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Gallery management -->
+        <div class="panel">
+            <div class="panel-header">
+                <span class="panel-header-icon teal">🖼️</span>
+                <h2>Gallery</h2>
+            </div>
+            <div class="panel-body">
+                <div id="gallery-drop-zone" class="gallery-file-drop"
+                     onclick="document.getElementById('gallery-file').click()"
+                     ondragover="event.preventDefault();this.classList.add('drag-over')"
+                     ondragleave="this.classList.remove('drag-over')"
+                     ondrop="event.preventDefault();this.classList.remove('drag-over');handleGalleryDrop(event)">
+                    <div class="gallery-drop-icon">📸</div>
+                    <p>Drop an image here or click to browse</p>
+                    <span>PNG, JPG, GIF, WebP — max 10 MB</span>
+                    <input type="file" id="gallery-file" accept="image/*" style="display:none" onchange="onGalleryFileSelect(this)">
+                </div>
+                <div class="gallery-file-preview" id="gallery-file-preview" style="display:none">
+                    <img id="gallery-preview-img" src="" alt="Preview">
+                    <button type="button" class="gallery-clear-btn" onclick="clearGalleryFile()">✕</button>
+                </div>
+                <div class="form-grid" style="margin-top:1rem">
+                    <div class="form-group">
+                        <label>Title</label>
+                        <input type="text" id="gallery-title" placeholder="e.g. Sunset at spawn">
+                    </div>
+                    <div class="form-group">
+                        <label>Description</label>
+                        <input type="text" id="gallery-desc" placeholder="e.g. Taken by Nightshade_Stars">
+                    </div>
+                    <div class="form-group">
+                        <label>Season</label>
+                        <select id="gallery-season">
+                            <option value="">&mdash; Not tagged</option>
+                            <option value="1">&#127807; Season 1</option>
+                            <option value="2">&#9728;&#65039; Season 2</option>
+                            <option value="3">&#128640; Season 3</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Uploaded by</label>
+                        <select id="gallery-uploader">
+                            <option value="">&mdash; Unknown</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="gallery-progress-wrap" id="gallery-progress-wrap" style="display:none">
+                    <div class="gallery-progress-bar" id="gallery-progress-bar"></div>
+                </div>
+                <button type="button" class="btn btn-primary" onclick="uploadGalleryImage()" style="margin-top:1rem">📤 Upload Image</button>
+
+                <h3 style="margin:2rem 0 .75rem;font-size:.9rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em">Existing Images</h3>
+                <div class="gallery-admin-grid" id="gallery-admin-grid">
+                    <div class="loading">Loading gallery…</div>
+                </div>
+            </div>
+        </div>
+
+        </div><!-- /tab-gallery -->
+
+        <!-- ══ EVENTS TAB ══ -->
+        <div id="tab-events" style="display:none">
+
+        <div class="panel">
+            <div class="panel-header">
+                <span class="panel-header-icon" style="background:rgba(255,152,0,.15)">📅</span>
+                <h2>Add Event</h2>
+            </div>
+            <div class="panel-body">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Event Name *</label>
+                        <input type="text" id="event-label" placeholder="e.g. Build Contest 🏗️" />
+                    </div>
+                    <div class="form-group">
+                        <label>Start Date *</label>
+                        <input type="date" id="event-date" />
+                    </div>
+                    <div class="form-group">
+                        <label>End Date</label>
+                        <input type="date" id="event-end-date" />
+                    </div>
+                    <div class="form-group">
+                        <label>Description</label>
+                        <input type="text" id="event-desc" placeholder="Short description" />
+                    </div>
+                    <div class="form-group">
+                        <label>Status</label>
+                        <select id="event-status">
+                            <option value="auto">Auto-detect</option>
+                            <option value="active">Active (highlighted)</option>
+                            <option value="upcoming">Upcoming</option>
+                            <option value="past">Past</option>
+                        </select>
+                    </div>
+                </div>
+                <button type="button" class="btn btn-green" onclick="addEvent()" style="margin-top:1rem">📅 Add Event</button>
+            </div>
+        </div>
+
+        <div class="panel">
+            <div class="panel-header">
+                <span class="panel-header-icon" style="background:rgba(255,152,0,.15)">📋</span>
+                <h2>Current Events</h2>
+                <span id="event-count" style="color:var(--muted);font-size:.85rem"></span>
+            </div>
+            <div class="panel-body">
+                <div id="events-admin-list">
+                    <div class="loading">Loading events…</div>
+                </div>
+            </div>
+        </div>
+
+        </div><!-- /tab-events -->
+
+        <!-- ══ WORLD DOWNLOADS TAB ══ -->
+        <div id="tab-downloads" style="display:none">
+
+        <div class="panel">
+            <div class="panel-header">
+                <span class="panel-header-icon" style="background:rgba(22,196,196,.15)">📥</span>
+                <h2>Add World Download</h2>
+            </div>
+            <div class="panel-body">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Title *</label>
+                        <input type="text" id="dl-title" placeholder="e.g. Season 2 World" />
+                    </div>
+                    <div class="form-group">
+                        <label>Download URL *</label>
+                        <input type="url" id="dl-url" placeholder="https://drive.google.com/..." />
+                    </div>
+                </div>
+                <button type="button" class="btn btn-green" onclick="addDownload()" style="margin-top:1rem">📥 Add Download</button>
+            </div>
+        </div>
+
+        <div class="panel">
+            <div class="panel-header">
+                <span class="panel-header-icon" style="background:rgba(22,196,196,.15)">📋</span>
+                <h2>Current Downloads</h2>
+                <span id="dl-count" style="color:var(--muted);font-size:.85rem"></span>
+            </div>
+            <div class="panel-body">
+                <div id="downloads-admin-list">
+                    <div class="loading">Loading downloads…</div>
+                </div>
+            </div>
+        </div>
+
+        </div><!-- /tab-downloads -->
+
+    </div>
+</div>
+
+<div id="toast"></div>
+
+<!-- Confirmation Modal -->
+<div id="confirm-modal" class="confirm-backdrop" onclick="if(event.target===this)closeConfirm()">
+    <div class="confirm-box">
+        <h3 id="confirm-title">Are you sure?</h3>
+        <p id="confirm-message">This action cannot be undone.</p>
+        <div class="confirm-actions">
+            <button type="button" class="btn btn-danger" id="confirm-yes">Confirm</button>
+            <button type="button" class="btn btn-ghost" onclick="closeConfirm()">Cancel</button>
+        </div>
+    </div>
+</div>
+
+<!-- Gallery Edit Modal -->
+<div id="gedit-modal" class="gedit-backdrop" onclick="if(event.target===this)closeGalleryEdit()">
+    <div class="gedit-box">
+        <h3>✏️ Edit Image</h3>
+        <img id="gedit-preview" src="" alt="">
+        <div class="gedit-field">
+            <label>Title</label>
+            <input type="text" id="gedit-title" maxlength="80">
+        </div>
+        <div class="gedit-field">
+            <label>Description</label>
+            <input type="text" id="gedit-desc" maxlength="160">
+        </div>
+        <div class="gedit-field">
+            <label>Uploaded by</label>
+            <select id="gedit-by">
+                <option value="">&mdash; Unknown</option>
+            </select>
+        </div>
+        <div class="gedit-field">
+            <label>Season</label>
+            <select id="gedit-season">
+                <option value="">&mdash; Not tagged</option>
+                <option value="1">&#127807; Season 1</option>
+                <option value="2">&#9728;&#65039; Season 2</option>
+                <option value="3">&#128640; Season 3</option>
+            </select>
+        </div>
+        <div class="gedit-actions">
+            <button type="button" class="btn btn-green" onclick="saveGalleryEdit()">💾 Save</button>
+            <button type="button" class="btn btn-ghost" onclick="closeGalleryEdit()">Cancel</button>
+        </div>
+    </div>
+</div>
+
+<!-- Event Edit Modal -->
+<div id="eedit-modal" class="eedit-backdrop" onclick="if(event.target===this)closeEventEdit()">
+    <div class="eedit-box">
+        <h3>✏️ Edit Event</h3>
+        <div class="eedit-field">
+            <label>Event Name</label>
+            <input type="text" id="eedit-label" maxlength="100">
+        </div>
+        <div class="eedit-field">
+            <label>Start Date</label>
+            <input type="date" id="eedit-date">
+        </div>
+        <div class="eedit-field">
+            <label>End Date</label>
+            <input type="date" id="eedit-end-date">
+        </div>
+        <div class="eedit-field">
+            <label>Description</label>
+            <input type="text" id="eedit-desc" maxlength="160">
+        </div>
+        <div class="eedit-field">
+            <label>Status</label>
+            <select id="eedit-status">
+                <option value="auto">Auto-detect</option>
+                <option value="active">Active (highlighted)</option>
+                <option value="upcoming">Upcoming</option>
+                <option value="past">Past</option>
+            </select>
+        </div>
+        <div class="eedit-field">
+            <label>Time Change</label>
+            <select id="eedit-timechange">
+                <option value="">None</option>
+                <option value="extended">⏳ Extended</option>
+                <option value="shortened">⏩ Shortened</option>
+            </select>
+            <span class="eedit-timechange-hint">Shows a badge on the home page if the event duration was changed.</span>
+        </div>
+        <div class="eedit-actions">
+            <button type="button" class="btn btn-green" onclick="saveEventEdit()">💾 Save</button>
+            <button type="button" class="btn btn-ghost" onclick="closeEventEdit()">Cancel</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    // @ts-nocheck — plain JS, not TypeScript (see players/index.astro for context)
+    import { ref, get, onValue, set, push, update, remove, child } from 'firebase/database';
+    import { ref as storageRef, uploadBytesResumable, getDownloadURL, deleteObject } from 'firebase/storage';
+    import { signInWithPopup, signOut, onAuthStateChanged } from 'firebase/auth';
+    import { db, auth, storage, googleProvider } from '../../scripts/firebase-client.js';
+
+    /* ── XSS safety ── */
+    function esc(str) {
+        const d = document.createElement('div');
+        d.textContent = str;
+        return d.innerHTML;
+    }
+
+    /* ── Confirm modal ── */
+    let confirmResolve = null;
+    function showConfirm(title, message) {
+        return new Promise(resolve => {
+            confirmResolve = resolve;
+            document.getElementById('confirm-title').textContent = title;
+            document.getElementById('confirm-message').textContent = message;
+            const modal = document.getElementById('confirm-modal');
+            modal.classList.add('active');
+            document.getElementById('confirm-yes').onclick = () => {
+                modal.classList.remove('active');
+                const r = confirmResolve;
+                confirmResolve = null;
+                if (r) r(true);
+            };
+        });
+    }
+    function closeConfirm() {
+        document.getElementById('confirm-modal').classList.remove('active');
+        const r = confirmResolve;
+        confirmResolve = null;
+        if (r) r(false);
+    }
+
+    /* ── Search & Filter state ── */
+    let currentRoleFilter = 'all';
+    function setRoleFilter(role) {
+        currentRoleFilter = role;
+        document.querySelectorAll('.role-filter-pill').forEach(p =>
+            p.classList.toggle('active', p.dataset.role === role)
+        );
+        filterMembers();
+    }
+    function filterMembers() {
+        const query = (document.getElementById('member-search')?.value || '').trim().toLowerCase();
+        const rows = document.querySelectorAll('.member-table tbody tr');
+        rows.forEach(row => {
+            const name = (row.querySelector('.member-name-colored')?.textContent || '').toLowerCase();
+            const role = (row.querySelector('.role-pill')?.textContent || '').toLowerCase();
+            const matchSearch = !query || name.includes(query);
+            const matchRole   = currentRoleFilter === 'all' || role === currentRoleFilter;
+            row.style.display = (matchSearch && matchRole) ? '' : 'none';
+        });
+    }
+
+    /* ── Keyboard shortcuts ── */
+    document.addEventListener('keydown', e => {
+        if (e.key === 'Escape') {
+            // Close any open modal or cancel editing
+            if (document.getElementById('confirm-modal').classList.contains('active')) { closeConfirm(); return; }
+            if (document.getElementById('eedit-modal').classList.contains('active')) { closeEventEdit(); return; }
+            if (document.getElementById('gedit-modal').classList.contains('active')) { closeGalleryEdit(); return; }
+            // Cancel inline edit if one is active
+            if (document.querySelector('.edit-row')) { renderTable(); }
+        }
+    });
+
+    function switchTab(tab) {
+        document.querySelectorAll('.admin-tab-btn').forEach(b =>
+            b.classList.toggle('active', b.dataset.tab === tab)
+        );
+        document.getElementById('tab-players').style.display = tab === 'players' ? 'block' : 'none';
+        document.getElementById('tab-gallery').style.display = tab === 'gallery' ? 'block' : 'none';
+        document.getElementById('tab-events').style.display  = tab === 'events'  ? 'block' : 'none';
+        document.getElementById('tab-downloads').style.display = tab === 'downloads' ? 'block' : 'none';
+    }
+
+    const MEMBERS_REF = ref(db, 'members');
+    const AUTH_REF    = ref(db, 'authorizedEmails');
+
+    let membersCache = [];
+    let membersListener = null;
+
+    /* ── Render stat cards ── */
+    function renderStats() {
+        const container = document.getElementById('admin-stats');
+        if (!container) return;
+        const counts = { total: membersCache.length, staff: 0, trialstaff: 0, member: 0 };
+        membersCache.forEach(m => {
+            let r = (m.role || '').toLowerCase();
+            if (r === 'owner') r = 'staff';
+            if (r === 'mod' || r === 'admin') r = 'staff';
+            if (counts.hasOwnProperty(r)) counts[r]++;
+        });
+        container.innerHTML = [
+            { cls: 'stat-total',  n: counts.total,  l: 'Total' },
+            { cls: 'stat-staff',  n: counts.staff,  l: 'Staff' },
+            { cls: 'stat-trialstaff',  n: counts.trialstaff,  l: 'Trial Staff' },
+            { cls: 'stat-member', n: counts.member, l: 'Members' },
+        ].map(s => `
+            <div class="admin-stat-card ${s.cls}">
+                <span class="admin-stat-number">${s.n}</span>
+                <span class="admin-stat-label">${s.l}</span>
+            </div>
+        `).join('');
+    }
+
+    // ── Check whether the signed-in user's email is in /authorizedEmails ──
+    // Returns: { allowed: bool, error: string|null }
+    async function isAuthorized(user) {
+        try {
+            const snap = await get(AUTH_REF);
+            const val  = snap.val();
+            if (!val) return { allowed: false, error: 'authorizedEmails list is empty or missing in the database.' };
+            const list = Array.isArray(val) ? val : Object.values(val);
+            const normalised = list.map(e => String(e).trim().toLowerCase());
+            const userEmail  = user.email.trim().toLowerCase();
+            const allowed = normalised.includes(userEmail);
+            return { allowed, error: allowed ? null : `${user.email} is not on the authorised list.` };
+        } catch (e) {
+            console.error('[Auth] Authorization check failed:', e);
+            return { allowed: false, error: `Database read failed (${e.code || e.message}). Check your Firebase rules allow reads of /authorizedEmails.` };
+        }
+    }
+
+    // ── Auth state observer — handles login, logout and page refresh ──
+    onAuthStateChanged(auth, async user => {
+        if (user) {
+            const { allowed, error } = await isAuthorized(user);
+            if (!allowed) {
+                await signOut(auth);
+                const errorEl = document.getElementById('login-error');
+                errorEl.textContent   = `Access denied — ${error}`;
+                errorEl.style.display = 'block';
+                return;
+            }
+            loadAndShowPanel(user);
+        } else {
+            document.getElementById('admin-panel').style.display = 'none';
+            document.getElementById('login-gate').style.display  = 'flex';
+        }
+    });
+
+    async function loginWithGoogle() {
+        const errorEl = document.getElementById('login-error');
+        errorEl.style.display = 'none';
+        try {
+            await signInWithPopup(auth, googleProvider);
+            // onAuthStateChanged will call loadAndShowPanel
+        } catch (e) {
+            console.error(e);
+            errorEl.textContent   = e.message || 'Google sign-in failed.';
+            errorEl.style.display = 'block';
+        }
+    }
+
+    function logout() {
+        if (membersListener) { membersListener(); membersListener = null; }
+        signOut(auth);
+    }
+
+    function loadAndShowPanel(user) {
+        document.getElementById('login-gate').style.display  = 'none';
+        document.getElementById('admin-panel').style.display = 'block';
+
+        // Show logged-in user info
+        if (user) {
+            const userEl = document.getElementById('admin-user');
+            const avatarEl = document.getElementById('admin-user-avatar');
+            const nameEl = document.getElementById('admin-user-name');
+            if (user.photoURL) avatarEl.src = user.photoURL;
+            else avatarEl.style.display = 'none';
+            nameEl.textContent = user.displayName || user.email;
+            userEl.style.display = 'flex';
+        }
+
+        // Detach any stale listener before attaching a fresh one
+        if (membersListener) { membersListener(); membersListener = null; }
+
+        membersListener = onValue(MEMBERS_REF, snap => {
+            const raw = snap.val();
+            membersCache = raw ? (Array.isArray(raw) ? raw : Object.values(raw)) : [];
+            renderTable();
+            renderStats();
+            populateUploaderDropdowns();
+            document.getElementById('member-count').textContent = `${membersCache.length} members`;
+            document.getElementById('seed-banner').style.display = membersCache.length === 0 ? 'flex' : 'none';
+        }, e => {
+            console.error('Failed to load members:', e);
+            document.getElementById('members-container').innerHTML =
+                `<div class="loading" style="color:var(--red)">Failed to load members: ${e.message}<br>Check your Firebase database rules.</div>`;
+        });
+    }
+
+    // ── First-time seed (no auth required — needs DB rules to allow writes, or use before locking down) ──
+    async function seedWithoutLogin() {
+        const statusEl = document.getElementById('seed-status');
+        statusEl.style.display = 'block';
+        statusEl.style.color   = 'var(--muted)';
+        statusEl.textContent   = 'Loading seed data…';
+        try {
+            const res = await fetch('/data/members-seed.json');
+            if (!res.ok) throw new Error(`HTTP ${res.status}`);
+            const seed = await res.json();
+            await set(ref(db, 'members'), seed);
+            statusEl.style.color = 'var(--green)';
+            statusEl.textContent = `✅ ${seed.length} members loaded into database!`;
+        } catch (e) {
+            statusEl.style.color = 'var(--red)';
+            statusEl.textContent = `❌ Failed: ${e.message}`;
+            console.error(e);
+        }
+    }
+
+    // ── Live skin/name preview ──
+    let previewTimer;
+    function updatePreview() {
+        const name  = document.getElementById('add-name').value.trim();
+        const color = document.getElementById('add-color-text').value.trim() || '#7B68EE';
+        const nameEl = document.getElementById('skin-preview-name');
+        nameEl.textContent = name || 'Preview';
+        nameEl.style.color = color;
+        clearTimeout(previewTimer);
+        if (name) {
+            previewTimer = setTimeout(() => {
+                document.getElementById('skin-preview').src =
+                    `https://minotar.net/armor/body/${encodeURIComponent(name)}/60.png`;
+            }, 600);
+        } else {
+            document.getElementById('skin-preview').src = 'https://minotar.net/armor/body/Steve/60.png';
+        }
+    }
+
+    // ── Save all members to Realtime Database ──
+    async function saveMembers() {
+        await set(MEMBERS_REF, membersCache);
+    }
+
+    const ROLE_ORDER = ['staff', 'trialstaff', 'member', 'imposter'];
+
+    function renderTable() {
+        const countEl = document.getElementById('member-count-inline');
+        if (countEl) countEl.textContent = `${membersCache.length} members`;
+
+        if (membersCache.length === 0) {
+            document.getElementById('members-container').innerHTML = '<div class="loading">No members yet. Use the form above to add the first one.</div>';
+            return;
+        }
+
+        const sorted = [...membersCache].sort((a, b) => {
+            let ar = (a.role || '').toLowerCase();
+            let br = (b.role || '').toLowerCase();
+            if (ar === 'owner') ar = 'staff';
+            if (ar === 'mod' || ar === 'admin') ar = 'trialstaff';
+            if (br === 'owner') br = 'staff';
+            if (br === 'mod' || br === 'admin') br = 'trialstaff';
+            const ai = ROLE_ORDER.indexOf(ar);
+            const bi = ROLE_ORDER.indexOf(br);
+            return (ai === -1 ? ROLE_ORDER.length : ai) - (bi === -1 ? ROLE_ORDER.length : bi);
+        });
+
+        const rows = sorted.map((m, i) => {
+            const realIdx = membersCache.findIndex(c => c === m);
+            const safeName = esc(m.name);
+            const safePronouns = esc(m.pronouns || '—');
+            const safeTwitch = m.twitch ? `<a href="${esc(m.twitch)}" target="_blank" rel="noopener noreferrer" style="color:#9146FF">${esc(m.twitch.replace('https://www.twitch.tv/',''))}</a>` : '—';
+            return `
+            <tr id="row-${realIdx}">
+                <td>
+                    <img class="member-avatar" src="https://mc-heads.net/avatar/${encodeURIComponent(m.name)}/28" alt="" onerror="this.style.display='none'">
+                    <strong class="member-name-colored" ${m.color ? `style="color:${esc(m.color)}"` : ''}>${safeName}</strong>
+                </td>
+                <td><span class="role-pill role-${esc(m.role)}">${esc(m.role)}</span></td>
+                <td>${safePronouns}</td>
+                <td>${safeTwitch}</td>
+                <td class="td-actions">
+                    <button class="btn btn-edit" onclick="startEdit(${realIdx})">✏️ Edit</button>
+                    <button class="btn btn-danger" id="del-btn-${realIdx}" onclick="confirmRemove(${realIdx})">🗑️ Remove</button>
+                </td>
+            </tr>
+        `}).join('');
+
+        document.getElementById('members-container').innerHTML = `
+            <div class="table-scroll">
+            <table class="member-table">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Role</th>
+                        <th>Pronouns</th>
+                        <th>Twitch</th>
+                        <th style="text-align:right">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>${rows}</tbody>
+            </table>
+            </div>
+        `;
+
+        // Re-apply any active search/filter
+        filterMembers();
+    }
+
+    // ── Add ──
+    async function addMember() {
+        const name     = document.getElementById('add-name').value.trim();
+        const role     = document.getElementById('add-role').value;
+        const pronouns = document.getElementById('add-pronouns').value.trim();
+        const color    = document.getElementById('add-color-text').value.trim();
+        const twitch   = document.getElementById('add-twitch').value.trim();
+
+        if (!name) { showToast('Username is required', 'error'); return; }
+        if (membersCache.find(m => m.name.toLowerCase() === name.toLowerCase())) {
+            showToast(`${name} already exists`, 'error'); return;
+        }
+
+        membersCache.push({ name, role, pronouns, color, twitch });
+        try {
+            await saveMembers();
+            showToast(`✅ ${name} added!`, 'success');
+            ['add-name','add-pronouns','add-color-text','add-twitch'].forEach(id => document.getElementById(id).value = '');
+            document.getElementById('add-color-pick').value = '#7B68EE';
+            document.getElementById('add-role').value = 'member';
+            updatePreview();
+        } catch (e) {
+            membersCache.pop();
+            showToast('Failed to save — check console', 'error');
+            console.error(e);
+        }
+    }
+
+    // ── Remove ──
+    async function confirmRemove(i) {
+        const m = membersCache[i];
+        const ok = await showConfirm(
+            `Remove ${m.name}?`,
+            'This will permanently remove them from the roster.'
+        );
+        if (!ok) return;
+        await doRemove(m.name);
+    }
+
+    async function doRemove(name) {
+        const prev = [...membersCache];
+        membersCache = membersCache.filter(m => m.name !== name);
+        try {
+            await saveMembers();
+            showToast(`🗑️ ${name} removed`, 'success');
+        } catch (e) {
+            membersCache = prev;
+            showToast('Failed to save — check console', 'error');
+            console.error(e);
+        }
+    }
+
+    // ── Inline Edit ──
+    function startEdit(i) {
+        const m = membersCache[i];
+        const row = document.getElementById(`row-${i}`);
+        row.classList.add('edit-row');
+        row.innerHTML = `
+            <td><input id="edit-name" value="${m.name}" /></td>
+            <td>
+                <select id="edit-role">
+                    ${['member','trialstaff','staff','imposter'].map(r =>
+                        `<option ${m.role===r?'selected':''}>${r}</option>`
+                    ).join('')}
+                </select>
+            </td>
+            <td><input id="edit-pronouns" value="${m.pronouns||''}" placeholder="pronouns" /></td>
+            <td>
+                <div style="display:flex;gap:5px;align-items:center">
+                    <input type="color" id="edit-color-pick" value="${m.color||'#7B68EE'}" style="width:32px;height:32px;padding:2px;border-radius:6px;border:1px solid var(--border);background:var(--bg2);cursor:pointer" oninput="document.getElementById('edit-color-text').value=this.value" />
+                    <input type="text" id="edit-color-text" value="${m.color||''}" placeholder="#hex" style="width:90px" oninput="document.getElementById('edit-color-pick').value=this.value||'#7B68EE'" />
+                    <input type="text" id="edit-twitch" value="${m.twitch||''}" placeholder="twitch url" style="flex:1" />
+                </div>
+            </td>
+            <td class="td-actions">
+                <button class="btn btn-green" onclick="saveEdit('${m.name}')">💾 Save</button>
+                <button class="btn btn-ghost" onclick="renderTable()">Cancel</button>
+            </td>
+        `;
+    }
+
+    async function saveEdit(originalName) {
+        const name     = document.getElementById('edit-name').value.trim();
+        const role     = document.getElementById('edit-role').value;
+        const pronouns = document.getElementById('edit-pronouns').value.trim();
+        const color    = document.getElementById('edit-color-text').value.trim();
+        const twitch   = document.getElementById('edit-twitch').value.trim();
+
+        const prev = [...membersCache];
+        const idx = membersCache.findIndex(m => m.name === originalName);
+        if (idx === -1) { showToast('Member not found', 'error'); return; }
+        membersCache[idx] = { name, role, pronouns, color, twitch };
+
+        try {
+            await saveMembers();
+            showToast('✅ Changes saved', 'success');
+        } catch (e) {
+            membersCache = prev;
+            showToast('Failed to save — check console', 'error');
+            console.error(e);
+        }
+    }
+
+    // ── Seed ──
+    async function seedMembers() {
+        try {
+            const res = await fetch('/data/members-seed.json');
+            membersCache = await res.json();
+            await saveMembers();
+            showToast(`✅ Loaded ${membersCache.length} members`, 'success');
+        } catch (e) {
+            showToast('Could not seed members — check console', 'error');
+            console.error(e);
+        }
+    }
+
+    let toastTimer;
+    function showToast(msg, type = 'success') {
+        const t = document.getElementById('toast');
+        t.textContent = msg;
+        t.className = `show ${type}`;
+        clearTimeout(toastTimer);
+        toastTimer = setTimeout(() => { t.className = ''; }, 3000);
+    }
+
+    // ── GALLERY ──
+    const GALLERY_REF = ref(db, 'gallery');
+    const QUEUE_REF   = ref(db, 'gallery_queue');
+    let galleryFileObj = null;
+
+    /* ── Drag & Drop handler ── */
+    function handleGalleryDrop(e) {
+        const file = e.dataTransfer?.files?.[0];
+        if (!file || !file.type.startsWith('image/')) {
+            showToast('Please drop an image file', 'error');
+            return;
+        }
+        galleryFileObj = file;
+        document.getElementById('gallery-preview-img').src = URL.createObjectURL(file);
+        document.getElementById('gallery-file-preview').style.display = 'block';
+        document.getElementById('gallery-drop-zone').style.display = 'none';
+    }
+
+    function onGalleryFileSelect(input) {
+        const file = input.files[0];
+        if (!file) return;
+        galleryFileObj = file;
+        document.getElementById('gallery-preview-img').src = URL.createObjectURL(file);
+        document.getElementById('gallery-file-preview').style.display = 'block';
+        document.getElementById('gallery-drop-zone').style.display = 'none';
+    }
+
+    function clearGalleryFile() {
+        galleryFileObj = null;
+        document.getElementById('gallery-file').value = '';
+        document.getElementById('gallery-file-preview').style.display = 'none';
+        document.getElementById('gallery-drop-zone').style.display = 'flex';
+    }
+
+    function populateUploaderDropdowns() {
+        const ids = ['gallery-uploader', 'gedit-by'];
+        ids.forEach(id => {
+            const sel = document.getElementById(id);
+            if (!sel) return;
+            const prev = sel.value;
+            const opts = '<option value="">&mdash; Unknown</option>' +
+                membersCache.map(m => `<option value="${m.name}">${m.name}</option>`).join('');
+            sel.innerHTML = opts;
+            if (prev) sel.value = prev;
+        });
+    }
+
+    // ── Client-side compression before upload (see gallery page for the
+    // rationale — real uploads are often multi-MB raw screenshots) ──
+    async function compressImage(file, { maxDimension = 1920, quality = 0.82 } = {}) {
+        if (file.type === 'image/gif') return file; // would flatten animation
+        let bitmap;
+        try {
+            bitmap = await createImageBitmap(file);
+        } catch (e) {
+            return file; // unsupported/corrupt — let Storage/Firebase reject it downstream
+        }
+        const scale = Math.min(1, maxDimension / Math.max(bitmap.width, bitmap.height));
+        if (scale === 1 && file.size < 400 * 1024) {
+            bitmap.close?.();
+            return file; // already small enough, not worth re-encoding
+        }
+        const canvas = document.createElement('canvas');
+        canvas.width  = Math.round(bitmap.width  * scale);
+        canvas.height = Math.round(bitmap.height * scale);
+        canvas.getContext('2d').drawImage(bitmap, 0, 0, canvas.width, canvas.height);
+        bitmap.close?.();
+        const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/jpeg', quality));
+        if (!blob || blob.size >= file.size) return file; // re-encode didn't help
+        const newName = file.name.replace(/\.[^.]+$/, '') + '.jpg';
+        return new File([blob], newName, { type: 'image/jpeg' });
+    }
+
+    async function uploadGalleryImage() {
+        if (!galleryFileObj) { showToast('Please select an image first', 'error'); return; }
+        const title = document.getElementById('gallery-title').value.trim();
+        const desc  = document.getElementById('gallery-desc').value.trim();
+
+        galleryFileObj = await compressImage(galleryFileObj);
+
+        const ext   = galleryFileObj.name.split('.').pop();
+        const path  = `gallery/${Date.now()}.${ext}`;
+
+        const progressWrap = document.getElementById('gallery-progress-wrap');
+        const progressBar  = document.getElementById('gallery-progress-bar');
+        progressWrap.style.display = 'block';
+
+        const task = uploadBytesResumable(storageRef(storage, path), galleryFileObj);
+        task.on('state_changed',
+            snap => {
+                const pct = Math.round(snap.bytesTransferred / snap.totalBytes * 100);
+                progressBar.style.width = pct + '%';
+            },
+            err => {
+                showToast('Upload failed: ' + err.message, 'error');
+                progressWrap.style.display = 'none';
+            },
+            async () => {
+                const url = await getDownloadURL(task.snapshot.ref);
+                const seasonRaw = document.getElementById('gallery-season').value;
+                const seasonEntry = seasonRaw ? { season: parseInt(seasonRaw, 10) } : {};
+                const uploader = document.getElementById('gallery-uploader').value;
+                const uploaderEntry = uploader ? { uploadedBy: uploader } : {};
+                await push(GALLERY_REF, { title, description: desc, url, storagePath: path, uploadedAt: Date.now(), ...seasonEntry, ...uploaderEntry });
+                showToast('✅ Image uploaded!', 'success');
+                progressWrap.style.display = 'none';
+                progressBar.style.width = '0';
+                clearGalleryFile();
+                document.getElementById('gallery-title').value = '';
+                document.getElementById('gallery-desc').value = '';
+                document.getElementById('gallery-season').value = '';
+                document.getElementById('gallery-uploader').value = '';
+                loadGalleryAdmin();
+            }
+        );
+    }
+
+    function loadGalleryAdmin() {
+        const grid = document.getElementById('gallery-admin-grid');
+        get(GALLERY_REF).then(snap => {
+            const items = [];
+            snap.forEach(child => {
+                const val = child.val();
+                if (val && val.url) items.push({ key: child.key, ...val });
+            });
+            items.sort((a, b) => (b.uploadedAt || 0) - (a.uploadedAt || 0));
+            if (!items.length) {
+                grid.innerHTML = '<p style="color:var(--muted);font-size:.9rem;padding:1rem 0">No images yet.</p>';
+                return;
+            }
+            const seasonLabel = { 1: '🌱 S1', 2: '☀️ S2', 3: '🚀 S3' };
+            grid.innerHTML = items.map(item => `
+                <div class="gallery-admin-item">
+                    <img src="${esc(item.url)}" alt="${esc(item.title || '')}" loading="lazy">
+                    <div class="gallery-admin-item-info">
+                        <strong>${esc(item.title || '(no title)')}${item.season ? ` <span class="admin-season-badge">${esc(seasonLabel[item.season] || 'S' + item.season)}</span>` : ''}</strong>
+                        <span>${esc(item.description || '')}</span>
+                        <span style="font-size:.7rem;opacity:.55">${esc(item.uploadedBy || '')}</span>
+                    </div>
+                    <div class="gallery-item-actions">
+                        <button class="btn btn-edit" onclick="editGalleryItem('${item.key}')">✏️ Edit</button>
+                        <button class="btn btn-danger" onclick="deleteGalleryItem('${item.key}','${item.storagePath || ''}')">🗑️</button>
+                    </div>
+                </div>
+            `).join('');
+        }, err => {
+            console.error('[Gallery] Failed to read /gallery:', err);
+        });
+    }
+
+    // ── Gallery Edit ──
+    let geditKey = null;
+
+    function editGalleryItem(key) {
+        get(child(GALLERY_REF, key)).then(snap => {
+            const item = snap.val();
+            if (!item) { showToast('Item not found', 'error'); return; }
+            geditKey = key;
+            document.getElementById('gedit-preview').src = item.url;
+            document.getElementById('gedit-title').value  = item.title || '';
+            document.getElementById('gedit-desc').value   = item.description || '';
+            document.getElementById('gedit-by').value     = item.uploadedBy || '';
+            document.getElementById('gedit-season').value = item.season ? String(item.season) : '';
+            document.getElementById('gedit-modal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        });
+    }
+
+    function closeGalleryEdit() {
+        document.getElementById('gedit-modal').classList.remove('active');
+        document.body.style.overflow = '';
+        geditKey = null;
+    }
+
+    async function saveGalleryEdit() {
+        if (!geditKey) return;
+        const title     = document.getElementById('gedit-title').value.trim();
+        const desc      = document.getElementById('gedit-desc').value.trim();
+        const by        = document.getElementById('gedit-by').value.trim();
+        const seasonRaw = document.getElementById('gedit-season').value;
+        const updates   = { title, description: desc, uploadedBy: by };
+        if (seasonRaw) updates.season = parseInt(seasonRaw, 10);
+        else           updates.season = null;
+        try {
+            await update(child(GALLERY_REF, geditKey), updates);
+            showToast('✅ Changes saved', 'success');
+            closeGalleryEdit();
+            loadGalleryAdmin();
+        } catch(e) {
+            showToast('Save failed: ' + e.message, 'error');
+        }
+    }
+
+    async function deleteGalleryItem(key, storagePath) {
+        const ok = await showConfirm('Delete image?', 'This will permanently remove the image from the gallery.');
+        if (!ok) return;
+        try {
+            if (storagePath) {
+                await deleteObject(storageRef(storage, storagePath)).catch(e => console.warn('[Delete] Storage delete failed (may already be gone):', e.message));
+            }
+            await remove(child(GALLERY_REF, key));
+            showToast('🗑️ Image deleted', 'success');
+            loadGalleryAdmin();
+        } catch(e) {
+            showToast('Delete failed: ' + e.message, 'error');
+        }
+    }
+
+    // ── QUEUE ──
+    function loadQueueAdmin() {
+        const grid = document.getElementById('queue-admin-grid');
+        get(QUEUE_REF).then(snap => {
+            const items = [];
+            snap.forEach(child => items.push({ key: child.key, ...child.val() }));
+            items.sort((a, b) => (b.submittedAt || 0) - (a.submittedAt || 0));
+            const countEl = document.getElementById('queue-count');
+            if (countEl) countEl.innerHTML = items.length ? `<span class="queue-badge">${items.length} pending</span>` : '';
+            if (!items.length) {
+                grid.innerHTML = '<p style="color:var(--muted);font-size:.9rem;padding:1rem 0">Queue is empty — no pending submissions.</p>';
+                return;
+            }
+            grid.innerHTML = items.map(item => `
+                <div class="gallery-admin-item">
+                    <img src="${esc(item.url)}" alt="${esc(item.title || '')}" loading="lazy">
+                    <div class="gallery-admin-item-info">
+                        <strong>${esc(item.title || '(no title)')}</strong>
+                        <span>${esc(item.description || '')}</span>
+                        <span class="queue-meta">By ${esc(item.submittedBy || 'Anonymous')} · ${new Date(item.submittedAt).toLocaleDateString()}</span>
+                    </div>
+                    <div class="queue-actions">
+                        <button class="btn btn-approve" onclick="approveQueueItem('${item.key}')">✅ Approve</button>
+                        <button class="btn btn-danger" onclick="declineQueueItem('${item.key}','${item.storagePath || ''}')">🗑️ Decline</button>
+                    </div>
+                </div>
+            `).join('');
+        });
+    }
+
+    async function approveQueueItem(key) {
+        try {
+            const snap = await get(child(QUEUE_REF, key));
+            const item = snap.val();
+            if (!item) { showToast('Item not found', 'error'); return; }
+
+            const newEntry = {
+                title:       item.title       || '',
+                description: item.description || '',
+                url:         item.url,
+                storagePath: item.storagePath  || '',
+                uploadedBy:  item.submittedBy  || 'Anonymous',
+                uploadedAt:  Date.now(),
+                ...(item.season ? { season: item.season } : {})
+            };
+            await push(GALLERY_REF, newEntry);
+
+            await remove(child(QUEUE_REF, key));
+
+            showToast('✅ Image approved and published!', 'success');
+            loadQueueAdmin();
+            loadGalleryAdmin();
+        } catch(e) {
+            console.error('[Approve] Error:', e);
+            showToast('Approval failed: ' + e.message, 'error');
+        }
+    }
+
+    async function declineQueueItem(key, storagePath) {
+        const ok = await showConfirm('Decline submission?', 'This will permanently delete this submission.');
+        if (!ok) return;
+        try {
+            if (storagePath) await deleteObject(storageRef(storage, storagePath)).catch(() => {});
+            await remove(child(QUEUE_REF, key));
+            showToast('🗑️ Submission declined', 'success');
+            loadQueueAdmin();
+        } catch(e) {
+            showToast('Decline failed: ' + e.message, 'error');
+        }
+    }
+
+    // Load gallery + queue on panel init (fires after auth succeeds)
+    onAuthStateChanged(auth, user => {
+        if (user) setTimeout(() => { loadGalleryAdmin(); loadQueueAdmin(); }, 500);
+    });
+
+    /* ═══ EVENTS MANAGEMENT ═══ */
+    const EVENTS_REF = ref(db, 'events');
+
+    async function addEvent() {
+        const label   = document.getElementById('event-label').value.trim();
+        const date    = document.getElementById('event-date').value;
+        const endDate = document.getElementById('event-end-date').value;
+        const desc    = document.getElementById('event-desc').value.trim();
+        const status  = document.getElementById('event-status').value;
+
+        if (!label || !date) return showToast('Name and date are required', 'error');
+        if (endDate && endDate < date) return showToast('End date must be on or after start date', 'error');
+
+        try {
+            const payload = {
+                label,
+                date,
+                description: desc || '',
+                status,
+                createdAt: Date.now()
+            };
+            if (endDate) payload.endDate = endDate;
+            await push(EVENTS_REF, payload);
+            showToast('📅 Event added!', 'success');
+            document.getElementById('event-label').value    = '';
+            document.getElementById('event-date').value     = '';
+            document.getElementById('event-end-date').value = '';
+            document.getElementById('event-desc').value     = '';
+            document.getElementById('event-status').value   = 'auto';
+        } catch (e) {
+            showToast('Failed to add event: ' + e.message, 'error');
+        }
+    }
+
+    async function deleteEvent(key) {
+        const ok = await showConfirm('Delete event?', 'This will permanently remove this event.');
+        if (!ok) return;
+        try {
+            await remove(child(EVENTS_REF, key));
+            showToast('🗑️ Event deleted', 'success');
+        } catch (e) {
+            showToast('Delete failed: ' + e.message, 'error');
+        }
+    }
+
+    /* ── Event Edit Modal ── */
+    let editingEventKey = null;
+    let editingEventOriginalEndDate = null;
+
+    function openEventEdit(key, ev) {
+        editingEventKey = key;
+        editingEventOriginalEndDate = ev.originalEndDate || ev.endDate || ev.date;
+        document.getElementById('eedit-label').value      = ev.label || '';
+        document.getElementById('eedit-date').value       = ev.date || '';
+        document.getElementById('eedit-end-date').value   = ev.endDate || '';
+        document.getElementById('eedit-desc').value       = ev.description || '';
+        document.getElementById('eedit-status').value     = ev.status || 'auto';
+        document.getElementById('eedit-timechange').value = ev.timeChange || '';
+        document.getElementById('eedit-modal').classList.add('active');
+    }
+
+    function closeEventEdit() {
+        document.getElementById('eedit-modal').classList.remove('active');
+        editingEventKey = null;
+    }
+
+    async function saveEventEdit() {
+        if (!editingEventKey) return;
+        const label     = document.getElementById('eedit-label').value.trim();
+        const date      = document.getElementById('eedit-date').value;
+        const endDate   = document.getElementById('eedit-end-date').value;
+        const desc      = document.getElementById('eedit-desc').value.trim();
+        const status    = document.getElementById('eedit-status').value;
+        let timeChange  = document.getElementById('eedit-timechange').value;
+
+        if (!label || !date) return showToast('Name and date are required', 'error');
+        if (endDate && endDate < date) return showToast('End date must be on or after start date', 'error');
+
+        // Auto-detect time change if the end date was modified
+        const effectiveNewEnd = endDate || date;
+        const effectiveOrigEnd = editingEventOriginalEndDate || date;
+        if (!timeChange && effectiveNewEnd !== effectiveOrigEnd) {
+            timeChange = effectiveNewEnd > effectiveOrigEnd ? 'extended' : 'shortened';
+        }
+
+        const payload = {
+            label,
+            date,
+            description: desc,
+            status,
+        };
+        if (endDate) {
+            payload.endDate = endDate;
+        } else {
+            payload.endDate = null; // remove if cleared
+        }
+        // Store original end date on first edit so future comparisons work
+        if (!editingEventOriginalEndDate || editingEventOriginalEndDate === date) {
+            // first time setting, save current as original
+        } else {
+            payload.originalEndDate = editingEventOriginalEndDate;
+        }
+        payload.timeChange = timeChange || null;
+
+        try {
+            await update(child(EVENTS_REF, editingEventKey), payload);
+            showToast('✏️ Event updated', 'success');
+            closeEventEdit();
+        } catch (e) {
+            showToast('Update failed: ' + e.message, 'error');
+        }
+    }
+
+    function getEventStatus(event) {
+        if (event.status && event.status !== 'auto') return event.status;
+        const now = new Date();
+        const today = now.getFullYear() + '-' + String(now.getMonth() + 1).padStart(2, '0') + '-' + String(now.getDate()).padStart(2, '0');
+        const end = event.endDate || event.date;
+        if (event.date <= today && today <= end) return 'active';
+        return event.date > today ? 'upcoming' : 'past';
+    }
+
+    function renderEventsAdmin(snap) {
+        const container = document.getElementById('events-admin-list');
+        const countEl   = document.getElementById('event-count');
+        const data = snap.val();
+
+        if (!data) {
+            container.innerHTML = '<p style="color:var(--muted);text-align:center;padding:2rem">No events yet.</p>';
+            countEl.textContent = '(0)';
+            return;
+        }
+
+        const entries = Object.entries(data).sort((a, b) => {
+            // Sort by date descending (newest first)
+            return b[1].date.localeCompare(a[1].date);
+        });
+
+        countEl.textContent = `(${entries.length})`;
+
+        const statusColors = {
+            active:   '#FF9800',
+            upcoming: '#16C4C4',
+            past:     'var(--muted)'
+        };
+
+        container.innerHTML = entries.map(([key, ev]) => {
+            const st = getEventStatus(ev);
+            const color = statusColors[st] || 'var(--muted)';
+            const tcBadge = ev.timeChange === 'extended'
+                ? '<span style="background:rgba(255,152,0,.15);color:#FF9800;padding:2px 8px;border-radius:6px;font-size:.7rem;font-weight:700">⏳ EXTENDED</span>'
+                : ev.timeChange === 'shortened'
+                ? '<span style="background:rgba(22,196,196,.15);color:#16C4C4;padding:2px 8px;border-radius:6px;font-size:.7rem;font-weight:700">⏩ SHORTENED</span>'
+                : '';
+            const evJson = JSON.stringify(ev).replace(/'/g, '&#39;').replace(/"/g, '&quot;');
+            return `
+            <div class="admin-list-item" style="color:${color};border-left-color:${color}">
+                <div style="flex:1;min-width:0">
+                    <div style="display:flex;align-items:center;gap:.5rem;flex-wrap:wrap">
+                        <strong class="admin-list-item-title">${esc(ev.label)}</strong>
+                        <span style="background:${color}22;color:${color};padding:2px 8px;border-radius:6px;font-size:.75rem;text-transform:uppercase">${st}</span>
+                        ${tcBadge}
+                    </div>
+                    <div class="admin-list-item-meta">
+                        📆 ${ev.date}${ev.endDate ? ' → ' + ev.endDate : ''}
+                        ${ev.description ? ' · ' + esc(ev.description) : ''}
+                    </div>
+                </div>
+                <div class="admin-list-item-actions">
+                    <button onclick='openEventEdit("${key}", JSON.parse(this.dataset.ev))' data-ev="${evJson}"
+                        class="btn btn-edit" title="Edit event">✏️</button>
+                    <button onclick="deleteEvent('${key}')"
+                        class="btn btn-danger" title="Delete">🗑️</button>
+                </div>
+            </div>`;
+        }).join('');
+    }
+
+    // Live listener
+    onValue(EVENTS_REF, renderEventsAdmin);
+
+    /* ── World Downloads ── */
+    const DOWNLOADS_REF = ref(db, 'worldDownloads');
+
+    async function addDownload() {
+        const title = document.getElementById('dl-title').value.trim();
+        const url   = document.getElementById('dl-url').value.trim();
+
+        if (!title || !url) return showToast('Title and URL are required', 'error');
+
+        try {
+            await push(DOWNLOADS_REF, { title, url, createdAt: Date.now() });
+            showToast('📥 Download added!', 'success');
+            document.getElementById('dl-title').value = '';
+            document.getElementById('dl-url').value   = '';
+        } catch (e) {
+            showToast('Failed to add download: ' + e.message, 'error');
+        }
+    }
+
+    async function deleteDownload(key) {
+        const ok = await showConfirm('Delete download?', 'This will permanently remove this world download.');
+        if (!ok) return;
+        try {
+            await remove(child(DOWNLOADS_REF, key));
+            showToast('🗑️ Download deleted', 'success');
+        } catch (e) {
+            showToast('Delete failed: ' + e.message, 'error');
+        }
+    }
+
+    async function editDownloadField(key, field, currentValue) {
+        const newVal = prompt(`Edit ${field}:`, currentValue);
+        if (newVal === null || newVal === currentValue) return;
+        try {
+            await update(child(DOWNLOADS_REF, key), { [field]: newVal });
+            showToast('✏️ Download updated', 'success');
+        } catch (e) {
+            showToast('Update failed: ' + e.message, 'error');
+        }
+    }
+
+    function renderDownloadsAdmin(snap) {
+        const container = document.getElementById('downloads-admin-list');
+        const countEl   = document.getElementById('dl-count');
+        const data = snap.val();
+
+        if (!data) {
+            container.innerHTML = '<p style="color:var(--muted);text-align:center;padding:2rem">No downloads yet.</p>';
+            countEl.textContent = '(0)';
+            return;
+        }
+
+        const entries = Object.entries(data).sort((a, b) => (b[1].createdAt || 0) - (a[1].createdAt || 0));
+        countEl.textContent = `(${entries.length})`;
+
+        container.innerHTML = entries.map(([key, dl]) => `
+            <div class="admin-list-item" style="border-left-color:#16C4C4">
+                <div style="flex:1;min-width:0">
+                    <strong class="admin-list-item-title" style="cursor:pointer"
+                        onclick="editDownloadField('${key}','title','${dl.title.replace(/'/g, "\\'")}')">📥 ${esc(dl.title)}</strong>
+                    <div class="admin-list-item-meta" style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">
+                        🔗 <a href="${esc(dl.url)}" target="_blank" rel="noopener noreferrer" style="color:#16C4C4">${esc(dl.url)}</a>
+                    </div>
+                </div>
+                <div class="admin-list-item-actions">
+                    <button onclick="editDownloadField('${key}','url','${dl.url.replace(/'/g, "\\'")}')"
+                        class="btn btn-edit" title="Edit URL">✏️</button>
+                    <button onclick="deleteDownload('${key}')"
+                        class="btn btn-danger" title="Delete">🗑️</button>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    onValue(DOWNLOADS_REF, renderDownloadsAdmin);
+
+    // The HTML above calls all of these via inline onclick/onchange/oninput
+    // attributes, which need real global lookups — see gallery/index.astro
+    // for why (this is now an ES module, and module top-level declarations
+    // aren't automatically exposed on `window` the way a classic script's are).
+    Object.assign(window, {
+        loginWithGoogle, logout, setRoleFilter, filterMembers, switchTab,
+        updatePreview, addMember, confirmRemove, startEdit, saveEdit,
+        seedMembers, handleGalleryDrop, onGalleryFileSelect, clearGalleryFile,
+        uploadGalleryImage, editGalleryItem, closeGalleryEdit, saveGalleryEdit,
+        deleteGalleryItem, approveQueueItem, declineQueueItem,
+        addEvent, deleteEvent, openEventEdit, closeEventEdit, saveEventEdit,
+        addDownload, deleteDownload, editDownloadField,
+        closeConfirm, renderTable,
+    });
+</script>
+</Layout>

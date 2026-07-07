@@ -1,0 +1,605 @@
+/* Font — loaded via <link> in each page's <head> for non-blocking load */
+
+/* Reset & Base Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 100px;
+    overflow-x: hidden;
+    font-size: 14px;
+}
+
+body.dark-mode  { color-scheme: dark; }
+body:not(.dark-mode) { color-scheme: light; }
+
+:root {
+    /* ── Season 3 Brand Palette ── */
+    --s3-teal:   #49B7C6;  /* soft teal accent */
+    --s3-green:  #67BB7A;  /* pastel green */
+    --s3-red:    #D35D54;  /* warm accent */
+    --s3-orange: #F58F5D;  /* soft highlight */
+    --s3-gold:   #D4C56A;  /* warm trim */
+
+    /* Light Mode Colors */
+    --primary-green: #5BBF8F;   /* friendly moss green */
+    --secondary-green: #8FD2AB; /* pastel leaf green */
+    --light-green: #AEDBA4;
+    --primary-purple: #7D83C2;  /* muted purple-teal blend */
+    --secondary-purple: #8AA2D8;
+    --light-purple: #9CC8E7;
+    --light-bg: #faf4eb;
+    --light-text: #2f2d2a;
+    --light-card-bg: #fffdf5;
+    
+    /* Dark Mode Colors */
+    --dark-bg: #12101A;
+    --dark-secondary-bg: #1f1d2d;
+    --dark-card-bg: #211f2d;
+    --dark-text: #efe8dd;
+    --dark-text-secondary: #b9aea3;
+    --dark-border: #3a3639;
+    
+    /* Current theme variables */
+    --bg-primary: var(--dark-bg);
+    --bg-secondary: var(--dark-secondary-bg);
+    --bg-card: var(--dark-card-bg);
+    --text-primary: var(--dark-text);
+    --text-secondary: var(--dark-text-secondary);
+    --border-color: var(--dark-border);
+    --surface: #fffdf5;
+    --surface-soft: #fffbe7;
+    --surface-warm: #fff8e7;
+    --surface-border: rgba(34, 34, 34, 0.18);
+    --surface-shadow: 4px 6px 0 rgba(0, 0, 0, 0.12);
+    
+    --shadow: 0 4px 20px rgba(0, 0, 0, 0.18);
+    --shadow-heavy: 0 8px 32px rgba(0, 0, 0, 0.28);
+    --border-radius: 18px;
+    --transition: all 0.3s ease;
+    --panel-bg: var(--bg-card);
+    --panel-border: var(--border-color);
+    --panel-shadow: var(--shadow);
+    --text-color: #efe8dd;
+    --header-bg: rgba(18, 16, 26, 0.92);
+    --font-display: 'Luckiest Guy', cursive;
+    --font-handwriting: 'DynaPuff', cursive;
+    --font-body: 'DynaPuff', cursive;
+}
+
+
+/* Light Mode */
+body:not(.dark-mode) {
+    --bg-primary: var(--light-bg);
+    --bg-secondary: #ffffff;
+    --bg-card: var(--light-card-bg);
+    --text-primary: var(--light-text);
+    --text-secondary: #6c757d;
+    --border-color: #dee2e6;
+    --shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    --shadow-heavy: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+body {
+    font-family: var(--font-body);
+    line-height: 1.6;
+    color: var(--text-primary);
+    background: radial-gradient(circle at top left, rgba(74, 213, 212, 0.16), transparent 30%),
+                radial-gradient(circle at bottom right, rgba(103, 187, 122, 0.15), transparent 25%),
+                var(--bg-primary) url('https://www.transparenttextures.com/patterns/paper-fibers.png');
+    min-height: 100vh;
+    position: relative;
+    overflow-x: hidden;
+    transition: var(--transition);
+    background-blend-mode: multiply;
+}
+
+body.dark-mode {
+    background: radial-gradient(circle at top left, rgba(103, 187, 122, 0.12), transparent 22%),
+                radial-gradient(circle at bottom right, rgba(77, 134, 214, 0.12), transparent 18%),
+                linear-gradient(180deg, #14101d 0%, #1e1830 68%), url('https://www.transparenttextures.com/patterns/asfalt-dark.png');
+    background-blend-mode: multiply;
+    --bg-secondary: #1b1630;
+    --bg-card: #201c2f;
+    --text-primary: #efe8dd;
+    --text-secondary: #b9aea3;
+    --border-color: rgba(255,255,255,0.12);
+    --surface: rgba(255,255,255,0.05);
+    --surface-soft: rgba(255,255,255,0.04);
+    --surface-warm: rgba(255,255,255,0.06);
+    --surface-border: rgba(255,255,255,0.12);
+    --surface-shadow: 4px 6px 0 rgba(255,255,255,0.08);
+    --panel-bg: var(--bg-card);
+    --panel-border: var(--border-color);
+    --panel-shadow: var(--shadow);
+}
+
+body.dark-mode .site-footer,
+body.dark-mode .back-to-top,
+body.dark-mode .gupload-close,
+body.dark-mode .gupload-box,
+body.dark-mode .gupload-drop,
+body.dark-mode .tab-btn {
+    background: var(--surface);
+    border-color: var(--surface-border);
+    box-shadow: var(--surface-shadow);
+}
+
+body.dark-mode .site-header,
+body.dark-mode .site-header.scrolled {
+    background: #1a1828;
+}
+
+body.dark-mode .theme-toggle {
+    color: var(--text-primary);
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-display);
+    letter-spacing: 0.04em;
+}
+
+h1, h2, h3, h4, h5, h6,
+.hero-badge, .about-badge, .gallery-badge, .players-season-badge,
+.resources-badge, .hero-member-badge,
+.btn-glow, .btn-outline,
+.article-tag, .aside-header,
+.chapter-num, .chapter-title,
+.htl-date, .htl-title {
+    filter: url(#chalkText);
+}
+
+h2 {
+    position: relative;
+    display: inline-block;
+    margin-bottom: 1rem;
+}
+
+/* ── Site-wide page fold corner ──
+   Place a <span class="page-fold" aria-hidden="true"></span> as the last
+   child of any position:relative card to get a turned-up bottom-right corner */
+.page-fold {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 0;
+    height: 0;
+    display: block;
+    pointer-events: none;
+    z-index: 10;
+    /* Dark shadow wedge — the "underside" of the lifted corner */
+    border-style: solid;
+    border-width: 0 0 30px 30px;
+    border-color: transparent transparent rgba(0,0,0,0.18) transparent;
+}
+/* The top face of the fold — matches the page background */
+.page-fold::before {
+    content: '';
+    position: absolute;
+    bottom: -30px;
+    right: 0;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 30px 30px 0 0;
+    border-color: var(--bg-primary) transparent transparent transparent;
+}
+
+
+
+body.dark-mode .btn-secondary {
+    background: linear-gradient(45deg, #7b80b8, #94afcf);
+}
+
+body.dark-mode .card,
+body.dark-mode .footer-nav a,
+body.dark-mode .construction-content,
+body.dark-mode .construction-features,
+body.dark-mode .aside-cta,
+body.dark-mode .rule-card,
+body.dark-mode .icon-card-v2,
+body.dark-mode .gallery-card,
+body.dark-mode .gupload-box {
+    background: var(--panel-bg);
+    border-color: var(--panel-border);
+    box-shadow: var(--panel-shadow);
+}
+
+.flower-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: 
+        radial-gradient(circle at 20% 80%, rgba(22, 196, 196, 0.15) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(82, 194, 40, 0.15) 0%, transparent 50%),
+        radial-gradient(circle at 40% 40%, rgba(156, 39, 176, 0.08) 0%, transparent 50%);
+    z-index: -1;
+    transition: var(--transition);
+}
+
+.dark-mode .flower-bg {
+    background-image: 
+        radial-gradient(circle at 20% 80%, rgba(103, 187, 122, 0.24) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(211, 93, 84, 0.18) 0%, transparent 50%),
+        radial-gradient(circle at 40% 40%, rgba(212, 197, 106, 0.12) 0%, transparent 50%);
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+}
+
+/* Shared Button Styles */
+.btn-primary, .btn-secondary {
+    padding: 15px 30px;
+    border: 2.5px solid #222;
+    border-radius: 16px; /* Irregular radius */
+    font-size: 1.1rem;
+    font-family: 'DynaPuff', cursive;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+    text-transform: none;
+    letter-spacing: 0.5px;
+    position: relative;
+    overflow: hidden;
+    text-decoration: none;
+    display: inline-block;
+    box-shadow: 2px 4px 0 #222, 0 4px 20px rgba(82, 194, 40, 0.2);
+    background-blend-mode: multiply;
+}
+
+.btn-primary {
+    background: linear-gradient(45deg, var(--primary-green), var(--secondary-green));
+    color: white;
+    box-shadow: 0 4px 20px rgba(82, 194, 40, 0.4);
+}
+
+/* ── Shared gradient title text ── */
+.gradient-text {
+    position: relative;
+    display: inline-block;
+    background: linear-gradient(135deg, #ffffff 0%, var(--s3-teal) 40%, var(--primary-purple) 70%, var(--s3-green) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    background-size: auto;
+}
+
+.gradient-text::after {
+    content: attr(data-text);
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, #fff 0%, var(--primary-purple) 50%, var(--primary-green) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    filter: blur(18px) brightness(1.5);
+    opacity: 0.35;
+    z-index: -1;
+    pointer-events: none;
+}
+
+body:not(.dark-mode) .gradient-text {
+    background: linear-gradient(135deg, var(--primary-purple) 0%, var(--primary-green) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    background-size: auto;
+    animation: none;
+}
+
+body:not(.dark-mode) .gradient-text::after {
+    animation: none;
+    opacity: 0;
+}
+
+.btn-primary:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 30px rgba(82, 194, 40, 0.6);
+}
+
+.btn-secondary {
+    background: linear-gradient(45deg, var(--primary-purple), var(--secondary-purple));
+    color: white;
+    box-shadow: 0 4px 20px rgba(22, 196, 196, 0.4);
+}
+
+.btn-secondary:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 30px rgba(22, 196, 196, 0.6);
+}
+
+/* Shared Card Styles */
+.card {
+    background: var(--surface);
+    border-radius: 16px;
+    padding: 2rem;
+    border: 2.5px solid var(--surface-border);
+    box-shadow: var(--surface-shadow), var(--shadow);
+    font-family: 'DynaPuff', cursive;
+    position: relative;
+    transition: var(--transition);
+}
+
+/* Hand-drawn border effect for cards */
+.card::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border: 2px dashed rgba(255,255,255,0.12);
+    border-radius: 16px;
+    pointer-events: none;
+    opacity: 0.25;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-heavy);
+}
+
+/* Page Hero Shared */
+.page-hero {
+    margin-top: 0;
+    padding: 3rem 0;
+    text-align: center;
+    background: var(--bg-secondary);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.page-hero h1 {
+    font-size: 2.5rem;
+    background: linear-gradient(135deg, #fff 0%, var(--s3-teal) 50%, var(--s3-green) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 1rem;
+}
+
+body:not(.dark-mode) .page-hero h1 {
+    background: linear-gradient(135deg, #0A8A8A 0%, var(--s3-green) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.page-hero p {
+    font-size: 1.2rem;
+    color: var(--text-secondary);
+}
+
+/* ─── Shared Animations ─── */
+@keyframes blink {
+    0%, 100% { opacity: 1; }
+    50%       { opacity: 0.35; }
+}
+
+@keyframes statusPulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50%      { opacity: 0.5; transform: scale(1.5); }
+}
+
+@keyframes bgPulse {
+    0%   { opacity: 0.5; transform: scale(1); }
+    100% { opacity: 1;   transform: scale(1.1); }
+}
+
+/* Shimmer sweep used on gradient text headings */
+@keyframes shimmerTitle {
+    0%   { background-position: 0% center; }
+    100% { background-position: 200% center; }
+}
+
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeInDown {
+    from { opacity: 0; transform: translateY(-20px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ─── Page Transitions ─── */
+@keyframes pageEnter {
+    from { opacity: 0; transform: translateY(14px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes pageExit {
+    from { opacity: 1; transform: translateY(0); }
+    to   { opacity: 0; transform: translateY(-10px); }
+}
+
+main {
+    animation: pageEnter 0.4s ease forwards;
+    will-change: transform, opacity;
+}
+
+/* ─── Back-to-Top Button ─── */
+.back-to-top {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: var(--s3-teal);
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    font-size: 1.25rem;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 16px rgba(22, 196, 196, 0.45);
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(10px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    z-index: 999;
+}
+
+.back-to-top.visible {
+    opacity: 1;
+    pointer-events: all;
+    transform: translateY(0);
+}
+
+.back-to-top:hover {
+    background: var(--s3-green);
+    box-shadow: 0 4px 20px rgba(82, 194, 40, 0.5);
+}
+
+/* SERVER STATUS PILL */
+.server-status-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: .32rem .85rem;
+    border-radius: 999px;
+    background: rgba(0,0,0,.28);
+    border: 1px solid rgba(255,255,255,.08);
+    font-size: .76rem;
+    font-weight: 600;
+    letter-spacing: .05em;
+    color: var(--text-secondary);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    text-transform: uppercase;
+    transition: opacity .4s;
+}
+.server-status-pill .status-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: rgba(255,255,255,.2);
+    flex-shrink: 0;
+}
+.server-status-pill.online .status-dot {
+    background: #2ECC71;
+    box-shadow: 0 0 6px #2ECC71;
+    animation: blink 2s ease-in-out infinite;
+}
+.server-status-pill.offline .status-dot { background: #e05555; }
+
+/* Open in new tab button */
+.open-new-tab-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    padding: 0.45rem 1rem;
+    margin-bottom: 0.75rem;
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--s3-teal);
+    background: rgba(22,196,196,0.08);
+    border: 1px solid rgba(22,196,196,0.25);
+    border-radius: 8px;
+    text-decoration: none;
+    transition: background 0.2s ease, border-color 0.2s ease;
+}
+.open-new-tab-btn:hover {
+    background: rgba(22,196,196,0.15);
+    border-color: var(--s3-teal);
+}
+
+/* ─── Skip to Content Link ─── */
+.skip-link {
+    position: absolute;
+    top: -100%;
+    left: 1rem;
+    z-index: 10000;
+    padding: 10px 20px;
+    background: var(--s3-teal);
+    color: #fff;
+    font-weight: 700;
+    border-radius: 0 0 8px 8px;
+    text-decoration: none;
+    transition: top 0.2s ease;
+}
+.skip-link:focus {
+    top: 0;
+}
+
+/* ─── Reduced Motion ───
+   Scoped to `body:not(.motion-enabled)` so a user can explicitly opt back
+   into this broad catch-all (via the accessibility widget's "Reduce Motion"
+   switch, or the first-visit prompt) even when their OS prefers reduced
+   motion. This does NOT affect the separate, deliberately curated list of
+   continuous/looping animations in home.css (doodles, live-pulse dots, etc)
+   — those stay suppressed regardless, since unbounded looping motion is the
+   higher vestibular-risk category this exception isn't meant to touch. */
+@media (prefers-reduced-motion: reduce) {
+    body:not(.motion-enabled) *,
+    body:not(.motion-enabled) *::before,
+    body:not(.motion-enabled) *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+    body:not(.motion-enabled) .reveal { opacity: 1 !important; transform: none !important; }
+    body:not(.motion-enabled) .feature-card,
+    body:not(.motion-enabled) .custom-feature { opacity: 1 !important; transform: none !important; }
+    body:not(.motion-enabled) .fade-in-up { opacity: 1 !important; transform: none !important; }
+}
+
+/* Pause all descendant animations when a section is off-screen */
+.paused-offscreen *,
+.paused-offscreen *::before,
+.paused-offscreen *::after {
+    animation-play-state: paused !important;
+}
+
+/* ─── Section Dividers (SVG waves) ─── */
+.section-divider {
+    width: 100%;
+    line-height: 0;
+    margin: -1px 0;
+    position: relative;
+    z-index: 2;
+    pointer-events: none;
+}
+.section-divider svg {
+    display: block;
+    width: 100%;
+    height: 60px;
+}
+.section-divider.flip svg {
+    transform: scaleY(-1);
+}
+
+/* ─── Scroll Reveal ─── */
+.reveal {
+    opacity: 0;
+    transform: translateY(36px);
+    transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1), transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.reveal.revealed {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* ─── Staggered Card Reveal ─── */
+.feature-card,
+.custom-feature {
+    opacity: 0;
+    transition: opacity 0.55s cubic-bezier(0.22, 1, 0.36, 1),
+                transform 0.25s ease,
+                border-color 0.25s ease,
+                box-shadow 0.25s ease;
+}
+.feature-card.card-visible,
+.custom-feature.card-visible {
+    opacity: 1;
+}
+

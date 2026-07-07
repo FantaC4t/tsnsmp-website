@@ -1,0 +1,150 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout
+    title="404 – Page Not Found | TSNSMP"
+    description="Page not found."
+    path="/404/"
+    currentPage="home"
+    robots="noindex, follow"
+>
+<Fragment slot="head">
+    <style>
+        /* ── 404 page ── */
+        .nf-hero {
+            position: relative;
+            padding: 5rem 1.5rem 4rem;
+            text-align: center;
+            background: var(--bg-secondary);
+            border-bottom: 1px solid var(--border-color);
+            overflow: hidden;
+        }
+
+        /* Faint dot-grid (same as other hero sections) */
+        .nf-hero::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image: radial-gradient(circle, rgba(255,255,255,0.06) 1px, transparent 1px);
+            background-size: 28px 28px;
+            pointer-events: none;
+        }
+
+        .nf-code {
+            font-family: 'Luckiest Guy', cursive;
+            font-size: clamp(7rem, 24vw, 13rem);
+            line-height: 0.85;
+            background: linear-gradient(135deg, var(--s3-teal) 0%, var(--s3-green) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            filter: url(#chalkText);
+            position: relative;
+            display: inline-block;
+        }
+
+        .nf-subtitle {
+            font-family: 'DynaPuff', cursive;
+            font-size: clamp(1.1rem, 3.5vw, 1.6rem);
+            color: var(--text-primary);
+            margin: 0.9rem 0 0.6rem;
+        }
+
+        .nf-desc {
+            color: var(--text-secondary);
+            font-size: 1rem;
+            max-width: 400px;
+            margin: 0 auto 2.5rem;
+            line-height: 1.7;
+        }
+
+        /* Doodle decorations */
+        .nf-doodles {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            color: var(--s3-teal);
+            opacity: 0.45;
+        }
+        .nf-doodle { position: absolute; }
+
+        /* Buttons — same style as nav / footer links */
+        .nf-action-btn {
+            display: inline-block;
+            text-decoration: none;
+            font-family: 'Luckiest Guy', cursive;
+            font-size: 1.05rem;
+            letter-spacing: 0.04em;
+            color: var(--text-color, #e0e0e0);
+            padding: 0.55rem 1.4rem;
+            border: 1.5px dashed rgba(255,255,255,0.28);
+            border-radius: 8px 13px 10px 14px / 13px 8px 14px 10px;
+            background: rgba(255,255,255,0.09);
+            box-shadow: 2px 3px 0 rgba(0,0,0,0.22);
+            transition: color 0.22s ease, background 0.22s ease,
+                        border-color 0.22s ease, transform 0.22s cubic-bezier(0.34,1.56,0.64,1),
+                        box-shadow 0.22s ease;
+        }
+        .nf-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            justify-content: center;
+            margin-top: 2.5rem;
+        }
+        .nf-links .nf-action-btn:nth-child(odd)  { transform: rotate(-2deg); }
+        .nf-links .nf-action-btn:nth-child(even) { transform: rotate(1.5deg); }
+
+        .nf-action-btn:hover,
+        .nf-action-btn:focus-visible {
+            color: var(--s3-teal, #49B7C6);
+            background: rgba(73,183,198,0.15);
+            border-color: var(--s3-teal, #49B7C6);
+            transform: translateY(-5px) rotate(0deg) scale(1.06);
+            box-shadow: 3px 6px 0 rgba(22,196,196,0.35);
+        }
+        /* Home button gets a teal tint to stand out as primary */
+        .nf-action-btn--home {
+            color: var(--s3-teal, #49B7C6);
+            border-color: rgba(73,183,198,0.55);
+            background: rgba(73,183,198,0.12);
+            transform: rotate(-1deg);
+        }
+        body:not(.dark-mode) .nf-action-btn {
+            color: var(--text-primary, #1a1a1a);
+            border-color: rgba(0,0,0,0.22);
+            background: rgba(0,0,0,0.04);
+        }
+    </style>
+</Fragment>
+
+<main id="main-content">
+    <!-- Hero -->
+    <section class="nf-hero">
+        <!-- Doodle decorations -->
+        <div class="nf-doodles" aria-hidden="true">
+            <svg class="nf-doodle" style="top:18%;right:9%;width:22px" viewBox="0 0 24 24" fill="none"><path d="M12 2L13.6 8.6L20 10L13.6 11.4L12 18L10.4 11.4L4 10L10.4 8.6Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>
+            <svg class="nf-doodle" style="top:30%;left:8%;width:14px" viewBox="0 0 24 24" fill="none"><path d="M12 2L13.6 8.6L20 10L13.6 11.4L12 18L10.4 11.4L4 10L10.4 8.6Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>
+            <svg class="nf-doodle" style="bottom:20%;right:7%;width:15px" viewBox="0 0 20 20" fill="none"><path d="M10 2.5L10 17.5M2.5 10L17.5 10" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+            <svg class="nf-doodle" style="bottom:25%;left:5%;width:55px" viewBox="0 0 80 16" fill="none"><path d="M2 8C10 3 18 13 26 8C34 3 42 13 50 8C58 3 66 13 74 8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+            <svg class="nf-doodle" style="top:50%;left:12%;width:38px" viewBox="0 0 52 10" fill="none"><circle cx="5" cy="5" r="2" fill="currentColor" opacity="0.9"/><circle cx="26" cy="5" r="2" fill="currentColor" opacity="0.6"/><circle cx="47" cy="5" r="2" fill="currentColor" opacity="0.3"/></svg>
+        </div>
+
+        <div class="container">
+            <div class="nf-code" aria-label="Error 404">404</div>
+            <h1 class="nf-subtitle">This page got lost in the Nether.</h1>
+            <p class="nf-desc">The page you're looking for doesn't exist — or maybe it was never there. Either way, let's get you back to safety.</p>
+            <a href="/" class="nf-action-btn nf-action-btn--home">🏠 Back to Home</a>
+
+            <nav class="nf-links" aria-label="Site pages">
+                <a href="/about/" class="nf-action-btn">About</a>
+                <a href="/players/" class="nf-action-btn">Players</a>
+                <a href="/gallery/" class="nf-action-btn">Gallery</a>
+                <a href="/resources/" class="nf-action-btn">Resources</a>
+            </nav>
+        </div>
+    </section>
+
+</main>
+</Layout>

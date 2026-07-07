@@ -1,0 +1,372 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import '../../styles/gallery.css';
+---
+
+<Layout
+    title="Gallery - TSNSMP Server"
+    description="Browse screenshots and highlights from the TSNSMP Minecraft SMP community."
+    path="/gallery/"
+    ogTitle="Gallery - TSNSMP"
+    currentPage="gallery"
+>
+<Fragment slot="head">
+    <script type="application/ld+json" is:inline set:html={JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.tsnsmp.online/" },
+        { "@type": "ListItem", "position": 2, "name": "Gallery", "item": "https://www.tsnsmp.online/gallery/" }
+      ]
+    })} />
+</Fragment>
+
+<main id="main-content">
+    <section class="gallery-hero">
+        <div class="gallery-hero-bg"></div>
+        <div class="hero-grid"></div>
+        <div class="container">
+            <h1><span class="gradient-text" data-text="Gallery">Gallery</span></h1>
+            <p class="gallery-hero-sub">Screenshots and highlights from the server.</p>
+            <button type="button" class="gallery-upload-btn" id="upload-trigger-btn" onclick="openUploadModal()">
+                📸 Submit a Screenshot
+            </button>
+            <div style="margin-top:.75rem">
+                <a href="/admin/" style="font-size:.78rem;color:var(--text-secondary);opacity:.45;text-decoration:none;transition:opacity .2s" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=.45">🛠️ Admin</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="gallery-section">
+        <div class="container">
+            <!-- Season filter bar -->
+            <div class="gallery-filters" role="group" aria-label="Filter by season">
+                <button type="button" class="gallery-filter-btn active" data-season="all">All</button>
+                <button type="button" class="gallery-filter-btn" data-season="1">🌱 Season 1</button>
+                <button type="button" class="gallery-filter-btn" data-season="2">☀️ Season 2</button>
+                <button type="button" class="gallery-filter-btn" data-season="3">🚀 Season 3</button>
+            </div>
+            <div id="gallery-loading" class="gallery-status">Loading images…</div>
+            <div id="gallery-empty" class="gallery-status" style="display:none">
+                <span class="gallery-empty-icon">🗜️</span>
+                <p>No images yet — check back soon!</p>
+            </div>
+            <div id="gallery-grid" class="gallery-grid"></div>
+        </div>
+    </section>
+</main>
+
+<!-- Lightbox -->
+<div id="lightbox" class="lightbox" role="dialog" aria-modal="true" aria-labelledby="lightbox-title" aria-hidden="true">
+    <button type="button" class="lightbox-close" id="lightbox-close-btn" aria-label="Close image viewer">✕</button>
+    <button type="button" class="lightbox-nav lightbox-prev" id="lightbox-prev-btn" aria-label="Previous image">&#8592;</button>
+    <button type="button" class="lightbox-nav lightbox-next" id="lightbox-next-btn" aria-label="Next image">&#8594;</button>
+    <div class="lightbox-inner" id="lightbox-inner">
+        <img id="lightbox-img" src="" alt="">
+        <div class="lightbox-caption">
+            <strong id="lightbox-title"></strong>
+            <span id="lightbox-desc"></span>
+        </div>
+    </div>
+</div>
+
+<!-- Upload Modal -->
+<div id="upload-modal" class="gupload-backdrop" onclick="handleBackdropClick(event)">
+    <div class="gupload-box">
+        <button type="button" class="gupload-close" onclick="closeUploadModal()">✕</button>
+
+        <!-- Upload form (no auth required) -->
+        <div id="gupload-step-form">
+            <div class="gupload-icon">📸</div>
+            <h2>Submit a Screenshot</h2>
+            <p style="font-size:.88rem;color:var(--text-secondary);margin:.4rem 0 1rem">Your screenshot will be reviewed by a mod before appearing in the gallery.</p>
+            <div id="gupload-drop" class="gupload-drop" onclick="document.getElementById('gupload-file').click()">
+                <div class="gupload-drop-icon">🖼️</div>
+                <p>Click to select image</p>
+                <span>PNG, JPG, GIF, WebP — max 10 MB</span>
+                <input type="file" id="gupload-file" accept="image/*" style="display:none" onchange="onGUploadSelect(this)">
+            </div>
+            <div id="gupload-preview-wrap" style="display:none;position:relative;max-width:100%;margin:.5rem 0">
+                <img id="gupload-preview-img" src="" alt="Preview" style="width:100%;border-radius:10px;display:block;max-height:220px;object-fit:contain;background:#111">
+                <button type="button" onclick="clearGUpload()" style="position:absolute;top:6px;right:6px;background:rgba(0,0,0,.7);border:none;color:#fff;width:26px;height:26px;border-radius:50%;cursor:pointer;font-size:.85rem">✕</button>
+            </div>
+            <div class="gupload-fields">
+                <div class="gupload-field">
+                    <label>Title *</label>
+                    <input type="text" id="gupload-title" placeholder="e.g. Sunset at spawn" maxlength="80">
+                </div>
+                <div class="gupload-field">
+                    <label>Description <span style="opacity:.5">(optional)</span></label>
+                    <input type="text" id="gupload-desc" placeholder="e.g. S2 Day 1" maxlength="160">
+                </div>
+                <div class="gupload-field">
+                    <label>Season <span style="opacity:.5">(optional)</span></label>
+                    <select id="gupload-season" class="gupload-select">
+                        <option value="">— Not sure / doesn't apply</option>
+                        <option value="1">Season 1</option>
+                        <option value="2">Season 2</option>
+                        <option value="3">Season 3</option>
+                    </select>
+                </div>
+                <div class="gupload-field">
+                    <label>Your name <span style="opacity:.5">(optional)</span></label>
+                    <input type="text" id="gupload-submitter" placeholder="e.g. FantaC4t" maxlength="60">
+                </div>
+            </div>
+            <div class="gupload-progress-wrap" id="gupload-progress-wrap" style="display:none">
+                <div class="gupload-progress-bar" id="gupload-progress-bar"></div>
+            </div>
+            <div class="gupload-actions">
+                <button type="button" class="gupload-btn-submit" onclick="submitGUpload()">📤 Submit for Review</button>
+            </div>
+            <p id="gupload-form-error" style="color:#e05555;font-size:.85rem;margin-top:.6rem;text-align:center;display:none"></p>
+        </div>
+
+        <!-- Success step -->
+        <div id="gupload-step-success" style="display:none;text-align:center;padding:1rem 0">
+            <div style="font-size:3.5rem;margin-bottom:.75rem">✅</div>
+            <h2 style="margin-bottom:.5rem">Submitted!</h2>
+            <p style="color:var(--text-secondary);font-size:.9rem;margin-bottom:1.5rem">Your screenshot has been submitted for review.<br>A mod will approve it soon.</p>
+            <button type="button" class="gupload-btn-submit" onclick="closeUploadModal()">Done</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    // @ts-nocheck — plain JS, not TypeScript (see players/index.astro for context)
+    import { ref as dbRef, onValue, push } from 'firebase/database';
+    import { ref as storageRef, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
+    import { db, storage } from '../../scripts/firebase-client.js';
+
+    let allItems    = []; // all approved items from Firebase
+    let galleryItems = []; // currently visible (filtered) items — used by lightbox
+    let currentFilter = 'all';
+    let gUploadFile = null;
+
+    // Escape user-supplied strings before injecting into innerHTML (XSS protection)
+    // (lightbox itself is shared — see scripts/lightbox.js)
+    const esc = window.Lightbox.esc;
+
+    // ── Season filtering ──
+    function applyFilter(season) {
+        currentFilter = season;
+        document.querySelectorAll('.gallery-filter-btn').forEach(btn => {
+            btn.classList.toggle('active', btn.dataset.season === season);
+            btn.setAttribute('aria-pressed', btn.dataset.season === season ? 'true' : 'false');
+        });
+        galleryItems = season === 'all'
+            ? allItems
+            : allItems.filter(item => String(item.season) === String(season));
+        window.Lightbox.setItems(galleryItems);
+        renderGrid();
+    }
+
+    function renderGrid() {
+        const grid = document.getElementById('gallery-grid');
+        const empty = document.getElementById('gallery-empty');
+        if (!galleryItems.length) {
+            empty.style.display = 'flex';
+            grid.innerHTML = '';
+            return;
+        }
+        empty.style.display = 'none';
+        const seasonLabel = { '1': '🌱 S1', '2': '☀️ S2', '3': '🚀 S3' };
+        grid.innerHTML = galleryItems.map((item, i) => `
+            <div class="gallery-card" data-index="${i}">
+                <img src="${esc(item.url)}" alt="${esc(item.title || 'Gallery image')}" loading="lazy" draggable="false">
+                ${item.season ? `<span class="gallery-season-tag" data-season="${esc(item.season)}">${seasonLabel[item.season] || ''}</span>` : ''}
+                <div class="gallery-card-overlay">
+                    ${item.title       ? `<strong>${esc(item.title)}</strong>` : ''}
+                    ${item.description ? `<span>${esc(item.description)}</span>` : ''}
+                    ${item.uploadedBy  ? `<span style="font-size:.72rem;opacity:.6;margin-top:3px">📸 ${esc(item.uploadedBy)}</span>` : ''}
+                </div>
+            </div>
+        `).join('');
+    }
+
+    // Wire up filter buttons
+    document.querySelectorAll('.gallery-filter-btn').forEach(btn => {
+        btn.setAttribute('aria-pressed', btn.dataset.season === 'all' ? 'true' : 'false');
+        btn.addEventListener('click', () => applyFilter(btn.dataset.season));
+    });
+
+    // ── Gallery load (live — updates when mods approve submissions) ──
+    function loadGallery() {
+        onValue(dbRef(db, 'gallery'), snap => {
+            document.getElementById('gallery-loading').style.display = 'none';
+            allItems = [];
+            snap.forEach(child => {
+                const val = child.val();
+                if (val && val.url) allItems.push({ key: child.key, ...val });
+            });
+            allItems.sort((a, b) => (b.uploadedAt || 0) - (a.uploadedAt || 0));
+            applyFilter(currentFilter);
+        }, () => {
+            document.getElementById('gallery-loading').textContent = 'Could not load images. Please try again later.';
+        });
+    }
+    loadGallery();
+
+    // ── Gallery grid click delegation (more reliable than inline onclick) ──
+    document.getElementById('gallery-grid').addEventListener('click', function(e) {
+        const card = e.target.closest('.gallery-card');
+        if (card && card.dataset.index !== undefined) {
+            window.Lightbox.open(parseInt(card.dataset.index, 10));
+        }
+    });
+
+    // ── Upload modal ──
+    function openUploadModal() {
+        document.getElementById('upload-modal').classList.add('active');
+        document.body.style.overflow = 'hidden';
+        document.getElementById('gupload-step-form').style.display = '';
+        document.getElementById('gupload-step-success').style.display = 'none';
+    }
+    function closeUploadModal() {
+        document.getElementById('upload-modal').classList.remove('active');
+        document.body.style.overflow = '';
+    }
+    function handleBackdropClick(e) {
+        if (e.target === document.getElementById('upload-modal')) closeUploadModal();
+    }
+
+    // ── File handling ──
+    function onGUploadSelect(input) {
+        const file = input.files[0];
+        if (!file) return;
+        if (file.size > 10 * 1024 * 1024) {
+            setFormError('File is too large (max 10 MB).');
+            return;
+        }
+        gUploadFile = file;
+        document.getElementById('gupload-preview-img').src = URL.createObjectURL(file);
+        document.getElementById('gupload-preview-wrap').style.display = 'block';
+        document.getElementById('gupload-drop').style.display = 'none';
+        clearFormError();
+    }
+    function clearGUpload() {
+        gUploadFile = null;
+        document.getElementById('gupload-file').value = '';
+        document.getElementById('gupload-preview-wrap').style.display = 'none';
+        document.getElementById('gupload-drop').style.display = 'flex';
+    }
+    function setFormError(msg) {
+        const el = document.getElementById('gupload-form-error');
+        el.textContent = msg;
+        el.style.display = '';
+        el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+    function clearFormError() {
+        document.getElementById('gupload-form-error').style.display = 'none';
+    }
+
+    // ── Client-side compression before upload ──
+    // Real user-uploaded screenshots often arrive as multi-MB raw PNGs; this
+    // downsizes anything larger than a reasonable gallery display size and
+    // re-encodes as JPEG, which is what actually dominates page weight on the
+    // home/gallery pages that display these images.
+    async function compressImage(file, { maxDimension = 1920, quality = 0.82 } = {}) {
+        if (file.type === 'image/gif') return file; // would flatten animation
+        let bitmap;
+        try {
+            bitmap = await createImageBitmap(file);
+        } catch (e) {
+            return file; // unsupported/corrupt — let Storage/Firebase reject it downstream
+        }
+        const scale = Math.min(1, maxDimension / Math.max(bitmap.width, bitmap.height));
+        if (scale === 1 && file.size < 400 * 1024) {
+            bitmap.close?.();
+            return file; // already small enough, not worth re-encoding
+        }
+        const canvas = document.createElement('canvas');
+        canvas.width  = Math.round(bitmap.width  * scale);
+        canvas.height = Math.round(bitmap.height * scale);
+        canvas.getContext('2d').drawImage(bitmap, 0, 0, canvas.width, canvas.height);
+        bitmap.close?.();
+        const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/jpeg', quality));
+        if (!blob || blob.size >= file.size) return file; // re-encode didn't help
+        const newName = file.name.replace(/\.[^.]+$/, '') + '.jpg';
+        return new File([blob], newName, { type: 'image/jpeg' });
+    }
+
+    // ── Submit to moderation queue ──
+    async function submitGUpload() {
+        clearFormError();
+        if (!storage)     { setFormError('Storage is not configured — enable Firebase Storage in the Firebase console.'); return; }
+        if (!gUploadFile) { setFormError('Please select an image.'); return; }
+        const title = document.getElementById('gupload-title').value.trim();
+        if (!title)       { setFormError('Please add a title.'); return; }
+
+        gUploadFile = await compressImage(gUploadFile);
+
+        const desc      = document.getElementById('gupload-desc').value.trim();
+        const submitter = document.getElementById('gupload-submitter').value.trim();
+        const seasonRaw = document.getElementById('gupload-season').value;
+        const season    = seasonRaw ? parseInt(seasonRaw, 10) : null;
+        const ext  = gUploadFile.name.split('.').pop().toLowerCase();
+        const path = `gallery_queue/${Date.now()}_${Math.random().toString(36).slice(2,8)}.${ext}`;
+
+        const progressWrap = document.getElementById('gupload-progress-wrap');
+        const progressBar  = document.getElementById('gupload-progress-bar');
+        progressWrap.style.display = 'block';
+
+        let task;
+        try {
+            task = uploadBytesResumable(storageRef(storage, path), gUploadFile);
+        } catch(e) {
+            setFormError('Could not start upload: ' + e.message);
+            progressWrap.style.display = 'none';
+            return;
+        }
+
+        task.on('state_changed',
+            snap => {
+                const pct = Math.round(snap.bytesTransferred / snap.totalBytes * 100);
+                progressBar.style.width = pct + '%';
+            },
+            err => {
+                setFormError('Upload failed: ' + err.message);
+                progressWrap.style.display = 'none';
+            },
+            async () => {
+                try {
+                    const url = await getDownloadURL(task.snapshot.ref);
+                    await push(dbRef(db, 'gallery_queue'), {
+                        title,
+                        description: desc,
+                        url,
+                        storagePath: path,
+                        submittedBy: submitter || 'Anonymous',
+                        submittedAt: Date.now(),
+                        ...(season && { season }),
+                        status: 'pending'
+                    });
+                    progressWrap.style.display = 'none';
+                    progressBar.style.width = '0';
+                    // Reset form fields
+                    clearGUpload();
+                    document.getElementById('gupload-title').value     = '';
+                    document.getElementById('gupload-desc').value      = '';
+                    document.getElementById('gupload-submitter').value = '';
+                    document.getElementById('gupload-season').value    = '';
+                    // Show success step
+                    document.getElementById('gupload-step-form').style.display    = 'none';
+                    document.getElementById('gupload-step-success').style.display = '';
+                } catch(e) {
+                    setFormError('Upload succeeded but failed to save: ' + e.message);
+                    progressWrap.style.display = 'none';
+                }
+            }
+        );
+    }
+
+    // The HTML above calls these via inline onclick/onchange attributes,
+    // which need real global lookups — a plain <script> would expose them
+    // automatically, but this is now an ES module (needed for `import`), and
+    // module top-level declarations are scoped to the module, not `window`.
+    Object.assign(window, {
+        openUploadModal, closeUploadModal, handleBackdropClick,
+        onGUploadSelect, clearGUpload, submitGUpload,
+    });
+</script>
+</Layout>

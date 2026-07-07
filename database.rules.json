@@ -2,27 +2,27 @@
   "rules": {
     "members": {
       ".read": true,
-      ".write": "auth != null"
+      ".write": "auth != null && root.child('authorizedEmails').child(auth.uid).exists()"
     },
     "authorizedEmails": {
       ".read": "auth != null",
-      ".write": "auth != null"
+      ".write": false
     },
     "gallery": {
       ".read": true,
-      ".write": "auth != null"
+      ".write": "auth != null && root.child('authorizedEmails').child(auth.uid).exists()"
     },
     "gallery_queue": {
-      ".read": "auth != null",
+      ".read": "auth != null && root.child('authorizedEmails').child(auth.uid).exists()",
       ".write": true
     },
     "events": {
       ".read": true,
-      ".write": "auth != null"
+      ".write": "auth != null && root.child('authorizedEmails').child(auth.uid).exists()"
     },
     "worldDownloads": {
       ".read": true,
-      ".write": "auth != null"
+      ".write": "auth != null && root.child('authorizedEmails').child(auth.uid).exists()"
     }
   }
 }

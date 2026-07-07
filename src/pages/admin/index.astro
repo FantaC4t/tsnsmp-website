@@ -526,17 +526,12 @@ import '../../styles/admin.css';
         `).join('');
     }
 
-    // ── Check whether the signed-in user's email is in /authorizedEmails ──
+    // ── Check whether the signed-in user's UID is in /authorizedEmails ──
     // Returns: { allowed: bool, error: string|null }
     async function isAuthorized(user) {
         try {
-            const snap = await get(AUTH_REF);
-            const val  = snap.val();
-            if (!val) return { allowed: false, error: 'authorizedEmails list is empty or missing in the database.' };
-            const list = Array.isArray(val) ? val : Object.values(val);
-            const normalised = list.map(e => String(e).trim().toLowerCase());
-            const userEmail  = user.email.trim().toLowerCase();
-            const allowed = normalised.includes(userEmail);
+            const snap = await get(child(AUTH_REF, user.uid));
+            const allowed = snap.exists();
             return { allowed, error: allowed ? null : `${user.email} is not on the authorised list.` };
         } catch (e) {
             console.error('[Auth] Authorization check failed:', e);

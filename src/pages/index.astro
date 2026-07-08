@@ -22,6 +22,7 @@ import '../styles/home.css';
     <svg class="doodle doodle-cross" viewBox="0 0 20 20" fill="none" style="top:65%;right:18%;width:18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 2.5 L10 17.5 M2.5 10 L17.5 10" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
     <svg class="doodle doodle-squiggle" viewBox="0 0 80 16" fill="none" style="bottom:16%;right:7%;width:68px" xmlns="http://www.w3.org/2000/svg"><path d="M2 8C10 3 18 13 26 8C34 3 42 13 50 8C58 3 66 13 74 8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" fill="none"/></svg>
     <svg class="doodle doodle-dots" viewBox="0 0 44 10" fill="none" style="top:80%;left:10%;width:52px" xmlns="http://www.w3.org/2000/svg"><circle cx="5" cy="5" r="2.2" fill="currentColor" opacity="0.8"/><circle cx="22" cy="5" r="2.2" fill="currentColor" opacity="0.55"/><circle cx="39" cy="5" r="2.2" fill="currentColor" opacity="0.3"/></svg>
+    <img class="hero-mascot" src="/assets/mascot.png" alt="" width="120" height="91" style="top:16%;right:14%" />
 </div>
 <div class="hero-container"><!-- Content -->
 <div class="hero-content">
@@ -496,7 +497,7 @@ import '../styles/home.css';
                     container.setAttribute('aria-busy', 'false');
                     container.innerHTML = `
                     <div class="events-empty">
-                        <span class="events-empty-icon">📡</span>
+                        <img class="events-empty-icon" src="/assets/mascot.png" alt="" width="90" height="68" loading="lazy" />
                         <p class="events-empty-title">Stay tuned!</p>
                         <p class="events-empty-desc">No events planned right now — but something's always brewing. Check back soon!</p>
                     </div>`;
@@ -610,7 +611,7 @@ import '../styles/home.css';
                 container.setAttribute('aria-busy', 'false');
                 container.innerHTML = `
                 <div class="events-empty">
-                    <span class="events-empty-icon">📡</span>
+                    <img class="events-empty-icon" src="/assets/mascot.png" alt="" width="90" height="68" loading="lazy" />
                     <p class="events-empty-title">Stay tuned!</p>
                     <p class="events-empty-desc">No events planned right now — but something's always brewing. Check back soon!</p>
                 </div>`;

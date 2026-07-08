@@ -45,10 +45,10 @@
     text-decoration: none;
     letter-spacing: 0.02em;
     font-weight: 600;
-    transition: color 0.2s, transform 0.2s, box-shadow 0.2s;
+    transition: color 0.2s ease, box-shadow 0.2s ease, transform 0.2s var(--bounce);
     font-family: var(--font-display, 'Luckiest Guy', cursive);
     font-size: 1.05rem;
-    border: 1.5px dashed rgba(255,255,255,0.22);
+    border: 2px dashed rgba(255,255,255,0.22);
     border-radius: 8px 13px 10px 14px / 13px 8px 14px 10px;
     padding: 0.3rem 0.9rem;
     background: var(--surface-soft);

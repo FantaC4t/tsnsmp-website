@@ -31,6 +31,14 @@ import Layout from '../layouts/Layout.astro';
             pointer-events: none;
         }
 
+        .nf-mascot {
+            display: block;
+            margin: 0 auto 0.5rem;
+            transform: rotate(-4deg);
+            position: relative;
+            z-index: 1;
+        }
+
         .nf-code {
             font-family: 'Luckiest Guy', cursive;
             font-size: clamp(7rem, 24vw, 13rem);
@@ -132,6 +140,7 @@ import Layout from '../layouts/Layout.astro';
         </div>
 
         <div class="container">
+            <img class="nf-mascot" src="/assets/mascot.png" alt="" width="140" height="106" />
             <div class="nf-code" aria-label="Error 404">404</div>
             <h1 class="nf-subtitle">This page got lost in the Nether.</h1>
             <p class="nf-desc">The page you're looking for doesn't exist — or maybe it was never there. Either way, let's get you back to safety.</p>

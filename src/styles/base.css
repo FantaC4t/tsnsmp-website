@@ -19,11 +19,21 @@ body:not(.dark-mode) { color-scheme: light; }
 
 :root {
     /* ── Season 3 Brand Palette ── */
-    --s3-teal:   #49B7C6;  /* soft teal accent */
-    --s3-green:  #67BB7A;  /* pastel green */
-    --s3-red:    #D35D54;  /* warm accent */
-    --s3-orange: #F58F5D;  /* soft highlight */
-    --s3-gold:   #D4C56A;  /* warm trim */
+    /* Bumped more saturated/punchy (2026-07-08 cartoony pass) — these were
+       reading soft/pastel everywhere they're used as accents (badges,
+       borders, hero glows), which undersold the hand-drawn/doodle theme. */
+    --s3-teal:   #2BC7DB;  /* vivid teal accent */
+    --s3-green:  #3ED676;  /* punchy green */
+    --s3-red:    #E8483B;  /* bold warm accent */
+    --s3-orange: #FF7A33;  /* vivid highlight */
+    --s3-gold:   #E8C43D;  /* rich trim */
+
+    /* Shared bounce-in/out easing — was already hand-typed identically in
+       ~15 places (rule-card, player-card, icon-card-v2, event-card hovers);
+       centralised here so it can be applied to the plainer shared
+       components (generic .card, buttons, nav) too, for a consistently
+       springier feel instead of just the specialty cards. */
+    --bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
 
     /* Light Mode Colors */
     --primary-green: #5BBF8F;   /* friendly moss green */
@@ -279,13 +289,13 @@ body:not(.dark-mode)::before {
 /* Shared Button Styles */
 .btn-primary, .btn-secondary {
     padding: 15px 30px;
-    border: 2.5px solid #222;
+    border: 3px solid #222;
     border-radius: 16px; /* Irregular radius */
     font-size: 1.1rem;
     font-family: 'DynaPuff', cursive;
     font-weight: 600;
     cursor: pointer;
-    transition: var(--transition);
+    transition: var(--transition), transform 0.25s var(--bounce);
     text-transform: none;
     letter-spacing: 0.5px;
     position: relative;
@@ -362,11 +372,11 @@ body:not(.dark-mode) .gradient-text::after {
     background: var(--surface);
     border-radius: 16px;
     padding: 2rem;
-    border: 2.5px solid var(--surface-border);
+    border: 3px solid var(--surface-border);
     box-shadow: var(--surface-shadow), var(--shadow);
     font-family: 'DynaPuff', cursive;
     position: relative;
-    transition: var(--transition);
+    transition: var(--transition), transform 0.25s var(--bounce);
 }
 
 /* Hand-drawn border effect for cards */

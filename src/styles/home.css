@@ -721,6 +721,20 @@ body:not(.dark-mode) .btn-outline {
     opacity: 0.28;
 }
 
+.hero-mascot {
+    position: absolute;
+    z-index: 3;
+    width: 120px;
+    height: auto;
+    animation: mascotFloat 6s ease-in-out infinite alternate;
+    filter: drop-shadow(3px 6px 8px rgba(0,0,0,0.25));
+}
+
+@keyframes mascotFloat {
+    0%   { transform: translateY(0) rotate(-3deg); }
+    100% { transform: translateY(-12px) rotate(2deg); }
+}
+
 .doodle-dots {
     color: var(--s3-gold);
     animation: doodleFloat 10s ease-in-out 2s infinite alternate;
@@ -2001,9 +2015,10 @@ body:not(.dark-mode) .app-response-note {
     box-shadow: 0 1px 3px rgba(0,0,0,0.15);
 }
 .events-empty-icon {
-    font-size: 2.5rem;
     display: block;
-    margin-bottom: 0.75rem;
+    width: 90px;
+    height: auto;
+    margin: 0 auto 0.75rem;
 }
 .events-empty-title {
     font-size: 1.2rem;
@@ -2921,6 +2936,7 @@ a:focus-visible {
     .polaroid-live-dot,
     .event-countdown-active,
     .pulse-btn::after,
+    .hero-mascot,
     .doodle,
     .doodle-star,
     .doodle-star--sm,

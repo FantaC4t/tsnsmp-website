@@ -1274,7 +1274,9 @@ body.dark-mode .custom-feature {
     box-shadow: 3px 5px 0 rgba(255,255,255,0.04);
 }
 
-/* Left-side teal accent bar */
+/* Left-side accent bar — colour-matched per card so this section carries
+   some of the vibrancy from the sticky-note section above it, instead of
+   all three cards reading as the same flat, monochrome grey. */
 .custom-feature::before {
     content: '';
     position: absolute;
@@ -1287,6 +1289,17 @@ body.dark-mode .custom-feature {
     opacity: 0.4;
     pointer-events: none;
 }
+.custom-feature:nth-child(1)::before { background: linear-gradient(180deg, #f58f5d, #d35d54, #7d83c2); }
+.custom-feature:nth-child(2)::before { background: linear-gradient(180deg, #e8749a, #d35d54); }
+.custom-feature:nth-child(3)::before { background: linear-gradient(180deg, #e8544a, #f58f5d); }
+
+/* Icon circle tint — matches each card's accent instead of the same flat
+   dark circle used for the rainbow sticky-notes above (which works there
+   because it sits on a bright background, but reads flat on these dark
+   cards). */
+.custom-feature:nth-child(1) .feature-icon { background: radial-gradient(circle, rgba(245,143,93,0.20), rgba(125,131,194,0.12)); }
+.custom-feature:nth-child(2) .feature-icon { background: radial-gradient(circle, rgba(232,116,154,0.20), rgba(211,93,84,0.12)); }
+.custom-feature:nth-child(3) .feature-icon { background: radial-gradient(circle, rgba(232,84,74,0.20), rgba(245,143,93,0.12)); }
 
 .custom-feature:hover {
     border-style: solid;
@@ -1961,13 +1974,31 @@ body:not(.dark-mode) .app-response-note {
     align-items: flex-start;
 }
 
-/* Empty state */
+/* Empty state — given the same tape-strip + slight-tilt treatment as the
+   event cards it stands in for, so it doesn't read as a plain unfinished
+   placeholder box next to everything else on the page. */
 .events-empty {
     text-align: center;
     padding: 2.5rem 1.5rem;
     background: var(--bg-card);
     border: 1px dashed var(--border-color);
-    border-radius: 16px;
+    border-radius: 2px 3px 4px 2px;
+    position: relative;
+    transform: rotate(-0.7deg);
+}
+.events-empty::before {
+    content: '';
+    position: absolute;
+    top: -11px;
+    left: calc(50% - 26px);
+    width: 52px;
+    height: 15px;
+    background: rgba(215, 190, 120, 0.6);
+    border-radius: 2px 3px 3px 2px;
+    transform: rotate(-1.2deg);
+    z-index: 2;
+    pointer-events: none;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.15);
 }
 .events-empty-icon {
     font-size: 2.5rem;

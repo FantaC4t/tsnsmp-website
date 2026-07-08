@@ -84,13 +84,23 @@ body:not(.dark-mode) {
     --shadow-heavy: 0 8px 25px rgba(0, 0, 0, 0.15);
 }
 
+/* Self-hosted paper-grain texture — inline SVG feTurbulence, rendered once as
+   a static background image (not a live filter), so there's no external
+   request and nothing to recompute on interaction. Replaces a dependency on
+   transparenttextures.com, which was a third-party request for a purely
+   decorative texture with no fallback if that site ever went down. */
+:root {
+    --grain-texture: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
 body {
     font-family: var(--font-body);
     line-height: 1.6;
     color: var(--text-primary);
     background: radial-gradient(circle at top left, rgba(74, 213, 212, 0.16), transparent 30%),
                 radial-gradient(circle at bottom right, rgba(103, 187, 122, 0.15), transparent 25%),
-                var(--bg-primary) url('https://www.transparenttextures.com/patterns/paper-fibers.png');
+                var(--bg-primary) var(--grain-texture);
+    background-size: auto, auto, 180px 180px;
     min-height: 100vh;
     position: relative;
     overflow-x: hidden;
@@ -101,7 +111,8 @@ body {
 body.dark-mode {
     background: radial-gradient(circle at top left, rgba(103, 187, 122, 0.12), transparent 22%),
                 radial-gradient(circle at bottom right, rgba(77, 134, 214, 0.12), transparent 18%),
-                linear-gradient(180deg, #14101d 0%, #1e1830 68%), url('https://www.transparenttextures.com/patterns/asfalt-dark.png');
+                linear-gradient(180deg, #14101d 0%, #1e1830 68%), var(--grain-texture);
+    background-size: auto, auto, auto, 180px 180px;
     background-blend-mode: multiply;
     --bg-secondary: #1b1630;
     --bg-card: #201c2f;
@@ -224,10 +235,39 @@ body.dark-mode .gupload-box {
 }
 
 .dark-mode .flower-bg {
-    background-image: 
+    background-image:
         radial-gradient(circle at 20% 80%, rgba(103, 187, 122, 0.24) 0%, transparent 50%),
         radial-gradient(circle at 80% 20%, rgba(211, 93, 84, 0.18) 0%, transparent 50%),
         radial-gradient(circle at 40% 40%, rgba(212, 197, 106, 0.12) 0%, transparent 50%);
+}
+
+/* Page-margin dot-grid — a faint graph-paper grid that only shows in the
+   gutters either side of the centered content column, fading to nothing
+   behind actual content. Gives the whole site a "notebook page" framing
+   instead of just the hero section having a grid. Fixed + negative z-index
+   so it sits behind everything, same convention as .flower-bg above. Hidden
+   below 1500px since there's no gutter space left to show it in. */
+body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+        linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+    background-size: 28px 28px;
+    mask-image: linear-gradient(90deg, black 0%, black 9%, transparent 17%, transparent 83%, black 91%, black 100%);
+    -webkit-mask-image: linear-gradient(90deg, black 0%, black 9%, transparent 17%, transparent 83%, black 91%, black 100%);
+    pointer-events: none;
+    z-index: -1;
+    display: none;
+}
+body:not(.dark-mode)::before {
+    background-image:
+        linear-gradient(rgba(0, 0, 0, 0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 0, 0, 0.05) 1px, transparent 1px);
+}
+@media (min-width: 1500px) {
+    body::before { display: block; }
 }
 
 .container {
@@ -339,6 +379,7 @@ body:not(.dark-mode) .gradient-text::after {
     pointer-events: none;
     opacity: 0.25;
 }
+
 
 .card:hover {
     transform: translateY(-5px);

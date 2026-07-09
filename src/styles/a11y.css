@@ -17,24 +17,24 @@
     height: 64px;
     border-radius: 50%;
     border: none;
-    background: var(--s3-teal, #49B7C6);
+    background: var(--s3-teal);
     color: #fff;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 4px 20px rgba(22, 196, 196, 0.5);
+    box-shadow: 0 4px 20px rgba(var(--s3-teal-rgb), 0.5);
     transition: transform 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
 }
 
 #a11y-trigger:hover {
-    background: var(--s3-green, #67BB7A);
+    background: var(--s3-green);
     transform: scale(1.1);
-    box-shadow: 0 4px 20px rgba(82, 194, 40, 0.5);
+    box-shadow: 0 4px 20px rgba(var(--s3-green-rgb), 0.5);
 }
 
 #a11y-trigger:focus-visible {
-    outline: 3px solid var(--s3-teal, #49B7C6);
+    outline: 3px solid var(--s3-teal);
     outline-offset: 3px;
 }
 
@@ -92,7 +92,7 @@
 }
 
 .a11y-close:focus-visible {
-    outline: 2px solid var(--s3-teal, #49B7C6);
+    outline: 2px solid var(--s3-teal);
     outline-offset: 2px;
 }
 
@@ -140,19 +140,19 @@
 }
 
 .a11y-size-btn:hover {
-    background: rgba(22, 196, 196, 0.14);
+    background: rgba(var(--s3-teal-rgb), 0.14);
     color: var(--text-primary, #efe8dd);
-    border-color: var(--s3-teal, #49B7C6);
+    border-color: var(--s3-teal);
 }
 
 .a11y-size-btn[aria-pressed="true"] {
-    background: var(--s3-teal, #49B7C6);
-    border-color: var(--s3-teal, #49B7C6);
+    background: var(--s3-teal);
+    border-color: var(--s3-teal);
     color: #fff;
 }
 
 .a11y-size-btn:focus-visible {
-    outline: 2px solid var(--s3-teal, #49B7C6);
+    outline: 2px solid var(--s3-teal);
     outline-offset: 2px;
 }
 
@@ -168,7 +168,7 @@
 }
 
 .a11y-switch:focus-visible {
-    outline: 2px solid var(--s3-teal, #49B7C6);
+    outline: 2px solid var(--s3-teal);
     outline-offset: 3px;
     border-radius: 12px;
 }
@@ -197,8 +197,8 @@
 }
 
 .a11y-switch[aria-checked="true"] .a11y-switch-track {
-    background: var(--s3-teal, #49B7C6);
-    border-color: var(--s3-teal, #49B7C6);
+    background: var(--s3-teal);
+    border-color: var(--s3-teal);
 }
 
 .a11y-switch[aria-checked="true"] .a11y-switch-thumb {
@@ -227,7 +227,7 @@
 }
 
 .a11y-reset-btn:focus-visible {
-    outline: 2px solid var(--s3-teal, #49B7C6);
+    outline: 2px solid var(--s3-teal);
     outline-offset: 2px;
 }
 
@@ -244,8 +244,8 @@ body:not(.dark-mode) .a11y-row-label     { color: #6c757d; }
 body:not(.dark-mode) .a11y-close         { color: #6c757d; }
 body:not(.dark-mode) .a11y-close:hover   { background: rgba(0, 0, 0, 0.05); color: #2f2d2a; }
 body:not(.dark-mode) .a11y-size-btn                    { background: rgba(0,0,0,0.04); border-color: #dee2e6; color: #6c757d; }
-body:not(.dark-mode) .a11y-size-btn:hover               { background: rgba(22,196,196,0.1); }
-body:not(.dark-mode) .a11y-size-btn[aria-pressed="true"] { background: var(--s3-teal, #49B7C6); border-color: var(--s3-teal, #49B7C6); color: #fff; }
+body:not(.dark-mode) .a11y-size-btn:hover               { background: rgba(var(--s3-teal-rgb), 0.1); }
+body:not(.dark-mode) .a11y-size-btn[aria-pressed="true"] { background: var(--s3-teal); border-color: var(--s3-teal); color: #fff; }
 body:not(.dark-mode) .a11y-switch-track  { background: rgba(0,0,0,0.08); border-color: #dee2e6; }
 body:not(.dark-mode) .a11y-switch-thumb  { background: #9ca3af; }
 body:not(.dark-mode) .a11y-reset-btn     { background: rgba(0,0,0,0.03); border-color: #dee2e6; color: #6c757d; }
@@ -365,20 +365,20 @@ body.reduce-motion .fade-in-up {
 
 .motion-prompt-btn:hover,
 .motion-prompt-btn:focus-visible {
-    border-color: var(--s3-teal, #49B7C6);
+    border-color: var(--s3-teal);
     color: var(--text-primary, #e0e0e0);
 }
 
 .motion-prompt-btn--primary {
-    background: var(--s3-teal, #49B7C6);
-    border-color: var(--s3-teal, #49B7C6);
+    background: var(--s3-teal);
+    border-color: var(--s3-teal);
     color: #fff;
 }
 
 .motion-prompt-btn--primary:hover,
 .motion-prompt-btn--primary:focus-visible {
-    background: var(--s3-green, #67BB7A);
-    border-color: var(--s3-green, #67BB7A);
+    background: var(--s3-green);
+    border-color: var(--s3-green);
     color: #fff;
 }
 

@@ -106,17 +106,17 @@ import Layout from '../layouts/Layout.astro';
 
         .nf-action-btn:hover,
         .nf-action-btn:focus-visible {
-            color: var(--s3-teal, #49B7C6);
-            background: rgba(73,183,198,0.15);
-            border-color: var(--s3-teal, #49B7C6);
+            color: var(--s3-teal);
+            background: rgba(var(--s3-teal-rgb), 0.15);
+            border-color: var(--s3-teal);
             transform: translateY(-5px) rotate(0deg) scale(1.06);
             box-shadow: 3px 6px 0 rgba(22,196,196,0.35);
         }
         /* Home button gets a teal tint to stand out as primary */
         .nf-action-btn--home {
-            color: var(--s3-teal, #49B7C6);
-            border-color: rgba(73,183,198,0.55);
-            background: rgba(73,183,198,0.12);
+            color: var(--s3-teal);
+            border-color: rgba(var(--s3-teal-rgb), 0.55);
+            background: rgba(var(--s3-teal-rgb), 0.12);
             transform: rotate(-1deg);
         }
         body:not(.dark-mode) .nf-action-btn {

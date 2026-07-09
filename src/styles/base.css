@@ -28,6 +28,16 @@ body:not(.dark-mode) { color-scheme: light; }
     --s3-orange: #FF7A33;  /* vivid highlight */
     --s3-gold:   #E8C43D;  /* rich trim */
 
+    /* RGB-triplet companions so rgba(var(--s3-teal-rgb), X) can replace the
+       hardcoded old-palette rgba() literals scattered across every
+       stylesheet (glows/shadows were still silently the pre-bump colour
+       since they never referenced the hex tokens above). */
+    --s3-teal-rgb:   43, 199, 219;
+    --s3-green-rgb:  62, 214, 118;
+    --s3-red-rgb:    232, 72, 59;
+    --s3-orange-rgb: 255, 122, 51;
+    --s3-gold-rgb:   232, 196, 61;
+
     /* Shared bounce-in/out easing — was already hand-typed identically in
        ~15 places (rule-card, player-card, icon-card-v2, event-card hovers);
        centralised here so it can be applied to the plainer shared
@@ -108,7 +118,7 @@ body {
     line-height: 1.6;
     color: var(--text-primary);
     background: radial-gradient(circle at top left, rgba(74, 213, 212, 0.16), transparent 30%),
-                radial-gradient(circle at bottom right, rgba(103, 187, 122, 0.15), transparent 25%),
+                radial-gradient(circle at bottom right, rgba(var(--s3-green-rgb), 0.15), transparent 25%),
                 var(--bg-primary) var(--grain-texture);
     background-size: auto, auto, 180px 180px;
     min-height: 100vh;
@@ -119,7 +129,7 @@ body {
 }
 
 body.dark-mode {
-    background: radial-gradient(circle at top left, rgba(103, 187, 122, 0.12), transparent 22%),
+    background: radial-gradient(circle at top left, rgba(var(--s3-green-rgb), 0.12), transparent 22%),
                 radial-gradient(circle at bottom right, rgba(77, 134, 214, 0.12), transparent 18%),
                 linear-gradient(180deg, #14101d 0%, #1e1830 68%), var(--grain-texture);
     background-size: auto, auto, auto, 180px 180px;
@@ -237,8 +247,8 @@ body.dark-mode .gupload-box {
     width: 100%;
     height: 100%;
     background-image: 
-        radial-gradient(circle at 20% 80%, rgba(22, 196, 196, 0.15) 0%, transparent 50%),
-        radial-gradient(circle at 80% 20%, rgba(82, 194, 40, 0.15) 0%, transparent 50%),
+        radial-gradient(circle at 20% 80%, rgba(var(--s3-teal-rgb), 0.15) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(var(--s3-green-rgb), 0.15) 0%, transparent 50%),
         radial-gradient(circle at 40% 40%, rgba(156, 39, 176, 0.08) 0%, transparent 50%);
     z-index: -1;
     transition: var(--transition);
@@ -246,9 +256,9 @@ body.dark-mode .gupload-box {
 
 .dark-mode .flower-bg {
     background-image:
-        radial-gradient(circle at 20% 80%, rgba(103, 187, 122, 0.24) 0%, transparent 50%),
-        radial-gradient(circle at 80% 20%, rgba(211, 93, 84, 0.18) 0%, transparent 50%),
-        radial-gradient(circle at 40% 40%, rgba(212, 197, 106, 0.12) 0%, transparent 50%);
+        radial-gradient(circle at 20% 80%, rgba(var(--s3-green-rgb), 0.24) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(var(--s3-red-rgb), 0.18) 0%, transparent 50%),
+        radial-gradient(circle at 40% 40%, rgba(var(--s3-gold-rgb), 0.12) 0%, transparent 50%);
 }
 
 /* Page-margin dot-grid — a faint graph-paper grid that only shows in the
@@ -302,14 +312,14 @@ body:not(.dark-mode)::before {
     overflow: hidden;
     text-decoration: none;
     display: inline-block;
-    box-shadow: 2px 4px 0 #222, 0 4px 20px rgba(82, 194, 40, 0.2);
+    box-shadow: 2px 4px 0 #222, 0 4px 20px rgba(var(--s3-green-rgb), 0.2);
     background-blend-mode: multiply;
 }
 
 .btn-primary {
     background: linear-gradient(45deg, var(--primary-green), var(--secondary-green));
     color: white;
-    box-shadow: 0 4px 20px rgba(82, 194, 40, 0.4);
+    box-shadow: 0 4px 20px rgba(var(--s3-green-rgb), 0.4);
 }
 
 /* ── Shared gradient title text ── */
@@ -353,18 +363,18 @@ body:not(.dark-mode) .gradient-text::after {
 
 .btn-primary:hover {
     transform: translateY(-3px);
-    box-shadow: 0 8px 30px rgba(82, 194, 40, 0.6);
+    box-shadow: 0 8px 30px rgba(var(--s3-green-rgb), 0.6);
 }
 
 .btn-secondary {
     background: linear-gradient(45deg, var(--primary-purple), var(--secondary-purple));
     color: white;
-    box-shadow: 0 4px 20px rgba(22, 196, 196, 0.4);
+    box-shadow: 0 4px 20px rgba(var(--s3-teal-rgb), 0.4);
 }
 
 .btn-secondary:hover {
     transform: translateY(-3px);
-    box-shadow: 0 8px 30px rgba(22, 196, 196, 0.6);
+    box-shadow: 0 8px 30px rgba(var(--s3-teal-rgb), 0.6);
 }
 
 /* Shared Card Styles */
@@ -491,7 +501,7 @@ main {
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 4px 16px rgba(22, 196, 196, 0.45);
+    box-shadow: 0 4px 16px rgba(var(--s3-teal-rgb), 0.45);
     opacity: 0;
     pointer-events: none;
     transform: translateY(10px);
@@ -507,7 +517,7 @@ main {
 
 .back-to-top:hover {
     background: var(--s3-green);
-    box-shadow: 0 4px 20px rgba(82, 194, 40, 0.5);
+    box-shadow: 0 4px 20px rgba(var(--s3-green-rgb), 0.5);
 }
 
 /* SERVER STATUS PILL */
@@ -552,14 +562,14 @@ main {
     font-size: 0.82rem;
     font-weight: 600;
     color: var(--s3-teal);
-    background: rgba(22,196,196,0.08);
-    border: 1px solid rgba(22,196,196,0.25);
+    background: rgba(var(--s3-teal-rgb), 0.08);
+    border: 1px solid rgba(var(--s3-teal-rgb), 0.25);
     border-radius: 8px;
     text-decoration: none;
     transition: background 0.2s ease, border-color 0.2s ease;
 }
 .open-new-tab-btn:hover {
-    background: rgba(22,196,196,0.15);
+    background: rgba(var(--s3-teal-rgb), 0.15);
     border-color: var(--s3-teal);
 }
 

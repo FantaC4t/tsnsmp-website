@@ -1,7 +1,7 @@
 /* ── Footer ── */
 .site-footer {
     margin-top: auto;
-    border-top: 1.5px dashed rgba(212,197,106,0.22);
+    border-top: 1.5px dashed rgba(var(--s3-gold-rgb), 0.22);
     background: var(--surface);
     color: var(--text-secondary);
     font-size: 0.95rem;
@@ -18,7 +18,7 @@
     left: 10%;
     right: 10%;
     height: 1px;
-    background: linear-gradient(90deg, transparent, rgba(22, 196, 196, 0.3), rgba(82, 194, 40, 0.2), transparent);
+    background: linear-gradient(90deg, transparent, rgba(var(--s3-teal-rgb), 0.3), rgba(var(--s3-green-rgb), 0.2), transparent);
 }
 
 .footer-inner {
@@ -61,10 +61,10 @@
 
 .footer-nav a:hover {
     color: var(--s3-teal);
-    background: rgba(73,183,198,0.10);
+    background: rgba(var(--s3-teal-rgb), 0.10);
     border-color: var(--s3-teal);
     transform: translateY(-3px) rotate(0deg) scale(1.05);
-    box-shadow: 3px 5px 0 rgba(22,196,196,0.25);
+    box-shadow: 3px 5px 0 rgba(var(--s3-teal-rgb), 0.25);
 }
 
 /* ─ Social icons ─ */
@@ -84,7 +84,7 @@
 }
 
 .footer-icon:hover {
-    background: rgba(22, 196, 196, 0.15);
+    background: rgba(var(--s3-teal-rgb), 0.15);
     transform: translateY(-2px);
 }
 

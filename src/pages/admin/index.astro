@@ -285,7 +285,7 @@ import '../../styles/admin.css';
 
         <div class="panel">
             <div class="panel-header">
-                <span class="panel-header-icon" style="background:rgba(22,196,196,.15)">📥</span>
+                <span class="panel-header-icon" style="background:rgba(var(--s3-teal-rgb),.15)">📥</span>
                 <h2>Add World Download</h2>
             </div>
             <div class="panel-body">
@@ -305,7 +305,7 @@ import '../../styles/admin.css';
 
         <div class="panel">
             <div class="panel-header">
-                <span class="panel-header-icon" style="background:rgba(22,196,196,.15)">📋</span>
+                <span class="panel-header-icon" style="background:rgba(var(--s3-teal-rgb),.15)">📋</span>
                 <h2>Current Downloads</h2>
                 <span id="dl-count" style="color:var(--muted);font-size:.85rem"></span>
             </div>
@@ -1268,7 +1268,7 @@ import '../../styles/admin.css';
 
         const statusColors = {
             active:   '#FF9800',
-            upcoming: '#16C4C4',
+            upcoming: 'var(--s3-teal)',
             past:     'var(--muted)'
         };
 
@@ -1278,7 +1278,7 @@ import '../../styles/admin.css';
             const tcBadge = ev.timeChange === 'extended'
                 ? '<span style="background:rgba(255,152,0,.15);color:#FF9800;padding:2px 8px;border-radius:6px;font-size:.7rem;font-weight:700">⏳ EXTENDED</span>'
                 : ev.timeChange === 'shortened'
-                ? '<span style="background:rgba(22,196,196,.15);color:#16C4C4;padding:2px 8px;border-radius:6px;font-size:.7rem;font-weight:700">⏩ SHORTENED</span>'
+                ? '<span style="background:rgba(var(--s3-teal-rgb),.15);color:var(--s3-teal);padding:2px 8px;border-radius:6px;font-size:.7rem;font-weight:700">⏩ SHORTENED</span>'
                 : '';
             const evJson = JSON.stringify(ev).replace(/'/g, '&#39;').replace(/"/g, '&quot;');
             return `
@@ -1363,12 +1363,12 @@ import '../../styles/admin.css';
         countEl.textContent = `(${entries.length})`;
 
         container.innerHTML = entries.map(([key, dl]) => `
-            <div class="admin-list-item" style="border-left-color:#16C4C4">
+            <div class="admin-list-item" style="border-left-color:var(--s3-teal)">
                 <div style="flex:1;min-width:0">
                     <strong class="admin-list-item-title" style="cursor:pointer"
                         onclick="editDownloadField('${key}','title','${dl.title.replace(/'/g, "\\'")}')">📥 ${esc(dl.title)}</strong>
                     <div class="admin-list-item-meta" style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">
-                        🔗 <a href="${esc(dl.url)}" target="_blank" rel="noopener noreferrer" style="color:#16C4C4">${esc(dl.url)}</a>
+                        🔗 <a href="${esc(dl.url)}" target="_blank" rel="noopener noreferrer" style="color:var(--s3-teal)">${esc(dl.url)}</a>
                     </div>
                 </div>
                 <div class="admin-list-item-actions">

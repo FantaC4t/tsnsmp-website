@@ -14,7 +14,7 @@
 
 .site-header.scrolled {
     background: #14121f;
-    border-bottom: 1px solid rgba(22, 196, 196, 0.15);
+    border-bottom: 1px solid rgba(var(--s3-teal-rgb), 0.15);
     box-shadow: 0 4px 30px rgba(0, 0, 0, 0.4);
 }
 
@@ -40,7 +40,7 @@ body:not(.dark-mode) .nav-links a {
 body:not(.dark-mode) .nav-links a:hover,
 body:not(.dark-mode) .nav-links a.active {
     color: var(--s3-teal);
-    background: rgba(22, 196, 196, 0.12);
+    background: rgba(var(--s3-teal-rgb), 0.12);
 }
 
 body:not(.dark-mode) .hamburger,
@@ -140,10 +140,10 @@ body:not(.dark-mode) .hamburger::after {
 .nav-links li:nth-child(odd)  > a:not(.nav-icon):not(.nav-admin-link):hover,
 .nav-links li:nth-child(even) > a:not(.nav-icon):not(.nav-admin-link):hover {
     color: var(--s3-teal);
-    background: rgba(73,183,198,0.15);
+    background: rgba(var(--s3-teal-rgb), 0.15);
     border-color: var(--s3-teal);
     transform: translateY(-5px) rotate(0deg) scale(1.06);
-    box-shadow: 3px 6px 0 rgba(22,196,196,0.35);
+    box-shadow: 3px 6px 0 rgba(var(--s3-teal-rgb), 0.35);
 }
 
 .nav-links .nav-icon {
@@ -163,8 +163,8 @@ body:not(.dark-mode) .hamburger::after {
 
 .nav-links .nav-icon:hover {
     color: #fff;
-    background: rgba(22, 196, 196, 0.25);
-    border-color: rgba(22, 196, 196, 0.6);
+    background: rgba(var(--s3-teal-rgb), 0.25);
+    border-color: rgba(var(--s3-teal-rgb), 0.6);
 }
 
 .nav-icon-img {
@@ -177,15 +177,15 @@ body:not(.dark-mode) .hamburger::after {
 
 .nav-links a:hover {
     color: var(--s3-teal);
-    background: rgba(73,183,198,0.15);
+    background: rgba(var(--s3-teal-rgb), 0.15);
     border-color: var(--s3-teal);
     transform: translateY(-5px) rotate(0deg) scale(1.06);
-    box-shadow: 3px 6px 0 rgba(22,196,196,0.35);
+    box-shadow: 3px 6px 0 rgba(var(--s3-teal-rgb), 0.35);
 }
 .nav-links a.active {
     color: var(--s3-teal);
-    background: rgba(73,183,198,0.14);
-    border-color: rgba(22,196,196,0.45);
+    background: rgba(var(--s3-teal-rgb), 0.14);
+    border-color: rgba(var(--s3-teal-rgb), 0.45);
 }
 
 .nav-links .nav-admin-link {
@@ -200,7 +200,7 @@ body:not(.dark-mode) .nav-links .nav-icon {
 }
 
 body:not(.dark-mode) .nav-links .nav-icon:hover {
-    background: rgba(22, 196, 196, 0.15);
+    background: rgba(var(--s3-teal-rgb), 0.15);
     color: var(--s3-teal);
 }
 
@@ -274,7 +274,7 @@ body:not(.dark-mode) .nav-links .nav-icon:hover {
 }
 
 .theme-toggle:hover {
-    background: rgba(22, 196, 196, 0.15);
+    background: rgba(var(--s3-teal-rgb), 0.15);
     transform: scale(1.1);
 }
 
@@ -341,7 +341,7 @@ body:not(.dark-mode) .nav-links .nav-icon:hover {
 
     body:not(.dark-mode) .nav-links a:hover,
     body:not(.dark-mode) .nav-links a.active {
-        background: rgba(22, 196, 196, 0.1);
+        background: rgba(var(--s3-teal-rgb), 0.1);
         color: var(--s3-teal);
     }
 }

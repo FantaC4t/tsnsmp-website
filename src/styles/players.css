@@ -1,6 +1,6 @@
 /* ═══════════════════════════════════════════════
    Players Page — Season 3 Redesign
-   Palette: teal #16C4C4 · green #52C228 · red #E53200 · orange #FF6622 · gold #AACC00
+   Palette: teal #2BC7DB (--s3-teal) · green #3ED676 (--s3-green) · red #E8483B (--s3-red) · orange #FF7A33 (--s3-orange) · gold #E8C43D (--s3-gold)
 ═══════════════════════════════════════════════ */
 
 /* ── HERO ── */
@@ -22,17 +22,17 @@
     inset: 0;
     z-index: 0;
     background:
-        radial-gradient(circle at 10% 60%, rgba(82, 194, 40, 0.12),  transparent 30%),
-        radial-gradient(circle at 90% 25%, rgba(22, 196, 196, 0.14), transparent 30%),
-        radial-gradient(circle at 55% 85%, rgba(229, 50, 0, 0.07),   transparent 25%);
+        radial-gradient(circle at 10% 60%, rgba(var(--s3-green-rgb), 0.12),  transparent 30%),
+        radial-gradient(circle at 90% 25%, rgba(var(--s3-teal-rgb), 0.14), transparent 30%),
+        radial-gradient(circle at 55% 85%, rgba(var(--s3-red-rgb), 0.07),   transparent 25%);
     filter: blur(55px);
     animation: bgPulse 10s ease-in-out infinite alternate;
 }
 
 body:not(.dark-mode) .hero-bg {
     background:
-        radial-gradient(circle at 10% 60%, rgba(82, 194, 40, 0.18),  transparent 35%),
-        radial-gradient(circle at 90% 25%, rgba(22, 196, 196, 0.18), transparent 35%);
+        radial-gradient(circle at 10% 60%, rgba(var(--s3-green-rgb), 0.18),  transparent 35%),
+        radial-gradient(circle at 90% 25%, rgba(var(--s3-teal-rgb), 0.18), transparent 35%);
     opacity: 0.8;
 }
 
@@ -86,7 +86,7 @@ body:not(.dark-mode) .hero-grid {
     height: 7px;
     border-radius: 50%;
     background: var(--s3-teal);
-    box-shadow: 0 0 8px rgba(22,196,196,0.7);
+    box-shadow: 0 0 8px rgba(var(--s3-teal-rgb), 0.7);
     animation: blink 2s ease-in-out infinite;
     flex-shrink: 0;
 }
@@ -101,7 +101,7 @@ body:not(.dark-mode) .hero-grid {
     letter-spacing: 0.01em;
     margin-bottom: 0.4rem;
     color: var(--text-primary);
-    text-shadow: 0 2px 24px rgba(73,183,198,0.18);
+    text-shadow: 0 2px 24px rgba(var(--s3-teal-rgb), 0.18);
     word-break: break-word;
 }
 
@@ -189,16 +189,16 @@ body.dark-mode .players-search input::placeholder { color: rgba(0,0,0,0.4); }
     max-width: 520px;
     margin: 0.5rem auto 0;
     padding: 10px 20px;
-    background: rgba(22,196,196,0.05);
-    border: 1.5px dashed rgba(22,196,196,0.2);
+    background: rgba(var(--s3-teal-rgb), 0.05);
+    border: 1.5px dashed rgba(var(--s3-teal-rgb), 0.2);
     border-radius: 8px 13px 10px 14px / 13px 8px 14px 10px;
 }
 
 .players-missing-notice strong { color: var(--text-primary); }
 
 body:not(.dark-mode) .players-missing-notice {
-    background: rgba(22,196,196,0.04);
-    border-color: rgba(22,196,196,0.2);
+    background: rgba(var(--s3-teal-rgb), 0.04);
+    border-color: rgba(var(--s3-teal-rgb), 0.2);
 }
 
 .players-list {
@@ -224,7 +224,7 @@ body:not(.dark-mode) .players-missing-notice {
     display: flex;
     flex-direction: column;
     align-items: center;
-    transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1),
+    transition: transform 0.3s var(--bounce),
                 box-shadow 0.3s;
     cursor: default;
     box-shadow:
@@ -285,7 +285,7 @@ body:not(.dark-mode) .players-missing-notice {
     position: relative;
     z-index: 2;
     filter: drop-shadow(0 4px 12px rgba(0,0,0,0.30));
-    transition: transform 0.35s cubic-bezier(0.34,1.56,0.64,1), filter 0.35s;
+    transition: transform 0.35s var(--bounce), filter 0.35s;
 }
 
 .player-card:hover .skin-viewer {
@@ -609,11 +609,11 @@ body:not(.dark-mode) .player-card {
 
 body:not(.dark-mode) .player-card:hover {
     border-color: var(--s3-teal);
-    box-shadow: 0 20px 40px rgba(22,196,196,0.15), 0 0 0 1px rgba(22,196,196,0.2);
+    box-shadow: 0 20px 40px rgba(var(--s3-teal-rgb), 0.15), 0 0 0 1px rgba(var(--s3-teal-rgb), 0.2);
 }
 
 body:not(.dark-mode) .player-card::after {
-    background: radial-gradient(ellipse at 50% 0%, rgba(22,196,196,0.06) 0%, transparent 65%);
+    background: radial-gradient(ellipse at 50% 0%, rgba(var(--s3-teal-rgb), 0.06) 0%, transparent 65%);
 }
 
 body:not(.dark-mode) .player-name {

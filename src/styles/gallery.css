@@ -1,6 +1,6 @@
 /* ═══════════════════════════════════════════════
    Gallery Page — Season 3
-   Palette: teal #16C4C4 · green #52C228
+   Palette: teal #2BC7DB (--s3-teal) · green #3ED676 (--s3-green)
 ═══════════════════════════════════════════════ */
 
 /* ── HERO ── */
@@ -21,8 +21,8 @@
     position: absolute;
     inset: 0;
     background:
-        radial-gradient(circle at 15% 60%, rgba(82,194,40,0.12), transparent 30%),
-        radial-gradient(circle at 85% 25%, rgba(22,196,196,0.14), transparent 30%);
+        radial-gradient(circle at 15% 60%, rgba(var(--s3-green-rgb), 0.12), transparent 30%),
+        radial-gradient(circle at 85% 25%, rgba(var(--s3-teal-rgb), 0.14), transparent 30%);
     filter: blur(55px);
     animation: bgPulse 10s ease-in-out infinite alternate;
 }
@@ -69,7 +69,7 @@
     height: 7px;
     border-radius: 50%;
     background: var(--s3-teal);
-    box-shadow: 0 0 8px rgba(22,196,196,0.7);
+    box-shadow: 0 0 8px rgba(var(--s3-teal-rgb), 0.7);
     animation: blink 2s ease-in-out infinite;
     flex-shrink: 0;
 }
@@ -81,15 +81,15 @@
     letter-spacing: 0.01em;
     line-height: 1.05;
     color: var(--text-primary);
-    text-shadow: 0 2px 24px rgba(73,183,198,0.18);
+    text-shadow: 0 2px 24px rgba(var(--s3-teal-rgb), 0.18);
     margin-bottom: 0.4rem;
     word-break: break-word;
 }
 
 body:not(.dark-mode) .gallery-hero-bg {
     background:
-        radial-gradient(circle at 15% 60%, rgba(82,194,40,0.12), transparent 30%),
-        radial-gradient(circle at 85% 25%, rgba(22,196,196,0.12), transparent 30%);
+        radial-gradient(circle at 15% 60%, rgba(var(--s3-green-rgb), 0.12), transparent 30%),
+        radial-gradient(circle at 85% 25%, rgba(var(--s3-teal-rgb), 0.12), transparent 30%);
     opacity: 0.7;
 }
 
@@ -127,7 +127,7 @@ body:not(.dark-mode) .gallery-hero .hero-grid {
     font-size: 1.1rem;
     font-weight: 700;
     cursor: pointer;
-    transition: transform .2s cubic-bezier(.34,1.56,.64,1), box-shadow .2s;
+    transition: transform .2s var(--bounce), box-shadow .2s;
     white-space: nowrap;
     /* sticky note shadow — offset so it looks like paper resting on a surface */
     box-shadow: 3px 4px 0 rgba(0,0,0,0.18), 0 6px 16px rgba(0,0,0,0.10);
@@ -233,7 +233,7 @@ body:not(.dark-mode) .gallery-hero .hero-grid {
     aspect-ratio: 16 / 10;
     background: var(--surface-warm);
     border: 2px dashed rgba(34,34,34,0.22);
-    transition: transform .3s cubic-bezier(.34,1.56,.64,1), box-shadow .3s, border-color .3s;
+    transition: transform .3s var(--bounce), box-shadow .3s, border-color .3s;
     touch-action: manipulation;
     -webkit-tap-highlight-color: transparent;
     box-shadow: 3px 5px 0 rgba(0,0,0,0.15), 0 4px 16px rgba(0,0,0,0.10);
@@ -276,10 +276,10 @@ body:not(.dark-mode) .gallery-hero .hero-grid {
 
 .gallery-card:hover {
     transform: translateY(-8px) rotate(0deg) scale(1.02);
-    border-color: rgba(22,196,196,0.5);
+    border-color: rgba(var(--s3-teal-rgb), 0.5);
     box-shadow:
         5px 8px 0 rgba(0,0,0,0.14),
-        0 14px 30px rgba(22,196,196,0.15);
+        0 14px 30px rgba(var(--s3-teal-rgb), 0.15);
 }
 .gallery-card:hover img { transform: scale(1.05); }
 
@@ -420,7 +420,7 @@ body:not(.dark-mode) .gallery-hero .hero-grid {
     display: flex; align-items: center; justify-content: center;
     z-index: 10000;
 }
-.lightbox-nav:hover { background: rgba(22,196,196,.3); border-color: rgba(22,196,196,.5); }
+.lightbox-nav:hover { background: rgba(var(--s3-teal-rgb), .3); border-color: rgba(var(--s3-teal-rgb), .5); }
 .lightbox-prev { left: 1.2rem; }
 .lightbox-next { right: 1.2rem; }
 
@@ -444,7 +444,7 @@ body:not(.dark-mode) .gallery-hero .hero-grid {
     font-size: 1.1rem;
     font-weight: 700;
     cursor: pointer;
-    transition: transform .2s cubic-bezier(.34,1.56,.64,1);
+    transition: transform .2s var(--bounce);
     transform: rotate(-1deg);
 }
 
@@ -579,7 +579,7 @@ body:not(.dark-mode) .gallery-hero .hero-grid {
     color: var(--text-secondary);
     transition: border-color .2s, background .2s;
 }
-.gupload-drop:hover { border-color: var(--s3-teal); background: rgba(22,196,196,.04); }
+.gupload-drop:hover { border-color: var(--s3-teal); background: rgba(var(--s3-teal-rgb), .04); }
 .gupload-drop-icon { font-size: 2rem; }
 .gupload-drop p    { margin: 0; font-size: .9rem; color: var(--text-primary); }
 .gupload-drop span { font-size: .75rem; }

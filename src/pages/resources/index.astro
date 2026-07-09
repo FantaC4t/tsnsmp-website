@@ -467,7 +467,7 @@ import '../../styles/resources.css';
                 <p class="section-subtitle">Download past world saves to explore on your own.</p>
             </div>
             <div id="downloads-grid" class="downloads-grid">
-                <p class="downloads-empty">No world downloads available yet.</p>
+                <div class="empty-state"><img class="empty-state-icon" src="/assets/mascot.png" alt="" width="90" height="68" loading="lazy" /><p class="empty-state-title">No downloads yet</p><p class="empty-state-desc">World downloads will show up here once available.</p></div>
             </div>
         </div>
     </section>
@@ -527,7 +527,7 @@ import '../../styles/resources.css';
         const data = snap.val();
 
         if (!data) {
-            container.innerHTML = '<p class="downloads-empty">No world downloads available yet.</p>';
+            container.innerHTML = '<div class="empty-state"><img class="empty-state-icon" src="/assets/mascot.png" alt="" width="90" height="68" loading="lazy" /><p class="empty-state-title">No downloads yet</p><p class="empty-state-desc">World downloads will show up here once available.</p></div>';
             return;
         }
 

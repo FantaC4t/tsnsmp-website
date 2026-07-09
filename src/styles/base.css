@@ -573,6 +573,59 @@ main {
     border-color: var(--s3-teal);
 }
 
+/* ── Site-wide empty-state card ──
+   Same tape-strip + slight-tilt sticky-note pattern as home.css's
+   .events-empty (kept there too, unchanged, since other rules target it
+   directly) — shared here so every other page's "nothing here yet" state
+   can reuse it instead of a bare paragraph. Markup:
+   <div class="empty-state">
+     <img class="empty-state-icon" src="/assets/mascot.png" alt="" width="90" height="68" loading="lazy" />
+     <p class="empty-state-title">Title</p>
+     <p class="empty-state-desc">Description</p>
+   </div> */
+.empty-state {
+    text-align: center;
+    padding: 2.5rem 1.5rem;
+    background: var(--bg-card);
+    border: 1px dashed var(--border-color);
+    border-radius: 2px 3px 4px 2px;
+    position: relative;
+    transform: rotate(-0.7deg);
+}
+.empty-state::before {
+    content: '';
+    position: absolute;
+    top: -11px;
+    left: calc(50% - 26px);
+    width: 52px;
+    height: 15px;
+    background: rgba(215, 190, 120, 0.6);
+    border-radius: 2px 3px 3px 2px;
+    transform: rotate(-1.2deg);
+    z-index: 2;
+    pointer-events: none;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.15);
+}
+.empty-state-icon {
+    display: block;
+    width: 90px;
+    height: auto;
+    margin: 0 auto 0.75rem;
+}
+.empty-state-title {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 0.4rem;
+}
+.empty-state-desc {
+    font-size: 0.92rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    max-width: 400px;
+    margin: 0 auto;
+}
+
 /* ─── Skip to Content Link ─── */
 .skip-link {
     position: absolute;

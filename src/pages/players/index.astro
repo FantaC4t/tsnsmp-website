@@ -159,7 +159,7 @@ import '../../styles/players.css';
         });
 
         if (members.length === 0) {
-            grid.innerHTML = '<p style="text-align:center;color:var(--text-secondary);padding:4rem 0">Could not load members. Please try again later.</p>';
+            grid.innerHTML = '<div class="empty-state"><img class="empty-state-icon" src="/assets/mascot.png" alt="" width="90" height="68" loading="lazy" /><p class="empty-state-title">Couldn\'t load members</p><p class="empty-state-desc">Please try again later.</p></div>';
             return;
         }
 
@@ -177,7 +177,7 @@ import '../../styles/players.css';
     }
 
     // ── Real-time listener — re-renders whenever the DB changes ──
-    grid.innerHTML = '<p style="text-align:center;color:var(--text-secondary);padding:4rem 0">Loading members…</p>';
+    grid.innerHTML = '<div class="empty-state"><img class="empty-state-icon" src="/assets/mascot.png" alt="" width="90" height="68" loading="lazy" /><p class="empty-state-title">Loading members…</p></div>';
 
     onValue(ref(db, 'members'), snap => {
         const raw = snap.val();
@@ -192,7 +192,7 @@ import '../../styles/players.css';
                 .then(renderPlayers)
                 .catch(e => {
                     console.error('Failed to load members.json fallback:', e);
-                    grid.innerHTML = '<p style="text-align:center;color:var(--text-secondary);padding:4rem 0">Could not load members. Please try again later.</p>';
+                    grid.innerHTML = '<div class="empty-state"><img class="empty-state-icon" src="/assets/mascot.png" alt="" width="90" height="68" loading="lazy" /><p class="empty-state-title">Couldn\'t load members</p><p class="empty-state-desc">Please try again later.</p></div>';
                 });
         }
     }, e => {
@@ -201,7 +201,7 @@ import '../../styles/players.css';
             .then(r => r.ok ? r.json() : [])
             .then(renderPlayers)
             .catch(() => {
-                grid.innerHTML = '<p style="text-align:center;color:var(--text-secondary);padding:4rem 0">Could not load members. Please try again later.</p>';
+                grid.innerHTML = '<div class="empty-state"><img class="empty-state-icon" src="/assets/mascot.png" alt="" width="90" height="68" loading="lazy" /><p class="empty-state-title">Couldn\'t load members</p><p class="empty-state-desc">Please try again later.</p></div>';
             });
     });
 

@@ -212,6 +212,9 @@ body:not(.dark-mode) .players-missing-notice {
     gap: 2.2rem;
     padding: 2.5rem 0 7rem;
 }
+.players-grid .empty-state {
+    grid-column: 1 / -1;
+}
 
 /* ── PLAYER CARD — polaroid photo style ── */
 .player-card {

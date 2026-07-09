@@ -438,10 +438,7 @@ a.mod-link:hover { opacity: 0.65; }
     max-width: 900px;
     margin: 0 auto;
 }
-.downloads-empty {
-    text-align: center;
-    color: var(--text-secondary);
-    padding: 2rem;
+.downloads-grid .empty-state {
     grid-column: 1 / -1;
 }
 

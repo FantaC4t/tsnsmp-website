@@ -46,10 +46,14 @@ import '../../styles/gallery.css';
                 <button type="button" class="gallery-filter-btn" data-season="2">☀️ Season 2</button>
                 <button type="button" class="gallery-filter-btn" data-season="3">🚀 Season 3</button>
             </div>
-            <div id="gallery-loading" class="gallery-status">Loading images…</div>
-            <div id="gallery-empty" class="gallery-status" style="display:none">
-                <span class="gallery-empty-icon">🗜️</span>
-                <p>No images yet — check back soon!</p>
+            <div id="gallery-loading" class="empty-state">
+                <img class="empty-state-icon" src="/assets/mascot.png" alt="" width="90" height="68" loading="lazy" />
+                <p class="empty-state-title">Loading images…</p>
+            </div>
+            <div id="gallery-empty" class="empty-state" style="display:none">
+                <img class="empty-state-icon" src="/assets/mascot.png" alt="" width="90" height="68" loading="lazy" />
+                <p class="empty-state-title">No images yet</p>
+                <p class="empty-state-desc">Check back soon!</p>
             </div>
             <div id="gallery-grid" class="gallery-grid"></div>
         </div>
@@ -165,7 +169,7 @@ import '../../styles/gallery.css';
         const grid = document.getElementById('gallery-grid');
         const empty = document.getElementById('gallery-empty');
         if (!galleryItems.length) {
-            empty.style.display = 'flex';
+            empty.style.display = 'block';
             grid.innerHTML = '';
             return;
         }
@@ -202,7 +206,12 @@ import '../../styles/gallery.css';
             allItems.sort((a, b) => (b.uploadedAt || 0) - (a.uploadedAt || 0));
             applyFilter(currentFilter);
         }, () => {
-            document.getElementById('gallery-loading').textContent = 'Could not load images. Please try again later.';
+            const loading = document.getElementById('gallery-loading');
+            loading.querySelector('.empty-state-title').textContent = 'Could not load images.';
+            const desc = document.createElement('p');
+            desc.className = 'empty-state-desc';
+            desc.textContent = 'Please try again later.';
+            loading.appendChild(desc);
         });
     }
     loadGallery();

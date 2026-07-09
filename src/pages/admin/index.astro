@@ -659,7 +659,7 @@ import '../../styles/admin.css';
         if (countEl) countEl.textContent = `${membersCache.length} members`;
 
         if (membersCache.length === 0) {
-            document.getElementById('members-container').innerHTML = '<div class="loading">No members yet. Use the form above to add the first one.</div>';
+            document.getElementById('members-container').innerHTML = '<div class="empty-state"><img class="empty-state-icon" src="/assets/mascot.png" alt="" width="90" height="68" loading="lazy" /><p class="empty-state-title">No members yet</p><p class="empty-state-desc">Use the form above to add the first one.</p></div>';
             return;
         }
 
@@ -969,7 +969,7 @@ import '../../styles/admin.css';
             });
             items.sort((a, b) => (b.uploadedAt || 0) - (a.uploadedAt || 0));
             if (!items.length) {
-                grid.innerHTML = '<p style="color:var(--muted);font-size:.9rem;padding:1rem 0">No images yet.</p>';
+                grid.innerHTML = '<div class="empty-state"><img class="empty-state-icon" src="/assets/mascot.png" alt="" width="90" height="68" loading="lazy" /><p class="empty-state-title">No images yet</p></div>';
                 return;
             }
             const seasonLabel = { 1: '🌱 S1', 2: '☀️ S2', 3: '🚀 S3' };
@@ -1060,7 +1060,7 @@ import '../../styles/admin.css';
             const countEl = document.getElementById('queue-count');
             if (countEl) countEl.innerHTML = items.length ? `<span class="queue-badge">${items.length} pending</span>` : '';
             if (!items.length) {
-                grid.innerHTML = '<p style="color:var(--muted);font-size:.9rem;padding:1rem 0">Queue is empty — no pending submissions.</p>';
+                grid.innerHTML = '<div class="empty-state"><img class="empty-state-icon" src="/assets/mascot.png" alt="" width="90" height="68" loading="lazy" /><p class="empty-state-title">Queue is empty</p><p class="empty-state-desc">No pending submissions.</p></div>';
                 return;
             }
             grid.innerHTML = items.map(item => `
@@ -1254,7 +1254,7 @@ import '../../styles/admin.css';
         const data = snap.val();
 
         if (!data) {
-            container.innerHTML = '<p style="color:var(--muted);text-align:center;padding:2rem">No events yet.</p>';
+            container.innerHTML = '<div class="empty-state"><img class="empty-state-icon" src="/assets/mascot.png" alt="" width="90" height="68" loading="lazy" /><p class="empty-state-title">No events yet</p></div>';
             countEl.textContent = '(0)';
             return;
         }
@@ -1354,7 +1354,7 @@ import '../../styles/admin.css';
         const data = snap.val();
 
         if (!data) {
-            container.innerHTML = '<p style="color:var(--muted);text-align:center;padding:2rem">No downloads yet.</p>';
+            container.innerHTML = '<div class="empty-state"><img class="empty-state-icon" src="/assets/mascot.png" alt="" width="90" height="68" loading="lazy" /><p class="empty-state-title">No downloads yet</p></div>';
             countEl.textContent = '(0)';
             return;
         }

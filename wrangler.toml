@@ -13,3 +13,7 @@ command = "npm run build"
 directory = "./dist"
 binding = "ASSETS"
 not_found_handling = "404-page"
+# Without this, requests are matched against static assets BEFORE the Worker
+# script runs at all -- meaning the hostname redirect in worker.js would
+# never fire for the old domain, since / matches dist/index.html directly.
+run_worker_first = true

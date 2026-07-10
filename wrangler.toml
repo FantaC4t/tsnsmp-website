@@ -1,4 +1,4 @@
-name = "tsnsmp-website"
+name = "tsnsmp"
 compatibility_date = "2025-05-15"
 main = "worker.js"
 

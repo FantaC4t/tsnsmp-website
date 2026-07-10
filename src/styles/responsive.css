@@ -51,6 +51,12 @@
     .hero-backdrop-img {
         display: none;
     }
+    /* Same treatment as .hero-backdrop-img above — on narrow viewports the
+       hero text column takes the full width, so the floating mascot has
+       nowhere to sit without overlapping body copy. */
+    .hero-mascot {
+        display: none;
+    }
 }
 
 @media (max-width: 576px) {

@@ -152,8 +152,6 @@ body.dark-mode {
 body.dark-mode .site-footer,
 body.dark-mode .back-to-top,
 body.dark-mode .gupload-close,
-body.dark-mode .gupload-box,
-body.dark-mode .gupload-drop,
 body.dark-mode .tab-btn {
     background: var(--surface);
     border-color: var(--surface-border);
@@ -233,8 +231,7 @@ body.dark-mode .construction-features,
 body.dark-mode .aside-cta,
 body.dark-mode .rule-card,
 body.dark-mode .icon-card-v2,
-body.dark-mode .gallery-card,
-body.dark-mode .gupload-box {
+body.dark-mode .gallery-card {
     background: var(--panel-bg);
     border-color: var(--panel-border);
     box-shadow: var(--panel-shadow);
@@ -566,11 +563,12 @@ main {
     border: 1px solid rgba(var(--s3-teal-rgb), 0.25);
     border-radius: 8px;
     text-decoration: none;
-    transition: background 0.2s ease, border-color 0.2s ease;
+    transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s var(--bounce);
 }
 .open-new-tab-btn:hover {
     background: rgba(var(--s3-teal-rgb), 0.15);
     border-color: var(--s3-teal);
+    transform: translateY(-2px);
 }
 
 /* ── Site-wide empty-state card ──
@@ -665,6 +663,31 @@ main {
     body:not(.motion-enabled) .feature-card,
     body:not(.motion-enabled) .custom-feature { opacity: 1 !important; transform: none !important; }
     body:not(.motion-enabled) .fade-in-up { opacity: 1 !important; transform: none !important; }
+}
+
+/* Site mascot — shared here (not page-specific CSS) since it now appears
+   on multiple pages' hero sections, not just home. Expects a containing
+   block with position:relative (page-hero/.hero already are). */
+.hero-mascot {
+    position: absolute;
+    z-index: 3;
+    width: 120px;
+    height: auto;
+    animation: mascotFloat 6s ease-in-out infinite alternate;
+    filter: drop-shadow(3px 6px 8px rgba(0,0,0,0.25));
+}
+
+@keyframes mascotFloat {
+    0%   { transform: translateY(0) rotate(-3deg); }
+    100% { transform: translateY(-12px) rotate(2deg); }
+}
+
+/* Continuous/looping mascot float — always suppressed regardless of the
+   motion-enabled opt-in above (same vestibular-risk category as the
+   curated list in home.css); lives here since the mascot now appears on
+   multiple pages, not just home. */
+@media (prefers-reduced-motion: reduce) {
+    .hero-mascot { animation: none !important; }
 }
 
 /* Pause all descendant animations when a section is off-screen */

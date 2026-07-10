@@ -192,6 +192,22 @@ body.dark-mode .players-search input::placeholder { color: rgba(0,0,0,0.4); }
     background: rgba(var(--s3-teal-rgb), 0.05);
     border: 1.5px dashed rgba(var(--s3-teal-rgb), 0.2);
     border-radius: 8px 13px 10px 14px / 13px 8px 14px 10px;
+    position: relative;
+    transform: rotate(-0.5deg);
+}
+.players-missing-notice::before {
+    content: '';
+    position: absolute;
+    top: -10px;
+    left: calc(50% - 24px);
+    width: 48px;
+    height: 14px;
+    background: rgba(215, 190, 120, 0.6);
+    border-radius: 2px 3px 3px 2px;
+    transform: rotate(-1.5deg);
+    z-index: 2;
+    pointer-events: none;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.15);
 }
 
 .players-missing-notice strong { color: var(--text-primary); }

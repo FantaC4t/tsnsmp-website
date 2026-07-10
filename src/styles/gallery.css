@@ -478,18 +478,35 @@ body:not(.dark-mode) .gallery-hero .hero-grid {
 
 .gupload-box {
     background: var(--bg-card);
-    border: 1px solid var(--border-color);
-    border-radius: 22px;
+    border: 2.5px dashed rgba(34,34,34,0.18);
+    border-radius: 14px 20px 16px 18px / 18px 14px 20px 16px;
     padding: 2.2rem;
     width: 100%;
     max-width: 460px;
     position: relative;
-    box-shadow: 0 28px 80px rgba(0,0,0,.55);
+    box-shadow: 4px 7px 0 rgba(0,0,0,0.18), 0 28px 80px rgba(0,0,0,.45);
     display: flex;
     flex-direction: column;
     gap: .6rem;
     max-height: 92vh;
     overflow-y: auto;
+}
+body.dark-mode .gupload-box {
+    border-color: rgba(255,255,255,0.12);
+}
+.gupload-box::before {
+    content: '';
+    position: absolute;
+    top: -11px;
+    left: calc(50% - 28px);
+    width: 56px;
+    height: 16px;
+    background: rgba(215, 190, 120, 0.65);
+    border-radius: 2px 3px 3px 2px;
+    transform: rotate(-1.3deg);
+    z-index: 2;
+    pointer-events: none;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.15);
 }
 
 .gupload-close {
@@ -507,55 +524,14 @@ body:not(.dark-mode) .gallery-hero .hero-grid {
 }
 .gupload-close:hover { background: rgba(255,255,255,.15); }
 
-/* Sign-in step */
-#gupload-step-signin {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    gap: .8rem;
-}
 .gupload-icon { font-size: 2.8rem; }
-#gupload-step-signin h2 { font-size: 1.3rem; font-weight: 800; }
-#gupload-step-signin p  { color: var(--text-secondary); font-size: .9rem; max-width: 340px; }
-
-.gupload-btn-google {
-    display: flex;
-    align-items: center;
-    gap: .6rem;
-    padding: 10px 22px;
-    background: #fff;
-    color: #222;
-    border: none;
-    border-radius: 50px;
-    font-size: .9rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background .2s, box-shadow .2s;
-    margin-top: .4rem;
-}
-.gupload-btn-google:hover { background: #f1f1f1; box-shadow: 0 4px 16px rgba(0,0,0,.2); }
-.gupload-hint { font-size: .8rem; color: var(--text-secondary); }
 
 /* Form step */
-.gupload-user-row {
-    display: flex;
-    align-items: center;
-    gap: .6rem;
-    font-size: .85rem;
-    color: var(--text-secondary);
-    margin-bottom: .2rem;
-}
-.gupload-user-row img {
-    width: 28px; height: 28px;
-    border-radius: 50%;
-    object-fit: cover;
-}
 #gupload-step-form h2 { font-size: 1.2rem; font-weight: 800; margin-bottom: .2rem; }
 
 .gupload-drop {
-    border: 2px dashed var(--border-color);
-    border-radius: 12px;
+    border: 2.5px dashed rgba(var(--s3-teal-rgb), 0.35);
+    border-radius: 10px 14px 12px 16px / 14px 10px 16px 12px;
     padding: 1.6rem 1rem;
     text-align: center;
     cursor: pointer;
@@ -564,9 +540,9 @@ body:not(.dark-mode) .gallery-hero .hero-grid {
     align-items: center;
     gap: .3rem;
     color: var(--text-secondary);
-    transition: border-color .2s, background .2s;
+    transition: border-color .2s ease, background .2s ease;
 }
-.gupload-drop:hover { border-color: var(--s3-teal); background: rgba(var(--s3-teal-rgb), .04); }
+.gupload-drop:hover { border-color: var(--s3-teal); background: rgba(var(--s3-teal-rgb), .08); }
 .gupload-drop-icon { font-size: 2rem; }
 .gupload-drop p    { margin: 0; font-size: .9rem; color: var(--text-primary); }
 .gupload-drop span { font-size: .75rem; }
@@ -614,24 +590,14 @@ body:not(.dark-mode) .gallery-hero .hero-grid {
     background: linear-gradient(135deg, var(--s3-teal), var(--s3-green));
     color: #fff;
     border: none;
-    border-radius: 50px;
+    border-radius: 10px 14px 12px 16px / 14px 10px 16px 12px;
     font-size: .9rem;
     font-weight: 700;
     cursor: pointer;
-    transition: opacity .2s, transform .2s;
+    box-shadow: 2px 4px 0 rgba(0,0,0,0.2);
+    transition: transform .2s var(--bounce), box-shadow .2s ease;
 }
-.gupload-btn-submit:hover { opacity: .88; transform: translateY(-1px); }
-.gupload-btn-signout {
-    padding: 10px 16px;
-    background: transparent;
-    border: 1px solid var(--border-color);
-    border-radius: 50px;
-    color: var(--text-secondary);
-    font-size: .82rem;
-    cursor: pointer;
-    transition: border-color .2s, color .2s;
-}
-.gupload-btn-signout:hover { border-color: #e05555; color: #e05555; }
+.gupload-btn-submit:hover { transform: translateY(-2px); box-shadow: 3px 6px 0 rgba(0,0,0,0.25); }
 
 @media (max-width: 520px) {
     .gupload-box { padding: 1.6rem 1.2rem; border-radius: 16px; }

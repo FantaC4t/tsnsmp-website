@@ -22,12 +22,12 @@ const {
   description,
   path,
   ogTitle = title,
-  ogImage = 'https://www.tsnsmp.online/assets/tsnsmp-og-s3.png',
+  ogImage = 'https://tsnsmp.com/assets/tsnsmp-og-s3.png',
   currentPage,
   robots = 'index, follow',
 } = Astro.props;
 
-const canonical = `https://www.tsnsmp.online${path}`;
+const canonical = `https://tsnsmp.com${path}`;
 ---
 
 <!DOCTYPE html>
@@ -96,18 +96,18 @@ const canonical = `https://www.tsnsmp.online${path}`;
         {
           "@type": "Organization",
           "name": "TSNSMP",
-          "url": "https://www.tsnsmp.online/",
-          "logo": "https://www.tsnsmp.online/assets/SMALL%20LOGO.png",
+          "url": "https://tsnsmp.com/",
+          "logo": "https://tsnsmp.com/assets/SMALL%20LOGO.png",
           "description": "A cozy, whitelisted Minecraft SMP community.",
           "sameAs": ["https://bsky.app/profile/tsnsmp.online"]
         },
         {
           "@type": "WebSite",
           "name": "TSNSMP",
-          "url": "https://www.tsnsmp.online/",
+          "url": "https://tsnsmp.com/",
           "potentialAction": {
             "@type": "SearchAction",
-            "target": "https://www.tsnsmp.online/players/?search={search_term_string}",
+            "target": "https://tsnsmp.com/players/?search={search_term_string}",
             "query-input": "required name=search_term_string"
           }
         }

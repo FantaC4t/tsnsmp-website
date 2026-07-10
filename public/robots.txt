@@ -3,4 +3,4 @@ Allow: /
 
 Disallow: /admin/
 
-Sitemap: https://www.tsnsmp.online/sitemap.xml
+Sitemap: https://tsnsmp.com/sitemap.xml

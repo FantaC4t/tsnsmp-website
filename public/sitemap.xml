@@ -1,27 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://www.tsnsmp.online/</loc>
+    <loc>https://tsnsmp.com/</loc>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://www.tsnsmp.online/about/</loc>
+    <loc>https://tsnsmp.com/about/</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://www.tsnsmp.online/players/</loc>
+    <loc>https://tsnsmp.com/players/</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://www.tsnsmp.online/gallery/</loc>
+    <loc>https://tsnsmp.com/gallery/</loc>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://www.tsnsmp.online/resources/</loc>
+    <loc>https://tsnsmp.com/resources/</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>

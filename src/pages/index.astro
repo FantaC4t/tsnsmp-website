@@ -541,12 +541,12 @@ import '../styles/home.css';
                             'eventAttendanceMode': 'https://schema.org/OnlineEventAttendanceMode',
                             'location': {
                                 '@type': 'VirtualLocation',
-                                'url': 'https://www.tsnsmp.online/'
+                                'url': 'https://tsnsmp.com/'
                             },
                             'organizer': {
                                 '@type': 'Organization',
                                 'name': 'TSNSMP',
-                                'url': 'https://www.tsnsmp.online/'
+                                'url': 'https://tsnsmp.com/'
                             }
                         }))
                     });
@@ -687,7 +687,7 @@ import '../styles/home.css';
             const switcher  = document.getElementById('streamSwitcher');
             if (!featured) return;
 
-            const parentDomain = location.hostname || 'www.tsnsmp.online';
+            const parentDomain = location.hostname || 'tsnsmp.com';
 
             function showStream(idx) {
                 currentStreamIdx = idx;

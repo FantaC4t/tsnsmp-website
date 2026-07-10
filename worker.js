@@ -1,6 +1,15 @@
+const OLD_HOSTNAMES = new Set(['tsnsmp.online', 'www.tsnsmp.online']);
+
 export default {
     async fetch(request, env) {
         const url = new URL(request.url);
+
+        // Domain migration: permanently redirect the old domain to the new
+        // one, preserving path/query so deep links keep working.
+        if (OLD_HOSTNAMES.has(url.hostname)) {
+            url.hostname = 'tsnsmp.com';
+            return Response.redirect(url.toString(), 301);
+        }
 
         if (url.pathname === '/submit-application' && request.method === 'POST') {
             return handleSubmit(request, env);

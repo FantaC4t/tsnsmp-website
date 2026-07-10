@@ -41,9 +41,175 @@
     .event-skeleton { animation: none; }
 }
 
+/* ═══════════════════════════════════════════════════════════════
+   WAVY SECTION TRANSITIONS (2026-07-10, take 3)
+   `.wave-seam` is a small sibling element dropped between two
+   sections (see index.astro). Two earlier approaches failed:
+
+   1. A separate SVG divider whose fill colour had to be manually
+      kept in sync with whatever came next — fragile, and wrong
+      every time a section had its own ambient glow near its edge.
+   2. Clipping the SECTION itself into a wave and relying on the
+      next (plain, unclipped) section to slide up and "show through"
+      the cut via a negative margin. This doesn't work: clip-path
+      only removes PAINT from an element's own box, it doesn't
+      change layout — the next section is still a plain rectangle,
+      and being later in DOM order it paints over the *entire*
+      overlap band, cut portions and all, completely hiding the
+      wave. That's why it rendered "flat" instead of wavy.
+
+   The fix: only the SEAM needs a colour, and only ONE colour — its
+   own preceding section's (always unambiguous, never approximated).
+   It's clipped so the wave PEAKS stay solid (painted in that
+   colour) and the TROUGHS are cut away entirely. Given
+   z-index above the following section, the peaks sit on top of it
+   while the troughs let the following section's true rendering
+   show through underneath — not a guessed colour, the actual thing,
+   ambient glow and all. Same-background boundaries (e.g. events →
+   carousel) still work correctly this way: the troughs simply
+   reveal more of that same background, which is exactly correct,
+   not a synthetic mismatch. */
+.wave-seam {
+    position: relative;
+    z-index: 5;
+    height: 80px;
+    margin-bottom: -80px;
+    pointer-events: none;
+    clip-path: polygon(
+        0% 0%,
+        100% 0%,
+        100.000% calc(100% - 27.6px),
+        98.333% calc(100% - 30.1px),
+        96.667% calc(100% - 32.1px),
+        95.000% calc(100% - 33.7px),
+        93.333% calc(100% - 35.0px),
+        91.667% calc(100% - 36.2px),
+        90.000% calc(100% - 37.3px),
+        88.333% calc(100% - 38.7px),
+        86.667% calc(100% - 40.5px),
+        85.000% calc(100% - 42.9px),
+        83.333% calc(100% - 45.8px),
+        81.667% calc(100% - 49.4px),
+        80.000% calc(100% - 53.4px),
+        78.333% calc(100% - 57.6px),
+        76.667% calc(100% - 61.7px),
+        75.000% calc(100% - 65.5px),
+        73.333% calc(100% - 68.6px),
+        71.667% calc(100% - 70.6px),
+        70.000% calc(100% - 71.3px),
+        68.333% calc(100% - 70.6px),
+        66.667% calc(100% - 68.3px),
+        65.000% calc(100% - 64.4px),
+        63.333% calc(100% - 59.2px),
+        61.667% calc(100% - 52.9px),
+        60.000% calc(100% - 45.9px),
+        58.333% calc(100% - 38.5px),
+        56.667% calc(100% - 31.3px),
+        55.000% calc(100% - 24.6px),
+        53.333% calc(100% - 18.8px),
+        51.667% calc(100% - 14.3px),
+        50.000% calc(100% - 11.2px),
+        48.333% calc(100% - 9.6px),
+        46.667% calc(100% - 9.6px),
+        45.000% calc(100% - 10.9px),
+        43.333% calc(100% - 13.3px),
+        41.667% calc(100% - 16.6px),
+        40.000% calc(100% - 20.4px),
+        38.333% calc(100% - 24.3px),
+        36.667% calc(100% - 28.1px),
+        35.000% calc(100% - 31.6px),
+        33.333% calc(100% - 34.6px),
+        31.667% calc(100% - 37.1px),
+        30.000% calc(100% - 39.0px),
+        28.333% calc(100% - 40.4px),
+        26.667% calc(100% - 41.7px),
+        25.000% calc(100% - 42.8px),
+        23.333% calc(100% - 44.2px),
+        21.667% calc(100% - 45.8px),
+        20.000% calc(100% - 47.9px),
+        18.333% calc(100% - 50.4px),
+        16.667% calc(100% - 53.4px),
+        15.000% calc(100% - 56.8px),
+        13.333% calc(100% - 60.2px),
+        11.667% calc(100% - 63.4px),
+        10.000% calc(100% - 66.1px),
+        8.333% calc(100% - 68.1px),
+        6.667% calc(100% - 69.0px),
+        5.000% calc(100% - 68.5px),
+        3.333% calc(100% - 66.6px),
+        1.667% calc(100% - 63.3px),
+        0.000% calc(100% - 58.5px)
+    );
+}
+
+@media (max-width: 768px) {
+    .wave-seam {
+        height: 40px;
+        margin-bottom: -40px;
+        clip-path: polygon(
+            0% 0%,
+            100% 0%,
+            100.000% calc(100% - 13.8px),
+            97.500% calc(100% - 15.6px),
+            95.000% calc(100% - 16.9px),
+            92.500% calc(100% - 17.8px),
+            90.000% calc(100% - 18.7px),
+            87.500% calc(100% - 19.8px),
+            85.000% calc(100% - 21.4px),
+            82.500% calc(100% - 23.8px),
+            80.000% calc(100% - 26.7px),
+            77.500% calc(100% - 29.8px),
+            75.000% calc(100% - 32.8px),
+            72.500% calc(100% - 34.9px),
+            70.000% calc(100% - 35.7px),
+            67.500% calc(100% - 34.8px),
+            65.000% calc(100% - 32.2px),
+            62.500% calc(100% - 28.1px),
+            60.000% calc(100% - 22.9px),
+            57.500% calc(100% - 17.4px),
+            55.000% calc(100% - 12.3px),
+            52.500% calc(100% - 8.2px),
+            50.000% calc(100% - 5.6px),
+            47.500% calc(100% - 4.7px),
+            45.000% calc(100% - 5.4px),
+            42.500% calc(100% - 7.4px),
+            40.000% calc(100% - 10.2px),
+            37.500% calc(100% - 13.1px),
+            35.000% calc(100% - 15.8px),
+            32.500% calc(100% - 18.0px),
+            30.000% calc(100% - 19.5px),
+            27.500% calc(100% - 20.5px),
+            25.000% calc(100% - 21.4px),
+            22.500% calc(100% - 22.5px),
+            20.000% calc(100% - 23.9px),
+            17.500% calc(100% - 25.9px),
+            15.000% calc(100% - 28.4px),
+            12.500% calc(100% - 30.9px),
+            10.000% calc(100% - 33.1px),
+            7.500% calc(100% - 34.3px),
+            5.000% calc(100% - 34.3px),
+            2.500% calc(100% - 32.6px),
+            0.000% calc(100% - 29.3px)
+        );
+    }
+}
+
+/* Hero → events: no separate .wave-seam element here (unlike every other
+   boundary). Two earlier attempts at a standalone seam for this one either
+   used a flat colour (looked dead next to hero's rich background) or tried
+   to re-create hero's glow/grid independently (created a visible intensity
+   seam, since a re-creation can't know how much hero's own gradients have
+   already faded by its real bottom edge). The fix: don't re-create
+   anything — clip hero's OWN box into the wave (same mechanism as
+   .wave-seam: peaks solid, troughs cut away, positioned above the next
+   section via z-index) so what shows in the peaks is hero's actual
+   rendered background — .hero-bg, .hero-grid, all of it — continuing for
+   real, because it's the same element, not an approximation of it. */
+
 /* === ADAPTIVE GRAND HERO SECTION === */
 .hero {
     position: relative;
+    z-index: 5;
     min-height: 100vh;
     display: flex;
     align-items: center;
@@ -52,10 +218,129 @@
     max-width: 100vw;
     background: var(--bg-primary);
     margin-top: -70px;
+    margin-bottom: -80px;
     padding-top: 160px;
+    padding-bottom: 110px;
     transition: background 0.3s ease;
     contain: layout style paint;
     font-family: 'DynaPuff', cursive;
+    clip-path: polygon(
+        0% 0%,
+        100% 0%,
+        100.000% calc(100% - 27.6px),
+        98.333% calc(100% - 30.1px),
+        96.667% calc(100% - 32.1px),
+        95.000% calc(100% - 33.7px),
+        93.333% calc(100% - 35.0px),
+        91.667% calc(100% - 36.2px),
+        90.000% calc(100% - 37.3px),
+        88.333% calc(100% - 38.7px),
+        86.667% calc(100% - 40.5px),
+        85.000% calc(100% - 42.9px),
+        83.333% calc(100% - 45.8px),
+        81.667% calc(100% - 49.4px),
+        80.000% calc(100% - 53.4px),
+        78.333% calc(100% - 57.6px),
+        76.667% calc(100% - 61.7px),
+        75.000% calc(100% - 65.5px),
+        73.333% calc(100% - 68.6px),
+        71.667% calc(100% - 70.6px),
+        70.000% calc(100% - 71.3px),
+        68.333% calc(100% - 70.6px),
+        66.667% calc(100% - 68.3px),
+        65.000% calc(100% - 64.4px),
+        63.333% calc(100% - 59.2px),
+        61.667% calc(100% - 52.9px),
+        60.000% calc(100% - 45.9px),
+        58.333% calc(100% - 38.5px),
+        56.667% calc(100% - 31.3px),
+        55.000% calc(100% - 24.6px),
+        53.333% calc(100% - 18.8px),
+        51.667% calc(100% - 14.3px),
+        50.000% calc(100% - 11.2px),
+        48.333% calc(100% - 9.6px),
+        46.667% calc(100% - 9.6px),
+        45.000% calc(100% - 10.9px),
+        43.333% calc(100% - 13.3px),
+        41.667% calc(100% - 16.6px),
+        40.000% calc(100% - 20.4px),
+        38.333% calc(100% - 24.3px),
+        36.667% calc(100% - 28.1px),
+        35.000% calc(100% - 31.6px),
+        33.333% calc(100% - 34.6px),
+        31.667% calc(100% - 37.1px),
+        30.000% calc(100% - 39.0px),
+        28.333% calc(100% - 40.4px),
+        26.667% calc(100% - 41.7px),
+        25.000% calc(100% - 42.8px),
+        23.333% calc(100% - 44.2px),
+        21.667% calc(100% - 45.8px),
+        20.000% calc(100% - 47.9px),
+        18.333% calc(100% - 50.4px),
+        16.667% calc(100% - 53.4px),
+        15.000% calc(100% - 56.8px),
+        13.333% calc(100% - 60.2px),
+        11.667% calc(100% - 63.4px),
+        10.000% calc(100% - 66.1px),
+        8.333% calc(100% - 68.1px),
+        6.667% calc(100% - 69.0px),
+        5.000% calc(100% - 68.5px),
+        3.333% calc(100% - 66.6px),
+        1.667% calc(100% - 63.3px),
+        0.000% calc(100% - 58.5px)
+    );
+}
+
+@media (max-width: 768px) {
+    .hero {
+        margin-bottom: -40px;
+        padding-bottom: 60px;
+        clip-path: polygon(
+            0% 0%,
+            100% 0%,
+            100.000% calc(100% - 13.8px),
+            97.500% calc(100% - 15.6px),
+            95.000% calc(100% - 16.9px),
+            92.500% calc(100% - 17.8px),
+            90.000% calc(100% - 18.7px),
+            87.500% calc(100% - 19.8px),
+            85.000% calc(100% - 21.4px),
+            82.500% calc(100% - 23.8px),
+            80.000% calc(100% - 26.7px),
+            77.500% calc(100% - 29.8px),
+            75.000% calc(100% - 32.8px),
+            72.500% calc(100% - 34.9px),
+            70.000% calc(100% - 35.7px),
+            67.500% calc(100% - 34.8px),
+            65.000% calc(100% - 32.2px),
+            62.500% calc(100% - 28.1px),
+            60.000% calc(100% - 22.9px),
+            57.500% calc(100% - 17.4px),
+            55.000% calc(100% - 12.3px),
+            52.500% calc(100% - 8.2px),
+            50.000% calc(100% - 5.6px),
+            47.500% calc(100% - 4.7px),
+            45.000% calc(100% - 5.4px),
+            42.500% calc(100% - 7.4px),
+            40.000% calc(100% - 10.2px),
+            37.500% calc(100% - 13.1px),
+            35.000% calc(100% - 15.8px),
+            32.500% calc(100% - 18.0px),
+            30.000% calc(100% - 19.5px),
+            27.500% calc(100% - 20.5px),
+            25.000% calc(100% - 21.4px),
+            22.500% calc(100% - 22.5px),
+            20.000% calc(100% - 23.9px),
+            17.500% calc(100% - 25.9px),
+            15.000% calc(100% - 28.4px),
+            12.500% calc(100% - 30.9px),
+            10.000% calc(100% - 33.1px),
+            7.500% calc(100% - 34.3px),
+            5.000% calc(100% - 34.3px),
+            2.500% calc(100% - 32.6px),
+            0.000% calc(100% - 29.3px)
+        );
+    }
 }
 
 /* Dynamic Background Mesh — soft gradients, no runtime filter */
@@ -63,7 +348,7 @@
     position: absolute;
     inset: 0;
     z-index: 0;
-    background: 
+    background:
         radial-gradient(ellipse 50% 50% at 15% 50%, rgba(var(--s3-green-rgb), 0.08), transparent 70%),
         radial-gradient(ellipse 50% 50% at 85% 30%, rgba(var(--s3-teal-rgb), 0.1), transparent 70%);
     animation: bgPulse 10s ease-in-out infinite alternate;
@@ -72,17 +357,20 @@
 
 /* Light Mode Background Adjustment */
 body:not(.dark-mode) .hero-bg {
-    background: 
+    background:
         radial-gradient(ellipse 50% 50% at 15% 50%, rgba(var(--s3-green-rgb), 0.15), transparent 70%),
         radial-gradient(ellipse 50% 50% at 85% 30%, rgba(var(--s3-teal-rgb), 0.15), transparent 70%);
     opacity: 0.8;
 }
 
-/* Grid Pattern Overlay */
+/* Grid Pattern Overlay — hero's own local decoration (radial-masked, fades
+   at the edges), separate from the page-wide fixed grid in base.css
+   (body::before). That one is a static backdrop behind the whole site; this
+   one is scoped to the hero and moves with it like any other section content. */
 .hero-grid {
     position: absolute;
     inset: 0;
-    background-image: 
+    background-image:
         linear-gradient(rgba(255, 255, 255, 0.045) 1px, transparent 1px),
         linear-gradient(90deg, rgba(255, 255, 255, 0.045) 1px, transparent 1px);
     background-size: 32px 32px;
@@ -137,7 +425,7 @@ body:not(.dark-mode) .hero-backdrop-img {
 }
 
 body:not(.dark-mode) .hero-grid {
-    background-image: 
+    background-image:
         linear-gradient(rgba(0, 0, 0, 0.05) 1px, transparent 1px),
         linear-gradient(90deg, rgba(0, 0, 0, 0.05) 1px, transparent 1px);
 }
@@ -179,7 +467,7 @@ body:not(.dark-mode) .hero-grid {
     gap: 9px;
     padding: 7px 18px;
     background: transparent;
-    border: 2px solid var(--s3-teal);
+    border: 2px dashed var(--s3-teal);
     border-radius: 6px 12px 8px 10px / 10px 8px 12px 6px;
     color: var(--s3-teal);
     font-size: 1.15rem;
@@ -315,6 +603,10 @@ body:not(.dark-mode) .hero-server-stats {
     opacity: 0.6;
 }
 
+/* Sticker-badge family (2026-07-10) — the tape strip below was dropped:
+   tape is now reserved exclusively for the sticky-note card family
+   (.feature-card, .event-card, etc.), so .hero-note reads as the same kind
+   of thing as the other small badges/pills instead of a one-off hybrid. */
 .hero-note {
     display: inline-flex;
     align-items: center;
@@ -332,22 +624,6 @@ body:not(.dark-mode) .hero-server-stats {
     position: relative;
 }
 
-/* Tape strip pinning the note */
-.hero-note::before {
-    content: '';
-    position: absolute;
-    top: -11px;
-    left: calc(50% - 28px);
-    width: 56px;
-    height: 15px;
-    background: rgba(215, 190, 120, 0.60);
-    border-radius: 2px 3px 2px 3px;
-    transform: rotate(-1deg);
-    z-index: 2;
-    pointer-events: none;
-    box-shadow: 0 1px 4px rgba(0,0,0,0.13);
-}
-
 body:not(.dark-mode) .hero-note {
     background: rgba(var(--s3-gold-rgb), 0.12);
     border-color: rgba(180,160,60,0.35);
@@ -362,7 +638,7 @@ body:not(.dark-mode) .hero-note {
     gap: 8px;
     padding: 6px 16px;
     background: rgba(76, 175, 80, 0.10);
-    border: 1px solid rgba(76, 175, 80, 0.25);
+    border: 1.5px dashed rgba(76, 175, 80, 0.4);
     border-radius: 8px 12px 10px 8px / 10px 8px 12px 10px;
     font-family: var(--font-handwriting);
     font-size: 1rem;
@@ -371,10 +647,11 @@ body:not(.dark-mode) .hero-note {
     margin-bottom: 1rem;
     width: fit-content;
     letter-spacing: 0.03em;
+    box-shadow: 2px 3px 0 rgba(76, 175, 80, 0.18);
 }
 body:not(.dark-mode) .hero-member-badge {
     background: rgba(76, 175, 80, 0.08);
-    border-color: rgba(76, 175, 80, 0.30);
+    border-color: rgba(76, 175, 80, 0.35);
     color: #388E3C;
 }
 .member-badge-dot {
@@ -1089,7 +1366,7 @@ section h2 .emoji {
     display: flex;
     flex-wrap: nowrap;
     justify-content: center;
-    gap: 1.5rem;
+    gap: 2.25rem;
     max-width: 1400px;
     margin: 0 auto;
     position: relative;
@@ -1114,13 +1391,17 @@ section h2 .emoji {
     will-change: transform;
 }
 
-/* Sticky-note background, one per card — card-squiggle has scale=10 so the wobble is visible on large elements */
+/* Sticky-note background, one per card — card-squiggle has scale=10 so the wobble is visible on large elements.
+   inset kept small relative to the grid gap (2026-07-10) — at -10px against
+   the old 1.5rem gap, neighbouring notes' backgrounds nearly touched (~1px
+   of visible space), reading as one solid striped banner instead of
+   separate cards with a shadow gap between them. */
 .feature-card::before {
     content: '';
     position: absolute;
-    inset: -10px;
+    inset: -6px;
     z-index: -1;
-    border-radius: 2px 4px 3px 3px;
+    border-radius: 16px;
     /* filter is static (never changes on hover) so the browser only has to run
        the expensive SVG turbulence/displacement pipeline once, not per-frame.
        The hover "lift" shadow is a separate, cheap box-shadow instead. */
@@ -1254,89 +1535,89 @@ section h2 .emoji {
     gap: 2.5rem;
 }
 
+/* Same sticky-note construction as .feature-card above (2026-07-10 —
+   these are both "grid of feature callouts" panels, so they should read as
+   the same family of component instead of two different card languages). */
 .custom-feature {
-    background: var(--bg-card);
-    padding: 2.5rem 2rem 2rem;
-    border-radius: 14px 20px 16px 18px / 18px 14px 20px 16px;
-    border: 2px dashed rgba(34,34,34,0.18);
+    background: transparent;
+    padding: 2.25rem 1.5rem 2rem;
+    border-radius: 0;
+    border: none;
     text-align: center;
     position: relative;
-    box-shadow: 3px 5px 0 rgba(0,0,0,0.08);
-    transition: transform 0.2s ease, border-color 0.2s ease, border-style 0.2s ease, box-shadow 0.2s ease;
+    isolation: isolate;
+    z-index: 1;
+    will-change: transform;
 }
 
 .custom-feature:nth-child(1) { transform: rotate(-0.7deg); }
 .custom-feature:nth-child(2) { transform: rotate(0.5deg); }
 .custom-feature:nth-child(3) { transform: rotate(-0.4deg); }
 
-body.dark-mode .custom-feature {
-    border-color: rgba(255,255,255,0.1);
-    box-shadow: 3px 5px 0 rgba(255,255,255,0.04);
-}
-
-/* Left-side accent bar — colour-matched per card so this section carries
-   some of the vibrancy from the sticky-note section above it, instead of
-   all three cards reading as the same flat, monochrome grey. */
+/* Sticky-note background, one per card — same mechanism as .feature-card::before */
 .custom-feature::before {
     content: '';
     position: absolute;
-    top: 16px;
-    bottom: 16px;
-    left: 0;
-    width: 3px;
-    border-radius: 0 3px 3px 0;
-    background: linear-gradient(180deg, var(--s3-teal), var(--s3-green));
-    opacity: 0.4;
-    pointer-events: none;
+    inset: -6px;
+    z-index: -1;
+    border-radius: 16px;
+    filter: url(#card-squiggle) drop-shadow(2px 6px 14px rgba(0,0,0,0.28));
+    box-shadow: 0 0 0 transparent;
+    transition: box-shadow 0.2s;
 }
-.custom-feature:nth-child(1)::before { background: linear-gradient(180deg, var(--s3-orange), var(--s3-red), #7d83c2); }
-.custom-feature:nth-child(2)::before { background: linear-gradient(180deg, #e8749a, var(--s3-red)); }
-.custom-feature:nth-child(3)::before { background: linear-gradient(180deg, #e8544a, var(--s3-orange)); }
+.custom-feature:nth-child(1)::before { background: linear-gradient(to bottom, #7c3aed 0%, #7c3aed 20%, #ddd6fe 20%); }
+.custom-feature:nth-child(2)::before { background: linear-gradient(to bottom, #db2777 0%, #db2777 20%, #fbcfe8 20%); }
+.custom-feature:nth-child(3)::before { background: linear-gradient(to bottom, #2563eb 0%, #2563eb 20%, #bfdbfe 20%); }
 
-/* Icon circle tint — matches each card's accent instead of the same flat
-   dark circle used for the rainbow sticky-notes above (which works there
-   because it sits on a bright background, but reads flat on these dark
-   cards). */
-.custom-feature:nth-child(1) .feature-icon { background: radial-gradient(circle, rgba(var(--s3-orange-rgb), 0.20), rgba(125,131,194,0.12)); }
-.custom-feature:nth-child(2) .feature-icon { background: radial-gradient(circle, rgba(232,116,154,0.20), rgba(var(--s3-red-rgb), 0.12)); }
-.custom-feature:nth-child(3) .feature-icon { background: radial-gradient(circle, rgba(232,84,74,0.20), rgba(var(--s3-orange-rgb), 0.12)); }
+/* Fold corner color matches each card */
+.custom-feature:nth-child(1) .page-fold::before { border-top-color: #ddd6fe; }
+.custom-feature:nth-child(2) .page-fold::before { border-top-color: #fbcfe8; }
+.custom-feature:nth-child(3) .page-fold::before { border-top-color: #bfdbfe; }
 
-.custom-feature:hover {
-    border-style: solid;
-    border-color: rgba(var(--s3-teal-rgb), 0.45);
-    box-shadow: 4px 7px 0 rgba(var(--s3-teal-rgb), 0.12), 0 10px 25px rgba(0,0,0,0.08);
-    transform: rotate(0deg) translateY(-4px);
-}
+.custom-feature:hover::before { box-shadow: 4px 10px 22px rgba(0,0,0,0.36); }
+.custom-feature:nth-child(1):hover { transform: rotate(-0.7deg) translateY(-9px) scale(1.02); }
+.custom-feature:nth-child(2):hover { transform: rotate(0.5deg) translateY(-9px) scale(1.02); }
+.custom-feature:nth-child(3):hover { transform: rotate(-0.4deg) translateY(-9px) scale(1.02); }
 
-/* Tape strip at top-right corner */
+/* Tape strip */
 .custom-feature::after {
     content: '';
     position: absolute;
-    top: -9px;
-    right: 24px;
-    width: 48px;
-    height: 15px;
-    background: rgba(215, 190, 120, 0.52);
-    border-radius: 2px 3px 2px 3px;
-    transform: rotate(2.5deg);
+    top: -11px;
+    left: calc(50% - 26px);
+    width: 52px;
+    height: 16px;
+    background: rgba(215, 190, 120, 0.65);
+    border-radius: 2px 3px 3px 2px;
+    transform: rotate(-1.5deg);
     z-index: 2;
     pointer-events: none;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.10);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.15);
 }
 
+/* Dark ink text on pastel — always dark regardless of dark/light mode */
+.custom-feature h3,
+.custom-feature p {
+    position: relative;
+    z-index: 1;
+}
 .custom-feature h3 {
-    font-size: 1.5rem;
+    font-size: 1.3rem;
     margin-bottom: 0.75rem;
-    color: var(--text-primary);
+    color: #1a1100;
     font-family: var(--font-display);
     font-weight: 700;
-    letter-spacing: 0.02em;
+    letter-spacing: 0.04em;
 }
 
 .custom-feature p {
-    color: var(--text-secondary);
+    color: #2e2a14;
     line-height: 1.65;
-    font-size: 0.95rem;
+    font-size: 0.92rem;
+}
+
+.custom-feature:hover .feature-icon {
+    transform: scale(1.1) rotate(4deg);
 }
 
 .color-examples, .pronoun-examples, .toggle-examples {
@@ -1347,23 +1628,22 @@ body.dark-mode .custom-feature {
     gap: 0.8rem;
 }
 
+/* These two sit inside pastel sticky-note cards now (always a light
+   background regardless of site theme, same as .feature-card), so they use
+   fixed dark-ink-friendly tones instead of theme-aware ones. */
 .color-examples {
     padding: 1rem 1.25rem;
-    background: rgba(0, 0, 0, 0.15);
-    border: 1px solid rgba(255, 255, 255, 0.06);
+    background: rgba(0, 0, 0, 0.06);
+    border: 1px solid rgba(0, 0, 0, 0.15);
     border-radius: 14px;
-}
-body:not(.dark-mode) .color-examples {
-    background: rgba(0, 0, 0, 0.04);
-    border-color: rgba(0, 0, 0, 0.06);
 }
 
 .pronoun-badge {
     padding: 7px 16px;
-    background: rgba(var(--s3-teal-rgb), 0.08);
-    border: 1px solid rgba(var(--s3-teal-rgb), 0.2);
+    background: rgba(0, 0, 0, 0.08);
+    border: 1px solid rgba(0, 0, 0, 0.18);
     border-radius: 8px 12px 10px 8px / 10px 8px 12px 10px;
-    color: var(--primary-purple);
+    color: #1a1100;
     font-family: var(--font-handwriting);
     font-size: 1rem;
     font-weight: 600;
@@ -1372,8 +1652,8 @@ body:not(.dark-mode) .color-examples {
 }
 .pronoun-badge:hover {
     transform: translateY(-2px);
-    box-shadow: 0 4px 14px rgba(var(--s3-teal-rgb), 0.18);
-    background: rgba(var(--s3-teal-rgb), 0.14);
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.18);
+    background: rgba(0, 0, 0, 0.14);
 }
 
 /* Application Section */
@@ -1486,19 +1766,57 @@ body:not(.dark-mode) .app-memo-body strong {
     top: 100px;
 }
 
+/* Sticky-note family (2026-07-10) — same squiggle-shadow + tape + 16px
+   radius construction as .feature-card/.event-card, just with a neutral
+   bg-card fill instead of a pastel band (this holds a dense list, not a
+   short blurb). Was previously a third, unrelated "dashed index card"
+   language shared by nothing else on the page. */
 .application-requirements {
-    background: var(--bg-card);
+    background: transparent;
     padding: 1.8rem 2rem;
-    border-radius: 4px 18px 14px 20px / 18px 6px 16px 8px;
-    border: 2px dashed rgba(var(--s3-teal-rgb), 0.35);
+    border-radius: 16px;
+    border: none;
     text-align: left;
-    box-shadow: 4px 5px 0 rgba(var(--s3-teal-rgb), 0.12);
-    transition: transform 0.25s ease, box-shadow 0.25s ease;
+    position: relative;
+    isolation: isolate;
+    z-index: 1;
+    transform: rotate(-0.5deg);
+    transition: transform 0.25s ease;
+}
+
+.application-requirements::before {
+    content: '';
+    position: absolute;
+    inset: -6px;
+    z-index: -1;
+    border-radius: 16px;
+    background: var(--bg-card);
+    filter: url(#card-squiggle) drop-shadow(2px 6px 14px rgba(0,0,0,0.28));
+    box-shadow: 0 0 0 transparent;
+    transition: box-shadow 0.2s;
+}
+
+/* Tape strip */
+.application-requirements::after {
+    content: '';
+    position: absolute;
+    top: -11px;
+    left: calc(50% - 26px);
+    width: 52px;
+    height: 16px;
+    background: rgba(215, 190, 120, 0.65);
+    border-radius: 2px 3px 3px 2px;
+    transform: rotate(-1.5deg);
+    z-index: 2;
+    pointer-events: none;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.15);
 }
 
 .application-requirements:hover {
-    transform: translateY(-2px) rotate(0.3deg);
-    box-shadow: 5px 7px 0 rgba(var(--s3-teal-rgb), 0.18);
+    transform: translateY(-2px) rotate(0deg);
+}
+.application-requirements:hover::before {
+    box-shadow: 4px 10px 22px rgba(0,0,0,0.36);
 }
 
 .application-requirements h3 {
@@ -1528,32 +1846,64 @@ body:not(.dark-mode) .app-memo-body strong {
     margin-bottom: 0;
 }
 
-/* Response note */
+/* Response note — sticky-note family, keeps its purple info-callout tint
+   (unlike .application-requirements/.application-form-wrapper it's a short
+   highlighted message, not dense content, so the tint stays as the "note
+   color" instead of flattening to plain bg-card). */
 .app-response-note {
     display: flex;
     align-items: flex-start;
     gap: .75rem;
     padding: 1.2rem 1.4rem;
-    background: rgba(123,104,238,0.06);
-    border: 2px dashed rgba(123,104,238,0.25);
-    border-radius: 16px 6px 18px 8px / 8px 18px 6px 16px;
-    box-shadow: 3px 4px 0 rgba(123,104,238,0.10);
+    background: transparent;
+    border: none;
+    border-radius: 16px;
+    position: relative;
+    isolation: isolate;
+    z-index: 1;
+    transform: rotate(0.4deg);
+}
+.app-response-note::before {
+    content: '';
+    position: absolute;
+    inset: -6px;
+    z-index: -1;
+    border-radius: 16px;
+    background: rgba(123,104,238,0.10);
+    filter: url(#card-squiggle) drop-shadow(2px 6px 14px rgba(0,0,0,0.24));
+}
+/* Tape strip */
+.app-response-note::after {
+    content: '';
+    position: absolute;
+    top: -11px;
+    left: calc(50% - 26px);
+    width: 52px;
+    height: 16px;
+    background: rgba(215, 190, 120, 0.65);
+    border-radius: 2px 3px 3px 2px;
+    transform: rotate(1.5deg);
+    z-index: 2;
+    pointer-events: none;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.15);
 }
 .app-response-icon {
     font-size: 1.3rem;
     flex-shrink: 0;
     line-height: 1.5;
+    position: relative;
+    z-index: 1;
 }
 .app-response-note p {
     font-size: .9rem;
     line-height: 1.6;
     color: var(--text-secondary);
     margin: 0;
+    position: relative;
+    z-index: 1;
 }
-body:not(.dark-mode) .app-response-note {
-    background: rgba(var(--s3-teal-rgb), 0.04);
-    border-color: rgba(var(--s3-teal-rgb), 0.22);
-    box-shadow: 3px 4px 0 rgba(var(--s3-teal-rgb), 0.08);
+body:not(.dark-mode) .app-response-note::before {
+    background: rgba(var(--s3-teal-rgb), 0.08);
 }
 
 /* Quick links */
@@ -1599,20 +1949,52 @@ body:not(.dark-mode) .app-response-note {
     min-width: 0;
 }
 
-/* Application Form Wrapper */
+/* Application Form Wrapper — sticky-note family */
 .application-form-wrapper {
     width: 100%;
-    border-radius: 6px 20px 16px 18px / 18px 8px 20px 10px;
-    background: var(--bg-card);
-    border: 2px dashed rgba(var(--s3-teal-rgb), 0.3);
-    box-shadow: 6px 7px 0 rgba(var(--s3-teal-rgb), 0.12);
+    border-radius: 16px;
+    background: transparent;
+    border: none;
+    position: relative;
+    isolation: isolate;
+    z-index: 1;
     transform: rotate(-0.3deg);
-    transition: transform 0.25s ease, box-shadow 0.25s ease;
+    transition: transform 0.25s ease;
+}
+
+.application-form-wrapper::before {
+    content: '';
+    position: absolute;
+    inset: -6px;
+    z-index: -1;
+    border-radius: 16px;
+    background: var(--bg-card);
+    filter: url(#card-squiggle) drop-shadow(2px 6px 14px rgba(0,0,0,0.28));
+    box-shadow: 0 0 0 transparent;
+    transition: box-shadow 0.2s;
+}
+
+/* Tape strip */
+.application-form-wrapper::after {
+    content: '';
+    position: absolute;
+    top: -11px;
+    left: calc(50% - 26px);
+    width: 52px;
+    height: 16px;
+    background: rgba(215, 190, 120, 0.65);
+    border-radius: 2px 3px 3px 2px;
+    transform: rotate(-1.5deg);
+    z-index: 2;
+    pointer-events: none;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.15);
 }
 
 .application-form-wrapper:hover {
     transform: rotate(0deg) translateY(-2px);
-    box-shadow: 5px 9px 0 rgba(var(--s3-teal-rgb), 0.18);
+}
+.application-form-wrapper:hover::before {
+    box-shadow: 4px 10px 22px rgba(0,0,0,0.36);
 }
 
 /* Custom Application Form */
@@ -1935,7 +2317,7 @@ body:not(.dark-mode) .app-response-note {
 
 /* === EVENTS SECTION === */
 .events-section {
-    padding: 4rem 0;
+    padding: 5rem 0;
     background: var(--bg-secondary);
     position: relative;
     overflow: hidden;
@@ -1969,7 +2351,7 @@ body:not(.dark-mode) .app-response-note {
 .events-timeline {
     display: flex;
     flex-wrap: wrap;
-    gap: 1.75rem;
+    gap: 2.25rem;
     justify-content: center;
     align-items: flex-start;
 }
@@ -1982,7 +2364,7 @@ body:not(.dark-mode) .app-response-note {
     padding: 2.5rem 1.5rem;
     background: var(--bg-card);
     border: 1px dashed var(--border-color);
-    border-radius: 2px 3px 4px 2px;
+    border-radius: 16px;
     position: relative;
     transform: rotate(-0.7deg);
 }
@@ -2045,12 +2427,16 @@ body:not(.dark-mode) .app-response-note {
     transition: transform 0.2s ease;
 }
 
-/* Squiggle sticky-note background — color driven by status */
+/* Squiggle sticky-note background — color driven by status.
+   16px radius + -6px inset (2026-07-10) — matches the .feature-card fix:
+   the old 2px-3px-4px-2px radius barely rounded at all, and -8px inset
+   against the previous 1.75rem grid gap left almost no visible space
+   between cards, same "cards touching" bug found on the features grid. */
 .event-card::before {
     content: '';
     position: absolute;
-    inset: -8px;
-    border-radius: 2px 3px 4px 2px;
+    inset: -6px;
+    border-radius: 16px;
     /* filter stays static — see .feature-card::before for why */
     filter: url(#card-squiggle) drop-shadow(2px 6px 14px rgba(0,0,0,0.28));
     box-shadow: 0 0 0 transparent;

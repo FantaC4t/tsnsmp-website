@@ -349,12 +349,45 @@ body:not(.dark-mode) .nav-links .nav-icon:hover {
 /* 3. Fix "Dark Line" below header (Force light border) */
 body:not(.dark-mode) .site-header {
     border-bottom: 1px solid rgba(0, 0, 0, 0.06) !important;
-    background: rgba(255, 255, 255, 0.95); /* Ensure opacity covers content behind */
+    /* background-color, not the `background` shorthand — the shorthand
+       resets background-image to none, which would wipe out the grid
+       overlay added below. */
+    background-color: rgba(255, 255, 255, 0.95); /* Ensure opacity covers content behind */
 }
 
 /* Body padding to account for fixed header */
 body {
     padding-top: 100px;
+}
+
+/* ─── Shared background grid (2026-07-10) ───
+   Exactly the same pattern/tile-size/colour as body::before (base.css) —
+   the site's one fixed, viewport-anchored "mega background" grid, which
+   otherwise only shows in the page gutters on wide screens since every
+   section paints an opaque background over it elsewhere. The header is
+   the other place it's visible, and painted here rather than shown through
+   real transparency (the header sits directly above the hero, which is
+   busy — mascot, badges, gradient text — so true see-through would reveal
+   that instead of a clean grid). Values MUST match body::before's 28px /
+   rgba(...,0.05) exactly, or the two grids visibly misalign at the seam
+   where the header ends and the page's own margin grid continues.
+   background-image only (not the `background` shorthand) — every rule
+   above sets a solid colour via `background`/`background-color`, and this
+   needs to add an image layer without wiping any of them out. Placed last +
+   selectors matched to the colour rules above so it wins every state
+   (default, scrolled, light mode). */
+.site-header,
+.site-header.scrolled {
+    background-image:
+        linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+    background-size: 28px 28px;
+}
+body:not(.dark-mode) .site-header,
+body:not(.dark-mode) .site-header.scrolled {
+    background-image:
+        linear-gradient(rgba(0, 0, 0, 0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 0, 0, 0.05) 1px, transparent 1px);
 }
 
 

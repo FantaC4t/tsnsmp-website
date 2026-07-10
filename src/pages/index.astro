@@ -1,6 +1,8 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import Doodle from '../components/Doodle.astro';
 import '../styles/home.css';
+import '../styles/intro.css';
 ---
 
 <Layout
@@ -8,6 +10,7 @@ import '../styles/home.css';
     description="Cozy whitelist Minecraft SMP with Season 3 applications open. Join a friendly community for building, exploring, and streaming together."
     path="/"
     currentPage="home"
+    showIntro={true}
 >
 
 <main id="main-content"><!-- Hero Section -->
@@ -17,10 +20,10 @@ import '../styles/home.css';
 <div class="hero-gallery-backdrop" id="heroGalleryBackdrop" aria-hidden="true"></div>
 <!-- Hand-drawn doodle decorations -->
 <div class="hero-doodles" aria-hidden="true">
-    <svg class="doodle doodle-star" viewBox="0 0 24 24" fill="none" style="top:13%;right:11%;width:26px" xmlns="http://www.w3.org/2000/svg"><path d="M12 2L13.6 8.6L20 10L13.6 11.4L12 18L10.4 11.4L4 10L10.4 8.6Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/></svg>
-    <svg class="doodle doodle-star doodle-star--sm" viewBox="0 0 24 24" fill="none" style="bottom:30%;left:5%;width:16px" xmlns="http://www.w3.org/2000/svg"><path d="M12 2L13.6 8.6L20 10L13.6 11.4L12 18L10.4 11.4L4 10L10.4 8.6Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/></svg>
-    <svg class="doodle doodle-cross" viewBox="0 0 20 20" fill="none" style="top:65%;right:18%;width:18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 2.5 L10 17.5 M2.5 10 L17.5 10" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
-    <svg class="doodle doodle-squiggle" viewBox="0 0 80 16" fill="none" style="bottom:16%;right:7%;width:68px" xmlns="http://www.w3.org/2000/svg"><path d="M2 8C10 3 18 13 26 8C34 3 42 13 50 8C58 3 66 13 74 8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" fill="none"/></svg>
+    <Doodle shape="star" class="doodle doodle-star" style="top:13%;right:11%;width:26px" />
+    <Doodle shape="star" class="doodle doodle-star doodle-star--sm" style="bottom:30%;left:5%;width:16px" />
+    <Doodle shape="cross" class="doodle doodle-cross" style="top:65%;right:18%;width:18px" />
+    <Doodle shape="squiggle" class="doodle doodle-squiggle" style="bottom:16%;right:7%;width:68px" />
     <svg class="doodle doodle-dots" viewBox="0 0 44 10" fill="none" style="top:80%;left:10%;width:52px" xmlns="http://www.w3.org/2000/svg"><circle cx="5" cy="5" r="2.2" fill="currentColor" opacity="0.8"/><circle cx="22" cy="5" r="2.2" fill="currentColor" opacity="0.55"/><circle cx="39" cy="5" r="2.2" fill="currentColor" opacity="0.3"/></svg>
     <img class="hero-mascot" src="/assets/mascot.png" alt="" width="120" height="91" style="top:16%;right:14%" />
 </div>
@@ -71,8 +74,13 @@ import '../styles/home.css';
 
 </div>
 </section>
-
 <section class="events-section reveal">
+<div class="section-doodles" aria-hidden="true">
+    <Doodle shape="sparkle" class="sec-doodle sec-doodle--sparkle" style="top:10%;left:3%" />
+    <Doodle shape="star" class="sec-doodle sec-doodle--star" style="top:15%;right:4%" strokeWidth={1.5} />
+    <svg class="sec-doodle sec-doodle--dots" viewBox="0 0 44 10" fill="none" style="bottom:12%;left:2%" xmlns="http://www.w3.org/2000/svg"><circle cx="5" cy="5" r="2.2" fill="currentColor" opacity="0.9"/><circle cx="22" cy="5" r="2.2" fill="currentColor" opacity="0.6"/><circle cx="39" cy="5" r="2.2" fill="currentColor" opacity="0.3"/></svg>
+    <Doodle shape="squiggle" class="sec-doodle sec-doodle--squiggle" style="bottom:16%;right:5%" />
+</div>
 <div class="container">
 <div class="events-wrapper">
     <div class="events-header">
@@ -87,9 +95,14 @@ import '../styles/home.css';
 </div>
 </div>
 </section>
-
+<div class="wave-seam" style="background:var(--bg-secondary)"></div>
 <!-- Carousel Section - pulls from Firebase Gallery -->
 <section class="player-showcase reveal">
+<div class="section-doodles" aria-hidden="true">
+    <Doodle shape="spiral" class="sec-doodle sec-doodle--spiral" style="top:6%;left:3%" />
+    <Doodle shape="star" class="sec-doodle sec-doodle--star" style="top:8%;right:4%" strokeWidth={1.5} />
+    <Doodle shape="arrow" class="sec-doodle sec-doodle--arrow" style="bottom:8%;left:5%" />
+</div>
 <div class="container">
 <h2>Check out some awesome builds! <span class="emoji">🏗️</span></h2>
 <p class="section-subtitle">Click any image to expand · Images from our <a href="/gallery/" style="color:var(--primary-purple)">gallery</a></p>
@@ -104,18 +117,13 @@ import '../styles/home.css';
 </div>
 </div>
 </section>
-
-<!-- Wave divider -->
-<div class="section-divider">
-  <svg viewBox="0 0 1440 80" preserveAspectRatio="none"><path d="M0,40 C360,80 720,0 1080,40 C1260,60 1380,50 1440,40 L1440,80 L0,80Z" fill="var(--bg-primary)"/><path d="M0,52 C320,72 640,20 960,52 C1120,68 1320,42 1440,52 L1440,80 L0,80Z" fill="var(--bg-primary)" opacity="0.5"/></svg>
-</div>
-
+<div class="wave-seam" style="background:var(--bg-secondary)"></div>
 <section class="features reveal">
 <div class="section-doodles" aria-hidden="true">
-    <svg class="sec-doodle sec-doodle--spiral" viewBox="0 0 40 40" fill="none" style="top:8%;left:2%" xmlns="http://www.w3.org/2000/svg"><path d="M20 20C20 20 24 16 26 20C28 24 24 28 20 28C14 28 10 22 12 16C14 10 22 8 28 12" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" fill="none"/></svg>
-    <svg class="sec-doodle sec-doodle--arrow" viewBox="0 0 36 24" fill="none" style="bottom:12%;right:3%" xmlns="http://www.w3.org/2000/svg"><path d="M2 12C8 8 16 6 24 8M24 8L19 4M24 8L20 13" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-    <svg class="sec-doodle sec-doodle--star" viewBox="0 0 24 24" fill="none" style="top:20%;right:6%" xmlns="http://www.w3.org/2000/svg"><path d="M12 2L13.6 8.6L20 10L13.6 11.4L12 18L10.4 11.4L4 10L10.4 8.6Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>
-    <svg class="sec-doodle sec-doodle--underline" viewBox="0 0 90 12" fill="none" style="bottom:18%;left:4%" xmlns="http://www.w3.org/2000/svg"><path d="M2 8C18 3 36 12 54 7C66 4 78 9 88 7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+    <Doodle shape="spiral" class="sec-doodle sec-doodle--spiral" style="top:8%;left:2%" />
+    <Doodle shape="arrow" class="sec-doodle sec-doodle--arrow" style="bottom:12%;right:3%" />
+    <Doodle shape="star" class="sec-doodle sec-doodle--star" style="top:20%;right:6%" strokeWidth={1.5} />
+    <Doodle shape="underline" class="sec-doodle sec-doodle--underline" style="bottom:18%;left:4%" />
 </div>
 <div class="container">
 <h2>Why we think you'll love it here <span class="emoji">✨</span></h2>
@@ -153,12 +161,12 @@ import '../styles/home.css';
 </div>
 </div>
 </section>
-
+<div class="wave-seam" style="background:var(--bg-primary)"></div>
 <section class="customization-showcase reveal">
 <div class="section-doodles" aria-hidden="true">
-    <svg class="sec-doodle sec-doodle--cross" viewBox="0 0 20 20" fill="none" style="top:10%;left:3%" xmlns="http://www.w3.org/2000/svg"><path d="M10 2.5L10 17.5M2.5 10L17.5 10" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
-    <svg class="sec-doodle sec-doodle--sparkle" viewBox="0 0 32 32" fill="none" style="top:15%;right:4%" xmlns="http://www.w3.org/2000/svg"><path d="M16 4V8M16 24V28M4 16H8M24 16H28M7.8 7.8L10.6 10.6M21.4 21.4L24.2 24.2M7.8 24.2L10.6 21.4M21.4 10.6L24.2 7.8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
-    <svg class="sec-doodle sec-doodle--squiggle" viewBox="0 0 80 16" fill="none" style="bottom:14%;right:5%" xmlns="http://www.w3.org/2000/svg"><path d="M2 8C10 3 18 13 26 8C34 3 42 13 50 8C58 3 66 13 74 8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+    <Doodle shape="cross" class="sec-doodle sec-doodle--cross" style="top:10%;left:3%" />
+    <Doodle shape="sparkle" class="sec-doodle sec-doodle--sparkle" style="top:15%;right:4%" />
+    <Doodle shape="squiggle" class="sec-doodle sec-doodle--squiggle" style="bottom:14%;right:5%" />
 </div>
 <div class="container">
 <h2>Make yourself at home with customization! <span class="emoji">🎨</span></h2>
@@ -189,18 +197,13 @@ import '../styles/home.css';
 </div>
 </div>
 </section>
-
-<!-- Wave divider -->
-<div class="section-divider">
-  <svg viewBox="0 0 1440 80" preserveAspectRatio="none"><path d="M0,40 C360,80 720,0 1080,40 C1260,60 1380,50 1440,40 L1440,80 L0,80Z" fill="var(--bg-primary)"/><path d="M0,52 C320,72 640,20 960,52 C1120,68 1320,42 1440,52 L1440,80 L0,80Z" fill="var(--bg-primary)" opacity="0.5"/></svg>
-</div>
-
+<div class="wave-seam" style="background:var(--bg-secondary)"></div>
 <section class="application-section reveal" id="application-section">
 <div class="section-doodles" aria-hidden="true">
-    <svg class="sec-doodle sec-doodle--heart" viewBox="0 0 28 26" fill="none" style="top:6%;left:3%" xmlns="http://www.w3.org/2000/svg"><path d="M14 23C14 23 3 16 3 9C3 6 5.5 4 8.5 4C11 4 13 5.5 14 7C15 5.5 17 4 19.5 4C22.5 4 25 6 25 9C25 16 14 23 14 23Z" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-    <svg class="sec-doodle sec-doodle--arrow" viewBox="0 0 36 24" fill="none" style="top:30%;right:3%" xmlns="http://www.w3.org/2000/svg"><path d="M2 12C8 8 16 6 24 8M24 8L19 4M24 8L20 13" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <Doodle shape="heart" class="sec-doodle sec-doodle--heart" style="top:6%;left:3%" />
+    <Doodle shape="arrow" class="sec-doodle sec-doodle--arrow" style="top:30%;right:3%" />
     <svg class="sec-doodle sec-doodle--dots" viewBox="0 0 44 10" fill="none" style="bottom:10%;left:2%" xmlns="http://www.w3.org/2000/svg"><circle cx="5" cy="5" r="2.2" fill="currentColor" opacity="0.9"/><circle cx="22" cy="5" r="2.2" fill="currentColor" opacity="0.6"/><circle cx="39" cy="5" r="2.2" fill="currentColor" opacity="0.3"/></svg>
-    <svg class="sec-doodle sec-doodle--star" viewBox="0 0 24 24" fill="none" style="bottom:20%;right:5%" xmlns="http://www.w3.org/2000/svg"><path d="M12 2L13.6 8.6L20 10L13.6 11.4L12 18L10.4 11.4L4 10L10.4 8.6Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>
+    <Doodle shape="star" class="sec-doodle sec-doodle--star" style="bottom:20%;right:5%" strokeWidth={1.5} />
 </div>
 <div class="container">
 <div class="application-content">
@@ -323,6 +326,7 @@ import '../styles/home.css';
 </div>
 </div>
 </section>
+<div class="wave-seam" style="background:var(--bg-primary)"></div>
 </main>
 
 <!-- Lightbox - must be outside <main> to avoid stacking context issues -->
@@ -1448,7 +1452,16 @@ import '../styles/home.css';
                         io.unobserve(e.target);
                     }
                 });
-            }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+            /* Was threshold:0.12 + a NEGATIVE bottom rootMargin — both make
+               the trigger point stricter/later. For a full-height section
+               that meant scrolling well into it before the reveal even
+               started, so the fade/slide-in was still animating well after
+               the section was already on screen. threshold:0 + a POSITIVE
+               bottom rootMargin fires as soon as the section is still
+               ~200px below the fold, so the 0.5s transition has finished
+               (or is nearly done) by the time it's actually scrolled into
+               view. */
+            }, { threshold: 0, rootMargin: '0px 0px 200px 0px' });
             els.forEach(function(el) { io.observe(el); });
         })();
 

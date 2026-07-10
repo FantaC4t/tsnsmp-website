@@ -1,0 +1,285 @@
+/* ══════════════════════════════════════════════════════════════
+   INTRO SPLASH — white-coffee.com-style branded reveal
+   Plays once per browser session on the homepage only (see the
+   inline script in IntroSplash.astro for the sessionStorage /
+   prefers-reduced-motion gating). Always renders on the dark brand
+   canvas regardless of the visitor's light/dark site preference —
+   it's a one-off cinematic moment, not a themed surface.
+   ══════════════════════════════════════════════════════════════ */
+
+.intro-splash {
+    position: fixed;
+    inset: 0;
+    z-index: 100000;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    cursor: pointer;
+    opacity: 1;
+}
+
+.intro-splash-bg {
+    position: absolute;
+    inset: 0;
+    background:
+        radial-gradient(ellipse 60% 50% at 20% 20%, rgba(var(--s3-teal-rgb), 0.16), transparent 60%),
+        radial-gradient(ellipse 60% 50% at 85% 80%, rgba(var(--s3-green-rgb), 0.14), transparent 60%),
+        linear-gradient(180deg, #14101d 0%, #1e1830 100%);
+}
+
+.intro-splash-grain {
+    position: absolute;
+    inset: 0;
+    background-image: var(--grain-texture);
+    background-size: 180px 180px;
+    opacity: 0.5;
+    mix-blend-mode: multiply;
+}
+
+/* Soft colour blob pulsing behind the mascot for a bit of extra spectacle */
+.intro-glow-blob {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: min(70vw, 640px);
+    height: min(70vw, 640px);
+    transform: translate(-50%, -55%) scale(0.85);
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(var(--s3-teal-rgb), 0.22) 0%, rgba(125, 131, 194, 0.10) 45%, transparent 72%);
+    pointer-events: none;
+    opacity: 0;
+    z-index: 0;
+}
+
+/* Hand-drawn doodles scattered around the stage */
+.intro-doodles {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    overflow: hidden;
+}
+.intro-doodle {
+    position: absolute;
+    width: 26px;
+    opacity: 0;
+    will-change: transform, opacity;
+}
+.intro-doodle--sm { width: 16px; }
+.intro-doodle--star { color: var(--s3-gold); }
+.intro-doodle--sparkle { color: var(--s3-teal); width: 30px; }
+.intro-doodle--squiggle { color: var(--primary-purple); width: 66px; }
+.intro-doodle--dots { color: var(--s3-green); width: 46px; }
+.intro-doodle--cross { color: var(--s3-red); width: 18px; }
+
+.intro-stage {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 0 1.5rem;
+}
+
+.intro-mascot {
+    width: clamp(190px, 32vw, 420px);
+    height: auto;
+    margin-bottom: 1.5rem;
+    filter: drop-shadow(0 16px 36px rgba(0, 0, 0, 0.5));
+    opacity: 0;
+    transform: translateY(60px) scale(0.6) rotate(-8deg);
+    position: relative;
+    z-index: 1;
+}
+
+.intro-wordmark {
+    margin: 0;
+    line-height: 1.05;
+    position: relative;
+    z-index: 1;
+}
+
+.intro-word-line {
+    display: block;
+    font-family: var(--font-handwriting);
+    font-size: clamp(1rem, 2.4vw, 1.4rem);
+    font-weight: 500;
+    color: rgba(239, 232, 221, 0.75);
+    letter-spacing: 0.03em;
+    opacity: 0;
+    transform: translateY(12px);
+}
+
+/* Self-contained gradient wordmark — deliberately NOT reusing the shared
+   .gradient-text::after glow trick. That duplicate-layer + blur(18px)
+   approach reads as a hazy rectangle behind chunky display type instead of
+   hugging the letterforms. drop-shadow() is alpha-aware (it follows the
+   actual glyph shapes, not the bounding box) so it glows correctly. */
+.intro-word-main {
+    display: inline-block;
+    font-family: var(--font-display);
+    font-size: clamp(2.6rem, 10vw, 5.5rem);
+    letter-spacing: 0.02em;
+    background: linear-gradient(135deg, #ffffff 0%, var(--s3-teal) 40%, var(--primary-purple) 70%, var(--s3-green) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    filter: url(#chalkText) drop-shadow(0 0 18px rgba(var(--s3-teal-rgb), 0.55)) drop-shadow(0 0 34px rgba(var(--s3-green-rgb), 0.3));
+    opacity: 0;
+    transform: scale(0.4) rotate(-6deg);
+    transform-origin: center bottom;
+}
+
+.intro-tagline {
+    margin: 0.9rem 0 0;
+    font-family: var(--font-body);
+    font-size: clamp(0.85rem, 1.6vw, 1rem);
+    color: rgba(239, 232, 221, 0.6);
+    letter-spacing: 0.02em;
+    opacity: 0;
+    transform: translateY(10px);
+}
+
+.intro-skip {
+    position: absolute;
+    right: 1.5rem;
+    bottom: 1.5rem;
+    z-index: 2;
+    padding: 0.5rem 1rem;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    border-radius: 8px;
+    color: rgba(239, 232, 221, 0.75);
+    font-family: var(--font-body);
+    font-size: 0.82rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    cursor: pointer;
+    opacity: 0;
+    transition: background 0.2s ease, color 0.2s ease, transform 0.2s var(--bounce);
+}
+
+.intro-skip:hover {
+    background: rgba(var(--s3-teal-rgb), 0.18);
+    border-color: rgba(var(--s3-teal-rgb), 0.5);
+    color: #fff;
+    transform: translateY(-2px);
+}
+
+/* ── Entrance timeline (only runs once .intro-splash--playing is added,
+   i.e. after the sessionStorage / reduced-motion check has passed) ──
+   Everything leans on the site's signature bounce easing (var(--bounce),
+   the same springy cubic-bezier used on card/button hovers) instead of a
+   clean agency-style wipe, so the intro reads as an extension of the
+   mascot's cartoony personality rather than a separate, calmer register. */
+.intro-splash--playing .intro-glow-blob {
+    animation: introGlowIn 1.8s ease-out 0.1s forwards, introGlowPulse 3.5s ease-in-out 1.9s infinite;
+}
+.intro-splash--playing .intro-doodle {
+    animation: introDoodleIn 0.6s var(--bounce) forwards, introDoodleFloat 5s ease-in-out infinite alternate;
+    animation-delay: var(--doodle-delay, 0.4s), calc(var(--doodle-delay, 0.4s) + 0.6s);
+}
+.intro-doodle--star           { --doodle-delay: 0.35s; }
+.intro-doodle--sparkle        { --doodle-delay: 0.5s; }
+.intro-doodle--squiggle       { --doodle-delay: 0.6s; }
+.intro-doodle--dots           { --doodle-delay: 0.7s; }
+.intro-doodle--star.intro-doodle--sm { --doodle-delay: 0.8s; }
+.intro-doodle--cross          { --doodle-delay: 0.9s; }
+
+.intro-splash--playing .intro-mascot {
+    animation: introMascotIn 0.85s var(--bounce) 0.1s forwards, introMascotIdle 2.2s ease-in-out 1s infinite alternate;
+}
+.intro-splash--playing .intro-word-line {
+    animation: introFadeUp 0.45s var(--bounce) 0.45s forwards;
+}
+.intro-splash--playing .intro-word-main {
+    animation: introPopIn 0.75s var(--bounce) 0.6s forwards;
+}
+.intro-splash--playing .intro-tagline {
+    animation: introFadeUp 0.5s ease 1.25s forwards;
+}
+.intro-splash--playing .intro-skip {
+    animation: introFadeIn 0.4s ease 1s forwards;
+}
+
+@keyframes introMascotIn {
+    0%   { opacity: 0; transform: translateY(60px) scale(0.6) rotate(-8deg); }
+    55%  { opacity: 1; transform: translateY(-22px) scale(1.12) rotate(6deg); }
+    75%  { transform: translateY(6px) scale(0.97) rotate(-3deg); }
+    100% { opacity: 1; transform: translateY(0) scale(1) rotate(0deg); }
+}
+@keyframes introMascotIdle {
+    from { transform: translateY(0) rotate(-2deg); }
+    to   { transform: translateY(-14px) rotate(2deg); }
+}
+@keyframes introPopIn {
+    0%   { opacity: 0; transform: scale(0.4) rotate(-6deg); }
+    55%  { opacity: 1; transform: scale(1.12) rotate(3deg); }
+    80%  { transform: scale(0.96) rotate(-1deg); }
+    100% { opacity: 1; transform: scale(1) rotate(0deg); }
+}
+@keyframes introFadeUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes introFadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+@keyframes introGlowIn {
+    from { opacity: 0; transform: translate(-50%, -55%) scale(0.7); }
+    to   { opacity: 1; transform: translate(-50%, -55%) scale(1); }
+}
+@keyframes introGlowPulse {
+    0%, 100% { transform: translate(-50%, -55%) scale(1); }
+    50%      { transform: translate(-50%, -55%) scale(1.08); }
+}
+@keyframes introDoodleIn {
+    from { opacity: 0; transform: scale(0.3) rotate(-20deg); }
+    to   { opacity: 0.55; transform: scale(1) rotate(0deg); }
+}
+@keyframes introDoodleFloat {
+    0%   { transform: translateY(0) rotate(0deg); }
+    100% { transform: translateY(-14px) rotate(6deg); }
+}
+
+/* ── Exit — the whole overlay slides/scrolls down and off, like a curtain
+   dropping away to reveal the real homepage sitting underneath (rather than
+   fading out in place). The homepage is already rendered behind the fixed
+   overlay the entire time, so sliding it down is all that's needed.
+   The wavy hem comes from #introWaveClip (defined in IntroSplash.astro) via
+   objectBoundingBox — border-radius was tried here first but only rounds
+   the two bottom *corners* with a flat gap between them, and at percentage
+   values on a full-viewport box that resolves to a huge, mangled-looking
+   curve rather than an actual wave. A clipPath with real bezier curves,
+   normalized 0-1 so it scales correctly with the viewport, is the fix. */
+.intro-splash--exiting {
+    animation: introExitSlideDown 0.65s cubic-bezier(0.55, 0, 0.85, 0.15) forwards;
+    clip-path: url(#introWaveClip);
+    pointer-events: none;
+}
+@keyframes introExitSlideDown {
+    from { transform: translateY(0); }
+    to   { transform: translateY(100vh); }
+}
+
+/* Fully removed from flow/paint once hidden — also the no-flash path for
+   repeat visits and prefers-reduced-motion (see IntroSplash.astro) */
+.intro-splash--instant-hide {
+    display: none !important;
+}
+
+body.intro-lock-scroll {
+    overflow: hidden;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .intro-splash,
+    .intro-splash * {
+        animation: none !important;
+        transition: none !important;
+    }
+}

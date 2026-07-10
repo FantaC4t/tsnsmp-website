@@ -1,0 +1,31 @@
+---
+/* Single source of truth for the hand-drawn accent doodles scattered across
+   the hero, section backgrounds, and the intro splash. These used to be
+   copy-pasted inline SVGs (same path data retyped 2-5x per shape) — one typo
+   or future edit in only one spot would have silently drifted the "same"
+   doodle out of sync across the page. */
+
+interface Props {
+  shape: 'star' | 'cross' | 'squiggle' | 'spiral' | 'arrow' | 'underline' | 'sparkle' | 'heart';
+  class: string;
+  style?: string;
+  strokeWidth?: number;
+}
+
+const SHAPES = {
+  star:      { viewBox: '0 0 24 24', strokeWidth: 1.5, linecap: 'round', linejoin: 'round', d: 'M12 2L13.6 8.6L20 10L13.6 11.4L12 18L10.4 11.4L4 10L10.4 8.6Z' },
+  cross:     { viewBox: '0 0 20 20', strokeWidth: 1.8, linecap: 'round', linejoin: undefined, d: 'M10 2.5 L10 17.5 M2.5 10 L17.5 10' },
+  squiggle:  { viewBox: '0 0 80 16', strokeWidth: 1.6, linecap: 'round', linejoin: undefined, d: 'M2 8C10 3 18 13 26 8C34 3 42 13 50 8C58 3 66 13 74 8' },
+  spiral:    { viewBox: '0 0 40 40', strokeWidth: 1.6, linecap: 'round', linejoin: undefined, d: 'M20 20C20 20 24 16 26 20C28 24 24 28 20 28C14 28 10 22 12 16C14 10 22 8 28 12' },
+  arrow:     { viewBox: '0 0 36 24', strokeWidth: 1.6, linecap: 'round', linejoin: 'round', d: 'M2 12C8 8 16 6 24 8M24 8L19 4M24 8L20 13' },
+  underline: { viewBox: '0 0 90 12', strokeWidth: 1.8, linecap: 'round', linejoin: undefined, d: 'M2 8C18 3 36 12 54 7C66 4 78 9 88 7' },
+  sparkle:   { viewBox: '0 0 32 32', strokeWidth: 1.6, linecap: 'round', linejoin: undefined, d: 'M16 4V8M16 24V28M4 16H8M24 16H28M7.8 7.8L10.6 10.6M21.4 21.4L24.2 24.2M7.8 24.2L10.6 21.4M21.4 10.6L24.2 7.8' },
+  heart:     { viewBox: '0 0 28 26', strokeWidth: 1.6, linecap: 'round', linejoin: 'round', d: 'M14 23C14 23 3 16 3 9C3 6 5.5 4 8.5 4C11 4 13 5.5 14 7C15 5.5 17 4 19.5 4C22.5 4 25 6 25 9C25 16 14 23 14 23Z' },
+} as const;
+
+const { shape, class: className, style, strokeWidth } = Astro.props;
+const s = SHAPES[shape];
+---
+<svg class={className} viewBox={s.viewBox} fill="none" style={style} xmlns="http://www.w3.org/2000/svg">
+    <path d={s.d} stroke="currentColor" stroke-width={strokeWidth ?? s.strokeWidth} stroke-linecap={s.linecap} stroke-linejoin={s.linejoin} fill="none" />
+</svg>

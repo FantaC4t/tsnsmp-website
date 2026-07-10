@@ -1,0 +1,110 @@
+---
+import Doodle from './Doodle.astro';
+---
+
+<!-- Wavy exit clip — objectBoundingBox normalizes the curve to 0-1, so it
+     scales correctly with the viewport instead of needing fixed pixels
+     (which plain CSS clip-path: path() would require). Same curve shape as
+     the .section-divider waves used across the homepage. -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <defs>
+        <clipPath id="introWaveClip" clipPathUnits="objectBoundingBox">
+            <path d="M0,0 L1,0 L1,0.95 C0.9583,0.9625 0.875,0.975 0.75,0.95 C0.5,0.9 0.25,1 0,0.95 Z" />
+        </clipPath>
+    </defs>
+</svg>
+
+<div class="intro-splash" id="introSplash" aria-hidden="true">
+    <div class="intro-splash-bg"></div>
+    <div class="intro-splash-grain"></div>
+
+    <!-- Hand-drawn doodle decorations, matching the hero's cartoony voice -->
+    <div class="intro-doodles" aria-hidden="true">
+        <Doodle shape="star" class="intro-doodle intro-doodle--star" style="top:14%;left:12%" strokeWidth={1.6} />
+        <Doodle shape="sparkle" class="intro-doodle intro-doodle--sparkle" style="top:20%;right:10%" strokeWidth={1.8} />
+        <Doodle shape="squiggle" class="intro-doodle intro-doodle--squiggle" style="bottom:22%;left:8%" strokeWidth={1.8} />
+        <svg class="intro-doodle intro-doodle--dots" viewBox="0 0 44 10" fill="none" style="bottom:16%;right:14%" xmlns="http://www.w3.org/2000/svg"><circle cx="5" cy="5" r="2.6" fill="currentColor" opacity="0.9"/><circle cx="22" cy="5" r="2.6" fill="currentColor" opacity="0.6"/><circle cx="39" cy="5" r="2.6" fill="currentColor" opacity="0.35"/></svg>
+        <Doodle shape="star" class="intro-doodle intro-doodle--star intro-doodle--sm" style="bottom:32%;right:22%" strokeWidth={1.6} />
+        <Doodle shape="cross" class="intro-doodle intro-doodle--cross" style="top:30%;left:6%" strokeWidth={2} />
+    </div>
+
+    <div class="intro-glow-blob" aria-hidden="true"></div>
+
+    <div class="intro-stage">
+        <img
+            class="intro-mascot"
+            src="/assets/mascot.png"
+            alt=""
+            width="180"
+            height="137"
+            loading="eager"
+            fetchpriority="high"
+        />
+
+        <h1 class="intro-wordmark">
+            <span class="intro-word-line">Welcome to</span>
+            <span class="intro-word-main">TSNSMP</span>
+        </h1>
+
+        <p class="intro-tagline">A cozy, whitelisted Minecraft SMP</p>
+    </div>
+
+    <button type="button" class="intro-skip" id="introSkip">Skip <span aria-hidden="true">↷</span></button>
+</div>
+
+<script>
+    (function () {
+        const splash = document.getElementById('introSplash');
+        if (!splash) return;
+
+        const SEEN_KEY = 'tsnsmp_intro_seen';
+        const reduceMotionSaved = localStorage.getItem('reduceMotion');
+        const reduceMotionOS = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        const skipAnimate = reduceMotionSaved !== null ? reduceMotionSaved === 'true' : reduceMotionOS;
+
+        function hideInstantly() {
+            splash.classList.add('intro-splash--instant-hide');
+            document.body.classList.remove('intro-lock-scroll');
+        }
+
+        if (sessionStorage.getItem(SEEN_KEY) || skipAnimate) {
+            hideInstantly();
+            sessionStorage.setItem(SEEN_KEY, '1');
+            return;
+        }
+
+        document.body.classList.add('intro-lock-scroll');
+        splash.classList.add('intro-splash--playing');
+
+        let dismissed = false;
+        function dismiss() {
+            if (dismissed) return;
+            dismissed = true;
+            sessionStorage.setItem(SEEN_KEY, '1');
+            splash.classList.add('intro-splash--exiting');
+            document.body.classList.remove('intro-lock-scroll');
+            window.setTimeout(() => {
+                splash.classList.add('intro-splash--instant-hide');
+            }, 680);
+        }
+
+        const autoTimer = window.setTimeout(dismiss, 3000);
+
+        splash.addEventListener('click', () => {
+            window.clearTimeout(autoTimer);
+            dismiss();
+        });
+        document.getElementById('introSkip')?.addEventListener('click', (e) => {
+            e.stopPropagation();
+            window.clearTimeout(autoTimer);
+            dismiss();
+        });
+        window.addEventListener('keydown', function onKey(e) {
+            if (e.key === 'Escape' || e.key === 'Enter' || e.key === ' ') {
+                window.clearTimeout(autoTimer);
+                dismiss();
+                window.removeEventListener('keydown', onKey);
+            }
+        });
+    })();
+</script>

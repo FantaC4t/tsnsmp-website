@@ -258,12 +258,17 @@ body.dark-mode .gallery-card {
         radial-gradient(circle at 40% 40%, rgba(var(--s3-gold-rgb), 0.12) 0%, transparent 50%);
 }
 
-/* Page-margin dot-grid — a faint graph-paper grid that only shows in the
-   gutters either side of the centered content column, fading to nothing
-   behind actual content. Gives the whole site a "notebook page" framing
-   instead of just the hero section having a grid. Fixed + negative z-index
-   so it sits behind everything, same convention as .flower-bg above. Hidden
-   below 1500px since there's no gutter space left to show it in. */
+/* Page-margin dot-grid — the site's one true "mega background": fixed to
+   the viewport (doesn't scroll with content, stays put as you scroll — see
+   .site-header below for the matching grid painted into the header so the
+   two are visually one continuous layer), sitting behind absolutely
+   everything via z-index:-1. Only ever visible in the gutters either side
+   of the centered content column and behind the header, since every
+   section on the page paints its own opaque, full-width background on top
+   of it elsewhere — that's expected, not a bug.
+   2026-07-10: was gated to display:none below 1500px width. Removed — there
+   was no reason for a whole tier of screens to never render it, and the
+   mask already collapses to nothing when there's no gutter space anyway. */
 body::before {
     content: '';
     position: fixed;
@@ -276,15 +281,11 @@ body::before {
     -webkit-mask-image: linear-gradient(90deg, black 0%, black 9%, transparent 17%, transparent 83%, black 91%, black 100%);
     pointer-events: none;
     z-index: -1;
-    display: none;
 }
 body:not(.dark-mode)::before {
     background-image:
         linear-gradient(rgba(0, 0, 0, 0.05) 1px, transparent 1px),
         linear-gradient(90deg, rgba(0, 0, 0, 0.05) 1px, transparent 1px);
-}
-@media (min-width: 1500px) {
-    body::before { display: block; }
 }
 
 .container {
@@ -697,29 +698,12 @@ main {
     animation-play-state: paused !important;
 }
 
-/* ─── Section Dividers (SVG waves) ─── */
-.section-divider {
-    width: 100%;
-    line-height: 0;
-    margin: -1px 0;
-    position: relative;
-    z-index: 2;
-    pointer-events: none;
-}
-.section-divider svg {
-    display: block;
-    width: 100%;
-    height: 60px;
-}
-.section-divider.flip svg {
-    transform: scaleY(-1);
-}
 
 /* ─── Scroll Reveal ─── */
 .reveal {
     opacity: 0;
-    transform: translateY(36px);
-    transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1), transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+    transform: translateY(20px);
+    transition: opacity 0.5s cubic-bezier(0.22, 1, 0.36, 1), transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
 }
 .reveal.revealed {
     opacity: 1;

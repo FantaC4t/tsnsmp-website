@@ -130,7 +130,13 @@ const navLinks = [
             animate.setAttribute('attributeName', 'seed');
             animate.setAttribute('values', '1;5;2;8;3;7;1');
             animate.setAttribute('dur', '4s');
-            animate.setAttribute('repeatCount', 'indefinite');
+            /* Was repeatCount="indefinite" — recomputing an SVG turbulence +
+               displacement filter every 4s forever, for every h1-h6/badge/
+               button on the page, for the entire lifetime of the tab. Capped
+               to 10 cycles (~40s) so the hand-drawn wobble still reads on
+               load/first look, then settles on a stable seed instead of
+               burning CPU/GPU indefinitely in the background. */
+            animate.setAttribute('repeatCount', '10');
             turb.appendChild(animate);
         }
     } else {

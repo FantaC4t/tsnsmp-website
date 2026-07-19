@@ -1,0 +1,140 @@
+/* Shared searchable timezone picker — used by the player application (home
+   page) and the staff application page. Paired with scripts/timezone-picker.js. */
+.tz-picker {
+    position: relative;
+}
+
+.tz-trigger {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    width: 100%;
+    background: var(--bg-primary);
+    border: 1.5px solid rgba(125,131,194,0.3);
+    border-radius: 8px;
+    padding: 0.7rem 1rem;
+    color: var(--text-primary);
+    font-family: 'DynaPuff', cursive;
+    font-size: 1.05rem;
+    cursor: pointer;
+    text-align: left;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.tz-trigger:focus,
+.tz-trigger[aria-expanded="true"] {
+    border-color: rgba(var(--s3-teal-rgb), 0.7);
+    box-shadow: 0 0 0 3px rgba(var(--s3-teal-rgb), 0.1);
+}
+
+.tz-trigger-text {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    opacity: 0.5;
+}
+
+.tz-trigger-text.has-value {
+    opacity: 1;
+}
+
+.tz-caret {
+    flex-shrink: 0;
+    color: var(--primary-purple);
+    transition: transform 0.2s ease;
+}
+
+.tz-trigger[aria-expanded="true"] .tz-caret {
+    transform: rotate(180deg);
+}
+
+.tz-dropdown {
+    position: absolute;
+    top: calc(100% + 5px);
+    left: 0;
+    right: 0;
+    background: var(--bg-card);
+    border: 1.5px solid rgba(var(--s3-teal-rgb), 0.45);
+    border-radius: 10px;
+    z-index: 300;
+    overflow: hidden;
+    box-shadow: 0 8px 28px rgba(0,0,0,0.28);
+}
+
+.tz-search-wrap {
+    padding: 0.5rem;
+    border-bottom: 1px solid rgba(125,131,194,0.15);
+}
+
+.tz-filter {
+    width: 100%;
+    padding: 0.55rem 0.8rem;
+    background: var(--bg-primary);
+    border: 1.5px solid rgba(125,131,194,0.2);
+    border-radius: 6px;
+    color: var(--text-primary);
+    font-family: 'DynaPuff', cursive;
+    font-size: 1rem;
+    outline: none;
+    box-sizing: border-box;
+    transition: border-color 0.2s;
+}
+
+.tz-filter:focus {
+    border-color: rgba(var(--s3-teal-rgb), 0.6);
+}
+
+.tz-list {
+    max-height: 240px;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
+}
+
+.tz-group-label {
+    padding: 0.5rem 0.9rem 0.2rem;
+    font-family: 'DynaPuff', cursive;
+    font-size: 0.72rem;
+    color: var(--s3-teal);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    position: sticky;
+    top: 0;
+    background: var(--bg-card);
+    z-index: 1;
+}
+
+.tz-option {
+    padding: 0.5rem 0.9rem 0.5rem 1.3rem;
+    cursor: pointer;
+    font-family: 'DynaPuff', cursive;
+    font-size: 0.95rem;
+    color: var(--text-primary);
+    transition: background 0.12s;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+.tz-option:hover,
+.tz-option.is-focused {
+    background: rgba(var(--s3-teal-rgb), 0.14);
+    color: var(--s3-teal);
+}
+
+.tz-option.is-selected {
+    background: rgba(var(--s3-teal-rgb), 0.1);
+    color: var(--s3-teal);
+}
+
+.tz-no-results {
+    padding: 1.2rem;
+    text-align: center;
+    font-family: 'DynaPuff', cursive;
+    font-size: 0.9rem;
+    color: var(--text-primary);
+    opacity: 0.45;
+}

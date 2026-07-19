@@ -12,7 +12,11 @@ export default {
         }
 
         if (url.pathname === '/submit-application' && request.method === 'POST') {
-            return handleSubmit(request, env);
+            return handleSubmit(request, env, 'DISCORD_WEBHOOK');
+        }
+
+        if (url.pathname === '/submit-staff-application' && request.method === 'POST') {
+            return handleSubmit(request, env, 'STAFF_APPLICATION_WEBHOOK');
         }
 
         // All other requests: serve the Astro build output from ./dist
@@ -20,8 +24,9 @@ export default {
     }
 };
 
-async function handleSubmit(request, env) {
-    if (!env.DISCORD_WEBHOOK) {
+async function handleSubmit(request, env, webhookKey) {
+    const webhookUrl = env[webhookKey];
+    if (!webhookUrl) {
         return json({ error: 'Webhook not configured' }, 500);
     }
 
@@ -53,9 +58,9 @@ async function handleSubmit(request, env) {
         const form = new FormData();
         form.append('payload_json', JSON.stringify(payload));
         form.append('file', faceBlob, 'face.png');
-        discordRes = await fetch(env.DISCORD_WEBHOOK, { method: 'POST', body: form });
+        discordRes = await fetch(webhookUrl, { method: 'POST', body: form });
     } else {
-        discordRes = await fetch(env.DISCORD_WEBHOOK, {
+        discordRes = await fetch(webhookUrl, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(payload)

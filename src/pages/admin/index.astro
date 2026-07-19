@@ -56,6 +56,7 @@ import '../../styles/admin.css';
         <button type="button" class="admin-tab-btn" data-tab="gallery" onclick="switchTab('gallery')">🖼️ Gallery</button>
         <button type="button" class="admin-tab-btn" data-tab="events" onclick="switchTab('events')">📅 Events</button>
         <button type="button" class="admin-tab-btn" data-tab="downloads" onclick="switchTab('downloads')">📥 World Downloads</button>
+        <button type="button" class="admin-tab-btn" data-tab="applications" onclick="switchTab('applications')">📋 Staff Applications</button>
     </div>
 
     <div class="admin-body">
@@ -319,6 +320,46 @@ import '../../styles/admin.css';
 
         </div><!-- /tab-downloads -->
 
+        <!-- ══ STAFF APPLICATIONS TAB ══ -->
+        <div id="tab-applications" style="display:none">
+
+        <div class="panel">
+            <div class="panel-header">
+                <span class="panel-header-icon" style="background:#e9d5ff">📋</span>
+                <h2>Staff Applications</h2>
+                <span id="app-count" style="color:var(--muted);font-size:.85rem"></span>
+            </div>
+            <div class="panel-body" style="padding-bottom:0">
+                <div class="admin-stats" id="app-stats"><div class="loading" style="padding:.4rem 0">Loading stats…</div></div>
+            </div>
+            <div class="app-filter-bar">
+                <input class="member-search" id="app-search" type="text" placeholder="Search Discord/Minecraft username…" oninput="renderApplicationsAdmin()">
+                <div class="app-filter-pills" id="app-status-filters">
+                    <button type="button" class="app-filter-pill active" data-status="all" onclick="setAppStatusFilter('all')">All</button>
+                    <button type="button" class="app-filter-pill" data-status="pending" onclick="setAppStatusFilter('pending')">⏳ Pending</button>
+                    <button type="button" class="app-filter-pill" data-status="accepted" onclick="setAppStatusFilter('accepted')">✅ Accepted</button>
+                    <button type="button" class="app-filter-pill" data-status="rejected" onclick="setAppStatusFilter('rejected')">❌ Rejected</button>
+                </div>
+                <div class="app-filter-pills" id="app-role-filters">
+                    <button type="button" class="app-filter-pill active" data-role="all" onclick="setAppRoleFilter('all')">All Roles</button>
+                    <button type="button" class="app-filter-pill" data-role="social" onclick="setAppRoleFilter('social')">🎥 Social</button>
+                    <button type="button" class="app-filter-pill" data-role="community" onclick="setAppRoleFilter('community')">💬 Community</button>
+                    <button type="button" class="app-filter-pill" data-role="events" onclick="setAppRoleFilter('events')">🎪 Events</button>
+                </div>
+                <select class="app-sort-select" id="app-sort" onchange="renderApplicationsAdmin()">
+                    <option value="newest">Newest first</option>
+                    <option value="oldest">Oldest first</option>
+                    <option value="rating-high">Highest rated</option>
+                    <option value="rating-low">Lowest rated</option>
+                </select>
+            </div>
+            <div class="app-list" id="app-list">
+                <div class="loading">Loading applications…</div>
+            </div>
+        </div>
+
+        </div><!-- /tab-applications -->
+
     </div>
 </div>
 
@@ -495,13 +536,32 @@ import '../../styles/admin.css';
         document.getElementById('tab-gallery').style.display = tab === 'gallery' ? 'block' : 'none';
         document.getElementById('tab-events').style.display  = tab === 'events'  ? 'block' : 'none';
         document.getElementById('tab-downloads').style.display = tab === 'downloads' ? 'block' : 'none';
+        document.getElementById('tab-applications').style.display = tab === 'applications' ? 'block' : 'none';
     }
 
     const MEMBERS_REF = ref(db, 'members');
     const AUTH_REF    = ref(db, 'authorizedEmails');
+    const APPLICATIONS_REF = ref(db, 'staffApplications');
 
     let membersCache = [];
     let membersListener = null;
+    let applicationsCache = [];
+    let applicationsListener = null;
+    let appStatusFilter = 'all';
+    let appRoleFilter = 'all';
+    const expandedAppKeys = new Set();
+
+    const APP_ROLE_LABEL = { social: 'Social', community: 'Community', events: 'Events' };
+    const APP_RATING_CATEGORIES = [
+        ['activityAvailability', 'Activity Availability'],
+        ['communication', 'Communication'],
+        ['maturity', 'Maturity'],
+        ['judgment', 'Judgment'],
+        ['communityKnowledge', 'Community Knowledge'],
+        ['initiative', 'Initiative'],
+        ['eventCreativity', 'Event Creativity'],
+        ['reliability', 'Reliability'],
+    ];
 
     /* ── Render stat cards ── */
     function renderStats() {
@@ -573,6 +633,7 @@ import '../../styles/admin.css';
 
     function logout() {
         if (membersListener) { membersListener(); membersListener = null; }
+        if (applicationsListener) { applicationsListener(); applicationsListener = null; }
         signOut(auth);
     }
 
@@ -606,6 +667,19 @@ import '../../styles/admin.css';
             console.error('Failed to load members:', e);
             document.getElementById('members-container').innerHTML =
                 `<div class="loading" style="color:var(--red)">Failed to load members: ${e.message}<br>Check your Firebase database rules.</div>`;
+        });
+
+        // Detach any stale listener before attaching a fresh one
+        if (applicationsListener) { applicationsListener(); applicationsListener = null; }
+
+        applicationsListener = onValue(APPLICATIONS_REF, snap => {
+            const data = snap.val();
+            applicationsCache = data ? Object.entries(data).sort((a, b) => (b[1].submittedAt || 0) - (a[1].submittedAt || 0)) : [];
+            renderApplicationsAdmin();
+        }, e => {
+            console.error('[Applications] Failed to load:', e);
+            document.getElementById('app-list').innerHTML =
+                `<div class="loading" style="color:var(--red)">Failed to load applications: ${e.message}<br>Check your Firebase database rules.</div>`;
         });
     }
 
@@ -1384,6 +1458,317 @@ import '../../styles/admin.css';
 
     onValue(DOWNLOADS_REF, renderDownloadsAdmin);
 
+    /* ═══ STAFF APPLICATIONS ═══ */
+    function setAppStatusFilter(status) {
+        appStatusFilter = status;
+        document.querySelectorAll('#app-status-filters .app-filter-pill').forEach(p =>
+            p.classList.toggle('active', p.dataset.status === status)
+        );
+        renderApplicationsAdmin();
+    }
+
+    function setAppRoleFilter(role) {
+        appRoleFilter = role;
+        document.querySelectorAll('#app-role-filters .app-filter-pill').forEach(p =>
+            p.classList.toggle('active', p.dataset.role === role)
+        );
+        renderApplicationsAdmin();
+    }
+
+    function appQaRow(label, value) {
+        const isEmpty = value === undefined || value === null || value === '';
+        return `<div class="qa-row"><span class="qa-q">${esc(label)}</span><span class="qa-a${isEmpty ? ' empty' : ''}">${isEmpty ? '—' : esc(String(value))}</span></div>`;
+    }
+
+    function toggleAppCard(key) {
+        const card = document.querySelector(`.app-card[data-key="${key}"]`);
+        if (!card) return;
+        const isExpanded = card.classList.toggle('expanded');
+        if (isExpanded) expandedAppKeys.add(key); else expandedAppKeys.delete(key);
+    }
+
+    function appAvgRating(app) {
+        const r = app.internalRating || {};
+        const vals = APP_RATING_CATEGORIES.map(([id]) => r[id]).filter(v => typeof v === 'number');
+        if (!vals.length) return null;
+        return vals.reduce((a, b) => a + b, 0) / vals.length;
+    }
+
+    function appPendingDays(app) {
+        if ((app.status || 'pending') !== 'pending' || !app.submittedAt) return null;
+        return Math.floor((Date.now() - app.submittedAt) / 86400000);
+    }
+
+    function renderApplicationCard(key, app) {
+        const roles        = app.roles || [];
+        const status       = app.status || 'pending';
+        const basic        = app.basic || {};
+        const availability  = app.availability || {};
+        const general       = app.general || {};
+        const scenarios     = app.scenarios || {};
+        const commitment    = app.commitment || {};
+        const rating        = app.internalRating || {};
+        const isExpanded    = expandedAppKeys.has(key);
+        const avgRating     = appAvgRating(app);
+        const pendingDays   = appPendingDays(app);
+
+        const roleBadges = roles.map(r => `<span class="app-role-badge role-${esc(r)}">${esc(APP_ROLE_LABEL[r] || r)}</span>`).join('');
+
+        let roleSpecificHtml = '';
+        if (roles.includes('social') && app.social) {
+            const s = app.social;
+            roleSpecificHtml += `
+                <div class="app-qa-group">
+                    <h4>🎥 Social Moderator</h4>
+                    ${appQaRow('Created promotional content before?', s.contentBefore)}
+                    ${appQaRow('Platforms', (s.platforms || []).join(', '))}
+                    ${appQaRow('Promotional idea', s.promoIdea)}
+                    ${appQaRow('Staying motivated in slow periods', s.stayMotivated)}
+                    ${appQaRow('Struggling for content ideas', s.ideaStruggle)}
+                    ${appQaRow('Skills', (s.skills || []).join(', '))}
+                    ${appQaRow('Comfort with feedback/revisions', s.feedbackComfort)}
+                    ${appQaRow('Collaboration with Community/Events teams', s.collaboration)}
+                </div>`;
+        }
+        if (roles.includes('community') && app.community) {
+            const c = app.community;
+            roleSpecificHtml += `
+                <div class="app-qa-group">
+                    <h4>💬 Community Moderator</h4>
+                    ${appQaRow('Strict vs. fair', c.strictVsFair)}
+                    ${appQaRow('Unsure about punishment', c.unsurePunishment)}
+                    ${appQaRow('Stressful situations', c.stressfulSituations)}
+                    ${appQaRow('Repeat rule breakers', c.repeatBreakers)}
+                    ${appQaRow('Balancing rules & approachability', c.balanceRules)}
+                    ${appQaRow('Investigation process', c.investigateProcess)}
+                    ${appQaRow('Keeping community engaged', c.keepEngaged)}
+                    ${appQaRow('Encouraging quieter members', c.encourageQuiet)}
+                    ${appQaRow('Declining Discord activity', c.discordDecline)}
+                    ${appQaRow('Encouraging inclusion', c.inclusion)}
+                </div>`;
+        }
+        if (roles.includes('events') && app.events) {
+            const ev = app.events;
+            roleSpecificHtml += `
+                <div class="app-qa-group">
+                    <h4>🎪 Events Moderator</h4>
+                    ${appQaRow('Event they would host', ev.eventDescribe)}
+                    ${appQaRow('Encouraging participation', ev.encourageParticipation)}
+                    ${appQaRow('Hosting frequency', ev.hostFrequency)}
+                    ${appQaRow('Planning process', ev.planProcess)}
+                    ${appQaRow('Advance notice', ev.advanceNotice)}
+                    ${appQaRow('Advertising', ev.advertise)}
+                    ${appQaRow('Rule clarity', ev.ruleClarity)}
+                    ${appQaRow('Preparing for unexpected issues', ev.unexpectedIssues)}
+                </div>`;
+        }
+
+        const ratingSelects = APP_RATING_CATEGORIES.map(([id, label]) => `
+            <div class="form-group">
+                <label>${esc(label)}</label>
+                <select id="rating-${key}-${id}">
+                    <option value="">—</option>
+                    ${[1,2,3,4,5].map(n => `<option value="${n}" ${String(rating[id]) === String(n) ? 'selected' : ''}>${n}</option>`).join('')}
+                </select>
+            </div>
+        `).join('');
+
+        return `
+        <div class="app-card${isExpanded ? ' expanded' : ''}" data-key="${key}">
+            <div class="app-card-summary" onclick="toggleAppCard('${key}')">
+                <div class="app-card-main">
+                    <strong>${esc(basic.minecraftUsername || '(no username)')}</strong>
+                    <span class="app-discord">${esc(basic.discordUsername || '')}</span>
+                    <div class="app-roles">${roleBadges}</div>
+                </div>
+                <div class="app-card-meta">
+                    ${avgRating !== null ? `<span class="app-rating-badge">⭐ ${avgRating.toFixed(1)}</span>` : ''}
+                    ${pendingDays !== null ? `<span class="app-pending-badge${pendingDays >= 3 ? ' warn' : ''}">⏳ ${pendingDays}d</span>` : ''}
+                    <span class="app-status-badge status-${esc(status)}">${esc(status)}</span>
+                    <span class="app-date">${app.submittedAt ? new Date(app.submittedAt).toLocaleDateString() : ''}</span>
+                </div>
+            </div>
+            <div class="app-card-body">
+                <div class="app-qa-group">
+                    <h4>Basic Information</h4>
+                    ${appQaRow('Discord Username', basic.discordUsername)}
+                    ${appQaRow('Minecraft Username', basic.minecraftUsername)}
+                    ${appQaRow('Age', basic.age)}
+                    ${appQaRow('Timezone', basic.timezone)}
+                    ${appQaRow('Member since', basic.memberSince)}
+                </div>
+                <div class="app-qa-group">
+                    <h4>Activity &amp; Availability</h4>
+                    ${appQaRow('Days per week', availability.daysPerWeek)}
+                    ${appQaRow('Usual online times', availability.onlineTimes)}
+                    ${appQaRow('Hours per week', availability.hoursPerWeek)}
+                    ${appQaRow('Left a staff team without notice before?', availability.leftWithoutNotice)}
+                    ${appQaRow('Explanation', availability.leftExplanation)}
+                    ${appQaRow('Plan if life gets busy', availability.busyPlan)}
+                    ${appQaRow('Why trust they stay active', availability.trustReason)}
+                </div>
+                <div class="app-qa-group">
+                    <h4>General Questions</h4>
+                    ${appQaRow('Why become a moderator', general.whyModerator)}
+                    ${appQaRow('Qualities of a good moderator', general.goodQualities)}
+                    ${appQaRow('Power vs. responsibility', general.powerVsResponsibility)}
+                    ${appQaRow('If another mod broke rules', general.modBrokeRules)}
+                    ${appQaRow('Handling conflict', general.handleConflict)}
+                    ${appQaRow('Staying calm under pressure', general.calmUnderPressure)}
+                </div>
+                <div class="app-qa-group">
+                    <h4>Scenario Questions</h4>
+                    ${appQaRow('Repeated chat arguing', scenarios.chatArguing)}
+                    ${appQaRow('Griefing dispute', scenarios.griefingDispute)}
+                    ${appQaRow('Friend breaks the rules', scenarios.friendBreaksRules)}
+                    ${appQaRow('Disagrees with another mod', scenarios.disagreeWithMod)}
+                    ${appQaRow('Frustrated player', scenarios.frustratedPlayer)}
+                </div>
+                ${roleSpecificHtml}
+                <div class="app-qa-group">
+                    <h4>Commitment</h4>
+                    ${appQaRow('Agrees to inactivity policy', commitment.agreeInactivityPolicy ? 'Yes' : 'No')}
+                    ${appQaRow('Commits to checking Discord', commitment.commitToDiscordChecks)}
+                    ${appQaRow('Anything affecting activity', commitment.affectingActivity)}
+                </div>
+                <div class="app-qa-group">
+                    <h4>Final Question</h4>
+                    ${appQaRow('Why choose you over another applicant', app.finalWhyChooseYou)}
+                </div>
+
+                <div class="app-flags-note">
+                    <strong>⚠️ Automatic red flags to watch for</strong>
+                    <ul>
+                        <li>Says they'll be active but gives vague availability</li>
+                        <li>Avoids confrontation entirely ("I'd just ignore it")</li>
+                        <li>Admits they'd give friends special treatment</li>
+                        <li>Focuses on power/permissions rather than helping the community</li>
+                        <li>Blames others in every conflict story</li>
+                        <li>Gives very short, low-effort responses</li>
+                        <li>Doesn't mention communicating when they'll be inactive</li>
+                    </ul>
+                </div>
+
+                <div class="app-qa-group">
+                    <h4>Internal Staff Rating <span style="font-weight:400;color:var(--muted);font-size:.75rem">(not visible to applicant)</span></h4>
+                    <div class="app-rating-grid">${ratingSelects}</div>
+                    <button type="button" class="btn btn-edit" onclick="saveAppRating('${key}')">💾 Save Rating</button>
+                </div>
+
+                <div class="app-card-actions">
+                    <button type="button" class="btn btn-approve" onclick="setAppStatus('${key}','accepted')">✅ Accept</button>
+                    <button type="button" class="btn btn-danger" onclick="setAppStatus('${key}','rejected')">❌ Reject</button>
+                    <button type="button" class="btn btn-ghost" onclick="setAppStatus('${key}','pending')">↩️ Reset to Pending</button>
+                    <button type="button" class="btn btn-danger" onclick="deleteApplication('${key}')">🗑️ Delete</button>
+                </div>
+            </div>
+        </div>`;
+    }
+
+    function renderAppStats() {
+        const container = document.getElementById('app-stats');
+        if (!container) return;
+        const counts = { total: applicationsCache.length, pending: 0, accepted: 0, rejected: 0 };
+        applicationsCache.forEach(([, a]) => {
+            const s = a.status || 'pending';
+            if (counts.hasOwnProperty(s)) counts[s]++;
+        });
+        container.innerHTML = [
+            { cls: 'stat-app-total',    n: counts.total,    l: 'Total' },
+            { cls: 'stat-app-pending',  n: counts.pending,  l: 'Pending' },
+            { cls: 'stat-app-accepted', n: counts.accepted, l: 'Accepted' },
+            { cls: 'stat-app-rejected', n: counts.rejected, l: 'Rejected' },
+        ].map(s => `
+            <div class="admin-stat-card ${s.cls}">
+                <span class="admin-stat-number">${s.n}</span>
+                <span class="admin-stat-label">${s.l}</span>
+            </div>
+        `).join('');
+    }
+
+    function renderApplicationsAdmin() {
+        const list    = document.getElementById('app-list');
+        const countEl = document.getElementById('app-count');
+        if (!list) return;
+        const query    = (document.getElementById('app-search')?.value || '').trim().toLowerCase();
+        const sortMode = document.getElementById('app-sort')?.value || 'newest';
+
+        renderAppStats();
+
+        let items = [...applicationsCache];
+        if (appStatusFilter !== 'all') items = items.filter(([, a]) => (a.status || 'pending') === appStatusFilter);
+        if (appRoleFilter !== 'all')   items = items.filter(([, a]) => (a.roles || []).includes(appRoleFilter));
+        if (query) {
+            items = items.filter(([, a]) => {
+                const d = (a.basic?.discordUsername || '').toLowerCase();
+                const m = (a.basic?.minecraftUsername || '').toLowerCase();
+                return d.includes(query) || m.includes(query);
+            });
+        }
+
+        items.sort((a, b) => {
+            if (sortMode === 'oldest') return (a[1].submittedAt || 0) - (b[1].submittedAt || 0);
+            if (sortMode === 'rating-high' || sortMode === 'rating-low') {
+                const ra = appAvgRating(a[1]), rb = appAvgRating(b[1]);
+                if (ra === null && rb === null) return (b[1].submittedAt || 0) - (a[1].submittedAt || 0);
+                if (ra === null) return 1;
+                if (rb === null) return -1;
+                return sortMode === 'rating-high' ? rb - ra : ra - rb;
+            }
+            return (b[1].submittedAt || 0) - (a[1].submittedAt || 0); // newest (default)
+        });
+
+        if (countEl) countEl.textContent = `(${items.length}/${applicationsCache.length})`;
+
+        if (!items.length) {
+            list.innerHTML = '<div class="empty-state"><img class="empty-state-icon" src="/assets/mascot.png" alt="" width="90" height="68" loading="lazy" /><p class="empty-state-title">No applications</p></div>';
+            return;
+        }
+
+        list.innerHTML = items.map(([key, app]) => renderApplicationCard(key, app)).join('');
+    }
+
+    async function setAppStatus(key, status) {
+        if (status === 'accepted' || status === 'rejected') {
+            const ok = await showConfirm(
+                `${status === 'accepted' ? 'Accept' : 'Reject'} this application?`,
+                `This will mark the application as ${status}.`
+            );
+            if (!ok) return;
+        }
+        try {
+            await update(child(APPLICATIONS_REF, key), { status });
+            showToast(`Status set to ${status}`, 'success');
+        } catch (e) {
+            showToast('Failed to update status: ' + e.message, 'error');
+        }
+    }
+
+    async function saveAppRating(key) {
+        const rating = {};
+        APP_RATING_CATEGORIES.forEach(([id]) => {
+            const v = document.getElementById(`rating-${key}-${id}`)?.value;
+            if (v) rating[id] = parseInt(v, 10);
+        });
+        try {
+            await update(child(APPLICATIONS_REF, key), { internalRating: rating });
+            showToast('✅ Rating saved', 'success');
+        } catch (e) {
+            showToast('Failed to save rating: ' + e.message, 'error');
+        }
+    }
+
+    async function deleteApplication(key) {
+        const ok = await showConfirm('Delete application?', 'This will permanently remove this application.');
+        if (!ok) return;
+        try {
+            await remove(child(APPLICATIONS_REF, key));
+            showToast('🗑️ Application deleted', 'success');
+        } catch (e) {
+            showToast('Delete failed: ' + e.message, 'error');
+        }
+    }
+
     // The HTML above calls all of these via inline onclick/onchange/oninput
     // attributes, which need real global lookups — see gallery/index.astro
     // for why (this is now an ES module, and module top-level declarations
@@ -1397,6 +1782,8 @@ import '../../styles/admin.css';
         addEvent, deleteEvent, openEventEdit, closeEventEdit, saveEventEdit,
         addDownload, deleteDownload, editDownloadField,
         closeConfirm, renderTable,
+        setAppStatusFilter, setAppRoleFilter, toggleAppCard, renderApplicationsAdmin,
+        setAppStatus, saveAppRating, deleteApplication,
     });
 </script>
 </Layout>

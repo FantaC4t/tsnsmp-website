@@ -1,0 +1,579 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import '../../styles/apply.css';
+import '../../styles/timezone-picker.css';
+---
+
+<Layout
+    title="Staff Application - TSNSMP Server"
+    description="Apply to join the TSNSMP moderation team — Social, Community, or Events Moderator."
+    path="/apply/"
+    ogTitle="Staff Application - TSNSMP"
+    currentPage="apply"
+>
+<Fragment slot="head">
+    <script type="application/ld+json" is:inline set:html={JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://tsnsmp.com/" },
+        { "@type": "ListItem", "position": 2, "name": "Staff Application", "item": "https://tsnsmp.com/apply/" }
+      ]
+    })} />
+</Fragment>
+
+<main id="main-content">
+    <section class="page-hero">
+        <div class="hero-bg"></div>
+        <div class="hero-grid"></div>
+        <div class="floating-shapes">
+            <div class="shape shape-1"></div>
+            <div class="shape shape-2"></div>
+        </div>
+        <div class="container" style="position:relative;z-index:2">
+            <div class="apply-hero-content">
+                <h1><span class="gradient-text" data-text="Staff Application">Staff Application</span></h1>
+                <p>Apply to join the TSNSMP moderation team. Answer honestly and take your time — thoughtful answers matter more than long ones.</p>
+            </div>
+        </div>
+    </section>
+
+    <div class="container apply-wrap">
+
+        <!-- ══ FORM ══ -->
+        <form id="apply-form" class="apply-form-panel" novalidate>
+
+            <!-- Basic Information -->
+            <div class="apply-section">
+                <h2>Basic Information</h2>
+                <div class="field-row">
+                    <div class="field">
+                        <label class="field-label" for="f-discord">Discord Username <span class="req">*</span></label>
+                        <input type="text" id="f-discord" required maxlength="100">
+                    </div>
+                    <div class="field">
+                        <label class="field-label" for="f-mcusername">Minecraft Username <span class="req">*</span></label>
+                        <input type="text" id="f-mcusername" required maxlength="100">
+                    </div>
+                </div>
+                <div class="field-row">
+                    <div class="field">
+                        <label class="field-label" for="f-age">Age <span class="req">*</span> <span class="field-hint">(18+)</span></label>
+                        <input type="number" id="f-age" min="13" max="120" required>
+                    </div>
+                    <div class="field">
+                        <label class="field-label" for="tzTrigger">Timezone <span class="req">*</span></label>
+                        <div class="tz-picker" id="tzPickerWrap">
+                            <button type="button" class="tz-trigger" id="tzTrigger" aria-haspopup="listbox" aria-expanded="false" aria-controls="tzDropdown">
+                                <span class="tz-trigger-text" id="tzDisplay">Select your timezone…</span>
+                                <svg class="tz-caret" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+                            </button>
+                            <div class="tz-dropdown" id="tzDropdown" role="listbox" aria-label="Timezones" hidden>
+                                <div class="tz-search-wrap">
+                                    <input type="text" class="tz-filter" id="tzFilter" placeholder="🔍 Search timezones…" autocomplete="off" aria-label="Search timezones">
+                                </div>
+                                <div class="tz-list" id="tzList"></div>
+                            </div>
+                            <input type="hidden" id="tzHidden">
+                        </div>
+                    </div>
+                </div>
+                <div class="field">
+                    <label class="field-label">Which moderator role(s) are you applying for? <span class="req">*</span></label>
+                    <div class="pill-group role-picker" id="role-picker">
+                        <label class="pill-option"><input type="checkbox" name="roles" value="social" data-role-target="role-block-social"> Social Moderator</label>
+                        <label class="pill-option"><input type="checkbox" name="roles" value="community" data-role-target="role-block-community"> Community Moderator</label>
+                        <label class="pill-option"><input type="checkbox" name="roles" value="events" data-role-target="role-block-events"> Events Moderator</label>
+                    </div>
+                    <p class="role-picker-hint">You can select more than one — matching role-specific questions will appear further down.</p>
+                </div>
+                <div class="field">
+                    <label class="field-label" for="f-membersince">How long have you been a member of TSN SMP? <span class="req">*</span></label>
+                    <input type="text" id="f-membersince" required maxlength="100">
+                </div>
+            </div>
+
+            <!-- Activity & Availability -->
+            <div class="apply-section">
+                <h2>Activity &amp; Availability</h2>
+                <p class="apply-section-note">This is the most important section — please be honest.</p>
+
+                <div class="field">
+                    <label class="field-label" for="f-days">On average, how many days per week can you actively moderate? <span class="req">*</span></label>
+                    <input type="text" id="f-days" required maxlength="100">
+                </div>
+                <div class="field">
+                    <label class="field-label" for="f-online">During what times are you usually online? (Include timezone.) <span class="req">*</span></label>
+                    <input type="text" id="f-online" required maxlength="150">
+                </div>
+                <div class="field">
+                    <label class="field-label" for="f-hours">If accepted, how many hours per week can you realistically dedicate to moderation? <span class="req">*</span></label>
+                    <input type="text" id="f-hours" required maxlength="100">
+                </div>
+                <div class="field">
+                    <label class="field-label">Have you ever left a staff team without notice or become inactive for an extended period? <span class="req">*</span></label>
+                    <div class="pill-group">
+                        <label class="pill-option"><input type="radio" name="leftWithoutNotice" value="yes" required> Yes</label>
+                        <label class="pill-option"><input type="radio" name="leftWithoutNotice" value="no"> No</label>
+                    </div>
+                </div>
+                <div class="field">
+                    <label class="field-label" for="f-left-explain">If yes, explain why. <span class="field-hint">(leave blank if not applicable)</span></label>
+                    <textarea id="f-left-explain" rows="3" maxlength="1000"></textarea>
+                </div>
+                <div class="field">
+                    <label class="field-label" for="f-busyplan">If life becomes busy and you can't moderate for a while, what would you do? <span class="req">*</span></label>
+                    <textarea id="f-busyplan" rows="3" required maxlength="1000"></textarea>
+                </div>
+                <div class="field">
+                    <label class="field-label" for="f-trust">Why should we trust that you will remain active as a moderator? <span class="req">*</span></label>
+                    <textarea id="f-trust" rows="3" required maxlength="1000"></textarea>
+                </div>
+            </div>
+
+            <!-- General Questions -->
+            <div class="apply-section">
+                <h2>General Questions</h2>
+                <div class="field">
+                    <label class="field-label" for="f-why-mod">Why do you want to become a moderator for TSN SMP? <span class="req">*</span></label>
+                    <textarea id="f-why-mod" rows="3" required maxlength="1500"></textarea>
+                </div>
+                <div class="field">
+                    <label class="field-label" for="f-qualities">What qualities make a good moderator? <span class="req">*</span></label>
+                    <textarea id="f-qualities" rows="3" required maxlength="1000"></textarea>
+                </div>
+                <div class="field">
+                    <label class="field-label" for="f-power-resp">What do you think is the difference between having power and having responsibility? <span class="req">*</span></label>
+                    <textarea id="f-power-resp" rows="3" required maxlength="1000"></textarea>
+                </div>
+                <div class="field">
+                    <label class="field-label" for="f-mod-broke-rules">What would you do if another moderator broke the rules? <span class="req">*</span></label>
+                    <textarea id="f-mod-broke-rules" rows="3" required maxlength="1000"></textarea>
+                </div>
+                <div class="field">
+                    <label class="field-label" for="f-conflict">How do you handle conflict or arguments? <span class="req">*</span></label>
+                    <textarea id="f-conflict" rows="3" required maxlength="1000"></textarea>
+                </div>
+                <div class="field">
+                    <label class="field-label" for="f-calm">Describe a situation where you had to remain calm under pressure. <span class="req">*</span></label>
+                    <textarea id="f-calm" rows="3" required maxlength="1500"></textarea>
+                </div>
+            </div>
+
+            <!-- Scenario Questions -->
+            <div class="apply-section">
+                <h2>Scenario Questions</h2>
+                <div class="field">
+                    <label class="field-label" for="f-sc-chat">A player is repeatedly arguing in chat and insulting others, but stops whenever staff appear. How would you handle it? <span class="req">*</span></label>
+                    <textarea id="f-sc-chat" rows="3" required maxlength="1000"></textarea>
+                </div>
+                <div class="field">
+                    <label class="field-label" for="f-sc-grief">Two players accuse each other of griefing. Both have convincing stories. What do you do? <span class="req">*</span></label>
+                    <textarea id="f-sc-grief" rows="3" required maxlength="1000"></textarea>
+                </div>
+                <div class="field">
+                    <label class="field-label" for="f-sc-friend">Your friend breaks the rules. How would you respond? <span class="req">*</span></label>
+                    <textarea id="f-sc-friend" rows="3" required maxlength="1000"></textarea>
+                </div>
+                <div class="field">
+                    <label class="field-label" for="f-sc-disagree">Another moderator makes a decision you disagree with. What would you do? <span class="req">*</span></label>
+                    <textarea id="f-sc-disagree" rows="3" required maxlength="1000"></textarea>
+                </div>
+                <div class="field">
+                    <label class="field-label" for="f-sc-frustrated">A player is frustrated with a punishment and begins arguing with you. How do you respond? <span class="req">*</span></label>
+                    <textarea id="f-sc-frustrated" rows="3" required maxlength="1000"></textarea>
+                </div>
+            </div>
+
+            <!-- Role-Specific Questions -->
+            <div class="apply-section">
+                <h2>Role-Specific Questions</h2>
+                <p class="apply-section-note">Only the sections matching the role(s) you selected above will show here.</p>
+
+                <!-- Social Moderator -->
+                <div class="role-block" id="role-block-social" hidden>
+                    <h3>🎥 Social Moderator</h3>
+                    <div class="field">
+                        <label class="field-label" for="f-soc-content">Have you created promotional content before? If so, what kind?</label>
+                        <textarea id="f-soc-content" rows="2" maxlength="800"></textarea>
+                    </div>
+                    <div class="field">
+                        <label class="field-label">Which platforms are you most familiar with?</label>
+                        <div class="pill-group">
+                            <label class="pill-option"><input type="checkbox" name="socPlatforms" value="TikTok"> TikTok</label>
+                            <label class="pill-option"><input type="checkbox" name="socPlatforms" value="YouTube Shorts"> YouTube Shorts</label>
+                            <label class="pill-option"><input type="checkbox" name="socPlatforms" value="Instagram"> Instagram</label>
+                            <label class="pill-option"><input type="checkbox" name="socPlatforms" value="X/Twitter"> X/Twitter</label>
+                            <label class="pill-option"><input type="checkbox" name="socPlatforms" value="Discord"> Discord</label>
+                            <label class="pill-option"><input type="checkbox" id="f-soc-platform-other-cb" value="Other"> Other</label>
+                        </div>
+                        <input type="text" id="f-soc-platform-other" placeholder="Other platform…" maxlength="60" style="margin-top:.5rem">
+                    </div>
+                    <div class="field">
+                        <label class="field-label" for="f-soc-promo">Pitch one promotional idea that would encourage new players to join TSN SMP.</label>
+                        <textarea id="f-soc-promo" rows="3" maxlength="1000"></textarea>
+                    </div>
+                    <div class="field">
+                        <label class="field-label" for="f-soc-motivate">How would you stay motivated to create content during slower periods when there aren't many updates?</label>
+                        <textarea id="f-soc-motivate" rows="2" maxlength="800"></textarea>
+                    </div>
+                    <div class="field">
+                        <label class="field-label" for="f-soc-struggle">What would you do if you were struggling to come up with new content ideas?</label>
+                        <textarea id="f-soc-struggle" rows="2" maxlength="800"></textarea>
+                    </div>
+                    <div class="field">
+                        <label class="field-label">What specific skills do you have?</label>
+                        <div class="pill-group">
+                            <label class="pill-option"><input type="checkbox" name="socSkills" value="Editing"> Editing</label>
+                            <label class="pill-option"><input type="checkbox" name="socSkills" value="Flashback/Replay mod"> Flashback/Replay mod for camera work</label>
+                            <label class="pill-option"><input type="checkbox" name="socSkills" value="Voice Acting"> Voice Acting</label>
+                            <label class="pill-option"><input type="checkbox" name="socSkills" value="Script/skit writing"> Script/skit writing</label>
+                            <label class="pill-option"><input type="checkbox" name="socSkills" value="Directing"> Directing (for skits)</label>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label class="field-label" for="f-soc-feedback">How comfortable are you accepting feedback or requested revisions to your content?</label>
+                        <textarea id="f-soc-feedback" rows="2" maxlength="800"></textarea>
+                    </div>
+                    <div class="field">
+                        <label class="field-label" for="f-soc-collab">How would you collaborate with the Community Team and Events Team to promote upcoming events?</label>
+                        <textarea id="f-soc-collab" rows="3" maxlength="1000"></textarea>
+                    </div>
+                </div>
+
+                <!-- Community Moderator -->
+                <div class="role-block" id="role-block-community" hidden>
+                    <h3>💬 Community Moderator</h3>
+                    <div class="field">
+                        <label class="field-label" for="f-com-strict">What do you think is the difference between being strict and being fair?</label>
+                        <textarea id="f-com-strict" rows="3" maxlength="1000"></textarea>
+                    </div>
+                    <div class="field">
+                        <label class="field-label" for="f-com-unsure">What would you do if you were unsure whether someone deserved a punishment?</label>
+                        <textarea id="f-com-unsure" rows="3" maxlength="1000"></textarea>
+                    </div>
+                    <div class="field">
+                        <label class="field-label" for="f-com-stress">How do you handle stressful or emotionally charged situations?</label>
+                        <textarea id="f-com-stress" rows="3" maxlength="1000"></textarea>
+                    </div>
+                    <div class="field">
+                        <label class="field-label" for="f-com-repeat">How would you deal with repeat rule breakers?</label>
+                        <textarea id="f-com-repeat" rows="2" maxlength="800"></textarea>
+                    </div>
+                    <div class="field">
+                        <label class="field-label" for="f-com-balance">How would you balance enforcing rules while remaining approachable?</label>
+                        <textarea id="f-com-balance" rows="3" maxlength="1000"></textarea>
+                    </div>
+                    <div class="field">
+                        <label class="field-label" for="f-com-investigate">What is your process when investigating a report?</label>
+                        <textarea id="f-com-investigate" rows="3" maxlength="1000"></textarea>
+                    </div>
+                    <div class="field">
+                        <label class="field-label" for="f-com-keepengaged">How would you keep the community engaged between major updates?</label>
+                        <textarea id="f-com-keepengaged" rows="3" maxlength="1000"></textarea>
+                    </div>
+                    <div class="field">
+                        <label class="field-label" for="f-com-quiet">How would you encourage quieter members to become involved in the community?</label>
+                        <textarea id="f-com-quiet" rows="2" maxlength="800"></textarea>
+                    </div>
+                    <div class="field">
+                        <label class="field-label" for="f-com-decline">What would you do if Discord activity started declining?</label>
+                        <textarea id="f-com-decline" rows="2" maxlength="800"></textarea>
+                    </div>
+                    <div class="field">
+                        <label class="field-label" for="f-com-inclusion">If you noticed the same small group of people talking while newer members were left out, how would you encourage more inclusion?</label>
+                        <textarea id="f-com-inclusion" rows="3" maxlength="1000"></textarea>
+                    </div>
+                </div>
+
+                <!-- Events Moderator -->
+                <div class="role-block" id="role-block-events" hidden>
+                    <h3>🎪 Events Moderator</h3>
+                    <div class="field">
+                        <label class="field-label" for="f-ev-describe">Describe an event you would host.</label>
+                        <textarea id="f-ev-describe" rows="3" maxlength="1200"></textarea>
+                    </div>
+                    <div class="field">
+                        <label class="field-label" for="f-ev-participation">How would you encourage players to participate?</label>
+                        <textarea id="f-ev-participation" rows="2" maxlength="800"></textarea>
+                    </div>
+                    <div class="field">
+                        <label class="field-label" for="f-ev-frequency">How often would you aim to host events?</label>
+                        <input type="text" id="f-ev-frequency" maxlength="100">
+                    </div>
+                    <div class="field">
+                        <label class="field-label" for="f-ev-plan">Walk us through how you would plan an event from start to finish.</label>
+                        <textarea id="f-ev-plan" rows="4" maxlength="1500"></textarea>
+                    </div>
+                    <div class="field">
+                        <label class="field-label" for="f-ev-advance">How far in advance do you think events should be planned?</label>
+                        <input type="text" id="f-ev-advance" maxlength="100">
+                    </div>
+                    <div class="field">
+                        <label class="field-label" for="f-ev-advertise">How would you advertise an upcoming event to maximize participation?</label>
+                        <textarea id="f-ev-advertise" rows="2" maxlength="800"></textarea>
+                    </div>
+                    <div class="field">
+                        <label class="field-label" for="f-ev-rules">How would you ensure players understand the rules before an event begins?</label>
+                        <textarea id="f-ev-rules" rows="2" maxlength="800"></textarea>
+                    </div>
+                    <div class="field">
+                        <label class="field-label" for="f-ev-unexpected">What would you do to prepare for unexpected issues during an event?</label>
+                        <textarea id="f-ev-unexpected" rows="2" maxlength="800"></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Commitment -->
+            <div class="apply-section">
+                <h2>Commitment</h2>
+                <div class="field">
+                    <label class="pill-option" style="display:inline-flex">
+                        <input type="checkbox" id="f-commit-inactive" required>
+                        Staff members are expected to remain active. If you become inactive without communicating, you may be removed from the team. Do you understand and agree? <span class="req">*</span>
+                    </label>
+                </div>
+                <div class="field">
+                    <label class="field-label">Staff are expected to check Discord regularly, respond to pings, and communicate absences. Can you commit to this? <span class="req">*</span></label>
+                    <div class="pill-group">
+                        <label class="pill-option"><input type="radio" name="commitDiscord" value="yes" required> Yes</label>
+                        <label class="pill-option"><input type="radio" name="commitDiscord" value="no"> No</label>
+                    </div>
+                </div>
+                <div class="field">
+                    <label class="field-label" for="f-commit-affecting">Is there anything that may affect your activity that we should know about?</label>
+                    <textarea id="f-commit-affecting" rows="3" maxlength="1000"></textarea>
+                </div>
+            </div>
+
+            <!-- Final Question -->
+            <div class="apply-section">
+                <h2>Final Question</h2>
+                <div class="field">
+                    <label class="field-label" for="f-final">Why should we choose you over another applicant? <span class="req">*</span></label>
+                    <textarea id="f-final" rows="4" required maxlength="1500"></textarea>
+                </div>
+            </div>
+
+            <!-- Submit -->
+            <div class="apply-section">
+                <div class="apply-submit-bar">
+                    <p class="apply-error" id="apply-error"></p>
+                    <button type="submit" class="btn-apply-submit" id="apply-submit-btn">📨 Submit Application</button>
+                </div>
+            </div>
+        </form>
+
+        <!-- ══ SUCCESS ══ -->
+        <div class="apply-success" id="apply-success" style="display:none">
+            <div class="apply-success-icon">✅</div>
+            <h2>Application submitted!</h2>
+            <p>Thanks for applying — staff will review your responses and reach out on Discord.</p>
+        </div>
+    </div>
+</main>
+
+<script>
+    // @ts-nocheck — plain JS, not TypeScript (see players/index.astro for context)
+    import { ref, push } from 'firebase/database';
+    import { db } from '../../scripts/firebase-client.js';
+    import { initTimezonePicker } from '../../scripts/timezone-picker.js';
+
+    initTimezonePicker();
+
+    const form = document.getElementById('apply-form');
+
+    // ── Discord notification — proxied via Cloudflare Worker, same pattern
+    // as the player application on the home page (keeps the webhook URL
+    // server-side). Best-effort: failures are logged, not surfaced to the
+    // applicant, since the Firebase write is what actually matters. ──
+    const STAFF_APPLICATION_ROLE_ID = '1456392236508905742';
+
+    async function notifyDiscord(app) {
+        const ROLE_LABEL = { social: 'Social', community: 'Community', events: 'Events' };
+        const rolesLabel = (app.roles || []).map(r => ROLE_LABEL[r] || r).join(', ') || '—';
+
+        const fields = [
+            { name: 'Minecraft Username', value: app.basic.minecraftUsername || '—', inline: true },
+            { name: 'Discord Username',   value: app.basic.discordUsername   || '—', inline: true },
+            { name: 'Age',                value: String(app.basic.age || '—'),        inline: true },
+            { name: 'Timezone',           value: app.basic.timezone || '—',           inline: true },
+            { name: 'Applying For',       value: rolesLabel,                          inline: true },
+            { name: 'Member Since',       value: app.basic.memberSince || '—',        inline: true },
+        ];
+
+        const discordPayload = {
+            content: `<@&${STAFF_APPLICATION_ROLE_ID}>`,
+            allowed_mentions: { parse: [], roles: [STAFF_APPLICATION_ROLE_ID] },
+            embeds: [{
+                title: `New Staff Application — ${app.basic.minecraftUsername || 'Unknown'}`,
+                color: 8156909,
+                fields,
+                footer: { text: 'Review in the admin panel → Staff Applications' },
+                timestamp: new Date().toISOString(),
+            }],
+        };
+
+        await fetch('/submit-staff-application', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(discordPayload),
+        });
+    }
+
+    // ── Toggle role-specific sections ──
+    document.getElementById('role-picker').addEventListener('change', e => {
+        const cb = e.target;
+        if (!cb || !cb.dataset.roleTarget) return;
+        const target = document.getElementById(cb.dataset.roleTarget);
+        if (!target) return;
+        target.hidden = !cb.checked;
+    });
+
+    function val(id) { return (document.getElementById(id)?.value || '').trim(); }
+    function checkboxGroupVals(name) {
+        return Array.from(document.querySelectorAll(`input[name="${name}"]:checked`)).map(cb => cb.value);
+    }
+
+    function showError(msg) {
+        const el = document.getElementById('apply-error');
+        el.textContent = msg;
+        el.classList.add('show');
+        el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+    function clearError() {
+        document.getElementById('apply-error').classList.remove('show');
+    }
+
+    form.addEventListener('submit', async e => {
+        e.preventDefault();
+        clearError();
+
+        const roles = checkboxGroupVals('roles');
+        if (!roles.length) {
+            showError('Please select at least one moderator role.');
+            document.getElementById('role-picker').scrollIntoView({ behavior: 'smooth', block: 'center' });
+            return;
+        }
+
+        const timezone = document.getElementById('tzHidden').value;
+        if (!timezone) {
+            showError('Please select your timezone.');
+            document.getElementById('tzTrigger').scrollIntoView({ behavior: 'smooth', block: 'center' });
+            return;
+        }
+
+        if (!form.checkValidity()) {
+            form.reportValidity();
+            return;
+        }
+
+        const submitBtn = document.getElementById('apply-submit-btn');
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Submitting…';
+
+        const payload = {
+            status: 'pending',
+            submittedAt: Date.now(),
+            roles,
+            basic: {
+                discordUsername: val('f-discord'),
+                minecraftUsername: val('f-mcusername'),
+                age: val('f-age'),
+                timezone,
+                memberSince: val('f-membersince'),
+            },
+            availability: {
+                daysPerWeek: val('f-days'),
+                onlineTimes: val('f-online'),
+                hoursPerWeek: val('f-hours'),
+                leftWithoutNotice: document.querySelector('input[name="leftWithoutNotice"]:checked')?.value || '',
+                leftExplanation: val('f-left-explain'),
+                busyPlan: val('f-busyplan'),
+                trustReason: val('f-trust'),
+            },
+            general: {
+                whyModerator: val('f-why-mod'),
+                goodQualities: val('f-qualities'),
+                powerVsResponsibility: val('f-power-resp'),
+                modBrokeRules: val('f-mod-broke-rules'),
+                handleConflict: val('f-conflict'),
+                calmUnderPressure: val('f-calm'),
+            },
+            scenarios: {
+                chatArguing: val('f-sc-chat'),
+                griefingDispute: val('f-sc-grief'),
+                friendBreaksRules: val('f-sc-friend'),
+                disagreeWithMod: val('f-sc-disagree'),
+                frustratedPlayer: val('f-sc-frustrated'),
+            },
+            commitment: {
+                agreeInactivityPolicy: document.getElementById('f-commit-inactive').checked,
+                commitToDiscordChecks: document.querySelector('input[name="commitDiscord"]:checked')?.value || '',
+                affectingActivity: val('f-commit-affecting'),
+            },
+            finalWhyChooseYou: val('f-final'),
+        };
+
+        if (roles.includes('social')) {
+            const otherChecked = document.getElementById('f-soc-platform-other-cb')?.checked;
+            const platforms = checkboxGroupVals('socPlatforms');
+            if (otherChecked) {
+                const other = val('f-soc-platform-other');
+                platforms.push(other ? `Other: ${other}` : 'Other');
+            }
+            payload.social = {
+                contentBefore: val('f-soc-content'),
+                platforms,
+                promoIdea: val('f-soc-promo'),
+                stayMotivated: val('f-soc-motivate'),
+                ideaStruggle: val('f-soc-struggle'),
+                skills: checkboxGroupVals('socSkills'),
+                feedbackComfort: val('f-soc-feedback'),
+                collaboration: val('f-soc-collab'),
+            };
+        }
+
+        if (roles.includes('community')) {
+            payload.community = {
+                strictVsFair: val('f-com-strict'),
+                unsurePunishment: val('f-com-unsure'),
+                stressfulSituations: val('f-com-stress'),
+                repeatBreakers: val('f-com-repeat'),
+                balanceRules: val('f-com-balance'),
+                investigateProcess: val('f-com-investigate'),
+                keepEngaged: val('f-com-keepengaged'),
+                encourageQuiet: val('f-com-quiet'),
+                discordDecline: val('f-com-decline'),
+                inclusion: val('f-com-inclusion'),
+            };
+        }
+
+        if (roles.includes('events')) {
+            payload.events = {
+                eventDescribe: val('f-ev-describe'),
+                encourageParticipation: val('f-ev-participation'),
+                hostFrequency: val('f-ev-frequency'),
+                planProcess: val('f-ev-plan'),
+                advanceNotice: val('f-ev-advance'),
+                advertise: val('f-ev-advertise'),
+                ruleClarity: val('f-ev-rules'),
+                unexpectedIssues: val('f-ev-unexpected'),
+            };
+        }
+
+        try {
+            await push(ref(db, 'staffApplications'), payload);
+            notifyDiscord(payload).catch(err => console.error('[Apply] Discord notify failed:', err));
+            form.style.display = 'none';
+            document.getElementById('apply-success').style.display = 'block';
+            document.getElementById('apply-success').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        } catch (err) {
+            console.error('[Apply] Submission failed:', err);
+            showError('Submission failed — please try again. (' + (err.message || 'unknown error') + ')');
+            submitBtn.disabled = false;
+            submitBtn.textContent = '📨 Submit Application';
+        }
+    });
+</script>
+</Layout>

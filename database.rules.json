@@ -23,6 +23,10 @@
     "worldDownloads": {
       ".read": true,
       ".write": "auth != null && root.child('authorizedEmails').child(auth.uid).exists()"
+    },
+    "staffApplications": {
+      ".read": "auth != null && root.child('authorizedEmails').child(auth.uid).exists()",
+      ".write": true
     }
   }
 }

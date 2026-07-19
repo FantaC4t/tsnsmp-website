@@ -250,20 +250,39 @@
    dropping away to reveal the real homepage sitting underneath (rather than
    fading out in place). The homepage is already rendered behind the fixed
    overlay the entire time, so sliding it down is all that's needed.
-   The wavy hem comes from #introWaveClip (defined in IntroSplash.astro) via
-   objectBoundingBox — border-radius was tried here first but only rounds
-   the two bottom *corners* with a flat gap between them, and at percentage
-   values on a full-viewport box that resolves to a huge, mangled-looking
-   curve rather than an actual wave. A clipPath with real bezier curves,
-   normalized 0-1 so it scales correctly with the viewport, is the fix. */
+   No wave-shaped hem (removed 2026-07-11) — plain rectangular edge.
+
+   Refined (2026-07-10): a touch longer with a smoother ease (was a blunt
+   fast-out curve that yanked the panel down) and the inner content now
+   shrinks/fades independently on its own faster timeline instead of just
+   being dragged off-screen as a rigid block — gives the exit a bit of the
+   same bounce-easing personality as the rest of the site, rather than
+   reading as a plain mechanical wipe. */
 .intro-splash--exiting {
-    animation: introExitSlideDown 0.65s cubic-bezier(0.55, 0, 0.85, 0.15) forwards;
-    clip-path: url(#introWaveClip);
+    animation: introExitSlideDown 0.75s cubic-bezier(0.65, 0, 0.35, 1) forwards;
     pointer-events: none;
+}
+.intro-splash--exiting .intro-stage {
+    animation: introExitContentOut 0.35s cubic-bezier(0.55, 0, 1, 0.45) forwards;
+}
+/* Separate keyframe (rather than reusing introExitContentOut) — the glow
+   blob is centered via translate(-50%, -55%) as part of its own transform,
+   which a generic "scale + fade" exit would silently drop, snapping it to
+   the top-left corner as it shrinks. This keeps that offset intact. */
+.intro-splash--exiting .intro-glow-blob {
+    animation: introExitGlowOut 0.35s cubic-bezier(0.55, 0, 1, 0.45) forwards;
 }
 @keyframes introExitSlideDown {
     from { transform: translateY(0); }
     to   { transform: translateY(100vh); }
+}
+@keyframes introExitContentOut {
+    from { opacity: 1; transform: scale(1); }
+    to   { opacity: 0; transform: scale(0.88); }
+}
+@keyframes introExitGlowOut {
+    from { opacity: 1; transform: translate(-50%, -55%) scale(1); }
+    to   { opacity: 0; transform: translate(-50%, -55%) scale(0.8); }
 }
 
 /* Fully removed from flow/paint once hidden — also the no-flash path for

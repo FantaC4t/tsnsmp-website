@@ -2,18 +2,6 @@
 import Doodle from './Doodle.astro';
 ---
 
-<!-- Wavy exit clip — objectBoundingBox normalizes the curve to 0-1, so it
-     scales correctly with the viewport instead of needing fixed pixels
-     (which plain CSS clip-path: path() would require). Same curve shape as
-     the .section-divider waves used across the homepage. -->
-<svg width="0" height="0" style="position:absolute" aria-hidden="true">
-    <defs>
-        <clipPath id="introWaveClip" clipPathUnits="objectBoundingBox">
-            <path d="M0,0 L1,0 L1,0.95 C0.9583,0.9625 0.875,0.975 0.75,0.95 C0.5,0.9 0.25,1 0,0.95 Z" />
-        </clipPath>
-    </defs>
-</svg>
-
 <div class="intro-splash" id="introSplash" aria-hidden="true">
     <div class="intro-splash-bg"></div>
     <div class="intro-splash-grain"></div>
@@ -85,7 +73,7 @@ import Doodle from './Doodle.astro';
             document.body.classList.remove('intro-lock-scroll');
             window.setTimeout(() => {
                 splash.classList.add('intro-splash--instant-hide');
-            }, 680);
+            }, 780);
         }
 
         const autoTimer = window.setTimeout(dismiss, 3000);

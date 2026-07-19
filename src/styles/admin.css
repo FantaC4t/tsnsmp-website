@@ -694,6 +694,10 @@ body.dark-mode .queue-badge { color: #FBC02D; background: rgba(251,188,5,.15); b
 .stat-trialstaff::before { background: linear-gradient(to bottom, #16a34a 0%, #16a34a 22%, #bbf7d0 22%); }
 .stat-member::before     { background: linear-gradient(to bottom, #2563eb 0%, #2563eb 22%, #bfdbfe 22%); }
 .stat-imposter::before   { background: linear-gradient(to bottom, #7c3aed 0%, #7c3aed 22%, #e9d5ff 22%); }
+.stat-app-total::before    { background: linear-gradient(to bottom, #7c3aed 0%, #7c3aed 22%, #e9d5ff 22%); }
+.stat-app-pending::before  { background: linear-gradient(to bottom, #c9ad00 0%, #c9ad00 22%, #fef08a 22%); }
+.stat-app-accepted::before { background: linear-gradient(to bottom, #16a34a 0%, #16a34a 22%, #bbf7d0 22%); }
+.stat-app-rejected::before { background: linear-gradient(to bottom, #dc2626 0%, #dc2626 22%, #fecaca 22%); }
 
 .admin-stat-card:hover { transform: translateY(-5px) rotate(-1deg); }
 
@@ -832,6 +836,7 @@ body.dark-mode .queue-badge { color: #FBC02D; background: rgba(251,188,5,.15); b
 .admin-tab-btn[data-tab="gallery"]::before   { background: linear-gradient(to bottom, #16a34a 0%, #16a34a 28%, #bbf7d0 28%); }
 .admin-tab-btn[data-tab="events"]::before    { background: linear-gradient(to bottom, #d97706 0%, #d97706 28%, #fde68a 28%); }
 .admin-tab-btn[data-tab="downloads"]::before { background: linear-gradient(to bottom, #2563eb 0%, #2563eb 28%, #bfdbfe 28%); }
+.admin-tab-btn[data-tab="applications"]::before { background: linear-gradient(to bottom, #7c3aed 0%, #7c3aed 28%, #e9d5ff 28%); }
 
 .admin-tab-btn:hover { transform: translateY(-3px); }
 .admin-tab-btn:hover::before { box-shadow: 2px 6px 12px rgba(0,0,0,0.36); }
@@ -1155,4 +1160,204 @@ body:not(.dark-mode) .gallery-progress-wrap { background: rgba(0,0,0,.08); }
     .admin-hero-content { justify-content: center; text-align: center; }
     .admin-stats { justify-content: center; }
     .td-actions { flex-direction: column; gap: 4px; }
+}
+
+/* ── STAFF APPLICATIONS ── */
+.app-filter-bar { display: flex; flex-wrap: wrap; gap: .6rem; align-items: center; padding: 1rem 1.5rem; border-bottom: 1px solid var(--border); }
+.app-filter-bar .member-search { flex: 1; min-width: 160px; }
+
+/* ── Filter pills (status + role) — cartoony, colour-coded per state ── */
+.app-filter-pills { display: flex; gap: 6px; flex-wrap: wrap; }
+.app-filter-pill {
+    padding: 7px 14px;
+    border: 2px solid #222;
+    border-radius: 9px 12px 10px 11px / 11px 9px 12px 10px;
+    background: rgba(255,255,255,0.06);
+    color: var(--muted);
+    font-size: .8rem;
+    font-weight: 700;
+    letter-spacing: .02em;
+    cursor: pointer;
+    box-shadow: 1.5px 2.5px 0 rgba(0,0,0,.3);
+    transition: all .2s var(--bounce);
+}
+body:not(.dark-mode) .app-filter-pill {
+    background: rgba(255,255,255,.8);
+    color: #6b5a45;
+    box-shadow: 1.5px 2.5px 0 rgba(0,0,0,.18);
+}
+.app-filter-pill:hover { transform: translateY(-2px) rotate(-0.5deg); box-shadow: 2.5px 4px 0 rgba(0,0,0,.35); }
+.app-filter-pill:active { transform: translateY(0) rotate(0); box-shadow: 1px 1.5px 0 rgba(0,0,0,.3); }
+
+/* "All" pills + default active state — teal, matches the rest of the site */
+.app-filter-pill.active {
+    background: rgba(var(--s3-teal-rgb), .22);
+    border-color: var(--s3-teal);
+    color: var(--text);
+    box-shadow: 1.5px 2.5px 0 rgba(var(--s3-teal-rgb), .4);
+}
+
+/* Status-specific colouring when active */
+.app-filter-pill[data-status="pending"].active  { background: #fef08a; border-color: #a68a00; color: #5c4d00; box-shadow: 1.5px 2.5px 0 #a68a00; }
+.app-filter-pill[data-status="accepted"].active { background: #bbf7d0; border-color: #16a34a; color: #14532d; box-shadow: 1.5px 2.5px 0 #16a34a; }
+.app-filter-pill[data-status="rejected"].active { background: #fecaca; border-color: #b91c1c; color: #7f1d1d; box-shadow: 1.5px 2.5px 0 #b91c1c; }
+body.dark-mode .app-filter-pill[data-status="pending"].active  { background: rgba(254,240,138,.22); color: #f5dd4f; }
+body.dark-mode .app-filter-pill[data-status="accepted"].active { background: rgba(187,247,208,.18); color: #5ddf98; }
+body.dark-mode .app-filter-pill[data-status="rejected"].active { background: rgba(254,202,202,.18); color: #ff7070; }
+
+/* Role-specific colouring when active */
+.app-filter-pill[data-role="social"].active    { background: #ffe0f0; border-color: #a6206f; color: #7a1854; box-shadow: 1.5px 2.5px 0 #a6206f; }
+.app-filter-pill[data-role="community"].active { background: #e0f0ff; border-color: #1d5fa6; color: #164a82; box-shadow: 1.5px 2.5px 0 #1d5fa6; }
+.app-filter-pill[data-role="events"].active    { background: #ffe9c2; border-color: #a67a1d; color: #7a5a10; box-shadow: 1.5px 2.5px 0 #a67a1d; }
+body.dark-mode .app-filter-pill[data-role="social"].active    { background: rgba(255,224,240,.16); color: #ff8ac9; }
+body.dark-mode .app-filter-pill[data-role="community"].active { background: rgba(224,240,255,.16); color: #7cc0ff; }
+body.dark-mode .app-filter-pill[data-role="events"].active    { background: rgba(255,233,194,.16); color: #ffce54; }
+
+.app-sort-select {
+    padding: 7px 12px;
+    background: rgba(255,255,255,0.06);
+    border: 2px solid #222;
+    border-radius: 9px 12px 10px 11px / 11px 9px 12px 10px;
+    color: var(--text);
+    font-size: .8rem;
+    font-weight: 700;
+    font-family: inherit;
+    cursor: pointer;
+    box-shadow: 1.5px 2.5px 0 rgba(0,0,0,.3);
+}
+body:not(.dark-mode) .app-sort-select { background: rgba(255,255,255,0.85); color: #1a1100; box-shadow: 1.5px 2.5px 0 rgba(0,0,0,.18); }
+.app-sort-select:focus { outline: none; border-color: var(--s3-teal); box-shadow: 0 0 0 3px rgba(var(--s3-teal-rgb), .18); }
+/* The closed <select> box can be themed freely, but the open OPTION list is
+   rendered by the OS/browser — force a light bg + dark text on the options
+   themselves so the popup stays readable regardless of page theme. */
+.app-sort-select option { background: #fefefe; color: #1a1100; }
+
+.app-rating-badge {
+    font-size: .72rem;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 8px 10px 9px 9px / 9px 8px 10px 9px;
+    border: 1.5px solid #a67a1d;
+    background: rgba(var(--s3-gold-rgb), .2);
+    color: #7a5a10;
+    box-shadow: 1px 2px 0 rgba(0,0,0,.18);
+}
+body.dark-mode .app-rating-badge { color: #ffce54; border-color: rgba(255,206,84,.5); box-shadow: 1px 2px 0 rgba(0,0,0,.35); }
+
+.app-pending-badge {
+    font-size: .72rem;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 8px 10px 9px 9px / 9px 8px 10px 9px;
+    border: 1.5px solid var(--border);
+    background: rgba(255,255,255,.08);
+    color: var(--muted);
+    box-shadow: 1px 2px 0 rgba(0,0,0,.15);
+}
+.app-pending-badge.warn { background: rgba(var(--s3-red-rgb), .18); color: #7f1d1d; border-color: #b91c1c; }
+body.dark-mode .app-pending-badge.warn { color: #ff7070; box-shadow: 1px 2px 0 rgba(0,0,0,.35); }
+
+.app-list { display: flex; flex-direction: column; gap: .9rem; padding: 1.5rem; }
+
+.app-card {
+    background: rgba(255,255,255,0.03);
+    border: 2px solid var(--border);
+    border-radius: 10px 13px 11px 12px / 12px 10px 13px 11px;
+    overflow: hidden;
+}
+body:not(.dark-mode) .app-card { background: rgba(255,255,255,0.7); }
+
+.app-card-summary {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: .75rem;
+    padding: 1rem 1.25rem;
+    cursor: pointer;
+}
+.app-card-main { display: flex; flex-direction: column; gap: .35rem; min-width: 0; }
+.app-card-main strong { font-size: 1rem; }
+.app-discord { font-size: .8rem; color: var(--muted); }
+.app-roles { display: flex; flex-wrap: wrap; gap: .35rem; }
+
+.app-role-badge {
+    font-size: .7rem;
+    font-weight: 700;
+    padding: 2px 9px;
+    border-radius: 6px 8px 7px 7px / 7px 6px 8px 7px;
+    text-transform: uppercase;
+    letter-spacing: .03em;
+    border: 1.5px solid transparent;
+    box-shadow: 1px 1.5px 0 rgba(0,0,0,.15);
+}
+.app-role-badge.role-social    { background: #ffe0f0; color: #a6206f; border-color: #a6206f; }
+.app-role-badge.role-community { background: #e0f0ff; color: #1d5fa6; border-color: #1d5fa6; }
+.app-role-badge.role-events    { background: #fff3d6; color: #a67a1d; border-color: #a67a1d; }
+body.dark-mode .app-role-badge.role-social    { background: rgba(255,224,240,.12); color: #ff8ac9; border-color: rgba(255,138,201,.5); box-shadow: 1px 1.5px 0 rgba(0,0,0,.3); }
+body.dark-mode .app-role-badge.role-community { background: rgba(224,240,255,.12); color: #7cc0ff; border-color: rgba(124,192,255,.5); box-shadow: 1px 1.5px 0 rgba(0,0,0,.3); }
+body.dark-mode .app-role-badge.role-events    { background: rgba(255,243,214,.12); color: #ffce54; border-color: rgba(255,206,84,.5); box-shadow: 1px 1.5px 0 rgba(0,0,0,.3); }
+
+.app-card-meta { display: flex; align-items: center; gap: .6rem; flex-shrink: 0; }
+.app-date { font-size: .75rem; color: var(--muted); white-space: nowrap; }
+
+.app-status-badge {
+    font-size: .72rem;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 8px 10px 9px 9px / 9px 8px 10px 9px;
+    text-transform: uppercase;
+    letter-spacing: .03em;
+    border: 1.5px solid transparent;
+    box-shadow: 1px 2px 0 rgba(0,0,0,.18);
+}
+.app-status-badge.status-pending  { background: #fef08a; color: #715f00; border-color: #a68a00; }
+.app-status-badge.status-accepted { background: #bbf7d0; color: #14532d; border-color: #16a34a; }
+.app-status-badge.status-rejected { background: #fecaca; color: #7f1d1d; border-color: #b91c1c; }
+body.dark-mode .app-status-badge.status-pending  { background: rgba(254,240,138,.15); color: #f5dd4f; border-color: rgba(245,221,79,.5); box-shadow: 1px 2px 0 rgba(0,0,0,.35); }
+body.dark-mode .app-status-badge.status-accepted { background: rgba(187,247,208,.15); color: #5ddf98; border-color: rgba(93,223,152,.5); box-shadow: 1px 2px 0 rgba(0,0,0,.35); }
+body.dark-mode .app-status-badge.status-rejected { background: rgba(254,202,202,.15); color: #ff7070; border-color: rgba(255,112,112,.5); box-shadow: 1px 2px 0 rgba(0,0,0,.35); }
+
+.app-card-body { border-top: 2px solid var(--border); padding: 1.25rem; display: none; }
+.app-card.expanded .app-card-body { display: block; }
+.app-card.expanded .app-card-summary { border-bottom: none; }
+
+.app-qa-group { margin-bottom: 1.4rem; }
+.app-qa-group h4 {
+    font-family: var(--font-display);
+    font-size: .95rem;
+    color: var(--s3-teal);
+    margin-bottom: .6rem;
+    letter-spacing: .02em;
+}
+.qa-row { margin-bottom: .7rem; }
+.qa-q { display: block; font-size: .78rem; color: var(--muted); font-weight: 700; margin-bottom: 2px; }
+.qa-a { display: block; font-size: .9rem; white-space: pre-wrap; }
+.qa-a.empty { opacity: .45; font-style: italic; }
+
+.app-flags-note {
+    background: rgba(var(--s3-red-rgb), .07);
+    border: 1.5px dashed rgba(var(--s3-red-rgb), .4);
+    border-radius: 8px;
+    padding: .8rem 1rem;
+    font-size: .82rem;
+    color: var(--muted);
+    margin-bottom: 1.4rem;
+}
+.app-flags-note strong { color: var(--s3-red); display: block; margin-bottom: .3rem; }
+.app-flags-note ul { margin: 0; padding-left: 1.1rem; }
+
+.app-rating-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: .8rem;
+    margin-bottom: 1rem;
+}
+.app-rating-grid .form-group select { padding: 7px 10px; }
+
+.app-card-actions { display: flex; flex-wrap: wrap; gap: .6rem; margin-top: .5rem; }
+
+@media (max-width: 600px) {
+    .app-card-summary { flex-direction: column; align-items: flex-start; }
+    .app-card-meta { width: 100%; justify-content: space-between; }
 }

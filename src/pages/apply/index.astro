@@ -403,7 +403,7 @@ import '../../styles/timezone-picker.css';
         ];
 
         const discordPayload = {
-            content: `<@&${STAFF_APPLICATION_ROLE_ID}>`,
+            content: `<@&${STAFF_APPLICATION_ROLE_ID}> New application!`,
             allowed_mentions: { parse: [], roles: [STAFF_APPLICATION_ROLE_ID] },
             embeds: [{
                 title: `New Staff Application — ${app.basic.minecraftUsername || 'Unknown'}`,

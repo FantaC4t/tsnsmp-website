@@ -550,6 +550,7 @@ import '../../styles/admin.css';
     let appStatusFilter = 'all';
     let appRoleFilter = 'all';
     const expandedAppKeys = new Set();
+    const collapsedQaGroups = new Set();
 
     const APP_ROLE_LABEL = { social: 'Social', community: 'Community', events: 'Events' };
     const APP_RATING_CATEGORIES = [
@@ -1480,6 +1481,27 @@ import '../../styles/admin.css';
         return `<div class="qa-row"><span class="qa-q">${esc(label)}</span><span class="qa-a${isEmpty ? ' empty' : ''}">${isEmpty ? '—' : esc(String(value))}</span></div>`;
     }
 
+    // Wraps a category's rows in a collapsible group with a clickable header.
+    // Collapse state is tracked per application+category so it survives
+    // re-renders (live Firebase updates, filter/sort changes, etc.).
+    function appQaGroup(key, idx, titleHtml, bodyHtml) {
+        const collapsed = collapsedQaGroups.has(`${key}::${idx}`);
+        return `
+        <div class="app-qa-group${collapsed ? ' collapsed' : ''}" data-key="${key}" data-idx="${idx}">
+            <h4 class="app-qa-toggle" onclick="toggleQaGroup('${key}', ${idx})">
+                <span class="app-qa-chevron">▾</span> ${titleHtml}
+            </h4>
+            <div class="app-qa-body">${bodyHtml}</div>
+        </div>`;
+    }
+
+    function toggleQaGroup(key, idx) {
+        const k = `${key}::${idx}`;
+        if (collapsedQaGroups.has(k)) collapsedQaGroups.delete(k); else collapsedQaGroups.add(k);
+        const group = document.querySelector(`.app-qa-group[data-key="${key}"][data-idx="${idx}"]`);
+        if (group) group.classList.toggle('collapsed', collapsedQaGroups.has(k));
+    }
+
     function toggleAppCard(key) {
         const card = document.querySelector(`.app-card[data-key="${key}"]`);
         if (!card) return;
@@ -1514,54 +1536,95 @@ import '../../styles/admin.css';
 
         const roleBadges = roles.map(r => `<span class="app-role-badge role-${esc(r)}">${esc(APP_ROLE_LABEL[r] || r)}</span>`).join('');
 
+        let qaIdx = 0;
+
+        const basicGroup = appQaGroup(key, qaIdx++, 'Basic Information', `
+            ${appQaRow('Discord Username', basic.discordUsername)}
+            ${appQaRow('Minecraft Username', basic.minecraftUsername)}
+            ${appQaRow('Age', basic.age)}
+            ${appQaRow('Timezone', basic.timezone)}
+            ${appQaRow('Member since', basic.memberSince)}
+        `);
+
+        const availabilityGroup = appQaGroup(key, qaIdx++, 'Activity &amp; Availability', `
+            ${appQaRow('Days per week', availability.daysPerWeek)}
+            ${appQaRow('Usual online times', availability.onlineTimes)}
+            ${appQaRow('Hours per week', availability.hoursPerWeek)}
+            ${appQaRow('Left a staff team without notice before?', availability.leftWithoutNotice)}
+            ${appQaRow('Explanation', availability.leftExplanation)}
+            ${appQaRow('Plan if life gets busy', availability.busyPlan)}
+            ${appQaRow('Why trust they stay active', availability.trustReason)}
+        `);
+
+        const generalGroup = appQaGroup(key, qaIdx++, 'General Questions', `
+            ${appQaRow('Why become a moderator', general.whyModerator)}
+            ${appQaRow('Qualities of a good moderator', general.goodQualities)}
+            ${appQaRow('Power vs. responsibility', general.powerVsResponsibility)}
+            ${appQaRow('If another mod broke rules', general.modBrokeRules)}
+            ${appQaRow('Handling conflict', general.handleConflict)}
+            ${appQaRow('Staying calm under pressure', general.calmUnderPressure)}
+        `);
+
+        const scenarioGroup = appQaGroup(key, qaIdx++, 'Scenario Questions', `
+            ${appQaRow('Repeated chat arguing', scenarios.chatArguing)}
+            ${appQaRow('Griefing dispute', scenarios.griefingDispute)}
+            ${appQaRow('Friend breaks the rules', scenarios.friendBreaksRules)}
+            ${appQaRow('Disagrees with another mod', scenarios.disagreeWithMod)}
+            ${appQaRow('Frustrated player', scenarios.frustratedPlayer)}
+        `);
+
         let roleSpecificHtml = '';
         if (roles.includes('social') && app.social) {
             const s = app.social;
-            roleSpecificHtml += `
-                <div class="app-qa-group">
-                    <h4>🎥 Social Moderator</h4>
-                    ${appQaRow('Created promotional content before?', s.contentBefore)}
-                    ${appQaRow('Platforms', (s.platforms || []).join(', '))}
-                    ${appQaRow('Promotional idea', s.promoIdea)}
-                    ${appQaRow('Staying motivated in slow periods', s.stayMotivated)}
-                    ${appQaRow('Struggling for content ideas', s.ideaStruggle)}
-                    ${appQaRow('Skills', (s.skills || []).join(', '))}
-                    ${appQaRow('Comfort with feedback/revisions', s.feedbackComfort)}
-                    ${appQaRow('Collaboration with Community/Events teams', s.collaboration)}
-                </div>`;
+            roleSpecificHtml += appQaGroup(key, qaIdx++, '🎥 Social Moderator', `
+                ${appQaRow('Created promotional content before?', s.contentBefore)}
+                ${appQaRow('Platforms', (s.platforms || []).join(', '))}
+                ${appQaRow('Promotional idea', s.promoIdea)}
+                ${appQaRow('Staying motivated in slow periods', s.stayMotivated)}
+                ${appQaRow('Struggling for content ideas', s.ideaStruggle)}
+                ${appQaRow('Skills', (s.skills || []).join(', '))}
+                ${appQaRow('Comfort with feedback/revisions', s.feedbackComfort)}
+                ${appQaRow('Collaboration with Community/Events teams', s.collaboration)}
+            `);
         }
         if (roles.includes('community') && app.community) {
             const c = app.community;
-            roleSpecificHtml += `
-                <div class="app-qa-group">
-                    <h4>💬 Community Moderator</h4>
-                    ${appQaRow('Strict vs. fair', c.strictVsFair)}
-                    ${appQaRow('Unsure about punishment', c.unsurePunishment)}
-                    ${appQaRow('Stressful situations', c.stressfulSituations)}
-                    ${appQaRow('Repeat rule breakers', c.repeatBreakers)}
-                    ${appQaRow('Balancing rules & approachability', c.balanceRules)}
-                    ${appQaRow('Investigation process', c.investigateProcess)}
-                    ${appQaRow('Keeping community engaged', c.keepEngaged)}
-                    ${appQaRow('Encouraging quieter members', c.encourageQuiet)}
-                    ${appQaRow('Declining Discord activity', c.discordDecline)}
-                    ${appQaRow('Encouraging inclusion', c.inclusion)}
-                </div>`;
+            roleSpecificHtml += appQaGroup(key, qaIdx++, '💬 Community Moderator', `
+                ${appQaRow('Strict vs. fair', c.strictVsFair)}
+                ${appQaRow('Unsure about punishment', c.unsurePunishment)}
+                ${appQaRow('Stressful situations', c.stressfulSituations)}
+                ${appQaRow('Repeat rule breakers', c.repeatBreakers)}
+                ${appQaRow('Balancing rules & approachability', c.balanceRules)}
+                ${appQaRow('Investigation process', c.investigateProcess)}
+                ${appQaRow('Keeping community engaged', c.keepEngaged)}
+                ${appQaRow('Encouraging quieter members', c.encourageQuiet)}
+                ${appQaRow('Declining Discord activity', c.discordDecline)}
+                ${appQaRow('Encouraging inclusion', c.inclusion)}
+            `);
         }
         if (roles.includes('events') && app.events) {
             const ev = app.events;
-            roleSpecificHtml += `
-                <div class="app-qa-group">
-                    <h4>🎪 Events Moderator</h4>
-                    ${appQaRow('Event they would host', ev.eventDescribe)}
-                    ${appQaRow('Encouraging participation', ev.encourageParticipation)}
-                    ${appQaRow('Hosting frequency', ev.hostFrequency)}
-                    ${appQaRow('Planning process', ev.planProcess)}
-                    ${appQaRow('Advance notice', ev.advanceNotice)}
-                    ${appQaRow('Advertising', ev.advertise)}
-                    ${appQaRow('Rule clarity', ev.ruleClarity)}
-                    ${appQaRow('Preparing for unexpected issues', ev.unexpectedIssues)}
-                </div>`;
+            roleSpecificHtml += appQaGroup(key, qaIdx++, '🎪 Events Moderator', `
+                ${appQaRow('Event they would host', ev.eventDescribe)}
+                ${appQaRow('Encouraging participation', ev.encourageParticipation)}
+                ${appQaRow('Hosting frequency', ev.hostFrequency)}
+                ${appQaRow('Planning process', ev.planProcess)}
+                ${appQaRow('Advance notice', ev.advanceNotice)}
+                ${appQaRow('Advertising', ev.advertise)}
+                ${appQaRow('Rule clarity', ev.ruleClarity)}
+                ${appQaRow('Preparing for unexpected issues', ev.unexpectedIssues)}
+            `);
         }
+
+        const commitmentGroup = appQaGroup(key, qaIdx++, 'Commitment', `
+            ${appQaRow('Agrees to inactivity policy', commitment.agreeInactivityPolicy ? 'Yes' : 'No')}
+            ${appQaRow('Commits to checking Discord', commitment.commitToDiscordChecks)}
+            ${appQaRow('Anything affecting activity', commitment.affectingActivity)}
+        `);
+
+        const finalGroup = appQaGroup(key, qaIdx++, 'Final Question', `
+            ${appQaRow('Why choose you over another applicant', app.finalWhyChooseYou)}
+        `);
 
         const ratingSelects = APP_RATING_CATEGORIES.map(([id, label]) => `
             <div class="form-group">
@@ -1572,6 +1635,11 @@ import '../../styles/admin.css';
                 </select>
             </div>
         `).join('');
+
+        const ratingGroup = appQaGroup(key, qaIdx++, 'Internal Staff Rating <span style="font-weight:400;color:var(--muted);font-size:.75rem">(not visible to applicant)</span>', `
+            <div class="app-rating-grid">${ratingSelects}</div>
+            <button type="button" class="btn btn-edit" onclick="saveAppRating('${key}')">💾 Save Rating</button>
+        `);
 
         return `
         <div class="app-card${isExpanded ? ' expanded' : ''}" data-key="${key}">
@@ -1589,52 +1657,13 @@ import '../../styles/admin.css';
                 </div>
             </div>
             <div class="app-card-body">
-                <div class="app-qa-group">
-                    <h4>Basic Information</h4>
-                    ${appQaRow('Discord Username', basic.discordUsername)}
-                    ${appQaRow('Minecraft Username', basic.minecraftUsername)}
-                    ${appQaRow('Age', basic.age)}
-                    ${appQaRow('Timezone', basic.timezone)}
-                    ${appQaRow('Member since', basic.memberSince)}
-                </div>
-                <div class="app-qa-group">
-                    <h4>Activity &amp; Availability</h4>
-                    ${appQaRow('Days per week', availability.daysPerWeek)}
-                    ${appQaRow('Usual online times', availability.onlineTimes)}
-                    ${appQaRow('Hours per week', availability.hoursPerWeek)}
-                    ${appQaRow('Left a staff team without notice before?', availability.leftWithoutNotice)}
-                    ${appQaRow('Explanation', availability.leftExplanation)}
-                    ${appQaRow('Plan if life gets busy', availability.busyPlan)}
-                    ${appQaRow('Why trust they stay active', availability.trustReason)}
-                </div>
-                <div class="app-qa-group">
-                    <h4>General Questions</h4>
-                    ${appQaRow('Why become a moderator', general.whyModerator)}
-                    ${appQaRow('Qualities of a good moderator', general.goodQualities)}
-                    ${appQaRow('Power vs. responsibility', general.powerVsResponsibility)}
-                    ${appQaRow('If another mod broke rules', general.modBrokeRules)}
-                    ${appQaRow('Handling conflict', general.handleConflict)}
-                    ${appQaRow('Staying calm under pressure', general.calmUnderPressure)}
-                </div>
-                <div class="app-qa-group">
-                    <h4>Scenario Questions</h4>
-                    ${appQaRow('Repeated chat arguing', scenarios.chatArguing)}
-                    ${appQaRow('Griefing dispute', scenarios.griefingDispute)}
-                    ${appQaRow('Friend breaks the rules', scenarios.friendBreaksRules)}
-                    ${appQaRow('Disagrees with another mod', scenarios.disagreeWithMod)}
-                    ${appQaRow('Frustrated player', scenarios.frustratedPlayer)}
-                </div>
+                ${basicGroup}
+                ${availabilityGroup}
+                ${generalGroup}
+                ${scenarioGroup}
                 ${roleSpecificHtml}
-                <div class="app-qa-group">
-                    <h4>Commitment</h4>
-                    ${appQaRow('Agrees to inactivity policy', commitment.agreeInactivityPolicy ? 'Yes' : 'No')}
-                    ${appQaRow('Commits to checking Discord', commitment.commitToDiscordChecks)}
-                    ${appQaRow('Anything affecting activity', commitment.affectingActivity)}
-                </div>
-                <div class="app-qa-group">
-                    <h4>Final Question</h4>
-                    ${appQaRow('Why choose you over another applicant', app.finalWhyChooseYou)}
-                </div>
+                ${commitmentGroup}
+                ${finalGroup}
 
                 <div class="app-flags-note">
                     <strong>⚠️ Automatic red flags to watch for</strong>
@@ -1649,11 +1678,7 @@ import '../../styles/admin.css';
                     </ul>
                 </div>
 
-                <div class="app-qa-group">
-                    <h4>Internal Staff Rating <span style="font-weight:400;color:var(--muted);font-size:.75rem">(not visible to applicant)</span></h4>
-                    <div class="app-rating-grid">${ratingSelects}</div>
-                    <button type="button" class="btn btn-edit" onclick="saveAppRating('${key}')">💾 Save Rating</button>
-                </div>
+                ${ratingGroup}
 
                 <div class="app-card-actions">
                     <button type="button" class="btn btn-approve" onclick="setAppStatus('${key}','accepted')">✅ Accept</button>
@@ -1782,7 +1807,7 @@ import '../../styles/admin.css';
         addEvent, deleteEvent, openEventEdit, closeEventEdit, saveEventEdit,
         addDownload, deleteDownload, editDownloadField,
         closeConfirm, renderTable,
-        setAppStatusFilter, setAppRoleFilter, toggleAppCard, renderApplicationsAdmin,
+        setAppStatusFilter, setAppRoleFilter, toggleAppCard, toggleQaGroup, renderApplicationsAdmin,
         setAppStatus, saveAppRating, deleteApplication,
     });
 </script>

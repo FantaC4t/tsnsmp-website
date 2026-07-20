@@ -1839,9 +1839,19 @@ import '../../styles/admin.css';
         const categoryAverages = appCategoryAverages(app);
         const raterCount = appRaterCount(app);
 
+        // Attached to <body> with position:fixed (not as a child of the badge)
+        // so it isn't clipped by .app-card's overflow:hidden — a collapsed
+        // card's box is only as tall as its summary row, which would slice
+        // off an absolutely-positioned popover dropping below the badge.
+        const badge = evt.currentTarget;
+        const rect = badge.getBoundingClientRect();
+        const popoverWidth = 240;
+
         const popover = document.createElement('div');
         popover.className = 'app-rating-popover';
         popover.dataset.key = key;
+        popover.style.top = `${rect.bottom + 8}px`;
+        popover.style.left = `${Math.min(rect.right - popoverWidth, window.innerWidth - popoverWidth - 12)}px`;
         popover.innerHTML = `
             <div class="app-rating-popover-title">Collective ratings <span>(${raterCount} rater${raterCount === 1 ? '' : 's'})</span></div>
             ${APP_RATING_CATEGORIES.map(([id, label]) => {
@@ -1849,7 +1859,7 @@ import '../../styles/admin.css';
                 return `<div class="app-rating-popover-row"><span>${esc(label)}</span><span>${c ? `⭐ ${c.avg.toFixed(1)} <em>(${c.count})</em>` : '—'}</span></div>`;
             }).join('')}
         `;
-        evt.currentTarget.appendChild(popover);
+        document.body.appendChild(popover);
 
         setTimeout(() => {
             document.addEventListener('click', function closeOnce(e) {

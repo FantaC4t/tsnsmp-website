@@ -1250,10 +1250,11 @@ body.dark-mode .app-rating-badge { color: #ffce54; border-color: rgba(255,206,84
 
 /* Popover breakdown opened by clicking the ⭐ badge */
 .app-rating-popover {
-    position: absolute;
-    top: calc(100% + 8px);
-    right: 0;
-    z-index: 50;
+    /* top/left set inline in JS from the badge's getBoundingClientRect() —
+       fixed to the viewport (not the badge) so it isn't clipped by any
+       ancestor's overflow:hidden, e.g. a collapsed .app-card. */
+    position: fixed;
+    z-index: 9000;
     width: 240px;
     background: var(--card);
     border: 2px solid #222;

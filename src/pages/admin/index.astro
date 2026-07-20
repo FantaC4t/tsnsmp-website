@@ -551,6 +551,7 @@ import '../../styles/admin.css';
     let appRoleFilter = 'all';
     const expandedAppKeys = new Set();
     const collapsedQaGroups = new Set();
+    let currentAdminUser = null;
 
     const APP_ROLE_LABEL = { social: 'Social', community: 'Community', events: 'Events' };
     const APP_RATING_CATEGORIES = [
@@ -641,6 +642,8 @@ import '../../styles/admin.css';
     function loadAndShowPanel(user) {
         document.getElementById('login-gate').style.display  = 'none';
         document.getElementById('admin-panel').style.display = 'block';
+
+        currentAdminUser = user;
 
         // Show logged-in user info
         if (user) {
@@ -1509,11 +1512,28 @@ import '../../styles/admin.css';
         if (isExpanded) expandedAppKeys.add(key); else expandedAppKeys.delete(key);
     }
 
+    // Per-category collective averages across every staff member who has
+    // voted on this application — e.g. { activityAvailability: { avg: 4.3, count: 3 }, ... }
+    function appCategoryAverages(app) {
+        const raters = Object.values(app.internalRatings || {});
+        const result = {};
+        APP_RATING_CATEGORIES.forEach(([id]) => {
+            const vals = raters.map(r => r[id]).filter(v => typeof v === 'number');
+            if (vals.length) result[id] = { avg: vals.reduce((a, b) => a + b, 0) / vals.length, count: vals.length };
+        });
+        return result;
+    }
+
+    // Overall badge number — the average of whichever per-category averages
+    // have at least one vote, so it stays a sensible summary of the breakdown.
     function appAvgRating(app) {
-        const r = app.internalRating || {};
-        const vals = APP_RATING_CATEGORIES.map(([id]) => r[id]).filter(v => typeof v === 'number');
-        if (!vals.length) return null;
-        return vals.reduce((a, b) => a + b, 0) / vals.length;
+        const categoryAverages = Object.values(appCategoryAverages(app));
+        if (!categoryAverages.length) return null;
+        return categoryAverages.reduce((a, c) => a + c.avg, 0) / categoryAverages.length;
+    }
+
+    function appRaterCount(app) {
+        return Object.keys(app.internalRatings || {}).length;
     }
 
     function appPendingDays(app) {
@@ -1529,7 +1549,8 @@ import '../../styles/admin.css';
         const general       = app.general || {};
         const scenarios     = app.scenarios || {};
         const commitment    = app.commitment || {};
-        const rating        = app.internalRating || {};
+        const myRating      = (app.internalRatings || {})[currentAdminUser?.uid] || {};
+        const raterCount    = appRaterCount(app);
         const isExpanded    = expandedAppKeys.has(key);
         const avgRating     = appAvgRating(app);
         const pendingDays   = appPendingDays(app);
@@ -1631,14 +1652,27 @@ import '../../styles/admin.css';
                 <label>${esc(label)}</label>
                 <select id="rating-${key}-${id}">
                     <option value="">—</option>
-                    ${[1,2,3,4,5].map(n => `<option value="${n}" ${String(rating[id]) === String(n) ? 'selected' : ''}>${n}</option>`).join('')}
+                    ${[1,2,3,4,5].map(n => `<option value="${n}" ${String(myRating[id]) === String(n) ? 'selected' : ''}>${n}</option>`).join('')}
                 </select>
             </div>
         `).join('');
 
+        const categoryAverages = appCategoryAverages(app);
+        const collectiveRows = APP_RATING_CATEGORIES.map(([id, label]) => {
+            const c = categoryAverages[id];
+            return `<div class="app-rating-collective-row"><span>${esc(label)}</span><span>${c ? `⭐ ${c.avg.toFixed(1)} <em>(${c.count})</em>` : '—'}</span></div>`;
+        }).join('');
+        const raterCountLabel = raterCount === 0
+            ? 'No staff have rated this application yet.'
+            : `${raterCount} staff member${raterCount === 1 ? '' : 's'} ${raterCount === 1 ? 'has' : 'have'} rated this application.`;
+
         const ratingGroup = appQaGroup(key, qaIdx++, 'Internal Staff Rating <span style="font-weight:400;color:var(--muted);font-size:.75rem">(not visible to applicant)</span>', `
+            <p class="app-rating-count">${raterCountLabel}</p>
+            <h5 class="app-rating-subheading">Collective Averages</h5>
+            <div class="app-rating-collective">${collectiveRows}</div>
+            <h5 class="app-rating-subheading">Your Rating</h5>
             <div class="app-rating-grid">${ratingSelects}</div>
-            <button type="button" class="btn btn-edit" onclick="saveAppRating('${key}')">💾 Save Rating</button>
+            <button type="button" class="btn btn-edit" onclick="saveAppRating('${key}')" ${currentAdminUser ? '' : 'disabled'}>💾 Save My Rating</button>
         `);
 
         return `
@@ -1650,7 +1684,7 @@ import '../../styles/admin.css';
                     <div class="app-roles">${roleBadges}</div>
                 </div>
                 <div class="app-card-meta">
-                    ${avgRating !== null ? `<span class="app-rating-badge">⭐ ${avgRating.toFixed(1)}</span>` : ''}
+                    ${avgRating !== null ? `<span class="app-rating-badge" onclick="toggleRatingBreakdown('${key}', event)">⭐ ${avgRating.toFixed(1)}</span>` : ''}
                     ${pendingDays !== null ? `<span class="app-pending-badge${pendingDays >= 3 ? ' warn' : ''}">⏳ ${pendingDays}d</span>` : ''}
                     <span class="app-status-badge status-${esc(status)}">${esc(status)}</span>
                     <span class="app-date">${app.submittedAt ? new Date(app.submittedAt).toLocaleDateString() : ''}</span>
@@ -1770,17 +1804,61 @@ import '../../styles/admin.css';
     }
 
     async function saveAppRating(key) {
+        if (!currentAdminUser) { showToast('You must be signed in to rate', 'error'); return; }
         const rating = {};
         APP_RATING_CATEGORIES.forEach(([id]) => {
             const v = document.getElementById(`rating-${key}-${id}`)?.value;
             if (v) rating[id] = parseInt(v, 10);
         });
+        rating.raterName = currentAdminUser.displayName || currentAdminUser.email || 'Unknown';
+        rating.ratedAt = Date.now();
         try {
-            await update(child(APPLICATIONS_REF, key), { internalRating: rating });
-            showToast('✅ Rating saved', 'success');
+            // Multi-path update targets only this rater's own slot, leaving
+            // every other staff member's vote on this application untouched.
+            await update(child(APPLICATIONS_REF, key), { [`internalRatings/${currentAdminUser.uid}`]: rating });
+            showToast('✅ Your rating was saved', 'success');
         } catch (e) {
             showToast('Failed to save rating: ' + e.message, 'error');
         }
+    }
+
+    // Small popover breakdown of collective per-category averages, opened by
+    // clicking the ⭐ badge on a card's collapsed summary — works whether or
+    // not the card itself is expanded.
+    function toggleRatingBreakdown(key, evt) {
+        evt.stopPropagation();
+        const existing = document.querySelector('.app-rating-popover');
+        if (existing) {
+            const wasSameBadge = existing.dataset.key === key;
+            existing.remove();
+            if (wasSameBadge) return;
+        }
+
+        const app = applicationsCache.find(([k]) => k === key)?.[1];
+        if (!app) return;
+        const categoryAverages = appCategoryAverages(app);
+        const raterCount = appRaterCount(app);
+
+        const popover = document.createElement('div');
+        popover.className = 'app-rating-popover';
+        popover.dataset.key = key;
+        popover.innerHTML = `
+            <div class="app-rating-popover-title">Collective ratings <span>(${raterCount} rater${raterCount === 1 ? '' : 's'})</span></div>
+            ${APP_RATING_CATEGORIES.map(([id, label]) => {
+                const c = categoryAverages[id];
+                return `<div class="app-rating-popover-row"><span>${esc(label)}</span><span>${c ? `⭐ ${c.avg.toFixed(1)} <em>(${c.count})</em>` : '—'}</span></div>`;
+            }).join('')}
+        `;
+        evt.currentTarget.appendChild(popover);
+
+        setTimeout(() => {
+            document.addEventListener('click', function closeOnce(e) {
+                if (!popover.contains(e.target)) {
+                    popover.remove();
+                    document.removeEventListener('click', closeOnce);
+                }
+            });
+        }, 0);
     }
 
     async function deleteApplication(key) {
@@ -1808,7 +1886,7 @@ import '../../styles/admin.css';
         addDownload, deleteDownload, editDownloadField,
         closeConfirm, renderTable,
         setAppStatusFilter, setAppRoleFilter, toggleAppCard, toggleQaGroup, renderApplicationsAdmin,
-        setAppStatus, saveAppRating, deleteApplication,
+        setAppStatus, saveAppRating, deleteApplication, toggleRatingBreakdown,
     });
 </script>
 </Layout>

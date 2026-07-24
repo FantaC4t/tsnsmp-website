@@ -6,7 +6,16 @@
     },
     "authorizedEmails": {
       ".read": "auth != null",
-      ".write": false
+      "$uid": {
+        ".write": "auth != null && auth.uid === $uid && !data.exists() && newData.val() === true && root.child('pendingAdminEmails').child(auth.token.email.replace('.', ',').replace('.', ',').replace('.', ',').replace('.', ',').replace('.', ',').replace('.', ',')).val() === true"
+      }
+    },
+    "pendingAdminEmails": {
+      ".read": "auth != null && root.child('authorizedEmails').child(auth.uid).exists()",
+      "$key": {
+        ".read": "auth != null && $key === auth.token.email.replace('.', ',').replace('.', ',').replace('.', ',').replace('.', ',').replace('.', ',').replace('.', ',')",
+        ".write": "auth != null && (root.child('authorizedEmails').child(auth.uid).exists() || ($key === auth.token.email.replace('.', ',').replace('.', ',').replace('.', ',').replace('.', ',').replace('.', ',').replace('.', ',') && data.val() === true && newData.val() === null))"
+      }
     },
     "gallery": {
       ".read": true,

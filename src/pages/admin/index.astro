@@ -96,8 +96,8 @@ import '../../styles/admin.css';
                                 <label>Role *</label>
                                 <select id="add-role">
                                     <option value="member">Member</option>
-                                    <option value="trialstaff">Trial Staff</option>
-                                    <option value="staff">Staff</option>
+                                    <option value="trialstaff">Mods</option>
+                                    <option value="staff">Admin</option>
                                     <option value="imposter">Imposter</option>
                                 </select>
                             </div>
@@ -125,6 +125,31 @@ import '../../styles/admin.css';
             </div>
         </div>
 
+        <!-- Invite Admin (grants access to THIS admin panel — separate from the player roster below) -->
+        <div class="panel">
+            <div class="panel-header">
+                <span class="panel-header-icon purple">🔑</span>
+                <h2>Invite Admin</h2>
+            </div>
+            <div class="panel-body">
+                <p style="font-size:.8rem;color:var(--muted);margin:0 0 .75rem">
+                    Grants access to this admin panel — not the same as the player roster below. They get in automatically the next time they sign in with Google using this email.
+                </p>
+                <div class="add-form-layout">
+                    <div class="form-fields">
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label>Email</label>
+                                <input type="email" id="invite-email" placeholder="e.g. newmod@gmail.com" />
+                            </div>
+                        </div>
+                        <button type="button" class="btn btn-primary" onclick="inviteAdmin()">➕ Send Invite</button>
+                    </div>
+                </div>
+                <div id="pending-invites-list" style="margin-top:1rem"></div>
+            </div>
+        </div>
+
         <!-- Current members -->
         <div class="panel">
             <div class="panel-header">
@@ -138,8 +163,8 @@ import '../../styles/admin.css';
                 </div>
                 <div class="role-filter-pills" id="role-filters">
                     <button type="button" class="role-filter-pill active" data-role="all" onclick="setRoleFilter('all')">All</button>
-                    <button type="button" class="role-filter-pill" data-role="staff" onclick="setRoleFilter('staff')">Staff</button>
-                    <button type="button" class="role-filter-pill" data-role="trialstaff" onclick="setRoleFilter('trialstaff')">Trial Staff</button>
+                    <button type="button" class="role-filter-pill" data-role="staff" onclick="setRoleFilter('staff')">Admin</button>
+                    <button type="button" class="role-filter-pill" data-role="trialstaff" onclick="setRoleFilter('trialstaff')">Mods</button>
                     <button type="button" class="role-filter-pill" data-role="member" onclick="setRoleFilter('member')">Member</button>
                 </div>
             </div>
@@ -509,7 +534,7 @@ import '../../styles/admin.css';
         const rows = document.querySelectorAll('.member-table tbody tr');
         rows.forEach(row => {
             const name = (row.querySelector('.member-name-colored')?.textContent || '').toLowerCase();
-            const role = (row.querySelector('.role-pill')?.textContent || '').toLowerCase();
+            const role = (row.querySelector('.role-pill')?.dataset.role || '').toLowerCase();
             const matchSearch = !query || name.includes(query);
             const matchRole   = currentRoleFilter === 'all' || role === currentRoleFilter;
             row.style.display = (matchSearch && matchRole) ? '' : 'none';
@@ -539,8 +564,9 @@ import '../../styles/admin.css';
         document.getElementById('tab-applications').style.display = tab === 'applications' ? 'block' : 'none';
     }
 
-    const MEMBERS_REF = ref(db, 'members');
-    const AUTH_REF    = ref(db, 'authorizedEmails');
+    const MEMBERS_REF  = ref(db, 'members');
+    const AUTH_REF     = ref(db, 'authorizedEmails');
+    const PENDING_REF  = ref(db, 'pendingAdminEmails');
     const APPLICATIONS_REF = ref(db, 'staffApplications');
 
     let membersCache = [];
@@ -578,8 +604,8 @@ import '../../styles/admin.css';
         });
         container.innerHTML = [
             { cls: 'stat-total',  n: counts.total,  l: 'Total' },
-            { cls: 'stat-staff',  n: counts.staff,  l: 'Staff' },
-            { cls: 'stat-trialstaff',  n: counts.trialstaff,  l: 'Trial Staff' },
+            { cls: 'stat-staff',  n: counts.staff,  l: 'Admin' },
+            { cls: 'stat-trialstaff',  n: counts.trialstaff,  l: 'Mods' },
             { cls: 'stat-member', n: counts.member, l: 'Members' },
         ].map(s => `
             <div class="admin-stat-card ${s.cls}">
@@ -602,10 +628,41 @@ import '../../styles/admin.css';
         }
     }
 
+    // ── Pre-authorization by email: site owner can add someone to
+    // /pendingAdminEmails (keyed by their email with dots swapped for commas,
+    // since Firebase keys can't contain '.') before they've ever logged in.
+    // On their first Google sign-in we detect the match and self-claim
+    // /authorizedEmails/{uid} — see database.rules.json for the write rule
+    // that makes this safe (only your own uid, only from a pending match).
+    function emailKey(email) {
+        return (email || '').replace(/\./g, ',');
+    }
+
+    async function tryClaimPendingAccess(user) {
+        try {
+            const key = emailKey(user.email);
+            const snap = await get(child(PENDING_REF, key));
+            if (snap.exists() && snap.val() === true) {
+                await set(child(AUTH_REF, user.uid), true);
+                // Self-cleanup: the invite is now redundant (they're in
+                // /authorizedEmails permanently) and, if left behind, would
+                // let them instantly re-claim access after a revoke.
+                await remove(child(PENDING_REF, key));
+                return true;
+            }
+        } catch (e) {
+            console.error('[Auth] Pending-access claim failed:', e);
+        }
+        return false;
+    }
+
     // ── Auth state observer — handles login, logout and page refresh ──
     onAuthStateChanged(auth, async user => {
         if (user) {
-            const { allowed, error } = await isAuthorized(user);
+            let { allowed, error } = await isAuthorized(user);
+            if (!allowed) {
+                allowed = await tryClaimPendingAccess(user);
+            }
             if (!allowed) {
                 await signOut(auth);
                 const errorEl = document.getElementById('login-error');
@@ -685,6 +742,61 @@ import '../../styles/admin.css';
             document.getElementById('app-list').innerHTML =
                 `<div class="loading" style="color:var(--red)">Failed to load applications: ${e.message}<br>Check your Firebase database rules.</div>`;
         });
+
+        // Detach any stale listener before attaching a fresh one
+        if (pendingInvitesListener) { pendingInvitesListener(); pendingInvitesListener = null; }
+
+        pendingInvitesListener = onValue(PENDING_REF, snap => {
+            const data = snap.val() || {};
+            renderPendingInvites(Object.keys(data));
+        }, e => {
+            console.error('[Invites] Failed to load pending invites:', e);
+        });
+    }
+
+    // ── Invite Admin: pre-authorize someone by email before they've logged in ──
+    let pendingInvitesListener = null;
+
+    function renderPendingInvites(keys) {
+        const el = document.getElementById('pending-invites-list');
+        if (!el) return;
+        if (keys.length === 0) { el.innerHTML = ''; return; }
+        el.innerHTML = `
+            <div style="font-size:.78rem;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:.4rem">Pending invites</div>
+            ${keys.map(key => `
+                <div style="display:flex;align-items:center;justify-content:space-between;gap:.5rem;padding:.4rem .6rem;background:var(--bg2);border-radius:8px;margin-bottom:.35rem">
+                    <span style="font-size:.85rem">${esc(key.replace(/,/g, '.'))}</span>
+                    <button type="button" class="btn btn-danger" style="padding:.25rem .6rem;font-size:.75rem" onclick="revokeInvite('${key}')">Cancel</button>
+                </div>
+            `).join('')}
+        `;
+    }
+
+    async function inviteAdmin() {
+        const input = document.getElementById('invite-email');
+        const email = input.value.trim().toLowerCase();
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+            showToast('Enter a valid email address', 'error');
+            return;
+        }
+        try {
+            await set(child(PENDING_REF, emailKey(email)), true);
+            input.value = '';
+            showToast(`✅ Invited ${email}`, 'success');
+        } catch (e) {
+            console.error('[Invites] Failed to add invite:', e);
+            showToast('Failed to send invite — check console', 'error');
+        }
+    }
+
+    async function revokeInvite(key) {
+        try {
+            await remove(child(PENDING_REF, key));
+            showToast('Invite cancelled', 'success');
+        } catch (e) {
+            console.error('[Invites] Failed to cancel invite:', e);
+            showToast('Failed to cancel — check console', 'error');
+        }
     }
 
     // ── First-time seed (no auth required — needs DB rules to allow writes, or use before locking down) ──
@@ -732,6 +844,7 @@ import '../../styles/admin.css';
     }
 
     const ROLE_ORDER = ['staff', 'trialstaff', 'member', 'imposter'];
+    const ROLE_LABEL = { staff: 'Admin', trialstaff: 'Mods', member: 'Member', imposter: 'Imposter' };
 
     function renderTable() {
         const countEl = document.getElementById('member-count-inline');
@@ -765,7 +878,7 @@ import '../../styles/admin.css';
                     <img class="member-avatar" src="https://mc-heads.net/avatar/${encodeURIComponent(m.name)}/28" alt="" onerror="this.style.display='none'">
                     <strong class="member-name-colored" ${m.color ? `style="color:${esc(m.color)}"` : ''}>${safeName}</strong>
                 </td>
-                <td><span class="role-pill role-${esc(m.role)}">${esc(m.role)}</span></td>
+                <td><span class="role-pill role-${esc(m.role)}" data-role="${esc((m.role||'').toLowerCase())}">${esc(ROLE_LABEL[(m.role||'').toLowerCase()] || m.role)}</span></td>
                 <td>${safePronouns}</td>
                 <td>${safeTwitch}</td>
                 <td class="td-actions">
@@ -858,7 +971,7 @@ import '../../styles/admin.css';
             <td>
                 <select id="edit-role">
                     ${['member','trialstaff','staff','imposter'].map(r =>
-                        `<option ${m.role===r?'selected':''}>${r}</option>`
+                        `<option value="${r}" ${m.role===r?'selected':''}>${ROLE_LABEL[r] || r}</option>`
                     ).join('')}
                 </select>
             </td>
@@ -1897,6 +2010,7 @@ import '../../styles/admin.css';
         closeConfirm, renderTable,
         setAppStatusFilter, setAppRoleFilter, toggleAppCard, toggleQaGroup, renderApplicationsAdmin,
         setAppStatus, saveAppRating, deleteApplication, toggleRatingBreakdown,
+        inviteAdmin, revokeInvite,
     });
 </script>
 </Layout>

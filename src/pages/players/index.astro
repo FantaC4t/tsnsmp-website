@@ -123,7 +123,7 @@ import '../../styles/players.css';
         let role = (member.role || '').toLowerCase();
         if (role === 'owner') role = 'staff';
         if (role === 'mod' || role === 'admin') role = 'trialstaff';
-        let roleLabel = role === 'trialstaff' ? 'Trial Staff' : (role === 'staff' ? 'Staff' : role.charAt(0).toUpperCase() + role.slice(1));
+        let roleLabel = role === 'trialstaff' ? 'Mods' : (role === 'staff' ? 'Admin' : role.charAt(0).toUpperCase() + role.slice(1));
         card.innerHTML = `
             <div class="skin-viewer">
                 <img src="${skinUrl}" alt="${member.name}" class="skin-image" loading="lazy"

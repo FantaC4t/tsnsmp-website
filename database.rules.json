@@ -36,6 +36,10 @@
     "staffApplications": {
       ".read": "auth != null && root.child('authorizedEmails').child(auth.uid).exists()",
       ".write": true
+    },
+    "config": {
+      ".read": true,
+      ".write": "auth != null && root.child('authorizedEmails').child(auth.uid).exists()"
     }
   }
 }

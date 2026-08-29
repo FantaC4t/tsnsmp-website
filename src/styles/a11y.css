@@ -2,50 +2,101 @@
    TSNSMP — Accessibility Widget  (a11y.css)
    ═══════════════════════════════════════════════════════════════ */
 
-/* ── Trigger button ─────────────────────────────────────────────── */
+/* ── Trigger: a bookmark-style tab tucked against the left screen edge ── */
 #a11y-widget {
     position: fixed;
-    bottom: max(2rem, env(safe-area-inset-bottom, 0px));
-    left: max(2rem, env(safe-area-inset-left, 0px));
+    bottom: 7%;
+    left: env(safe-area-inset-left, 0px);
     z-index: 9998;
     font-family: var(--font-body, 'DynaPuff', cursive);
     font-size: 14px;
+    transition: left 0.22s ease, top 0.22s ease;  /* glides on drop-snap */
 }
 
+/* Bookmark tab in the accessibility symbol's own indigo (#3F51B5) — the icon's
+   blue disc blends into the tab, leaving the white figure + ring reading clean.
+   Dimensions are in rem so the tab tracks the widget's Text Size setting.
+   It's also draggable (see a11y.js) — once moved, a11y.js writes inline
+   top/left and flips the anchor-* classes below. */
 #a11y-trigger {
-    width: 64px;
-    height: 64px;
-    border-radius: 50%;
-    border: none;
-    background: var(--s3-teal);
+    --a11y-blue: #3F51B5;
+    --a11y-blue-rgb: 63, 81, 181;
+    width: 6rem;
+    height: 7.5rem;
+    padding: 0;
+    border: 4px solid #5C6BC0;         /* full rim keeps the icon symmetrically centred */
+    border-radius: 0 1.5rem 1.5rem 0;  /* rounded outer edge = a peeking bookmark */
+    background: var(--a11y-blue);
     color: #fff;
-    cursor: pointer;
+    cursor: grab;
+    touch-action: none;                /* let a11y.js own touch gestures (drag, not scroll) */
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 4px 20px rgba(var(--s3-teal-rgb), 0.5);
+    overflow: hidden;                  /* clip the icon to the tab shape */
+    box-shadow: 5px 8px 24px rgba(var(--a11y-blue-rgb), 0.5);
     transition: transform 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
 }
 
-#a11y-trigger:hover {
-    background: var(--s3-green);
-    transform: scale(1.1);
-    box-shadow: 0 4px 20px rgba(var(--s3-green-rgb), 0.5);
+/* Grow from the anchored edge on hover — never uncovers the page behind it. */
+#a11y-trigger:hover,
+#a11y-trigger:focus-visible {
+    background: #4E5DC4;
+    transform: scale(1.06);
+    transform-origin: left center;
+    box-shadow: 6px 8px 24px rgba(var(--a11y-blue-rgb), 0.6);
+}
+
+/* Self-contained sprite: indigo disc + white figure/ring baked in, transparent
+   outside the disc so it blends into the tab. Just centre it. */
+.a11y-trigger-icon {
+    display: flex;
+    flex-shrink: 0;
+}
+
+.a11y-trigger-icon img {
+    width: 5rem;
+    height: 5rem;
+    display: block;
+    object-fit: contain;
 }
 
 #a11y-trigger:focus-visible {
-    outline: 3px solid var(--s3-teal);
+    outline: 3px solid #9FA8DA;
     outline-offset: 3px;
 }
 
-/* ── Panel ──────────────────────────────────────────────────────── */
+/* ── Dragging + edge anchoring (positions set by a11y.js) ── */
+#a11y-widget.a11y-dragging { transition: none; }
+#a11y-widget.a11y-dragging #a11y-trigger {
+    transform: none;
+    cursor: grabbing;
+}
+
+/* Snapped to the right half: mirror the bookmark, grow the other way,
+   and open the panel to the left. */
+#a11y-widget.a11y-anchor-right #a11y-trigger { border-radius: 1.5rem 0 0 1.5rem; }
+#a11y-widget.a11y-anchor-right #a11y-trigger:hover,
+#a11y-widget.a11y-anchor-right #a11y-trigger:focus-visible { transform-origin: right center; }
+#a11y-widget.a11y-anchor-right #a11y-panel {
+    left: auto;
+    right: calc(100% + 12px);
+}
+
+/* In the top half: drop the panel downward instead of up. */
+#a11y-widget.a11y-anchor-top #a11y-panel {
+    bottom: auto;
+    top: 0;
+}
+
+/* ── Panel — opens to the right of the tab, bottom-aligned with it ── */
 #a11y-panel {
     position: absolute;
-    bottom: calc(100% + 12px);
-    left: 0;
+    bottom: 0;
+    left: calc(100% + 12px);
     width: 280px;
-    background: var(--bg-card, #211f2d);
-    border: 1px solid var(--border-color, #3a3639);
+    background: var(--bg-card, #182036);
+    border: 1px solid var(--border-color, #33394A);
     border-radius: 16px;
     box-shadow: 0 8px 36px rgba(0, 0, 0, 0.4);
     padding: 1rem 1rem 0.85rem;
@@ -53,8 +104,8 @@
 }
 
 @keyframes a11y-panel-in {
-    from { opacity: 0; transform: translateY(8px); }
-    to   { opacity: 1; transform: translateY(0); }
+    from { opacity: 0; transform: translateX(-8px); }
+    to   { opacity: 1; transform: translateX(0); }
 }
 
 /* ── Panel header ───────────────────────────────────────────────── */
@@ -64,7 +115,7 @@
     justify-content: space-between;
     margin-bottom: 0.85rem;
     padding-bottom: 0.6rem;
-    border-bottom: 1px solid var(--border-color, #3a3639);
+    border-bottom: 1px solid var(--border-color, #33394A);
 }
 
 .a11y-panel-title {
@@ -127,7 +178,7 @@
 
 .a11y-size-btn {
     background: rgba(255, 255, 255, 0.06);
-    border: 1px solid var(--border-color, #3a3639);
+    border: 1px solid var(--border-color, #33394A);
     border-radius: 6px;
     color: var(--text-secondary, #b9aea3);
     cursor: pointer;
@@ -179,7 +230,7 @@
     height: 22px;
     border-radius: 11px;
     background: rgba(255, 255, 255, 0.12);
-    border: 1px solid var(--border-color, #3a3639);
+    border: 1px solid var(--border-color, #33394A);
     position: relative;
     transition: background 0.2s, border-color 0.2s;
 }
@@ -212,7 +263,7 @@
     width: 100%;
     padding: 6px;
     background: rgba(255, 255, 255, 0.05);
-    border: 1px solid var(--border-color, #3a3639);
+    border: 1px solid var(--border-color, #33394A);
     border-radius: 8px;
     color: var(--text-secondary, #b9aea3);
     cursor: pointer;
@@ -330,8 +381,8 @@ body.reduce-motion .fade-in-up {
     z-index: 9999;
     max-width: 460px;
     margin: 0 auto;
-    background: var(--bg-card, #211f2d);
-    border: 1px solid var(--border-color, #3a3639);
+    background: var(--bg-card, #182036);
+    border: 1px solid var(--border-color, #33394A);
     border-radius: 14px;
     box-shadow: 0 8px 36px rgba(0, 0, 0, 0.4);
     padding: 1rem 1.1rem;
@@ -356,7 +407,7 @@ body.reduce-motion .fade-in-up {
     font-size: 0.82rem;
     padding: 0.5rem 0.9rem;
     border-radius: 8px;
-    border: 1px solid var(--border-color, #3a3639);
+    border: 1px solid var(--border-color, #33394A);
     background: transparent;
     color: var(--text-secondary, #a09aa5);
     cursor: pointer;
@@ -402,13 +453,27 @@ body.a11y-highlight-links a:not([class*="btn"]):not(.nav-icon):not(.skip-link):n
 
 /* ── Mobile overrides ───────────────────────────────────────────── */
 @media (max-width: 576px) {
+    /* Only the default (un-dragged) placement — once a11y.js sets inline
+       top/left these are overridden. */
+    #a11y-widget:not([style*="left"]) {
+        top: auto;
+        bottom: 8%;
+    }
     #a11y-trigger {
-        width: 52px;
-        height: 52px;
-        font-size: 12px;
+        width: 5.25rem;
+        height: 6.75rem;
+    }
+    .a11y-trigger-icon img {
+        width: 4.3rem;
+        height: 4.3rem;
     }
     #a11y-panel {
-        width: 260px;
-        bottom: calc(100% + 8px);
+        left: calc(100% + 8px);
+        bottom: 0;
+        width: min(260px, calc(100vw - 66px));
+    }
+    #a11y-widget.a11y-anchor-right #a11y-panel {
+        left: auto;
+        right: calc(100% + 8px);
     }
 }

@@ -36,7 +36,6 @@ import '../../styles/admin.css';
 <div id="admin-panel">
     <div class="admin-hero">
         <div class="admin-hero-bg"></div>
-        <div class="admin-hero-grid"></div>
         <div class="admin-hero-content">
             <h1 class="admin-hero-title">🛠️ TSNSMP Admin</h1>
             <div class="admin-hero-meta">
@@ -83,7 +82,7 @@ import '../../styles/admin.css';
                 <div class="add-form-layout">
                     <div class="skin-preview-wrap">
                         <img class="skin-preview-img" id="skin-preview" src="https://minotar.net/armor/body/Steve/60.png" alt="Skin preview">
-                        <span class="skin-preview-name" id="skin-preview-name" style="color: #7B68EE">Preview</span>
+                        <span class="skin-preview-name" id="skin-preview-name" style="color: #3D7FE0">Preview</span>
                     </div>
                     <div class="form-fields">
                         <div class="form-grid">
@@ -108,10 +107,10 @@ import '../../styles/admin.css';
                             <div class="form-group">
                                 <label>Name Color</label>
                                 <div class="color-row">
-                                    <input type="color" id="add-color-pick" value="#7B68EE"
+                                    <input type="color" id="add-color-pick" value="#3D7FE0"
                                         oninput="document.getElementById('add-color-text').value=this.value; updatePreview()" />
-                                    <input type="text" id="add-color-text" placeholder="#7B68EE"
-                                        oninput="document.getElementById('add-color-pick').value=this.value||'#7B68EE'; updatePreview()" />
+                                    <input type="text" id="add-color-text" placeholder="#3D7FE0"
+                                        oninput="document.getElementById('add-color-pick').value=this.value||'#3D7FE0'; updatePreview()" />
                                 </div>
                             </div>
                             <div class="form-group">
@@ -229,6 +228,7 @@ import '../../styles/admin.css';
                             <option value="1">&#127807; Season 1</option>
                             <option value="2">&#9728;&#65039; Season 2</option>
                             <option value="3">&#128640; Season 3</option>
+                            <option value="matcha">&#127749; Matcha Season</option>
                         </select>
                     </div>
                     <div class="form-group">
@@ -350,6 +350,20 @@ import '../../styles/admin.css';
 
         <div class="panel">
             <div class="panel-header">
+                <span class="panel-header-icon" style="background:#bbf7d0">🚦</span>
+                <h2>Applications status</h2>
+            </div>
+            <div class="panel-body">
+                <label class="staff-apps-toggle">
+                    <input type="checkbox" id="staff-apps-open" onchange="setStaffAppsOpen(this.checked)">
+                    <span>Accept new moderator applications</span>
+                </label>
+                <p class="staff-apps-hint" id="staff-apps-hint">Checking…</p>
+            </div>
+        </div>
+
+        <div class="panel">
+            <div class="panel-header">
                 <span class="panel-header-icon" style="background:#e9d5ff">📋</span>
                 <h2>Staff Applications</h2>
                 <span id="app-count" style="color:var(--muted);font-size:.85rem"></span>
@@ -428,6 +442,7 @@ import '../../styles/admin.css';
                 <option value="1">&#127807; Season 1</option>
                 <option value="2">&#9728;&#65039; Season 2</option>
                 <option value="3">&#128640; Season 3</option>
+                <option value="matcha">&#127749; Matcha Season</option>
             </select>
         </div>
         <div class="gedit-actions">
@@ -823,7 +838,7 @@ import '../../styles/admin.css';
     let previewTimer;
     function updatePreview() {
         const name  = document.getElementById('add-name').value.trim();
-        const color = document.getElementById('add-color-text').value.trim() || '#7B68EE';
+        const color = document.getElementById('add-color-text').value.trim() || '#3D7FE0';
         const nameEl = document.getElementById('skin-preview-name');
         nameEl.textContent = name || 'Preview';
         nameEl.style.color = color;
@@ -927,7 +942,7 @@ import '../../styles/admin.css';
             await saveMembers();
             showToast(`✅ ${name} added!`, 'success');
             ['add-name','add-pronouns','add-color-text','add-twitch'].forEach(id => document.getElementById(id).value = '');
-            document.getElementById('add-color-pick').value = '#7B68EE';
+            document.getElementById('add-color-pick').value = '#3D7FE0';
             document.getElementById('add-role').value = 'member';
             updatePreview();
         } catch (e) {
@@ -978,8 +993,8 @@ import '../../styles/admin.css';
             <td><input id="edit-pronouns" value="${m.pronouns||''}" placeholder="pronouns" /></td>
             <td>
                 <div style="display:flex;gap:5px;align-items:center">
-                    <input type="color" id="edit-color-pick" value="${m.color||'#7B68EE'}" style="width:32px;height:32px;padding:2px;border-radius:6px;border:1px solid var(--border);background:var(--bg2);cursor:pointer" oninput="document.getElementById('edit-color-text').value=this.value" />
-                    <input type="text" id="edit-color-text" value="${m.color||''}" placeholder="#hex" style="width:90px" oninput="document.getElementById('edit-color-pick').value=this.value||'#7B68EE'" />
+                    <input type="color" id="edit-color-pick" value="${m.color||'#3D7FE0'}" style="width:32px;height:32px;padding:2px;border-radius:6px;border:1px solid var(--border);background:var(--bg2);cursor:pointer" oninput="document.getElementById('edit-color-text').value=this.value" />
+                    <input type="text" id="edit-color-text" value="${m.color||''}" placeholder="#hex" style="width:90px" oninput="document.getElementById('edit-color-pick').value=this.value||'#3D7FE0'" />
                     <input type="text" id="edit-twitch" value="${m.twitch||''}" placeholder="twitch url" style="flex:1" />
                 </div>
             </td>
@@ -1134,7 +1149,10 @@ import '../../styles/admin.css';
             async () => {
                 const url = await getDownloadURL(task.snapshot.ref);
                 const seasonRaw = document.getElementById('gallery-season').value;
-                const seasonEntry = seasonRaw ? { season: parseInt(seasonRaw, 10) } : {};
+                // numbered seasons stored as ints; the Matcha mini-season as "matcha"
+                const seasonEntry = seasonRaw
+                    ? { season: /^\d+$/.test(seasonRaw) ? parseInt(seasonRaw, 10) : seasonRaw }
+                    : {};
                 const uploader = document.getElementById('gallery-uploader').value;
                 const uploaderEntry = uploader ? { uploadedBy: uploader } : {};
                 await push(GALLERY_REF, { title, description: desc, url, storagePath: path, uploadedAt: Date.now(), ...seasonEntry, ...uploaderEntry });
@@ -1164,7 +1182,7 @@ import '../../styles/admin.css';
                 grid.innerHTML = '<div class="empty-state"><img class="empty-state-icon" src="/assets/mascot.png" alt="" width="90" height="68" loading="lazy" /><p class="empty-state-title">No images yet</p></div>';
                 return;
             }
-            const seasonLabel = { 1: '🌱 S1', 2: '☀️ S2', 3: '🚀 S3' };
+            const seasonLabel = { 1: '🌱 S1', 2: '☀️ S2', 3: '🚀 S3', matcha: '🍵 Matcha' };
             grid.innerHTML = items.map(item => `
                 <div class="gallery-admin-item">
                     <img src="${esc(item.url)}" alt="${esc(item.title || '')}" loading="lazy">
@@ -1215,7 +1233,7 @@ import '../../styles/admin.css';
         const by        = document.getElementById('gedit-by').value.trim();
         const seasonRaw = document.getElementById('gedit-season').value;
         const updates   = { title, description: desc, uploadedBy: by };
-        if (seasonRaw) updates.season = parseInt(seasonRaw, 10);
+        if (seasonRaw) updates.season = /^\d+$/.test(seasonRaw) ? parseInt(seasonRaw, 10) : seasonRaw;
         else           updates.season = null;
         try {
             await update(child(GALLERY_REF, geditKey), updates);
@@ -1498,6 +1516,31 @@ import '../../styles/admin.css';
 
     // Live listener
     onValue(EVENTS_REF, renderEventsAdmin);
+
+    /* ── Staff-application intake toggle (config/staffAppsOpen) ── */
+    const STAFF_APPS_REF = ref(db, 'config/staffAppsOpen');
+
+    onValue(STAFF_APPS_REF, snap => {
+        const open = snap.val() === true;
+        const cb = document.getElementById('staff-apps-open');
+        if (cb) cb.checked = open;
+        const hint = document.getElementById('staff-apps-hint');
+        if (hint) {
+            hint.textContent = open
+                ? 'OPEN — the /apply/ page shows the form and it links from the footer.'
+                : 'CLOSED — /apply/ shows a "not accepting right now" message and the footer link is hidden.';
+            hint.classList.toggle('is-open', open);
+        }
+    });
+
+    async function setStaffAppsOpen(open) {
+        try {
+            await set(STAFF_APPS_REF, !!open);
+            showToast(open ? '✅ Moderator applications opened' : '🔒 Moderator applications closed', 'success');
+        } catch (e) {
+            showToast('Failed to update: ' + e.message, 'error');
+        }
+    }
 
     /* ── World Downloads ── */
     const DOWNLOADS_REF = ref(db, 'worldDownloads');
@@ -2010,7 +2053,7 @@ import '../../styles/admin.css';
         closeConfirm, renderTable,
         setAppStatusFilter, setAppRoleFilter, toggleAppCard, toggleQaGroup, renderApplicationsAdmin,
         setAppStatus, saveAppRating, deleteApplication, toggleRatingBreakdown,
-        inviteAdmin, revokeInvite,
+        inviteAdmin, revokeInvite, setStaffAppsOpen,
     });
 </script>
 </Layout>

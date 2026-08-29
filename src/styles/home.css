@@ -9,9 +9,9 @@
 .carousel-skeleton {
     background: linear-gradient(
         90deg,
-        var(--bg-card, #211f2d) 25%,
-        var(--bg-secondary, #1a1826) 50%,
-        var(--bg-card, #211f2d) 75%
+        var(--bg-card, #182036) 25%,
+        var(--bg-secondary, #161B2E) 50%,
+        var(--bg-card, #182036) 75%
     );
     background-size: 200% 100%;
     animation: shimmer 1.6s ease-in-out infinite;
@@ -24,9 +24,9 @@
     border-radius: 4px;
     background: linear-gradient(
         90deg,
-        var(--bg-card, #211f2d) 25%,
-        var(--bg-secondary, #1a1826) 50%,
-        var(--bg-card, #211f2d) 75%
+        var(--bg-card, #182036) 25%,
+        var(--bg-secondary, #161B2E) 50%,
+        var(--bg-card, #182036) 75%
     );
     background-size: 200% 100%;
     animation: shimmer 1.6s ease-in-out infinite;
@@ -75,122 +75,18 @@
     height: 80px;
     margin-bottom: -80px;
     pointer-events: none;
-    clip-path: polygon(
-        0% 0%,
-        100% 0%,
-        100.000% calc(100% - 27.6px),
-        98.333% calc(100% - 30.1px),
-        96.667% calc(100% - 32.1px),
-        95.000% calc(100% - 33.7px),
-        93.333% calc(100% - 35.0px),
-        91.667% calc(100% - 36.2px),
-        90.000% calc(100% - 37.3px),
-        88.333% calc(100% - 38.7px),
-        86.667% calc(100% - 40.5px),
-        85.000% calc(100% - 42.9px),
-        83.333% calc(100% - 45.8px),
-        81.667% calc(100% - 49.4px),
-        80.000% calc(100% - 53.4px),
-        78.333% calc(100% - 57.6px),
-        76.667% calc(100% - 61.7px),
-        75.000% calc(100% - 65.5px),
-        73.333% calc(100% - 68.6px),
-        71.667% calc(100% - 70.6px),
-        70.000% calc(100% - 71.3px),
-        68.333% calc(100% - 70.6px),
-        66.667% calc(100% - 68.3px),
-        65.000% calc(100% - 64.4px),
-        63.333% calc(100% - 59.2px),
-        61.667% calc(100% - 52.9px),
-        60.000% calc(100% - 45.9px),
-        58.333% calc(100% - 38.5px),
-        56.667% calc(100% - 31.3px),
-        55.000% calc(100% - 24.6px),
-        53.333% calc(100% - 18.8px),
-        51.667% calc(100% - 14.3px),
-        50.000% calc(100% - 11.2px),
-        48.333% calc(100% - 9.6px),
-        46.667% calc(100% - 9.6px),
-        45.000% calc(100% - 10.9px),
-        43.333% calc(100% - 13.3px),
-        41.667% calc(100% - 16.6px),
-        40.000% calc(100% - 20.4px),
-        38.333% calc(100% - 24.3px),
-        36.667% calc(100% - 28.1px),
-        35.000% calc(100% - 31.6px),
-        33.333% calc(100% - 34.6px),
-        31.667% calc(100% - 37.1px),
-        30.000% calc(100% - 39.0px),
-        28.333% calc(100% - 40.4px),
-        26.667% calc(100% - 41.7px),
-        25.000% calc(100% - 42.8px),
-        23.333% calc(100% - 44.2px),
-        21.667% calc(100% - 45.8px),
-        20.000% calc(100% - 47.9px),
-        18.333% calc(100% - 50.4px),
-        16.667% calc(100% - 53.4px),
-        15.000% calc(100% - 56.8px),
-        13.333% calc(100% - 60.2px),
-        11.667% calc(100% - 63.4px),
-        10.000% calc(100% - 66.1px),
-        8.333% calc(100% - 68.1px),
-        6.667% calc(100% - 69.0px),
-        5.000% calc(100% - 68.5px),
-        3.333% calc(100% - 66.6px),
-        1.667% calc(100% - 63.3px),
-        0.000% calc(100% - 58.5px)
-    );
+    clip-path: var(--wave-clip);
+    /* Fade the wave's lower half to transparent so the section above melts
+       down into the one below instead of meeting it at a hard line. Colour
+       comes from the inline `--seam-bg` (the preceding section's background). */
+    background: linear-gradient(to bottom, var(--seam-bg, var(--bg-primary)) 52%, transparent);
 }
 
 @media (max-width: 768px) {
     .wave-seam {
         height: 40px;
         margin-bottom: -40px;
-        clip-path: polygon(
-            0% 0%,
-            100% 0%,
-            100.000% calc(100% - 13.8px),
-            97.500% calc(100% - 15.6px),
-            95.000% calc(100% - 16.9px),
-            92.500% calc(100% - 17.8px),
-            90.000% calc(100% - 18.7px),
-            87.500% calc(100% - 19.8px),
-            85.000% calc(100% - 21.4px),
-            82.500% calc(100% - 23.8px),
-            80.000% calc(100% - 26.7px),
-            77.500% calc(100% - 29.8px),
-            75.000% calc(100% - 32.8px),
-            72.500% calc(100% - 34.9px),
-            70.000% calc(100% - 35.7px),
-            67.500% calc(100% - 34.8px),
-            65.000% calc(100% - 32.2px),
-            62.500% calc(100% - 28.1px),
-            60.000% calc(100% - 22.9px),
-            57.500% calc(100% - 17.4px),
-            55.000% calc(100% - 12.3px),
-            52.500% calc(100% - 8.2px),
-            50.000% calc(100% - 5.6px),
-            47.500% calc(100% - 4.7px),
-            45.000% calc(100% - 5.4px),
-            42.500% calc(100% - 7.4px),
-            40.000% calc(100% - 10.2px),
-            37.500% calc(100% - 13.1px),
-            35.000% calc(100% - 15.8px),
-            32.500% calc(100% - 18.0px),
-            30.000% calc(100% - 19.5px),
-            27.500% calc(100% - 20.5px),
-            25.000% calc(100% - 21.4px),
-            22.500% calc(100% - 22.5px),
-            20.000% calc(100% - 23.9px),
-            17.500% calc(100% - 25.9px),
-            15.000% calc(100% - 28.4px),
-            12.500% calc(100% - 30.9px),
-            10.000% calc(100% - 33.1px),
-            7.500% calc(100% - 34.3px),
-            5.000% calc(100% - 34.3px),
-            2.500% calc(100% - 32.6px),
-            0.000% calc(100% - 29.3px)
-        );
+        clip-path: var(--wave-clip-sm);
     }
 }
 
@@ -203,7 +99,7 @@
    anything — clip hero's OWN box into the wave (same mechanism as
    .wave-seam: peaks solid, troughs cut away, positioned above the next
    section via z-index) so what shows in the peaks is hero's actual
-   rendered background — .hero-bg, .hero-grid, all of it — continuing for
+   rendered background — .hero-bg, all of it — continuing for
    real, because it's the same element, not an approximation of it. */
 
 /* === ADAPTIVE GRAND HERO SECTION === */
@@ -224,122 +120,14 @@
     transition: background 0.3s ease;
     contain: layout style paint;
     font-family: 'DynaPuff', cursive;
-    clip-path: polygon(
-        0% 0%,
-        100% 0%,
-        100.000% calc(100% - 27.6px),
-        98.333% calc(100% - 30.1px),
-        96.667% calc(100% - 32.1px),
-        95.000% calc(100% - 33.7px),
-        93.333% calc(100% - 35.0px),
-        91.667% calc(100% - 36.2px),
-        90.000% calc(100% - 37.3px),
-        88.333% calc(100% - 38.7px),
-        86.667% calc(100% - 40.5px),
-        85.000% calc(100% - 42.9px),
-        83.333% calc(100% - 45.8px),
-        81.667% calc(100% - 49.4px),
-        80.000% calc(100% - 53.4px),
-        78.333% calc(100% - 57.6px),
-        76.667% calc(100% - 61.7px),
-        75.000% calc(100% - 65.5px),
-        73.333% calc(100% - 68.6px),
-        71.667% calc(100% - 70.6px),
-        70.000% calc(100% - 71.3px),
-        68.333% calc(100% - 70.6px),
-        66.667% calc(100% - 68.3px),
-        65.000% calc(100% - 64.4px),
-        63.333% calc(100% - 59.2px),
-        61.667% calc(100% - 52.9px),
-        60.000% calc(100% - 45.9px),
-        58.333% calc(100% - 38.5px),
-        56.667% calc(100% - 31.3px),
-        55.000% calc(100% - 24.6px),
-        53.333% calc(100% - 18.8px),
-        51.667% calc(100% - 14.3px),
-        50.000% calc(100% - 11.2px),
-        48.333% calc(100% - 9.6px),
-        46.667% calc(100% - 9.6px),
-        45.000% calc(100% - 10.9px),
-        43.333% calc(100% - 13.3px),
-        41.667% calc(100% - 16.6px),
-        40.000% calc(100% - 20.4px),
-        38.333% calc(100% - 24.3px),
-        36.667% calc(100% - 28.1px),
-        35.000% calc(100% - 31.6px),
-        33.333% calc(100% - 34.6px),
-        31.667% calc(100% - 37.1px),
-        30.000% calc(100% - 39.0px),
-        28.333% calc(100% - 40.4px),
-        26.667% calc(100% - 41.7px),
-        25.000% calc(100% - 42.8px),
-        23.333% calc(100% - 44.2px),
-        21.667% calc(100% - 45.8px),
-        20.000% calc(100% - 47.9px),
-        18.333% calc(100% - 50.4px),
-        16.667% calc(100% - 53.4px),
-        15.000% calc(100% - 56.8px),
-        13.333% calc(100% - 60.2px),
-        11.667% calc(100% - 63.4px),
-        10.000% calc(100% - 66.1px),
-        8.333% calc(100% - 68.1px),
-        6.667% calc(100% - 69.0px),
-        5.000% calc(100% - 68.5px),
-        3.333% calc(100% - 66.6px),
-        1.667% calc(100% - 63.3px),
-        0.000% calc(100% - 58.5px)
-    );
+    clip-path: var(--wave-clip);
 }
 
 @media (max-width: 768px) {
     .hero {
         margin-bottom: -40px;
         padding-bottom: 60px;
-        clip-path: polygon(
-            0% 0%,
-            100% 0%,
-            100.000% calc(100% - 13.8px),
-            97.500% calc(100% - 15.6px),
-            95.000% calc(100% - 16.9px),
-            92.500% calc(100% - 17.8px),
-            90.000% calc(100% - 18.7px),
-            87.500% calc(100% - 19.8px),
-            85.000% calc(100% - 21.4px),
-            82.500% calc(100% - 23.8px),
-            80.000% calc(100% - 26.7px),
-            77.500% calc(100% - 29.8px),
-            75.000% calc(100% - 32.8px),
-            72.500% calc(100% - 34.9px),
-            70.000% calc(100% - 35.7px),
-            67.500% calc(100% - 34.8px),
-            65.000% calc(100% - 32.2px),
-            62.500% calc(100% - 28.1px),
-            60.000% calc(100% - 22.9px),
-            57.500% calc(100% - 17.4px),
-            55.000% calc(100% - 12.3px),
-            52.500% calc(100% - 8.2px),
-            50.000% calc(100% - 5.6px),
-            47.500% calc(100% - 4.7px),
-            45.000% calc(100% - 5.4px),
-            42.500% calc(100% - 7.4px),
-            40.000% calc(100% - 10.2px),
-            37.500% calc(100% - 13.1px),
-            35.000% calc(100% - 15.8px),
-            32.500% calc(100% - 18.0px),
-            30.000% calc(100% - 19.5px),
-            27.500% calc(100% - 20.5px),
-            25.000% calc(100% - 21.4px),
-            22.500% calc(100% - 22.5px),
-            20.000% calc(100% - 23.9px),
-            17.500% calc(100% - 25.9px),
-            15.000% calc(100% - 28.4px),
-            12.500% calc(100% - 30.9px),
-            10.000% calc(100% - 33.1px),
-            7.500% calc(100% - 34.3px),
-            5.000% calc(100% - 34.3px),
-            2.500% calc(100% - 32.6px),
-            0.000% calc(100% - 29.3px)
-        );
+        clip-path: var(--wave-clip-sm);
     }
 }
 
@@ -363,72 +151,29 @@ body:not(.dark-mode) .hero-bg {
     opacity: 0.8;
 }
 
-/* Grid Pattern Overlay — hero's own local decoration (radial-masked, fades
-   at the edges), separate from the page-wide fixed grid in base.css
-   (body::before). That one is a static backdrop behind the whole site; this
-   one is scoped to the hero and moves with it like any other section content. */
-.hero-grid {
+/* Home hero gets two extra decorative canvases on top of the shared leaves
+   layer (.hero-particles base styles live in base.css). All three sit above
+   the gradient mesh (.hero-bg, z 0) and below the hero content (z 10) /
+   doodles. Animation, reduced-motion freezing and off-screen pausing are all
+   driven by scripts/hero-canvas.js.
+
+   .hero-stars — sparse drifting starfield (scripts/hero-stars.js)
+   .hero-rays  — additive sun god-rays (scripts/hero-rays.js) */
+.hero-stars,
+.hero-rays {
     position: absolute;
     inset: 0;
-    background-image:
-        linear-gradient(rgba(255, 255, 255, 0.045) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255, 255, 255, 0.045) 1px, transparent 1px);
-    background-size: 32px 32px;
-    mask-image: radial-gradient(circle at center, black 40%, transparent 80%);
-    -webkit-mask-image: radial-gradient(circle at center, black 40%, transparent 80%);
-    z-index: 1;
+    width: 100%;
+    height: 100%;
     pointer-events: none;
 }
 
-/* Hero Gallery Backdrop — floating dimmed gallery images */
-.hero-gallery-backdrop {
-    position: absolute;
-    inset: 0;
-    z-index: 1;
-    pointer-events: none;
-    overflow: hidden;
-}
+.hero .hero-stars     { z-index: 1; opacity: 0.68; }
+.hero .hero-rays      { z-index: 2; opacity: 0.46; }
+.hero .hero-particles { z-index: 3; }   /* above stars + rays on the home hero */
 
-.hero-backdrop-img {
-    position: absolute;
-    border-radius: 14px;
-    opacity: 0;
-    filter: blur(2px) saturate(0.6);
-    object-fit: cover;
-    aspect-ratio: 16 / 10;
-    animation: heroBackdropFloat 18s ease-in-out infinite alternate, heroBackdropFadeIn 2s ease forwards;
-    will-change: transform, opacity;
-}
-
-.dark-mode .hero-backdrop-img {
-    opacity: 0;
-    /* fade-in animation target */
-}
-
-@keyframes heroBackdropFadeIn {
-    to { opacity: 0.12; }
-}
-
-body:not(.dark-mode) .hero-backdrop-img {
-    filter: blur(2px) saturate(0.5) brightness(1.1);
-    animation: heroBackdropFloat 18s ease-in-out infinite alternate, heroBackdropFadeInLight 2s ease forwards;
-}
-
-@keyframes heroBackdropFadeInLight {
-    to { opacity: 0.08; }
-}
-
-@keyframes heroBackdropFloat {
-    0%   { transform: translateY(0) rotate(-1deg) scale(1); }
-    50%  { transform: translateY(-12px) rotate(0.5deg) scale(1.02); }
-    100% { transform: translateY(6px) rotate(-0.5deg) scale(0.98); }
-}
-
-body:not(.dark-mode) .hero-grid {
-    background-image:
-        linear-gradient(rgba(0, 0, 0, 0.05) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(0, 0, 0, 0.05) 1px, transparent 1px);
-}
+body:not(.dark-mode) .hero .hero-stars { opacity: 0.14; }
+body:not(.dark-mode) .hero .hero-rays  { opacity: 0.62; }  /* warm amber rays, painted on white */
 
 
 /* Main Content Container */
@@ -467,9 +212,9 @@ body:not(.dark-mode) .hero-grid {
     gap: 9px;
     padding: 7px 18px;
     background: transparent;
-    border: 2px dashed var(--s3-teal);
+    border: 2px dashed var(--s3-green);
     border-radius: 6px 12px 8px 10px / 10px 8px 12px 6px;
-    color: var(--s3-teal);
+    color: var(--s3-green);
     font-size: 1.15rem;
     font-family: var(--font-display);
     font-weight: 700;
@@ -477,13 +222,13 @@ body:not(.dark-mode) .hero-grid {
     letter-spacing: 0.04em;
     animation: fadeInDown 0.8s ease-out;
     position: relative;
-    box-shadow: 2px 3px 0 var(--s3-teal);
+    box-shadow: 2px 3px 0 var(--s3-green);
 }
 
 body:not(.dark-mode) .hero-badge {
-    border-color: var(--s3-teal);
-    color: #0A7878;
-    box-shadow: 2px 3px 0 var(--s3-teal);
+    border-color: var(--s3-green);
+    color: #1E8A4C;
+    box-shadow: 2px 3px 0 var(--s3-green);
 }
 
 .status-indicator {
@@ -525,45 +270,6 @@ body:not(.dark-mode) .hero-badge {
     letter-spacing: 0.03em;
 }
 
-.gradient-text {
-    position: relative;
-    display: inline-block;
-    background: linear-gradient(135deg, #ffffff 0%, var(--s3-teal) 40%, var(--primary-purple) 70%, var(--s3-green) 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    background-size: auto;
-}
-
-/* Glow applied via pseudo-element so it doesn't break Firefox background-clip animation */
-.gradient-text::after {
-    content: attr(data-text);
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(135deg, #fff 0%, var(--primary-purple) 50%, var(--primary-green) 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    filter: blur(18px) brightness(1.5);
-    opacity: 0.35;
-    z-index: -1;
-    pointer-events: none;
-}
-
-body:not(.dark-mode) .gradient-text {
-    background: linear-gradient(135deg, var(--primary-purple) 0%, var(--primary-green) 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    background-size: auto;
-    animation: none;
-}
-
-body:not(.dark-mode) .gradient-text::after {
-    animation: none;
-    opacity: 0;
-}
-
 .hero p {
     font-size: 1.15rem;
     color: var(--text-secondary);
@@ -586,10 +292,10 @@ body:not(.dark-mode) .gradient-text::after {
     letter-spacing: 0.04em;
     padding: 9px 18px;
     background: rgba(255,255,255,0.04);
-    border: 1.5px dashed rgba(var(--s3-teal-rgb), 0.3);
+    border: 1.5px dashed rgba(var(--s3-green-rgb), 0.3);
     border-radius: 8px 14px 10px 12px / 12px 8px 14px 10px;
     width: fit-content;
-    box-shadow: 2px 3px 0 rgba(var(--s3-teal-rgb), 0.1);
+    box-shadow: 2px 3px 0 rgba(var(--s3-green-rgb), 0.1);
 }
 
 body:not(.dark-mode) .hero-server-stats {
@@ -599,7 +305,7 @@ body:not(.dark-mode) .hero-server-stats {
 
 .hero-server-stats .stat-dot {
     font-size: 0.5rem;
-    color: var(--primary-purple);
+    color: var(--s3-green);
     opacity: 0.6;
 }
 
@@ -993,7 +699,7 @@ body:not(.dark-mode) .btn-outline {
 }
 
 .doodle-squiggle {
-    color: var(--primary-purple);
+    color: var(--primary-blue);
     animation: doodleFloat 6s ease-in-out 0.4s infinite alternate;
     opacity: 0.28;
 }
@@ -1038,12 +744,12 @@ body:not(.dark-mode) .btn-outline {
 }
 
 .sec-doodle--spiral  { color: var(--s3-teal);    width: 36px; animation: doodleFloat 9s ease-in-out infinite alternate; }
-.sec-doodle--arrow   { color: var(--primary-purple); width: 32px; animation: doodleFloat 7s ease-in-out 1s infinite alternate; }
+.sec-doodle--arrow   { color: var(--primary-blue); width: 32px; animation: doodleFloat 7s ease-in-out 1s infinite alternate; }
 .sec-doodle--star    { color: var(--s3-gold, #AACC00); width: 22px; animation: doodleFloat 8s ease-in-out 0.5s infinite alternate; }
 .sec-doodle--underline { color: var(--s3-green); width: 70px; animation: doodleFloat 11s ease-in-out 2s infinite alternate; opacity: 0.18; }
 .sec-doodle--cross   { color: var(--s3-teal);    width: 18px; animation: doodleFloat 8s ease-in-out 0.3s infinite alternate; }
 .sec-doodle--sparkle { color: var(--s3-gold, #AACC00); width: 28px; animation: doodleSpin 16s linear infinite; opacity: 0.16; }
-.sec-doodle--squiggle{ color: var(--primary-purple); width: 64px; animation: doodleFloat 7s ease-in-out 1.5s infinite alternate; opacity: 0.15; }
+.sec-doodle--squiggle{ color: var(--primary-blue); width: 64px; animation: doodleFloat 7s ease-in-out 1.5s infinite alternate; opacity: 0.15; }
 .sec-doodle--heart   { color: #ff7b9c; width: 26px; animation: doodleFloat 9s ease-in-out 0.8s infinite alternate; }
 .sec-doodle--dots    { color: var(--s3-teal); width: 44px; animation: doodleFloat 12s ease-in-out 3s infinite alternate; opacity: 0.2; }
 
@@ -1054,11 +760,6 @@ body:not(.dark-mode) .btn-outline {
     /* ── Mobile perf: kill expensive decorative animations ────────
        Multiple simultaneous infinite animations + blur filters cause
        noticeable jank on mid-range phones.                          */
-
-    /* Stop floating blurred backdrop images — biggest GPU cost */
-    .hero-backdrop-img {
-        display: none;
-    }
 
     /* Stop hero doodle animations; keep them visible but static */
     .hero-doodles .doodle {
@@ -1197,7 +898,7 @@ section h2 .emoji {
 
 .carousel-item:hover {
     transform: scale(1.02) translateY(-4px);
-    border-color: var(--primary-purple);
+    border-color: var(--primary-blue);
     z-index: 2;
     box-shadow: 0 16px 40px rgba(var(--s3-teal-rgb), 0.12), 0 6px 16px rgba(0, 0, 0, 0.2);
 }
@@ -1846,7 +1547,7 @@ body:not(.dark-mode) .app-memo-body strong {
     margin-bottom: 0;
 }
 
-/* Response note — sticky-note family, keeps its purple info-callout tint
+/* Response note — sticky-note family, keeps its green info-callout tint
    (unlike .application-requirements/.application-form-wrapper it's a short
    highlighted message, not dense content, so the tint stays as the "note
    color" instead of flattening to plain bg-card). */
@@ -1869,7 +1570,7 @@ body:not(.dark-mode) .app-memo-body strong {
     inset: -6px;
     z-index: -1;
     border-radius: 16px;
-    background: rgba(123,104,238,0.10);
+    background: rgba(var(--s3-green-rgb),0.10);
     filter: url(#card-squiggle) drop-shadow(2px 6px 14px rgba(0,0,0,0.24));
 }
 /* Tape strip */
@@ -2086,10 +1787,60 @@ body:not(.dark-mode) .app-response-note::before {
 }
 
 .apply-radio-label input[type="radio"] {
-    accent-color: var(--primary-purple);
+    accent-color: var(--primary-blue);
     width: 17px;
     height: 17px;
     cursor: pointer;
+}
+
+/* Opt-out checkbox (keep me off the public members list) */
+.apply-consent {
+    gap: 0.3rem;
+}
+
+.apply-consent-label {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.6rem;
+    cursor: pointer;
+    font-family: 'DynaPuff', cursive;
+    font-size: 1.05rem;
+    color: var(--text-primary);
+    opacity: 0.9;
+    line-height: 1.35;
+}
+
+.apply-consent-label input[type="checkbox"] {
+    accent-color: var(--primary-blue);
+    width: 17px;
+    height: 17px;
+    margin-top: 0.15rem;
+    flex-shrink: 0;
+    cursor: pointer;
+}
+
+.apply-hint {
+    font-family: 'DynaPuff', cursive;
+    font-size: 0.85rem;
+    color: var(--text-primary);
+    opacity: 0.55;
+    line-height: 1.4;
+}
+
+.apply-privacy-note {
+    font-family: 'DynaPuff', cursive;
+    font-size: 0.8rem;
+    color: var(--text-primary);
+    opacity: 0.5;
+    line-height: 1.45;
+    margin-top: 0.7rem;
+    text-align: center;
+}
+
+.apply-privacy-note a {
+    color: var(--s3-teal);
+    text-decoration: underline;
+    text-underline-offset: 2px;
 }
 
 /* Submit button — styled like header nav links */
@@ -3067,7 +2818,7 @@ body:not(.dark-mode) .pp-twitch.is-live:hover { background: rgba(220,38,38,0.20)
     margin-left: auto;
     font-size: 0.75rem;
     font-weight: 600;
-    color: var(--primary-purple);
+    color: var(--primary-blue);
     text-decoration: none;
     white-space: nowrap;
     opacity: 0.7;
@@ -3158,7 +2909,6 @@ a:focus-visible {
 /* === Reduced Motion Accessibility === */
 @media (prefers-reduced-motion: reduce) {
     /* Continuous/looping animations that cause vestibular issues */
-    .hero-backdrop-img,
     .hero-bg,
     .hero-badge,
     .status-indicator,
@@ -3214,110 +2964,3 @@ a:focus-visible {
         animation: none !important;
     }
 }
-
-/* ── Staff application toast — fixed to viewport, but only shown while
-   the hero is scrolled into view (see initStaffToast in the page script) ── */
-.staff-toast {
-    position: fixed;
-    bottom: 28px;
-    right: 28px;
-    z-index: 200;
-    max-width: 300px;
-    background: var(--bg-card);
-    border: 2px solid rgba(var(--s3-teal-rgb), 0.4);
-    border-radius: 12px 16px 14px 15px / 15px 12px 16px 14px;
-    padding: 1.1rem 1.3rem;
-    box-shadow: 3px 5px 0 rgba(0,0,0,0.18), 0 12px 32px rgba(0,0,0,.35);
-    opacity: 0;
-    transform: translateY(14px) scale(.96);
-    pointer-events: none;
-    transition: opacity .35s ease, transform .35s var(--bounce);
-}
-.staff-toast.active {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-    pointer-events: all;
-}
-
-.staff-toast-close {
-    position: absolute;
-    top: .5rem; right: .6rem;
-    background: rgba(255,255,255,.07);
-    border: 1px solid rgba(255,255,255,.1);
-    color: var(--text-secondary);
-    width: 22px; height: 22px;
-    border-radius: 50%;
-    cursor: pointer;
-    font-size: .68rem;
-    display: flex; align-items: center; justify-content: center;
-    transition: background .2s;
-}
-.staff-toast-close:hover { background: rgba(255,255,255,.15); }
-
-.staff-toast-header {
-    display: flex;
-    align-items: center;
-    gap: .5rem;
-    margin-bottom: .4rem;
-    padding-right: 1.4rem;
-}
-.staff-toast-icon { font-size: 1.4rem; flex-shrink: 0; }
-.staff-toast-header strong {
-    font-family: 'DynaPuff', cursive;
-    font-size: 1rem;
-    color: var(--text-primary);
-    line-height: 1.3;
-}
-
-.staff-toast p {
-    color: var(--text-secondary);
-    font-size: .88rem;
-    line-height: 1.4;
-    margin-bottom: .9rem;
-}
-
-.staff-toast-actions {
-    display: flex;
-    align-items: center;
-    gap: .9rem;
-}
-
-.staff-toast-apply {
-    padding: 0.45rem 1rem;
-    background: rgba(var(--s3-teal-rgb), 0.18);
-    border: 1.5px dashed var(--s3-teal);
-    border-radius: 8px 12px 9px 13px / 12px 8px 13px 9px;
-    color: var(--s3-teal);
-    font-family: 'DynaPuff', cursive;
-    font-size: .88rem;
-    cursor: pointer;
-    box-shadow: 2px 3px 0 rgba(0,0,0,0.22);
-    text-decoration: none;
-    white-space: nowrap;
-    transition: color 0.22s ease, background 0.22s ease,
-                transform 0.22s var(--bounce), box-shadow 0.22s ease;
-}
-.staff-toast-apply:hover {
-    color: #fff;
-    background: rgba(var(--s3-teal-rgb), 0.35);
-    transform: translateY(-2px) scale(1.02);
-    box-shadow: 3px 5px 0 rgba(var(--s3-teal-rgb), 0.35);
-}
-
-.staff-toast-later {
-    background: none;
-    border: none;
-    color: var(--text-secondary);
-    font-family: 'DynaPuff', cursive;
-    font-size: .8rem;
-    cursor: pointer;
-    opacity: .7;
-    transition: opacity .2s;
-}
-.staff-toast-later:hover { opacity: 1; text-decoration: underline; }
-
-@media (max-width: 640px) {
-    .staff-toast { left: 16px; right: 16px; bottom: 16px; max-width: none; }
-}
-
-

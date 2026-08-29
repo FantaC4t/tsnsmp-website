@@ -5,7 +5,7 @@
     left: 0;
     right: 0;
     z-index: 1000;
-    background: #1a1828;
+    background: #141B2C;
     border-bottom: 1px solid rgba(255,255,255,0.08);
     transition: background 0.3s ease, box-shadow 0.3s ease;
     font-family: 'DynaPuff', cursive;
@@ -13,8 +13,8 @@
 }
 
 .site-header.scrolled {
-    background: #14121f;
-    border-bottom: 1px solid rgba(var(--s3-teal-rgb), 0.15);
+    background: #10141F;
+    border-bottom: 1px solid rgba(var(--s3-green-rgb), 0.15);
     box-shadow: 0 4px 30px rgba(0, 0, 0, 0.4);
 }
 
@@ -39,8 +39,8 @@ body:not(.dark-mode) .nav-links a {
 
 body:not(.dark-mode) .nav-links a:hover,
 body:not(.dark-mode) .nav-links a.active {
-    color: var(--s3-teal);
-    background: rgba(var(--s3-teal-rgb), 0.12);
+    color: var(--s3-green);
+    background: rgba(var(--s3-green-rgb), 0.12);
 }
 
 body:not(.dark-mode) .hamburger,
@@ -80,7 +80,7 @@ body:not(.dark-mode) .hamburger::after {
 }
 
 .nav-logo {
-    height: 140px;
+    height: 58px;
     width: auto;
     border: none;
     object-fit: contain;
@@ -92,7 +92,7 @@ body:not(.dark-mode) .hamburger::after {
 }
 
 .nav-brand a:hover .nav-logo {
-    filter: drop-shadow(0 0 15px rgba(123, 104, 238, 0.6));
+    filter: drop-shadow(0 0 15px rgba(var(--s3-green-rgb), 0.6));
     transform: none; /* Reset rotation */
 }
 
@@ -139,11 +139,11 @@ body:not(.dark-mode) .hamburger::after {
 /* Hover must beat the nth-child rotation specificity (0,4,1 vs 0,2,1) */
 .nav-links li:nth-child(odd)  > a:not(.nav-icon):not(.nav-admin-link):hover,
 .nav-links li:nth-child(even) > a:not(.nav-icon):not(.nav-admin-link):hover {
-    color: var(--s3-teal);
-    background: rgba(var(--s3-teal-rgb), 0.15);
-    border-color: var(--s3-teal);
+    color: var(--s3-green);
+    background: rgba(var(--s3-green-rgb), 0.15);
+    border-color: var(--s3-green);
     transform: translateY(-5px) rotate(0deg) scale(1.06);
-    box-shadow: 3px 6px 0 rgba(var(--s3-teal-rgb), 0.35);
+    box-shadow: 3px 6px 0 rgba(var(--s3-green-rgb), 0.35);
 }
 
 .nav-links .nav-icon {
@@ -163,8 +163,8 @@ body:not(.dark-mode) .hamburger::after {
 
 .nav-links .nav-icon:hover {
     color: #fff;
-    background: rgba(var(--s3-teal-rgb), 0.25);
-    border-color: rgba(var(--s3-teal-rgb), 0.6);
+    background: rgba(var(--s3-green-rgb), 0.25);
+    border-color: rgba(var(--s3-green-rgb), 0.6);
 }
 
 .nav-icon-img {
@@ -176,20 +176,20 @@ body:not(.dark-mode) .hamburger::after {
 }
 
 .nav-links a:hover {
-    color: var(--s3-teal);
-    background: rgba(var(--s3-teal-rgb), 0.15);
-    border-color: var(--s3-teal);
+    color: var(--s3-green);
+    background: rgba(var(--s3-green-rgb), 0.15);
+    border-color: var(--s3-green);
     transform: translateY(-5px) rotate(0deg) scale(1.06);
-    box-shadow: 3px 6px 0 rgba(var(--s3-teal-rgb), 0.35);
+    box-shadow: 3px 6px 0 rgba(var(--s3-green-rgb), 0.35);
 }
 .nav-links a.active {
-    color: var(--s3-teal);
-    background: rgba(var(--s3-teal-rgb), 0.14);
-    border-color: rgba(var(--s3-teal-rgb), 0.45);
+    color: var(--s3-green);
+    background: rgba(var(--s3-green-rgb), 0.14);
+    border-color: rgba(var(--s3-green-rgb), 0.45);
 }
 
 .nav-links .nav-admin-link {
-    color: var(--s3-teal);
+    color: var(--s3-green);
     font-weight: 700;
 }
 
@@ -200,8 +200,8 @@ body:not(.dark-mode) .nav-links .nav-icon {
 }
 
 body:not(.dark-mode) .nav-links .nav-icon:hover {
-    background: rgba(var(--s3-teal-rgb), 0.15);
-    color: var(--s3-teal);
+    background: rgba(var(--s3-green-rgb), 0.15);
+    color: var(--s3-green);
 }
 
 .nav-toggle {
@@ -256,33 +256,88 @@ body:not(.dark-mode) .nav-links .nav-icon:hover {
     top: 0;
 }
 
-.theme-toggle {
-    background: none;
-    border: none;
-    border-radius: 50%;
-    width: 40px;
-    height: 40px;
+/* ── Minecraft-style theme switch (adapted from Uiverse.io by csozidev) ──
+   Checkbox checked === light mode. Wired up in Header.astro. */
+.theme-switch {
+    --sw: 15px;                 /* 1em unit for the switch */
+    font-size: var(--sw);
+    position: relative;
+    display: inline-block;
+    width: 4em;
+    height: 2em;
+    flex-shrink: 0;
     cursor: pointer;
-    font-size: 1.2rem;
-    transition: all 0.3s ease;
-    outline: none;
 }
 
-.theme-toggle:focus-visible {
-    outline: 2px solid var(--s3-teal);
+.theme-switch-input {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.theme-switch-track {
+    position: absolute;
+    inset: 0;
+    background: #6f7683;
+    box-shadow:
+        inset -0.2em -0.2em 0 rgba(0, 0, 0, 0.28),
+        inset 0.2em 0.2em 0 rgba(255, 255, 255, 0.18);
+    transition: background 0.3s ease;
+}
+
+.theme-switch-knob {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 2em;
+    width: 2em;
+    background-color: #e7eaf0;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 62%;
+    image-rendering: pixelated;
+    box-shadow:
+        inset -0.22em -0.22em 0 rgba(0, 0, 0, 0.25),
+        inset 0.22em 0.22em 0 rgba(255, 255, 255, 0.4);
+    transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.theme-switch-knob--moon {
+    opacity: 1;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8' shape-rendering='crispEdges'%3E%3Crect width='8' height='8' fill='%23c3c9d6'/%3E%3Crect x='1' y='1' width='6' height='6' fill='%23e7ecf5'/%3E%3Crect x='2' y='2' width='2' height='2' fill='%23a9b2c4'/%3E%3Crect x='5' y='4' width='2' height='2' fill='%23a9b2c4'/%3E%3Crect x='3' y='5' width='1' height='1' fill='%23a9b2c4'/%3E%3C/svg%3E");
+}
+
+.theme-switch-knob--sun {
+    opacity: 0;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8' shape-rendering='crispEdges'%3E%3Crect width='8' height='8' fill='%23f5a623'/%3E%3Crect x='1' y='1' width='6' height='6' fill='%23ffcf4d'/%3E%3Crect x='2' y='2' width='4' height='4' fill='%23fff0b0'/%3E%3Crect x='0' y='0' width='1' height='1' fill='%23ffcf4d'/%3E%3Crect x='7' y='0' width='1' height='1' fill='%23ffcf4d'/%3E%3Crect x='0' y='7' width='1' height='1' fill='%23ffcf4d'/%3E%3Crect x='7' y='7' width='1' height='1' fill='%23ffcf4d'/%3E%3C/svg%3E");
+}
+
+.theme-switch-input:checked ~ .theme-switch-knob--moon { transform: translateX(2em); opacity: 0; }
+.theme-switch-input:checked ~ .theme-switch-knob--sun  { transform: translateX(2em); opacity: 1; }
+
+.theme-switch-input:focus-visible ~ .theme-switch-track {
+    outline: 2px solid var(--s3-green);
     outline-offset: 3px;
 }
 
-.theme-toggle:hover {
-    background: rgba(var(--s3-teal-rgb), 0.15);
-    transform: scale(1.1);
+.theme-switch:hover .theme-switch-knob { filter: brightness(1.08); }
+
+@media (prefers-reduced-motion: reduce) {
+    .theme-switch-track,
+    .theme-switch-knob { transition: none; }
 }
 
 /* Mobile styles */
 @media (max-width: 768px) {
     .nav-logo {
-        height: 70px;
+        height: 38px;
     }
+
+    .theme-switch { --sw: 12px; }
 
     .nav-toggle {
         display: block;
@@ -341,53 +396,20 @@ body:not(.dark-mode) .nav-links .nav-icon:hover {
 
     body:not(.dark-mode) .nav-links a:hover,
     body:not(.dark-mode) .nav-links a.active {
-        background: rgba(var(--s3-teal-rgb), 0.1);
-        color: var(--s3-teal);
+        background: rgba(var(--s3-green-rgb), 0.1);
+        color: var(--s3-green);
     }
 }
 
 /* 3. Fix "Dark Line" below header (Force light border) */
 body:not(.dark-mode) .site-header {
     border-bottom: 1px solid rgba(0, 0, 0, 0.06) !important;
-    /* background-color, not the `background` shorthand — the shorthand
-       resets background-image to none, which would wipe out the grid
-       overlay added below. */
     background-color: rgba(255, 255, 255, 0.95); /* Ensure opacity covers content behind */
 }
 
-/* Body padding to account for fixed header */
+/* Body padding to account for fixed header (~65px tall) */
 body {
-    padding-top: 100px;
-}
-
-/* ─── Shared background grid (2026-07-10) ───
-   Exactly the same pattern/tile-size/colour as body::before (base.css) —
-   the site's one fixed, viewport-anchored "mega background" grid, which
-   otherwise only shows in the page gutters on wide screens since every
-   section paints an opaque background over it elsewhere. The header is
-   the other place it's visible, and painted here rather than shown through
-   real transparency (the header sits directly above the hero, which is
-   busy — mascot, badges, gradient text — so true see-through would reveal
-   that instead of a clean grid). Values MUST match body::before's 28px /
-   rgba(...,0.05) exactly, or the two grids visibly misalign at the seam
-   where the header ends and the page's own margin grid continues.
-   background-image only (not the `background` shorthand) — every rule
-   above sets a solid colour via `background`/`background-color`, and this
-   needs to add an image layer without wiping any of them out. Placed last +
-   selectors matched to the colour rules above so it wins every state
-   (default, scrolled, light mode). */
-.site-header,
-.site-header.scrolled {
-    background-image:
-        linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
-    background-size: 28px 28px;
-}
-body:not(.dark-mode) .site-header,
-body:not(.dark-mode) .site-header.scrolled {
-    background-image:
-        linear-gradient(rgba(0, 0, 0, 0.05) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(0, 0, 0, 0.05) 1px, transparent 1px);
+    padding-top: 65px;
 }
 
 

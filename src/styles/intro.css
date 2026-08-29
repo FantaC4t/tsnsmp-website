@@ -26,7 +26,7 @@
     background:
         radial-gradient(ellipse 60% 50% at 20% 20%, rgba(var(--s3-teal-rgb), 0.16), transparent 60%),
         radial-gradient(ellipse 60% 50% at 85% 80%, rgba(var(--s3-green-rgb), 0.14), transparent 60%),
-        linear-gradient(180deg, #14101d 0%, #1e1830 100%);
+        linear-gradient(180deg, #0F1422 0%, #17203D 100%);
 }
 
 .intro-splash-grain {
@@ -70,7 +70,7 @@
 .intro-doodle--sm { width: 16px; }
 .intro-doodle--star { color: var(--s3-gold); }
 .intro-doodle--sparkle { color: var(--s3-teal); width: 30px; }
-.intro-doodle--squiggle { color: var(--primary-purple); width: 66px; }
+.intro-doodle--squiggle { color: var(--primary-blue); width: 66px; }
 .intro-doodle--dots { color: var(--s3-green); width: 46px; }
 .intro-doodle--cross { color: var(--s3-red); width: 18px; }
 
@@ -113,20 +113,12 @@
     transform: translateY(12px);
 }
 
-/* Self-contained gradient wordmark — deliberately NOT reusing the shared
-   .gradient-text::after glow trick. That duplicate-layer + blur(18px)
-   approach reads as a hazy rectangle behind chunky display type instead of
-   hugging the letterforms. drop-shadow() is alpha-aware (it follows the
-   actual glyph shapes, not the bounding box) so it glows correctly. */
 .intro-word-main {
     display: inline-block;
     font-family: var(--font-display);
     font-size: clamp(2.6rem, 10vw, 5.5rem);
     letter-spacing: 0.02em;
-    background: linear-gradient(135deg, #ffffff 0%, var(--s3-teal) 40%, var(--primary-purple) 70%, var(--s3-green) 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+    color: var(--text-primary);
     filter: url(#chalkText) drop-shadow(0 0 18px rgba(var(--s3-teal-rgb), 0.55)) drop-shadow(0 0 34px rgba(var(--s3-green-rgb), 0.3));
     opacity: 0;
     transform: scale(0.4) rotate(-6deg);

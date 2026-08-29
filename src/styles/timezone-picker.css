@@ -44,7 +44,7 @@
 
 .tz-caret {
     flex-shrink: 0;
-    color: var(--primary-purple);
+    color: var(--primary-blue);
     transition: transform 0.2s ease;
 }
 

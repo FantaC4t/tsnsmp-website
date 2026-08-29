@@ -21,16 +21,6 @@ import Layout from '../layouts/Layout.astro';
             overflow: hidden;
         }
 
-        /* Faint dot-grid (same as other hero sections) */
-        .nf-hero::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background-image: radial-gradient(circle, rgba(255,255,255,0.06) 1px, transparent 1px);
-            background-size: 28px 28px;
-            pointer-events: none;
-        }
-
         .nf-mascot {
             display: block;
             margin: 0 auto 0.5rem;
@@ -43,10 +33,7 @@ import Layout from '../layouts/Layout.astro';
             font-family: 'Luckiest Guy', cursive;
             font-size: clamp(7rem, 24vw, 13rem);
             line-height: 0.85;
-            background: linear-gradient(135deg, var(--s3-teal) 0%, var(--s3-green) 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            color: var(--text-primary);
             filter: url(#chalkText);
             position: relative;
             display: inline-block;

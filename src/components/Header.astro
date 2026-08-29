@@ -1,6 +1,6 @@
 ---
 import { Image } from 'astro:assets';
-import navLogo from '../assets/minecraft_title(1).png';
+import navLogo from '../assets/matcha_logo.png';
 
 interface Props {
   currentPage: string;
@@ -14,7 +14,8 @@ const navLinks = [
   { page: 'players', href: '/players/', label: 'Players' },
   { page: 'gallery', href: '/gallery/', label: 'Gallery' },
   { page: 'resources', href: '/resources/', label: 'Resources' },
-  { page: 'apply', href: '/apply/', label: 'Staff Apply' },
+  // Staff Apply hidden for now — page still lives at /apply/, just not linked.
+  // { page: 'apply', href: '/apply/', label: 'Staff Apply' },
 ];
 ---
 
@@ -22,7 +23,7 @@ const navLinks = [
     <nav class="navbar">
         <div class="nav-brand">
             <a href="/">
-                <Image src={navLogo} alt="TSNSMP Logo" class="nav-logo" width={280} height={280} loading="eager" />
+                <Image src={navLogo} alt="TSNSMP Re-Flavoured Logo" class="nav-logo" height={280} loading="eager" />
                 <span class="nav-title">TSNSMP</span>
             </a>
         </div>
@@ -39,12 +40,15 @@ const navLinks = [
                     >{link.label}</a>
                 </li>
             ))}
-            <li><a href="https://bsky.app/profile/tsnsmp.online" target="_blank" rel="noopener noreferrer" class="nav-icon" aria-label="Follow TSNSMP on Bluesky" title="Follow TSNSMP on Bluesky"><img src="/assets/icons/bluesky.svg" alt="Bluesky" class="nav-icon-img"></a></li>
+            <li><a href="https://bsky.app/profile/tsnsmp.com" target="_blank" rel="noopener noreferrer" class="nav-icon" aria-label="Follow TSNSMP on Bluesky" title="Follow TSNSMP on Bluesky"><img src="/assets/icons/bluesky.svg" alt="Bluesky" class="nav-icon-img"></a></li>
             <li><a href="/admin/" class={`nav-admin-link ${currentPage === 'admin' ? 'active' : ''}`} aria-current={currentPage === 'admin' ? 'page' : undefined}>⚙️ Admin</a></li>
         </ul>
-        <button class="theme-toggle" aria-label="Toggle dark mode">
-            <span class="theme-icon" aria-hidden="true">🌙</span>
-        </button>
+        <label class="theme-switch" title="Toggle light / dark mode">
+            <input type="checkbox" class="theme-switch-input" role="switch" aria-label="Switch between light and dark mode">
+            <span class="theme-switch-track" aria-hidden="true"></span>
+            <span class="theme-switch-knob theme-switch-knob--moon" aria-hidden="true"></span>
+            <span class="theme-switch-knob theme-switch-knob--sun" aria-hidden="true"></span>
+        </label>
     </nav>
 </header>
 
@@ -87,28 +91,20 @@ const navLinks = [
         });
     }
 
-    // Theme toggle + persisted preference
-    const themeBtn = document.querySelector('.theme-toggle');
-    const themeIcon = themeBtn?.querySelector('.theme-icon');
+    // Theme switch + persisted preference — checkbox checked === light mode
+    const themeEl = document.querySelector('.theme-switch-input');
+    if (themeEl instanceof HTMLInputElement) {
+        const themeInput = themeEl;
+        const startLight = localStorage.getItem('theme') === 'light';
+        if (startLight) document.body.classList.remove('dark-mode');
+        themeInput.checked = startLight;
 
-    function updateThemeLabel() {
-        const isDark = document.body.classList.contains('dark-mode');
-        themeBtn?.setAttribute('aria-label', isDark ? 'Switch to light mode' : 'Switch to dark mode');
+        themeInput.addEventListener('change', () => {
+            const light = themeInput.checked;
+            document.body.classList.toggle('dark-mode', !light);
+            localStorage.setItem('theme', light ? 'light' : 'dark');
+        });
     }
-
-    if (localStorage.getItem('theme') === 'light') {
-        document.body.classList.remove('dark-mode');
-        if (themeIcon) themeIcon.textContent = '☀️';
-    }
-    updateThemeLabel();
-
-    themeBtn?.addEventListener('click', () => {
-        document.body.classList.toggle('dark-mode');
-        const isDark = document.body.classList.contains('dark-mode');
-        if (themeIcon) themeIcon.textContent = isDark ? '🌙' : '☀️';
-        localStorage.setItem('theme', isDark ? 'dark' : 'light');
-        updateThemeLabel();
-    });
 
     // Back-to-top button
     const backToTop = document.getElementById('backToTop');

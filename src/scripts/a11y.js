@@ -139,14 +139,9 @@
         widget.innerHTML = `
             <button id="a11y-trigger" aria-expanded="false" aria-controls="a11y-panel"
                     aria-label="Accessibility options" title="Accessibility options">
-              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" focusable="false"
-                   xmlns="http://www.w3.org/2000/svg" width="28" height="28">
-                <circle cx="12" cy="4.5" r="1.75" fill="currentColor"/>
-                <path d="M8 9h8M12 9v4.5M9.5 21l1-3 1.5 1.5 1.5-1.5 1 3"
-                      stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
-                <path d="M9.5 13.5L8 21M14.5 13.5L16 21"
-                      stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
-              </svg>
+              <span class="a11y-trigger-icon">
+                <img src="/assets/icons/a11y-symbol.png" alt="" aria-hidden="true" width="40" height="40">
+              </span>
             </button>
             <div id="a11y-panel" role="dialog" aria-label="Accessibility settings" aria-modal="true" hidden>
               <div class="a11y-panel-header">
@@ -223,6 +218,97 @@
         });
 
         closeBtn.addEventListener('click', closePanel);
+
+        // ── Draggable widget (touch + mouse) ─────────────────────────────
+        const POS_KEY = 'a11y-widget-pos';
+        const DRAG_THRESHOLD = 6; // px before a press becomes a drag, not a tap
+
+        const applyPos = (x, y) => {
+            const w = widget.offsetWidth;
+            const h = widget.offsetHeight;
+            const cx = Math.max(6, Math.min(x, window.innerWidth  - w - 6));
+            const cy = Math.max(6, Math.min(y, window.innerHeight - h - 6));
+            widget.style.left = cx + 'px';
+            widget.style.right = 'auto';
+            widget.style.top = cy + 'px';
+            widget.style.bottom = 'auto';
+            widget.classList.toggle('a11y-anchor-right', cx + w / 2 > window.innerWidth / 2);
+            widget.classList.toggle('a11y-anchor-top',   cy + h / 2 < window.innerHeight / 2);
+            return { x: cx, y: cy };
+        };
+
+        // Restore a saved position (next frame, so offsetWidth is measured
+        // post-layout) — without animating in from the default spot.
+        try {
+            const saved = JSON.parse(localStorage.getItem(POS_KEY) || 'null');
+            if (saved && Number.isFinite(saved.x) && Number.isFinite(saved.y)) {
+                requestAnimationFrame(() => {
+                    widget.style.transition = 'none';
+                    applyPos(saved.x, saved.y);
+                    void widget.offsetWidth;            // flush before re-enabling
+                    widget.style.transition = '';
+                });
+            }
+        } catch (e) { /* ignore */ }
+
+        // Keep it on-screen through rotation / resize
+        window.addEventListener('resize', () => {
+            if (!widget.style.left) return;
+            applyPos(parseFloat(widget.style.left), parseFloat(widget.style.top));
+        });
+
+        let dragging = false;
+        let moved = false;
+        let sx = 0, sy = 0, ox = 0, oy = 0;
+
+        trigger.addEventListener('pointerdown', e => {
+            if (typeof e.button === 'number' && e.button !== 0) return;
+            dragging = true;
+            moved = false;
+            sx = e.clientX;
+            sy = e.clientY;
+            const r = widget.getBoundingClientRect();
+            ox = r.left;
+            oy = r.top;
+            try { trigger.setPointerCapture(e.pointerId); } catch (err) { /* ignore */ }
+        });
+
+        trigger.addEventListener('pointermove', e => {
+            if (!dragging) return;
+            const dx = e.clientX - sx;
+            const dy = e.clientY - sy;
+            if (!moved && Math.hypot(dx, dy) < DRAG_THRESHOLD) return;
+            moved = true;
+            widget.classList.add('a11y-dragging');
+            if (!panel.hidden) closePanel();
+            applyPos(ox + dx, oy + dy);
+        });
+
+        const endDrag = e => {
+            if (!dragging) return;
+            dragging = false;
+            widget.classList.remove('a11y-dragging');
+            try { trigger.releasePointerCapture(e.pointerId); } catch (err) { /* ignore */ }
+            if (moved) {
+                // Snap to the nearer side edge (keep the vertical position) so it
+                // always rests as a proper bookmark tab.
+                const r = widget.getBoundingClientRect();
+                const toRight = r.left + r.width / 2 > window.innerWidth / 2;
+                const snapped = applyPos(toRight ? window.innerWidth : 0, r.top);
+                try { localStorage.setItem(POS_KEY, JSON.stringify(snapped)); } catch (err) { /* ignore */ }
+            }
+        };
+        trigger.addEventListener('pointerup', endDrag);
+        trigger.addEventListener('pointercancel', endDrag);
+
+        // Swallow the click that fires after a drag so the panel doesn't toggle
+        trigger.addEventListener('click', e => {
+            if (moved) {
+                e.stopImmediatePropagation();
+                e.preventDefault();
+                moved = false;
+            }
+        }, true);
 
         // Keyboard: Escape closes; Tab traps focus inside panel
         widget.addEventListener('keydown', e => {

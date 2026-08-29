@@ -9,13 +9,38 @@
             <a href="/players/" data-no-transition>Players</a>
             <a href="/gallery/" data-no-transition>Gallery</a>
             <a href="/resources/" data-no-transition>Resources</a>
-            <a href="/apply/" data-no-transition>Staff Apply</a>
+            {/* Revealed by the script below only when config/staffAppsOpen is true. */}
+            <a href="/apply/" class="footer-staff-apply" data-no-transition hidden>Staff Apply</a>
         </nav>
         <div class="footer-social">
-            <a href="https://bsky.app/profile/tsnsmp.online" target="_blank" rel="noopener noreferrer" class="footer-icon" aria-label="Bluesky">
+            <a href="https://bsky.app/profile/tsnsmp.com" target="_blank" rel="noopener noreferrer" class="footer-icon" aria-label="Bluesky">
                 <img src="/assets/icons/bluesky.svg" alt="Bluesky">
             </a>
         </div>
         <p class="footer-copy">&copy; {new Date().getFullYear()} TSNSMP &middot; Not affiliated with Mojang Studios.</p>
+        <p class="footer-legal"><a href="/privacy/" data-no-transition>Privacy</a></p>
     </div>
 </footer>
+
+<script>
+    // Show the "Staff Apply" footer link only when applications are open.
+    // Tiny public REST read (config is world-readable), cached for the session.
+    (function () {
+        const KEY = 'tsnsmp_staff_apps_open';
+        const link = document.querySelector('.footer-staff-apply');
+        if (!link) return;
+
+        const cached = sessionStorage.getItem(KEY);
+        if (cached === 'true') { link.hidden = false; return; }
+        if (cached === 'false') return;
+
+        fetch('https://tsnplayerlist-default-rtdb.europe-west1.firebasedatabase.app/config/staffAppsOpen.json')
+            .then(r => r.ok ? r.json() : null)
+            .then(open => {
+                const isOpen = open === true;
+                try { sessionStorage.setItem(KEY, String(isOpen)); } catch (e) { /* ignore */ }
+                if (isOpen) link.hidden = false;
+            })
+            .catch(() => { /* stay hidden */ });
+    })();
+</script>

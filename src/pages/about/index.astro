@@ -24,17 +24,12 @@ import '../../styles/about.css';
 <main id="main-content">
     <section class="page-hero">
         <div class="hero-bg"></div>
-        <div class="hero-grid"></div>
-        <div class="hero-doodles" aria-hidden="true">
-            <svg class="doodle doodle-star" viewBox="0 0 24 24" fill="none" style="top:20%;right:11%;width:22px" xmlns="http://www.w3.org/2000/svg"><path d="M12 2L13.6 8.6L20 10L13.6 11.4L12 18L10.4 11.4L4 10L10.4 8.6Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>
-            <svg class="doodle doodle-star doodle-star--sm" viewBox="0 0 24 24" fill="none" style="top:28%;left:7%;width:15px" xmlns="http://www.w3.org/2000/svg"><path d="M12 2L13.6 8.6L20 10L13.6 11.4L12 18L10.4 11.4L4 10L10.4 8.6Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>
-            <svg class="doodle doodle-cross" viewBox="0 0 20 20" fill="none" style="top:65%;right:8%;width:16px" xmlns="http://www.w3.org/2000/svg"><path d="M10 2.5L10 17.5M2.5 10L17.5 10" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
-            <svg class="doodle doodle-squiggle" viewBox="0 0 80 16" fill="none" style="bottom:22%;left:5%;width:58px" xmlns="http://www.w3.org/2000/svg"><path d="M2 8C10 3 18 13 26 8C34 3 42 13 50 8C58 3 66 13 74 8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
-            <svg class="doodle doodle-dots" viewBox="0 0 52 10" fill="none" style="top:55%;left:10%;width:40px" xmlns="http://www.w3.org/2000/svg"><circle cx="5" cy="5" r="2" fill="currentColor" opacity="0.9"/><circle cx="26" cy="5" r="2" fill="currentColor" opacity="0.6"/><circle cx="47" cy="5" r="2" fill="currentColor" opacity="0.3"/></svg>
-            <img class="hero-mascot" src="/assets/mascot.png" alt="" width="90" height="68" style="top:4%;right:3%" />
+        <div class="floating-shapes">
+            <div class="shape shape-1"></div>
+            <div class="shape shape-2"></div>
         </div>
         <div class="container">
-            <div class="hero-content-about">
+            <div class="hero-content">
                 <h1><span class="gradient-text" data-text="Our Story">Our Story</span></h1>
                 <p>How four friends turned heartbreak into a thriving community 💚</p>
             </div>
@@ -97,8 +92,8 @@ import '../../styles/about.css';
                     <dl class="stat-list">
                         <div class="stat-row">
                             <span class="stat-icon">🗓️</span>
-                            <dt>S3 Started</dt>
-                            <dd>March 2026</dd>
+                            <dt>Matcha Started</dt>
+                            <dd>September 2026</dd>
                         </div>
                         <div class="stat-row">
                             <span class="stat-icon">👑</span>
@@ -167,12 +162,12 @@ import '../../styles/about.css';
 
                 <div class="timeline-arrow" aria-hidden="true"><svg viewBox="0 0 36 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2 12C8 8 16 6 24 8M24 8L19 4M24 8L20 13" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
 
-                <div class="season-card season-card--s3 season-card--active">
+                <div class="season-card season-card--s3">
                     <div class="season-card-header">
                         <span class="season-badge">S3</span>
                         <div class="season-meta">
                             <span class="season-name">Season Three</span>
-                            <span class="season-dates">Mar 2026 – Now</span>
+                            <span class="season-dates">Mar 2026 – Sep 2026</span>
                         </div>
                     </div>
                     <ul class="season-highlights">
@@ -181,11 +176,30 @@ import '../../styles/about.css';
                         <li>🎙️ Members streaming</li>
                         <li>🚀 Bigger than ever</li>
                     </ul>
+                    <div class="season-footer-note">Bigger, bolder, online</div>
+                </div>
+
+                <div class="timeline-arrow" aria-hidden="true"><svg viewBox="0 0 36 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2 12C8 8 16 6 24 8M24 8L19 4M24 8L20 13" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+
+                <div class="season-card season-card--matcha season-card--active">
+                    <div class="season-card-header">
+                        <span class="season-badge">🍵</span>
+                        <div class="season-meta">
+                            <span class="season-name">Matcha Season</span>
+                            <span class="season-dates">Sep 2026 – Now</span>
+                        </div>
+                    </div>
+                    <ul class="season-highlights">
+                        <li>🍵 A cozy mini-season after S3</li>
+                        <li>🌱 Re-flavoured, greener than ever</li>
+                        <li>🎨 Fresh coat of paint &amp; new mods</li>
+                    </ul>
                     <div class="season-footer-note season-footer-note--live"><span class="tl-live-dot"></span> Currently live</div>
                 </div>
 
             </div>
         </div>
     </section>
+
 </main>
 </Layout>

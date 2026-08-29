@@ -1,0 +1,197 @@
+---
+import Layout from '../../layouts/Layout.astro';
+
+const updated = 'August 2026';
+---
+
+<Layout
+    title="Privacy — TSNSMP"
+    description="What information the TSNSMP website collects, where it goes, and how to have it removed. No tracking, no analytics, no advertising cookies."
+    path="/privacy/"
+    currentPage="privacy"
+>
+<Fragment slot="head">
+    <style>
+        .pp-wrap {
+            max-width: 760px;
+            margin: 0 auto;
+            padding: 6.5rem 1.5rem 4rem;
+            font-family: 'DynaPuff', cursive;
+        }
+        .pp-title {
+            font-family: var(--font-display, 'Luckiest Guy', cursive);
+            font-size: clamp(2.2rem, 7vw, 3.2rem);
+            color: var(--text-primary);
+            line-height: 1;
+            margin-bottom: 0.4rem;
+            filter: url(#chalkText);
+        }
+        .pp-updated {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            opacity: 0.75;
+            margin-bottom: 2rem;
+        }
+        .pp-tldr {
+            border: 2px dashed rgba(var(--s3-green-rgb), 0.5);
+            border-radius: 10px 16px 12px 14px / 14px 12px 16px 10px;
+            background: rgba(var(--s3-green-rgb), 0.08);
+            padding: 1.1rem 1.3rem;
+            margin-bottom: 2.5rem;
+        }
+        .pp-tldr strong { color: var(--s3-green); }
+        .pp-tldr ul { margin: 0.5rem 0 0; padding-left: 1.2rem; }
+        .pp-tldr li { margin: 0.3rem 0; color: var(--text-primary); }
+
+        .pp-section { margin-bottom: 2rem; }
+        .pp-section h2 {
+            font-family: var(--font-display, 'Luckiest Guy', cursive);
+            font-size: 1.35rem;
+            color: var(--text-primary);
+            margin-bottom: 0.6rem;
+            letter-spacing: 0.02em;
+        }
+        .pp-section p,
+        .pp-section li {
+            color: var(--text-secondary);
+            line-height: 1.75;
+            font-size: 1rem;
+        }
+        .pp-section p { margin-bottom: 0.8rem; }
+        .pp-section ul { padding-left: 1.2rem; margin-bottom: 0.8rem; }
+        .pp-section li { margin: 0.35rem 0; }
+        .pp-section strong { color: var(--text-primary); }
+        .pp-section a {
+            color: var(--s3-teal);
+            text-decoration: underline;
+            text-underline-offset: 2px;
+        }
+        .pp-key {
+            display: inline-block;
+            font-size: 0.82rem;
+            background: rgba(var(--s3-teal-rgb), 0.12);
+            border: 1px solid rgba(var(--s3-teal-rgb), 0.3);
+            border-radius: 5px;
+            padding: 1px 6px;
+            color: var(--text-primary);
+        }
+    </style>
+</Fragment>
+
+<main id="main-content">
+    <div class="pp-wrap">
+        <h1 class="pp-title">Privacy</h1>
+        <p class="pp-updated">Last updated: {updated}</p>
+
+        <div class="pp-tldr">
+            <strong>The short version</strong>
+            <ul>
+                <li>No tracking, no analytics, no advertising cookies — none at all.</li>
+                <li>The only data we hold is what you type into an application or a gallery upload, which goes to our staff team.</li>
+                <li>Accepted members appear on the public members list — you can opt out.</li>
+                <li>Want anything removed? Message a staff member on Discord.</li>
+            </ul>
+        </div>
+
+        <section class="pp-section">
+            <h2>Who this is about</h2>
+            <p>
+                This covers the TSNSMP website (<strong>tsnsmp.com</strong>). We're a small
+                Minecraft community running this ourselves — we're not a company and we're
+                not lawyers, so this page is written plainly. If anything here is unclear,
+                just ask us.
+            </p>
+        </section>
+
+        <section class="pp-section">
+            <h2>What your browser stores</h2>
+            <p>
+                We don't use cookies, and there's no analytics or tracking script on the
+                site. A few small settings are saved in your browser's local storage and
+                never leave your device:
+            </p>
+            <ul>
+                <li><span class="pp-key">theme</span> — your light/dark choice</li>
+                <li>Your accessibility-widget preferences (text size, contrast, reduced motion, etc.) and where you've dragged the accessibility button</li>
+                <li>A note that you've seen the intro animation, and a 5-minute cache of which members are currently live on Twitch (names only)</li>
+            </ul>
+            <p>Clearing your browser data removes all of it.</p>
+        </section>
+
+        <section class="pp-section">
+            <h2>Information you give us</h2>
+            <p><strong>Member application</strong> (on the home page). You enter your Minecraft
+                name, age or age range, Discord, any other socials you choose to share,
+                pronouns (optional), timezone, and written answers. When you submit, it's
+                sent through a small server function and posted to our private staff Discord
+                for the team to review. We also fetch your Minecraft avatar from a skin
+                service to attach it to the post.</p>
+            <p><strong>Moderator application</strong> (<a href="/apply/">/apply/</a>). Similar
+                details plus more written answers. These are stored in our database
+                (Google Firebase) and posted to Discord.</p>
+            <p><strong>Gallery submissions</strong> (<a href="/gallery/">/gallery/</a>). The
+                image, a title, an optional description and an optional name. Uploads go to
+                our Firebase storage and are reviewed by staff before appearing on the site.</p>
+        </section>
+
+        <section class="pp-section">
+            <h2>The public members list</h2>
+            <p>
+                If you're accepted, your Minecraft name, pronouns, chosen colour and Twitch
+                link (if you've shared one) are shown publicly on the <a href="/players/">Players</a>{' '}
+                page and the home page. You can opt out with the checkbox on the application
+                form, or ask a staff member to take you off the list at any time.
+            </p>
+        </section>
+
+        <section class="pp-section">
+            <h2>Other services involved</h2>
+            <p>Running the site means your browser (or our server) talks to a few outside
+                services. Each has its own privacy policy and may see your IP address:</p>
+            <ul>
+                <li><strong>Discord</strong> — where applications are sent</li>
+                <li><strong>Google / Firebase</strong> — database, image storage, and staff sign-in</li>
+                <li><strong>Cloudflare</strong> — hosts the site; its servers log IP addresses and request info for security and abuse prevention</li>
+                <li><strong>minotar.net</strong> — Minecraft skins and avatars</li>
+                <li><strong>Twitch</strong> — checking whether members are live, and stream thumbnails</li>
+                <li><strong>Google Fonts</strong> and <strong>Modrinth</strong> (mod links on the Resources page)</li>
+            </ul>
+        </section>
+
+        <section class="pp-section">
+            <h2>Age</h2>
+            <p>
+                TSNSMP is an <strong>18+ community</strong>. Applications from anyone under
+                18 are not accepted, and you're asked to confirm your age when you apply.
+                If you're under 18, please don't submit an application or share personal
+                details with us.
+            </p>
+        </section>
+
+        <section class="pp-section">
+            <h2>Keeping and deleting your data</h2>
+            <p>
+                Applications stay in our Discord and records while we consider them, and for
+                a while afterwards in case you re-apply or we need the context. If you want
+                your application, or your entry on the members list, deleted — message a
+                staff member on Discord and we'll take care of it.
+            </p>
+        </section>
+
+        <section class="pp-section">
+            <h2>Changes</h2>
+            <p>
+                If what we collect changes, we'll update this page and the date at the top.
+            </p>
+        </section>
+
+        <section class="pp-section">
+            <h2>Contact</h2>
+            <p>
+                Reach us on our community Discord, or on Bluesky at{' '}
+                <a href="https://bsky.app/profile/tsnsmp.com" target="_blank" rel="noopener noreferrer">@tsnsmp.com</a>.
+            </p>
+        </section>
+    </div>
+</main>
+</Layout>

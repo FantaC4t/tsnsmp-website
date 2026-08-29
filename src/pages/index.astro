@@ -7,8 +7,8 @@ import '../styles/timezone-picker.css';
 ---
 
 <Layout
-    title="TSNSMP | Cozy Minecraft Server"
-    description="Cozy whitelist Minecraft SMP with Season 3 applications open. Join a friendly community for building, exploring, and streaming together."
+    title="TSNSMP | Matcha Season — Cozy Minecraft Server"
+    description="Cozy whitelist Minecraft SMP with Matcha Season applications open. Join a friendly community for building, exploring, and streaming together."
     path="/"
     currentPage="home"
     showIntro={true}
@@ -17,8 +17,9 @@ import '../styles/timezone-picker.css';
 <main id="main-content"><!-- Hero Section -->
 <section class="hero">
 <div class="hero-bg"></div>
-<div class="hero-grid"></div>
-<div class="hero-gallery-backdrop" id="heroGalleryBackdrop" aria-hidden="true"></div>
+<canvas id="heroStars" class="hero-stars" aria-hidden="true"></canvas>
+<canvas id="heroRays" class="hero-rays" aria-hidden="true"></canvas>
+<canvas id="heroParticles" class="hero-particles" aria-hidden="true"></canvas>
 <!-- Hand-drawn doodle decorations -->
 <div class="hero-doodles" aria-hidden="true">
     <Doodle shape="star" class="doodle doodle-star" style="top:13%;right:11%;width:26px" />
@@ -32,13 +33,13 @@ import '../styles/timezone-picker.css';
 <div class="hero-content">
 <div class="hero-badge">
 <div class="status-indicator"></div>
-<span>Season 3 - LIVE NOW</span></div>
+<span>🍵 Matcha Season - LIVE NOW</span></div>
 <h1><span class="text-reveal">Welcome to</span><br /><span class="gradient-text" data-text="TSNSMP">TSNSMP</span></h1>
-<div class="hero-underline" aria-hidden="true"><svg viewBox="0 0 280 12" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none"><path d="M2 9C28 4 56 12 84 7C112 3 140 12 168 7C196 3 224 12 252 7C265 5 274 8 278 7" stroke="url(#heroUGrad)" stroke-width="2.5" stroke-linecap="round" fill="none"/><defs><linearGradient id="heroUGrad" x1="0" x2="1" y1="0" y2="0"><stop offset="0%" stop-color="#7D83C2"/><stop offset="50%" stop-color="var(--s3-teal)"/><stop offset="100%" stop-color="var(--s3-green)"/></linearGradient></defs></svg></div>
+<div class="hero-underline" aria-hidden="true"><svg viewBox="0 0 280 12" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none"><path d="M2 9C28 4 56 12 84 7C112 3 140 12 168 7C196 3 224 12 252 7C265 5 274 8 278 7" stroke="url(#heroUGrad)" stroke-width="2.5" stroke-linecap="round" fill="none"/><defs><linearGradient id="heroUGrad" x1="0" x2="1" y1="0" y2="0"><stop offset="0%" stop-color="var(--primary-blue)"/><stop offset="50%" stop-color="var(--s3-teal)"/><stop offset="100%" stop-color="var(--s3-green)"/></linearGradient></defs></svg></div>
 <p class="fade-in-up delay-1">Join our cozy survival SMP — build, explore, and make friends with a welcoming (but slightly unhinged) community. If you feel you would fit in! MAKE SURE TO APPLY!
 </p>
 <div class="hero-server-stats fade-in-up delay-1">
-<span>⚔️ 1.21.11 Server </span><span class="stat-dot">◆</span><span>🌍 Season 3 Live</span><span class="stat-dot">◆</span><span>🔒 Kept And Private Community</span>
+<span>⚔️ 1.21.11 Server </span><span class="stat-dot">◆</span><span>🍵 Matcha Season Live</span><span class="stat-dot">◆</span><span>🔒 Kept And Private Community</span>
 </div>
 <div class="hero-note fade-in-up delay-1">Keep in mind, the server is kept private to ensure a safe and enjoyable experience for all members. The mods on the server are not required on your side but can definitely improve the experience — check out the mods we have in the resources tab!</div>
 <div class="hero-member-badge fade-in-up delay-1" id="heroMemberBadge" style="display:none" aria-live="polite">
@@ -51,7 +52,7 @@ import '../styles/timezone-picker.css';
         <a href="/about/" class="btn-outline"> 👋 Meet TSNSMP </a>
     </div>
     <div class="hero-social-icons" role="group" aria-label="TSNSMP community links">
-        <a href="https://bsky.app/profile/tsnsmp.online" target="_blank" class="btn-icon" rel="noopener noreferrer" aria-label="Follow TSNSMP on Bluesky" title="Follow TSNSMP on Bluesky"><img src="/assets/icons/bluesky.svg" alt="Bluesky" class="btn-icon-img"></a>
+        <a href="https://bsky.app/profile/tsnsmp.com" target="_blank" class="btn-icon" rel="noopener noreferrer" aria-label="Follow TSNSMP on Bluesky" title="Follow TSNSMP on Bluesky"><img src="/assets/icons/bluesky.svg" alt="Bluesky" class="btn-icon-img"></a>
     </div>
 </div>
 
@@ -96,7 +97,7 @@ import '../styles/timezone-picker.css';
 </div>
 </div>
 </section>
-<div class="wave-seam" style="background:var(--bg-secondary)"></div>
+<div class="wave-seam" style="--seam-bg:var(--bg-secondary)"></div>
 <!-- Carousel Section - pulls from Firebase Gallery -->
 <section class="player-showcase reveal">
 <div class="section-doodles" aria-hidden="true">
@@ -106,7 +107,7 @@ import '../styles/timezone-picker.css';
 </div>
 <div class="container">
 <h2>Check out some awesome builds! <span class="emoji">🏗️</span></h2>
-<p class="section-subtitle">Click any image to expand · Images from our <a href="/gallery/" style="color:var(--primary-purple)">gallery</a></p>
+<p class="section-subtitle">Click any image to expand · Images from our <a href="/gallery/" style="color:var(--primary-blue)">gallery</a></p>
 <div class="carousel-container">
 <div class="carousel-track" id="carouselTrack" aria-busy="true" aria-live="polite">
     <div class="carousel-item carousel-skeleton" aria-hidden="true"></div>
@@ -118,7 +119,7 @@ import '../styles/timezone-picker.css';
 </div>
 </div>
 </section>
-<div class="wave-seam" style="background:var(--bg-secondary)"></div>
+<div class="wave-seam" style="--seam-bg:var(--bg-secondary)"></div>
 <section class="features reveal">
 <div class="section-doodles" aria-hidden="true">
     <Doodle shape="spiral" class="sec-doodle sec-doodle--spiral" style="top:8%;left:2%" />
@@ -156,13 +157,13 @@ import '../styles/timezone-picker.css';
 <div class="feature-card">
 <div class="feature-icon">🌱</div>
 <h3>New Start, Grand Adventures</h3>
-<p>Season 3 brings a fresh world with new goals, new builds, and plenty of chances to make memories together.</p>
+<p>Matcha Season brings a fresh, green-tinted world with new goals, new builds, and plenty of chances to make memories together.</p>
 <span class="page-fold" aria-hidden="true"></span>
 </div>
 </div>
 </div>
 </section>
-<div class="wave-seam" style="background:var(--bg-primary)"></div>
+<div class="wave-seam" style="--seam-bg:var(--bg-primary)"></div>
 <section class="customization-showcase reveal">
 <div class="section-doodles" aria-hidden="true">
     <Doodle shape="cross" class="sec-doodle sec-doodle--cross" style="top:10%;left:3%" />
@@ -198,7 +199,7 @@ import '../styles/timezone-picker.css';
 </div>
 </div>
 </section>
-<div class="wave-seam" style="background:var(--bg-secondary)"></div>
+<div class="wave-seam" style="--seam-bg:var(--bg-secondary)"></div>
 <section class="application-section reveal" id="application-section">
 <div class="section-doodles" aria-hidden="true">
     <Doodle shape="heart" class="sec-doodle sec-doodle--heart" style="top:6%;left:3%" />
@@ -208,7 +209,7 @@ import '../styles/timezone-picker.css';
 </div>
 <div class="container">
 <div class="application-content">
-<h2>Join us for Season 3! <span class="emoji">🌸</span></h2>
+<h2>Join us for the Matcha Season! <span class="emoji">🍵</span></h2>
 <p class="app-subtitle">Whether you're a returning player or new here, we'd love to meet you. Apply if you want to build, explore, play with amazing and wonderful people.</p>
 
 <div class="app-layout">
@@ -220,13 +221,28 @@ import '../styles/timezone-picker.css';
                 <li>✨ A positive attitude and respect for everyone</li>
                 <li>🏗️ A willingness to build, collaborate, and help others. Skill level doesnt matter! We accept EVERYONE!</li>
                 <li>🚫 No griefing, drama, or toxic behavior, keep the server positively vibed and not toxic</li>
-                <li>🌱 Age 18+ (younger applicants welcome if mature or vouched for) we do our best to accommodate everyone and dont want to be held responsible for more minors.</li>
+                <li>🔞 <strong>You must be 18 or older to apply.</strong> This is a firm requirement — we're not accepting minors.</li>
                 <li>🤝 Someone who wants to keep the server friendly and fun and is willing to meet new friends!</li>
             </ul>
         </div>
         <div class="app-response-note">
             <span class="app-response-icon">📬</span>
-            <p>Our Process of application is simple and straightforward. All members get a notification on discord and discuss wether or not we want someone.</p>
+            <p>Our application process is simple: every member gets a heads-up on Discord, and we talk it over together before deciding whether someone's a good fit.</p>
+        </div>
+        <div class="community-note">
+            <h2>💚 A note on our community</h2>
+            <p>
+                TSNSMP is an <strong>18+ server</strong> applications are adults
+                only. A few longtime members are under 18 so keep that in mind!
+            </p>
+            <ul>
+                <li>Sexually explicit content isn't allowed here from anyone, toward anyone.</li>
+                <li>Friendly, flirty banter between members is fine, but stop the moment someone says they're not comfortable, and keep it platonic with anyone who is or might be under 18. This isnt a suggestion.</li>
+            </ul>
+            <p>
+                If something makes you uncomfortable, or you see behaviour that crosses a
+                line, tell a staff member on Discord or open a ticket. Reports are handled privately.
+            </p>
         </div>
         <div class="app-quick-links">
             <a href="/about/" class="app-quick-link about">
@@ -246,8 +262,9 @@ import '../styles/timezone-picker.css';
                 </div>
 
                 <div class="apply-field">
-                    <label class="apply-label" for="apply-age">What's your age or age range? <span class="req">*</span></label>
-                    <input class="apply-input" id="apply-age" name="age" type="text" required placeholder="e.g. 22 or 20-25" maxlength="10">
+                    <label class="apply-label" for="apply-age">How old are you? <span class="req">*</span></label>
+                    <input class="apply-input" id="apply-age" name="age" type="text" required placeholder="e.g. 22" maxlength="10">
+                    <span class="apply-hint">TSNSMP is 18+. Applications from under-18s aren't accepted.</span>
                 </div>
 
                 <div class="apply-field">
@@ -317,8 +334,25 @@ import '../styles/timezone-picker.css';
                     <input class="apply-input apply-referral-other" id="apply-referral-other" name="referral_other" type="text" placeholder="How did you find us? Tell us more…" maxlength="200" style="display:none;margin-top:10px">
                 </div>
 
+                <div class="apply-field apply-consent">
+                    <label class="apply-consent-label" for="apply-age18">
+                        <input type="checkbox" id="apply-age18" name="age18" value="yes" required>
+                        <span>I confirm I am 18 years or older <span class="req">*</span></span>
+                    </label>
+                    <span class="apply-hint">This is a firm requirement — please don't apply if you're under 18.</span>
+                </div>
+
+                <div class="apply-field apply-consent">
+                    <label class="apply-consent-label" for="apply-nolist">
+                        <input type="checkbox" id="apply-nolist" name="no_public_list" value="yes">
+                        <span>Please keep me off the public members list on the website</span>
+                    </label>
+                    <span class="apply-hint">You'll still be a full member — this just hides your name, pronouns, colour and Twitch from the public site. You can change your mind anytime by asking staff.</span>
+                </div>
+
                 <div class="apply-status" id="applyStatus" role="alert" aria-live="polite"></div>
                 <button class="apply-submit" id="applySubmit" type="submit">🎫 Submit Application</button>
+                <p class="apply-privacy-note">By submitting, your answers are shared with TSNSMP staff via our Discord and handled per our <a href="/privacy/">Privacy page</a>.</p>
             </form>
         </div>
     </div>
@@ -327,7 +361,6 @@ import '../styles/timezone-picker.css';
 </div>
 </div>
 </section>
-<div class="wave-seam" style="background:var(--bg-primary)"></div>
 </main>
 
 <!-- Lightbox - must be outside <main> to avoid stacking context issues -->
@@ -344,28 +377,23 @@ import '../styles/timezone-picker.css';
     </div>
 </div>
 
-<!-- Staff application toast — also kept outside <main> (position:fixed
-     inside .hero doesn't work: .hero has contain:content and <main> gets a
-     transform from the page-transition system, both of which hijack fixed
-     positioning for descendants — same reason the lightbox lives out here) -->
-<div class="staff-toast" id="staffToast" role="status" aria-live="polite">
-    <button type="button" class="staff-toast-close" id="staffToastClose" aria-label="Close">✕</button>
-    <div class="staff-toast-header">
-        <span class="staff-toast-icon">🛡️</span>
-        <strong>Want to help run the server?</strong>
-    </div>
-    <p>We're looking for Social, Community, and Events Moderators.</p>
-    <div class="staff-toast-actions">
-        <a href="/apply/" class="staff-toast-apply" id="staffToastApply">📋 Apply Now</a>
-        <button type="button" class="staff-toast-later" id="staffToastLater">Maybe later</button>
-    </div>
-</div>
+<!-- Staff application toast hidden for now (markup + initStaffToast() removed).
+     The staff apply page still exists at /apply/, just not surfaced here. -->
 
 <script>
         // @ts-nocheck — plain JS, not TypeScript (see players/index.astro for context)
         import { ref, get } from 'firebase/database';
         import { db } from '../scripts/firebase-client.js';
         import { initTimezonePicker } from '../scripts/timezone-picker.js';
+        import { initHeroRays } from '../scripts/hero-rays.js';
+        import { initHeroStars } from '../scripts/hero-stars.js';
+
+        /* -- Home hero's extra canvases: starfield + additive light rays. The
+           drifting leaves layer is shared across every page's hero and wired up
+           in scripts/hero-leaves.js (loaded from Layout). All freeze when
+           "Reduce Motion" is on (see hero-canvas.js). -- */
+        initHeroStars();
+        initHeroRays();
 
         /* -- Gallery-powered carousel (lightbox itself is shared — see scripts/lightbox.js) -- */
         const esc = window.Lightbox.esc;
@@ -407,40 +435,6 @@ import '../styles/timezone-picker.css';
                 const totalWidth = items.length * (itemWidth + gap);
                 const speed = 50; /* px per second */
                 track.style.animationDuration = (totalWidth / speed) + 's';
-
-                /* Populate hero gallery backdrop with random images */
-                populateHeroBackdrop(items);
-            }
-
-            /* Hero gallery backdrop: floating dimmed images behind hero content */
-            function populateHeroBackdrop(items) {
-                const backdrop = document.getElementById('heroGalleryBackdrop');
-                if (!backdrop || !items.length) return;
-                /* Pick up to 5 random images */
-                const shuffled = items.slice().sort(function() { return 0.5 - Math.random(); });
-                const picks = shuffled.slice(0, Math.min(5, items.length));
-                /* Predefined positions to avoid overlap */
-                const positions = [
-                    { top: '8%',  left: '5%',  w: 220 },
-                    { top: '55%', left: '2%',  w: 180 },
-                    { top: '12%', right: '4%', w: 200 },
-                    { top: '60%', right: '6%', w: 190 },
-                    { top: '35%', left: '12%', w: 160 },
-                ];
-                picks.forEach(function(item, i) {
-                    var pos = positions[i];
-                    var img = document.createElement('img');
-                    img.src = item.url;
-                    img.alt = '';
-                    img.draggable = false;
-                    img.className = 'hero-backdrop-img';
-                    img.style.width = pos.w + 'px';
-                    img.style.top = pos.top;
-                    if (pos.left) img.style.left = pos.left;
-                    if (pos.right) img.style.right = pos.right;
-                    img.style.animationDelay = (i * 2.5) + 's';
-                    backdrop.appendChild(img);
-                });
             }
 
             /* Event delegation: handle clicks on carousel items via a static parent.
@@ -509,7 +503,7 @@ import '../styles/timezone-picker.css';
             }
         })();
 
-        // Season 3 events timeline - reads from Firebase
+        // Matcha Season events timeline - reads from Firebase
         (function buildEventsTimeline() {
             const container = document.getElementById('eventsTimeline');
             if (!container) return;
@@ -1134,6 +1128,14 @@ import '../styles/timezone-picker.css';
             form.addEventListener('submit', async function(e) {
                 e.preventDefault();
 
+                /* 18+ is a hard gate */
+                if (!form.querySelector('#apply-age18:checked')) {
+                    status.className = 'apply-status error';
+                    status.textContent = '❌ You must confirm you are 18 or older. TSNSMP does not accept applications from minors.';
+                    status.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                    return;
+                }
+
                 /* Validate required radio groups (browser validity doesn't cover these) */
                 if (!form.querySelector('[name="creator"]:checked') || !form.querySelector('[name="referral"]:checked')) {
                     status.className = 'apply-status error';
@@ -1161,12 +1163,13 @@ import '../styles/timezone-picker.css';
                 const referralOther= (fd.get('referral_other')|| '').trim();
                 const referralDisplay = referral === 'Other' && referralOther
                     ? `Other: ${referralOther}` : referral;
+                const noPublicList = fd.get('no_public_list') === 'yes';
 
                 function trunc(s, n) { return (s || '—').substring(0, n) || '—'; }
 
                 const fields = [
                     { name: 'Minecraft Nickname',          value: trunc(mc, 1024),              inline: false },
-                    { name: 'Age',                         value: trunc(age, 256),               inline: true  },
+                    { name: 'Age',                         value: `${trunc(age, 240)}${fd.get('age18') === 'yes' ? ' · ✅ confirmed 18+' : ' · ⚠️ 18+ NOT confirmed'}`, inline: true  },
                     { name: 'Discord',                     value: trunc(discord, 256),           inline: true  },
                     { name: 'Other Socials',               value: trunc(socials, 1024),          inline: false },
                     { name: 'Pronouns',                    value: trunc(pronouns, 256),          inline: true  },
@@ -1174,6 +1177,7 @@ import '../styles/timezone-picker.css';
                     { name: 'Plans for the Server',        value: trunc(plans, 1024),            inline: false },
                     { name: 'Content Creator?',            value: trunc(creator, 256),           inline: true  },
                     { name: 'How did they find TSNSMP?',   value: trunc(referralDisplay, 256),   inline: true  },
+                    { name: 'Public members list',         value: noPublicList ? '🚫 Opted OUT — do not add to the public site' : '✅ OK to list publicly', inline: true },
                     { name: 'If born as a Minecraft mob…', value: trunc(mob, 1024),              inline: false },
                 ];
 
@@ -1261,43 +1265,7 @@ import '../styles/timezone-picker.css';
             });
         })();
 
-        /* -- Staff application toast — shows every visit, every time the hero
-           scrolls into view. Dismissing hides it for that pass through the
-           hero; scrolling away and back (or reloading) re-arms it. -- */
-        (function initStaffToast() {
-            const toast = document.getElementById('staffToast');
-            const hero  = document.querySelector('.hero');
-            if (!toast || !hero) return;
-
-            let heroInView   = false;
-            let delayElapsed = false;
-            let dismissed    = false;
-
-            function sync() {
-                toast.classList.toggle('active', heroInView && delayElapsed && !dismissed);
-            }
-
-            function dismiss() {
-                dismissed = true;
-                sync();
-            }
-
-            setTimeout(function() { delayElapsed = true; sync(); }, 2500);
-
-            new IntersectionObserver(function(entries) {
-                const nowInView = entries[0].isIntersecting;
-                if (nowInView && !heroInView) dismissed = false; // re-arm on re-entering the hero
-                heroInView = nowInView;
-                sync();
-            }, { threshold: 0.4 }).observe(hero);
-
-            document.getElementById('staffToastClose').addEventListener('click', dismiss);
-            document.getElementById('staffToastLater').addEventListener('click', dismiss);
-            document.getElementById('staffToastApply').addEventListener('click', dismiss);
-            document.addEventListener('keydown', function(e) {
-                if (e.key === 'Escape' && toast.classList.contains('active')) dismiss();
-            });
-        })();
+        /* Staff application toast removed — see the hidden markup note above. */
 </script>
 
 </Layout>

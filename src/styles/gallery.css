@@ -1,110 +1,7 @@
 /* ═══════════════════════════════════════════════
-   Gallery Page — Season 3
+   Gallery Page
    Palette: teal #2BC7DB (--s3-teal) · green #3ED676 (--s3-green)
 ═══════════════════════════════════════════════ */
-
-/* ── HERO ── */
-.gallery-hero {
-    position: relative;
-    min-height: 28vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
-    background: var(--bg-primary);
-    padding-top: 3.5rem;
-    padding-bottom: 3rem;
-    font-family: 'DynaPuff', cursive;
-}
-
-.gallery-hero-bg {
-    position: absolute;
-    inset: 0;
-    background:
-        radial-gradient(circle at 15% 60%, rgba(var(--s3-green-rgb), 0.12), transparent 30%),
-        radial-gradient(circle at 85% 25%, rgba(var(--s3-teal-rgb), 0.14), transparent 30%);
-    filter: blur(55px);
-    animation: bgPulse 10s ease-in-out infinite alternate;
-}
-
-.hero-grid {
-    position: absolute;
-    inset: 0;
-    background-image:
-        linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
-    background-size: 32px 32px;
-    mask-image: radial-gradient(ellipse at 50% 40%, black 25%, transparent 75%);
-    -webkit-mask-image: radial-gradient(ellipse at 50% 40%, black 25%, transparent 75%);
-    z-index: 1;
-    pointer-events: none;
-}
-
-.gallery-hero .container {
-    position: relative;
-    z-index: 2;
-    text-align: center;
-}
-
-.gallery-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 9px;
-    padding: 7px 18px;
-    background: transparent;
-    border: 2px solid var(--s3-teal);
-    border-radius: 6px 12px 8px 10px / 10px 8px 12px 6px;
-    color: var(--s3-teal);
-    font-size: 1.1rem;
-    font-family: var(--font-display);
-    font-weight: 700;
-    letter-spacing: 0.04em;
-    margin-bottom: 1.25rem;
-    box-shadow: 2px 3px 0 var(--s3-teal);
-    animation: fadeInDown 0.8s ease-out;
-}
-
-.gallery-badge-dot {
-    width: 7px;
-    height: 7px;
-    border-radius: 50%;
-    background: var(--s3-teal);
-    box-shadow: 0 0 8px rgba(var(--s3-teal-rgb), 0.7);
-    animation: blink 2s ease-in-out infinite;
-    flex-shrink: 0;
-}
-
-.gallery-hero h1 {
-    font-size: clamp(1.8rem, 8vw, 5.8rem);
-    font-weight: 700;
-    font-family: var(--font-display);
-    letter-spacing: 0.01em;
-    line-height: 1.05;
-    color: var(--text-primary);
-    text-shadow: 0 2px 24px rgba(var(--s3-teal-rgb), 0.18);
-    margin-bottom: 0.4rem;
-    word-break: break-word;
-}
-
-body:not(.dark-mode) .gallery-hero-bg {
-    background:
-        radial-gradient(circle at 15% 60%, rgba(var(--s3-green-rgb), 0.12), transparent 30%),
-        radial-gradient(circle at 85% 25%, rgba(var(--s3-teal-rgb), 0.12), transparent 30%);
-    opacity: 0.7;
-}
-
-body:not(.dark-mode) .gallery-hero .hero-grid {
-    background-image:
-        linear-gradient(rgba(0,0,0,0.04) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(0,0,0,0.04) 1px, transparent 1px);
-}
-
-
-
-.gallery-hero-sub {
-    color: var(--text-secondary);
-    font-size: 1rem;
-}
 
 /* ── GALLERY SECTION ── */
 /* ── SEASON FILTER BAR ── */
@@ -168,11 +65,17 @@ body:not(.dark-mode) .gallery-hero .hero-grid {
     color: #3d1200;
     transform: rotate(-0.8deg);
 }
-/* Season 3 — lavender */
+/* Season 3 — periwinkle blue */
 .gallery-filter-btn[data-season="3"] {
-    background: #c8c3f0;
-    color: #1a1540;
+    background: #b8d0f5;
+    color: #0a2540;
     transform: rotate(1.5deg);
+}
+/* Matcha Season (mini-season after S3) — matcha green */
+.gallery-filter-btn[data-season="matcha"] {
+    background: #cdeb8c;
+    color: #263d0a;
+    transform: rotate(-1.2deg);
 }
 
 .gallery-filter-btn:hover {
@@ -190,10 +93,11 @@ body:not(.dark-mode) .gallery-hero .hero-grid {
 }
 
 /* Override per-season hover so active doesn't jump */
-.gallery-filter-btn[data-season="all"].active  { background: #f7e96b; color: #3a2e00; }
-.gallery-filter-btn[data-season="1"].active    { background: #b8f0c8; color: #0d3318; }
-.gallery-filter-btn[data-season="2"].active    { background: #ffc9a0; color: #3d1200; }
-.gallery-filter-btn[data-season="3"].active    { background: #c8c3f0; color: #1a1540; }
+.gallery-filter-btn[data-season="all"].active    { background: #f7e96b; color: #3a2e00; }
+.gallery-filter-btn[data-season="1"].active      { background: #b8f0c8; color: #0d3318; }
+.gallery-filter-btn[data-season="2"].active      { background: #ffc9a0; color: #3d1200; }
+.gallery-filter-btn[data-season="3"].active      { background: #b8d0f5; color: #0a2540; }
+.gallery-filter-btn[data-season="matcha"].active { background: #cdeb8c; color: #263d0a; }
 
 .gallery-filter-btn:focus-visible {
     outline: 2px solid currentColor;
@@ -202,6 +106,7 @@ body:not(.dark-mode) .gallery-hero .hero-grid {
 
 .gallery-section {
     padding: 3.5rem 0 6rem;
+    background: var(--bg-primary);
 }
 
 /* ── GRID ── */
@@ -328,9 +233,10 @@ body:not(.dark-mode) .gallery-hero .hero-grid {
     pointer-events: none;
 }
 /* Per-season tag colors matching the filter buttons */
-.gallery-season-tag[data-season="1"] { background: #b8f0c8; color: #0d3318; }
-.gallery-season-tag[data-season="2"] { background: #ffc9a0; color: #3d1200; }
-.gallery-season-tag[data-season="3"] { background: #c8c3f0; color: #1a1540; }
+.gallery-season-tag[data-season="1"]      { background: #b8f0c8; color: #0d3318; }
+.gallery-season-tag[data-season="2"]      { background: #ffc9a0; color: #3d1200; }
+.gallery-season-tag[data-season="3"]      { background: #b8d0f5; color: #0a2540; }
+.gallery-season-tag[data-season="matcha"] { background: #cdeb8c; color: #263d0a; }
 
 /* ── LIGHTBOX ── */
 .lightbox {

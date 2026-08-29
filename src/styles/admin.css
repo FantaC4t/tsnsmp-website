@@ -6,7 +6,6 @@
     --bg2:    var(--bg-secondary);
     --card:   var(--bg-card);
     --border: var(--border-color);
-    --purple: var(--primary-purple);
     --green:  var(--primary-green);
     --red:    #e05555;
     --text:   var(--text-primary);
@@ -21,9 +20,8 @@
     align-items: center;
     justify-content: center;
     background:
-        radial-gradient(circle at 15% 50%, rgba(76,175,80,0.08), transparent 25%),
-        radial-gradient(circle at 85% 30%, rgba(123,104,238,0.10), transparent 25%),
-        radial-gradient(circle at 50% 85%, rgba(var(--s3-teal-rgb), 0.07), transparent 30%);
+        radial-gradient(circle at 15% 50%, rgba(var(--s3-green-rgb), 0.10), transparent 25%),
+        radial-gradient(circle at 85% 30%, rgba(var(--s3-teal-rgb), 0.12), transparent 25%);
 }
 
 .login-box {
@@ -157,11 +155,11 @@
 .btn-google svg { flex-shrink: 0; }
 
 /* ── ADMIN PANEL ── */
-#admin-panel { display: none; }
+#admin-panel { display: none; background: var(--bg-primary); }
 
 .admin-hero {
     position: relative;
-    padding: 100px 2rem 2.5rem;
+    padding: 1.5rem 2rem 2.5rem;
     text-align: center;
     overflow: hidden;
 }
@@ -169,23 +167,10 @@
     position: absolute;
     inset: 0;
     background:
-        radial-gradient(circle at 15% 50%, rgba(76,175,80,0.08), transparent 25%),
-        radial-gradient(circle at 85% 30%, rgba(123,104,238,0.10), transparent 25%),
-        radial-gradient(circle at 50% 85%, rgba(var(--s3-teal-rgb), 0.07), transparent 30%);
+        radial-gradient(circle at 15% 50%, rgba(var(--s3-green-rgb), 0.10), transparent 25%),
+        radial-gradient(circle at 85% 30%, rgba(var(--s3-teal-rgb), 0.12), transparent 25%);
     filter: blur(40px);
     z-index: 0;
-}
-.admin-hero-grid {
-    position: absolute;
-    inset: 0;
-    background-image:
-        linear-gradient(rgba(255,255,255,.03) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255,255,255,.03) 1px, transparent 1px);
-    background-size: 50px 50px;
-    mask-image: radial-gradient(circle at center, black 40%, transparent 80%);
-    -webkit-mask-image: radial-gradient(circle at center, black 40%, transparent 80%);
-    z-index: 1;
-    pointer-events: none;
 }
 .admin-hero-content {
     position: relative;
@@ -201,10 +186,7 @@
 .admin-hero-title {
     font-size: clamp(1.8rem, 3vw, 2.6rem);
     font-family: var(--font-display);
-    background: linear-gradient(135deg, #fff 0%, var(--primary-purple) 40%, var(--s3-teal) 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+    color: var(--text-primary);
     margin: 0;
 }
 .admin-hero-meta {
@@ -367,6 +349,30 @@ body.dark-mode .panel-header h2 { color: var(--text); }
 .panel-header-icon.yellow { background: #fef08a; }
 .panel-header-icon.teal   { background: #a5f3fc; }
 .panel-body { padding: 1.5rem; }
+
+/* ── Staff-application intake toggle ── */
+.staff-apps-toggle {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.95rem;
+}
+.staff-apps-toggle input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    accent-color: #16a34a;
+    cursor: pointer;
+    flex-shrink: 0;
+}
+.staff-apps-hint {
+    margin: 0.5rem 0 0;
+    font-size: 0.8rem;
+    color: var(--muted);
+    line-height: 1.5;
+}
+.staff-apps-hint.is-open { color: #16a34a; }
 
 /* ── ADD FORM ── */
 .add-form-layout {
@@ -786,9 +792,9 @@ body.dark-mode .queue-badge { color: #FBC02D; background: rgba(251,188,5,.15); b
 
 /* ── DRAG-OVER ── */
 .gallery-file-drop.drag-over {
-    border-color: var(--purple);
-    background: rgba(123,104,238,.08);
-    box-shadow: 0 0 0 3px rgba(123,104,238,.12);
+    border-color: var(--s3-green);
+    background: rgba(var(--s3-green-rgb),.08);
+    box-shadow: 0 0 0 3px rgba(var(--s3-green-rgb),.12);
 }
 
 /* ── TABS ── */
@@ -923,7 +929,7 @@ body.dark-mode .gallery-file-drop { background: rgba(255,255,255,0.04); border-c
 .gallery-progress-bar {
     height: 100%;
     width: 0;
-    background: linear-gradient(90deg, var(--primary-purple), var(--primary-green));
+    background: linear-gradient(90deg, var(--primary-blue), var(--primary-green));
     transition: width .2s;
 }
 .gallery-admin-grid {
@@ -1107,10 +1113,6 @@ body.dark-mode .admin-season-badge { color: var(--s3-teal); }
 .eedit-timechange-hint { font-size: .78rem; color: #4a2800; margin-top: 2px; opacity: 0.7; }
 
 /* ── LIGHT MODE OVERRIDES ── */
-body:not(.dark-mode) .admin-hero-title {
-    background: linear-gradient(135deg, #0A8A8A 0%, var(--s3-teal) 40%, var(--s3-green) 100%);
-    -webkit-background-clip: text; background-clip: text;
-}
 body:not(.dark-mode) .panel-header { background: rgba(0,0,0,.02); border-bottom-color: rgba(0,0,0,.12); }
 body:not(.dark-mode) .member-table th { border-bottom-color: rgba(0,0,0,.14); }
 body:not(.dark-mode) .member-table td { border-bottom-color: rgba(0,0,0,.07); color: #1a1100; }

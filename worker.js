@@ -1,5 +1,15 @@
 const OLD_HOSTNAMES = new Set(['tsnsmp.online', 'www.tsnsmp.online']);
 
+// Baseline security headers for served pages/assets. Mirrors firebase.json's
+// `hosting.headers` so the site is protected the same way however it's served
+// (firebase.json only applies on Firebase Hosting; this covers the Worker).
+const SECURITY_HEADERS = {
+    'X-Frame-Options': 'SAMEORIGIN',
+    'X-Content-Type-Options': 'nosniff',
+    'Referrer-Policy': 'strict-origin-when-cross-origin',
+    'Permissions-Policy': 'camera=(), microphone=(), geolocation=()',
+};
+
 export default {
     async fetch(request, env) {
         const url = new URL(request.url);
@@ -19,8 +29,12 @@ export default {
             return handleSubmit(request, env, 'STAFF_APPLICATION_WEBHOOK');
         }
 
-        // All other requests: serve the Astro build output from ./dist
-        return env.ASSETS.fetch(request);
+        // All other requests: serve the Astro build output from ./dist,
+        // with the baseline security headers layered on.
+        const assetRes = await env.ASSETS.fetch(request);
+        const res = new Response(assetRes.body, assetRes);
+        for (const [k, v] of Object.entries(SECURITY_HEADERS)) res.headers.set(k, v);
+        return res;
     }
 };
 

@@ -9,7 +9,7 @@
 
 html {
     scroll-behavior: smooth;
-    scroll-padding-top: 100px;
+    scroll-padding-top: 80px;
     overflow-x: hidden;
     font-size: 14px;
 }
@@ -18,12 +18,12 @@ body.dark-mode  { color-scheme: dark; }
 body:not(.dark-mode) { color-scheme: light; }
 
 :root {
-    /* ── Season 3 Brand Palette ── */
+    /* ── Brand Palette ── */
     /* Bumped more saturated/punchy (2026-07-08 cartoony pass) — these were
        reading soft/pastel everywhere they're used as accents (badges,
        borders, hero glows), which undersold the hand-drawn/doodle theme. */
     --s3-teal:   #2BC7DB;  /* vivid teal accent */
-    --s3-green:  #3ED676;  /* punchy green */
+    --s3-green:  #24CC46;  /* matcha green, tuned to the logo's "RE-FLAVOURED" green (2026-08-28) */
     --s3-red:    #E8483B;  /* bold warm accent */
     --s3-orange: #FF7A33;  /* vivid highlight */
     --s3-gold:   #E8C43D;  /* rich trim */
@@ -33,7 +33,7 @@ body:not(.dark-mode) { color-scheme: light; }
        stylesheet (glows/shadows were still silently the pre-bump colour
        since they never referenced the hex tokens above). */
     --s3-teal-rgb:   43, 199, 219;
-    --s3-green-rgb:  62, 214, 118;
+    --s3-green-rgb:  36, 204, 70;
     --s3-red-rgb:    232, 72, 59;
     --s3-orange-rgb: 255, 122, 51;
     --s3-gold-rgb:   232, 196, 61;
@@ -45,24 +45,30 @@ body:not(.dark-mode) { color-scheme: light; }
        springier feel instead of just the specialty cards. */
     --bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
 
+    /* Shared wavy edge — the home hero (.hero), every inner-page hero
+       (.page-hero) and the between-section seams (.wave-seam) all clip to this
+       same silhouette so section transitions match site-wide. */
+    --wave-clip: polygon(0% 0%,100% 0%,100.000% calc(100% - 27.6px),98.333% calc(100% - 30.1px),96.667% calc(100% - 32.1px),95.000% calc(100% - 33.7px),93.333% calc(100% - 35.0px),91.667% calc(100% - 36.2px),90.000% calc(100% - 37.3px),88.333% calc(100% - 38.7px),86.667% calc(100% - 40.5px),85.000% calc(100% - 42.9px),83.333% calc(100% - 45.8px),81.667% calc(100% - 49.4px),80.000% calc(100% - 53.4px),78.333% calc(100% - 57.6px),76.667% calc(100% - 61.7px),75.000% calc(100% - 65.5px),73.333% calc(100% - 68.6px),71.667% calc(100% - 70.6px),70.000% calc(100% - 71.3px),68.333% calc(100% - 70.6px),66.667% calc(100% - 68.3px),65.000% calc(100% - 64.4px),63.333% calc(100% - 59.2px),61.667% calc(100% - 52.9px),60.000% calc(100% - 45.9px),58.333% calc(100% - 38.5px),56.667% calc(100% - 31.3px),55.000% calc(100% - 24.6px),53.333% calc(100% - 18.8px),51.667% calc(100% - 14.3px),50.000% calc(100% - 11.2px),48.333% calc(100% - 9.6px),46.667% calc(100% - 9.6px),45.000% calc(100% - 10.9px),43.333% calc(100% - 13.3px),41.667% calc(100% - 16.6px),40.000% calc(100% - 20.4px),38.333% calc(100% - 24.3px),36.667% calc(100% - 28.1px),35.000% calc(100% - 31.6px),33.333% calc(100% - 34.6px),31.667% calc(100% - 37.1px),30.000% calc(100% - 39.0px),28.333% calc(100% - 40.4px),26.667% calc(100% - 41.7px),25.000% calc(100% - 42.8px),23.333% calc(100% - 44.2px),21.667% calc(100% - 45.8px),20.000% calc(100% - 47.9px),18.333% calc(100% - 50.4px),16.667% calc(100% - 53.4px),15.000% calc(100% - 56.8px),13.333% calc(100% - 60.2px),11.667% calc(100% - 63.4px),10.000% calc(100% - 66.1px),8.333% calc(100% - 68.1px),6.667% calc(100% - 69.0px),5.000% calc(100% - 68.5px),3.333% calc(100% - 66.6px),1.667% calc(100% - 63.3px),0.000% calc(100% - 58.5px));
+    --wave-clip-sm: polygon(0% 0%,100% 0%,100.000% calc(100% - 13.8px),97.500% calc(100% - 15.6px),95.000% calc(100% - 16.9px),92.500% calc(100% - 17.8px),90.000% calc(100% - 18.7px),87.500% calc(100% - 19.8px),85.000% calc(100% - 21.4px),82.500% calc(100% - 23.8px),80.000% calc(100% - 26.7px),77.500% calc(100% - 29.8px),75.000% calc(100% - 32.8px),72.500% calc(100% - 34.9px),70.000% calc(100% - 35.7px),67.500% calc(100% - 34.8px),65.000% calc(100% - 32.2px),62.500% calc(100% - 28.1px),60.000% calc(100% - 22.9px),57.500% calc(100% - 17.4px),55.000% calc(100% - 12.3px),52.500% calc(100% - 8.2px),50.000% calc(100% - 5.6px),47.500% calc(100% - 4.7px),45.000% calc(100% - 5.4px),42.500% calc(100% - 7.4px),40.000% calc(100% - 10.2px),37.500% calc(100% - 13.1px),35.000% calc(100% - 15.8px),32.500% calc(100% - 18.0px),30.000% calc(100% - 19.5px),27.500% calc(100% - 20.5px),25.000% calc(100% - 21.4px),22.500% calc(100% - 22.5px),20.000% calc(100% - 23.9px),17.500% calc(100% - 25.9px),15.000% calc(100% - 28.4px),12.500% calc(100% - 30.9px),10.000% calc(100% - 33.1px),7.500% calc(100% - 34.3px),5.000% calc(100% - 34.3px),2.500% calc(100% - 32.6px),0.000% calc(100% - 29.3px));
+
     /* Light Mode Colors */
     --primary-green: #5BBF8F;   /* friendly moss green */
     --secondary-green: #8FD2AB; /* pastel leaf green */
     --light-green: #AEDBA4;
-    --primary-purple: #7D83C2;  /* muted purple-teal blend */
-    --secondary-purple: #8AA2D8;
-    --light-purple: #9CC8E7;
+    --primary-blue: #3D7FE0;  /* logo ice-blue, from the "TSN" wordmark gradient */
+    --secondary-blue: #6FB6EA;
+    --light-blue: #9ED8F5;
     --light-bg: #faf4eb;
     --light-text: #2f2d2a;
     --light-card-bg: #fffdf5;
     
-    /* Dark Mode Colors */
-    --dark-bg: #12101A;
-    --dark-secondary-bg: #1f1d2d;
-    --dark-card-bg: #211f2d;
+    /* Dark Mode Colors — navy blue, not purple/indigo (2026-08-28 re-hue pass) */
+    --dark-bg: #0E1420;
+    --dark-secondary-bg: #161D30;
+    --dark-card-bg: #182036;
     --dark-text: #efe8dd;
     --dark-text-secondary: #b9aea3;
-    --dark-border: #3a3639;
+    --dark-border: #33394A;
     
     /* Current theme variables */
     --bg-primary: var(--dark-bg);
@@ -85,7 +91,7 @@ body:not(.dark-mode) { color-scheme: light; }
     --panel-border: var(--border-color);
     --panel-shadow: var(--shadow);
     --text-color: #efe8dd;
-    --header-bg: rgba(18, 16, 26, 0.92);
+    --header-bg: rgba(14, 20, 32, 0.92);
     --font-display: 'Luckiest Guy', cursive;
     --font-handwriting: 'DynaPuff', cursive;
     --font-body: 'DynaPuff', cursive;
@@ -117,8 +123,8 @@ body {
     font-family: var(--font-body);
     line-height: 1.6;
     color: var(--text-primary);
-    background: radial-gradient(circle at top left, rgba(74, 213, 212, 0.16), transparent 30%),
-                radial-gradient(circle at bottom right, rgba(var(--s3-green-rgb), 0.15), transparent 25%),
+    background: radial-gradient(circle at top left, rgba(var(--s3-green-rgb), 0.2), transparent 30%),
+                radial-gradient(circle at bottom right, rgba(74, 213, 212, 0.13), transparent 25%),
                 var(--bg-primary) var(--grain-texture);
     background-size: auto, auto, 180px 180px;
     min-height: 100vh;
@@ -129,13 +135,13 @@ body {
 }
 
 body.dark-mode {
-    background: radial-gradient(circle at top left, rgba(var(--s3-green-rgb), 0.12), transparent 22%),
-                radial-gradient(circle at bottom right, rgba(77, 134, 214, 0.12), transparent 18%),
-                linear-gradient(180deg, #14101d 0%, #1e1830 68%), var(--grain-texture);
+    background: radial-gradient(circle at top left, rgba(var(--s3-green-rgb), 0.18), transparent 24%),
+                radial-gradient(circle at bottom right, rgba(77, 134, 214, 0.1), transparent 18%),
+                linear-gradient(180deg, #0F1422 0%, #17203D 68%), var(--grain-texture);
     background-size: auto, auto, auto, 180px 180px;
     background-blend-mode: multiply;
-    --bg-secondary: #1b1630;
-    --bg-card: #201c2f;
+    --bg-secondary: #161B2E;
+    --bg-card: #182036;
     --text-primary: #efe8dd;
     --text-secondary: #b9aea3;
     --border-color: rgba(255,255,255,0.12);
@@ -149,7 +155,6 @@ body.dark-mode {
     --panel-shadow: var(--shadow);
 }
 
-body.dark-mode .site-footer,
 body.dark-mode .back-to-top,
 body.dark-mode .gupload-close,
 body.dark-mode .tab-btn {
@@ -160,11 +165,7 @@ body.dark-mode .tab-btn {
 
 body.dark-mode .site-header,
 body.dark-mode .site-header.scrolled {
-    background: #1a1828;
-}
-
-body.dark-mode .theme-toggle {
-    color: var(--text-primary);
+    background: #141B2C;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -173,8 +174,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 h1, h2, h3, h4, h5, h6,
-.hero-badge, .about-badge, .gallery-badge, .players-season-badge,
-.resources-badge, .hero-member-badge,
+.hero-badge, .hero-member-badge,
 .btn-glow, .btn-outline,
 .article-tag, .aside-header,
 .chapter-num, .chapter-title,
@@ -237,56 +237,6 @@ body.dark-mode .gallery-card {
     box-shadow: var(--panel-shadow);
 }
 
-.flower-bg {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-image: 
-        radial-gradient(circle at 20% 80%, rgba(var(--s3-teal-rgb), 0.15) 0%, transparent 50%),
-        radial-gradient(circle at 80% 20%, rgba(var(--s3-green-rgb), 0.15) 0%, transparent 50%),
-        radial-gradient(circle at 40% 40%, rgba(156, 39, 176, 0.08) 0%, transparent 50%);
-    z-index: -1;
-    transition: var(--transition);
-}
-
-.dark-mode .flower-bg {
-    background-image:
-        radial-gradient(circle at 20% 80%, rgba(var(--s3-green-rgb), 0.24) 0%, transparent 50%),
-        radial-gradient(circle at 80% 20%, rgba(var(--s3-red-rgb), 0.18) 0%, transparent 50%),
-        radial-gradient(circle at 40% 40%, rgba(var(--s3-gold-rgb), 0.12) 0%, transparent 50%);
-}
-
-/* Page-margin dot-grid — the site's one true "mega background": fixed to
-   the viewport (doesn't scroll with content, stays put as you scroll — see
-   .site-header below for the matching grid painted into the header so the
-   two are visually one continuous layer), sitting behind absolutely
-   everything via z-index:-1. Only ever visible in the gutters either side
-   of the centered content column and behind the header, since every
-   section on the page paints its own opaque, full-width background on top
-   of it elsewhere — that's expected, not a bug.
-   2026-07-10: was gated to display:none below 1500px width. Removed — there
-   was no reason for a whole tier of screens to never render it, and the
-   mask already collapses to nothing when there's no gutter space anyway. */
-body::before {
-    content: '';
-    position: fixed;
-    inset: 0;
-    background-image:
-        linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
-    background-size: 28px 28px;
-    mask-image: linear-gradient(90deg, black 0%, black 9%, transparent 17%, transparent 83%, black 91%, black 100%);
-    -webkit-mask-image: linear-gradient(90deg, black 0%, black 9%, transparent 17%, transparent 83%, black 91%, black 100%);
-    pointer-events: none;
-    z-index: -1;
-}
-body:not(.dark-mode)::before {
-    background-image:
-        linear-gradient(rgba(0, 0, 0, 0.05) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(0, 0, 0, 0.05) 1px, transparent 1px);
-}
 
 .container {
     max-width: 1200px;
@@ -320,43 +270,9 @@ body:not(.dark-mode)::before {
     box-shadow: 0 4px 20px rgba(var(--s3-green-rgb), 0.4);
 }
 
-/* ── Shared gradient title text ── */
+/* ── Shared title text (plain — gradient-clip effect removed 2026-08-28) ── */
 .gradient-text {
-    position: relative;
-    display: inline-block;
-    background: linear-gradient(135deg, #ffffff 0%, var(--s3-teal) 40%, var(--primary-purple) 70%, var(--s3-green) 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    background-size: auto;
-}
-
-.gradient-text::after {
-    content: attr(data-text);
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(135deg, #fff 0%, var(--primary-purple) 50%, var(--primary-green) 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    filter: blur(18px) brightness(1.5);
-    opacity: 0.35;
-    z-index: -1;
-    pointer-events: none;
-}
-
-body:not(.dark-mode) .gradient-text {
-    background: linear-gradient(135deg, var(--primary-purple) 0%, var(--primary-green) 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    background-size: auto;
-    animation: none;
-}
-
-body:not(.dark-mode) .gradient-text::after {
-    animation: none;
-    opacity: 0;
+    color: var(--text-primary);
 }
 
 .btn-primary:hover {
@@ -365,7 +281,7 @@ body:not(.dark-mode) .gradient-text::after {
 }
 
 .btn-secondary {
-    background: linear-gradient(45deg, var(--primary-purple), var(--secondary-purple));
+    background: linear-gradient(45deg, var(--primary-blue), var(--secondary-blue));
     color: white;
     box-shadow: 0 4px 20px rgba(var(--s3-teal-rgb), 0.4);
 }
@@ -404,34 +320,164 @@ body:not(.dark-mode) .gradient-text::after {
     box-shadow: var(--shadow-heavy);
 }
 
-/* Page Hero Shared */
+/* ── Shared inner-page hero ──
+   One canonical hero shell for every secondary page (About, Players,
+   Gallery, Resources, Apply) — was five near-identical copies that had
+   quietly drifted apart (different padding, different h1 clamp values,
+   Apply's smaller max size, Players' own hardcoded light-mode background).
+   Markup:
+   <section class="page-hero">
+     <div class="hero-bg"></div>
+     <div class="floating-shapes">...</div>
+     <div class="container"><div class="hero-content"><h1>…</h1><p>…</p></div></div>
+   </section>
+   A page may add extra content (a button, a link) inside .hero-content
+   after the <p> without affecting the shared shell. */
 .page-hero {
-    margin-top: 0;
-    padding: 3rem 0;
+    position: relative;
+    z-index: 5;
+    min-height: 28vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    /* Solid -secondary that blends to the page's own -primary over its last
+       ~90px (roughly the wave depth), clipped to the wave and pulled over the
+       section below (margin-bottom). The gradient ends on an OPAQUE colour, not
+       transparent: fading to transparent meant the wave revealed two different
+       backdrops (body grain+glow above the next section's box, flat -primary
+       below it) and the seam between them read as a hard horizontal line —
+       invisible in dark mode, ugly in light. Now the hero paints the whole
+       transition itself, so there's nothing behind it to leak through. */
+    background: linear-gradient(
+        to bottom,
+        var(--bg-secondary),
+        var(--bg-secondary) calc(100% - 90px),
+        var(--bg-primary)
+    );
+    padding: 1.5rem 0 6rem;
+    font-family: 'DynaPuff', cursive;
+    clip-path: var(--wave-clip);
+    margin-bottom: -80px;
+    /* Traces the clipped wave outline with a soft edge so the crests still read
+       when -secondary and -primary are nearly the same colour (light mode:
+       #fff vs #faf4eb). */
+    filter: drop-shadow(0 3px 3px rgba(0, 0, 0, 0.10));
+}
+
+/* Give whatever follows the hero room so the wave cuts into empty space,
+   not into a heading. (Resources' second <main> is handled in resources.css.) */
+.page-hero + section { padding-top: 6rem; }
+
+/* ── Wavy edge into the footer — same mechanism as .page-hero: the page's
+   -primary background, fading to transparent over the last ~90px, clipped to
+   the wave and pulled over the -secondary footer. The colour matches the
+   section above (so no line where they meet) and the fade is deeper than the
+   wave (so no hard clip edge) — it just melts into the footer. Added before
+   <Footer> by Layout.astro. ── */
+.footer-wave {
+    position: relative;
+    z-index: 5;
+    height: 100px;
+    margin-bottom: -100px;
+    pointer-events: none;
+    background: linear-gradient(
+        to bottom,
+        var(--bg-primary),
+        var(--bg-primary) calc(100% - 90px),
+        transparent
+    );
+    clip-path: var(--wave-clip);
+}
+
+@media (max-width: 768px) {
+    .footer-wave {
+        height: 56px;
+        margin-bottom: -56px;
+        clip-path: var(--wave-clip-sm);
+    }
+}
+
+
+/* Ambient glow blob, shared by every inner-page hero — was five copies
+   (about/players/gallery/resources/apply.css) that had drifted to slightly
+   different opacities, so Resources in particular read visibly dimmer than
+   its siblings. */
+.page-hero .hero-bg {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    background:
+        radial-gradient(circle at 15% 50%, rgba(var(--s3-green-rgb), 0.10), transparent 25%),
+        radial-gradient(circle at 85% 30%, rgba(var(--s3-teal-rgb), 0.12), transparent 25%);
+    filter: blur(60px);
+    animation: bgPulse 10s ease-in-out infinite alternate;
+}
+
+body:not(.dark-mode) .page-hero .hero-bg {
+    background:
+        radial-gradient(circle at 15% 50%, rgba(var(--s3-green-rgb), 0.15), transparent 30%),
+        radial-gradient(circle at 85% 30%, rgba(var(--s3-teal-rgb), 0.15), transparent 30%);
+    opacity: 0.8;
+}
+
+.page-hero .container {
+    position: relative;
+    z-index: 2;
     text-align: center;
-    background: var(--bg-secondary);
-    border-bottom: 1px solid var(--border-color);
+}
+
+.hero-content {
+    max-width: 700px;
+    margin: 0 auto;
 }
 
 .page-hero h1 {
-    font-size: 2.5rem;
-    background: linear-gradient(135deg, #fff 0%, var(--s3-teal) 50%, var(--s3-green) 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    margin-bottom: 1rem;
-}
-
-body:not(.dark-mode) .page-hero h1 {
-    background: linear-gradient(135deg, #0A8A8A 0%, var(--s3-green) 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+    font-size: clamp(1.8rem, 8vw, 5.8rem);
+    font-weight: 700;
+    font-family: var(--font-display);
+    letter-spacing: 0.01em;
+    line-height: 1.05;
+    margin-bottom: 0.4rem;
+    color: var(--text-primary);
+    text-shadow: 0 2px 24px rgba(var(--s3-teal-rgb), 0.18);
+    word-break: break-word;
 }
 
 .page-hero p {
     font-size: 1.2rem;
     color: var(--text-secondary);
+    max-width: 600px;
+    margin: 0 auto;
+    line-height: 1.6;
+}
+
+@media (max-width: 768px) {
+    .page-hero {
+        min-height: 32vh;
+        padding-bottom: 3.5rem;
+        margin-bottom: -40px;
+        clip-path: var(--wave-clip-sm);
+    }
+    .page-hero h1 { font-size: clamp(1.8rem, 9vw, 2.6rem); }
+    .page-hero + section { padding-top: 3.25rem; }
+}
+
+/* ── Shared hero decoration: two floating blur orbs ──
+   Was copy-pasted per-page (apply.css, resources.css) with drifting values;
+   centralised so every inner-page hero (About, Players, Gallery, Resources,
+   Apply) uses the exact same markup/motion instead of some pages getting it
+   and others not. Markup:
+   <div class="floating-shapes"><div class="shape shape-1"></div><div class="shape shape-2"></div></div> */
+.floating-shapes { position: absolute; inset: 0; pointer-events: none; z-index: 1; }
+.shape { position: absolute; border-radius: 50%; opacity: 0.18; animation: floatShape 20s ease-in-out infinite; will-change: transform; }
+.shape-1 { width: 300px; height: 300px; background: radial-gradient(circle, rgba(var(--s3-teal-rgb), 0.4), transparent 70%); top: 8%; left: 6%; }
+.shape-2 { width: 250px; height: 250px; background: radial-gradient(circle, rgba(var(--s3-green-rgb), 0.4), transparent 70%); bottom: 15%; right: 8%; animation-delay: 5s; }
+
+@keyframes floatShape {
+    0%, 100% { transform: translate(0, 0); }
+    33%      { transform: translate(30px, -50px); }
+    66%      { transform: translate(-20px, 20px); }
 }
 
 /* ─── Shared Animations ─── */
@@ -490,7 +536,7 @@ main {
     width: 44px;
     height: 44px;
     border-radius: 50%;
-    background: var(--s3-teal);
+    background: var(--s3-green);
     color: #fff;
     border: none;
     cursor: pointer;
@@ -499,7 +545,7 @@ main {
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 4px 16px rgba(var(--s3-teal-rgb), 0.45);
+    box-shadow: 0 4px 16px rgba(var(--s3-green-rgb), 0.45);
     opacity: 0;
     pointer-events: none;
     transform: translateY(10px);
@@ -514,8 +560,8 @@ main {
 }
 
 .back-to-top:hover {
-    background: var(--s3-green);
-    box-shadow: 0 4px 20px rgba(var(--s3-green-rgb), 0.5);
+    background: var(--s3-teal);
+    box-shadow: 0 4px 20px rgba(var(--s3-teal-rgb), 0.5);
 }
 
 /* SERVER STATUS PILL */
@@ -632,7 +678,7 @@ main {
     left: 1rem;
     z-index: 10000;
     padding: 10px 20px;
-    background: var(--s3-teal);
+    background: var(--s3-green);
     color: #fff;
     font-weight: 700;
     border-radius: 0 0 8px 8px;
@@ -722,5 +768,57 @@ main {
 .feature-card.card-visible,
 .custom-feature.card-visible {
     opacity: 1;
+}
+
+/* ─── Drifting matcha leaves — added to every page's hero (.hero / .page-hero)
+   by scripts/hero-leaves.js. Sits above the hero's gradient glow and below
+   its content. The home hero layers stars + rays on top (see home.css). ─── */
+.hero-particles {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 1;
+    opacity: 0.7;
+}
+body:not(.dark-mode) .hero-particles { opacity: 0.8; }
+
+/* ─── Community & safety note (About page + application section) ─── */
+.community-note {
+    max-width: 720px;
+    margin: 0 auto;
+    background: rgba(var(--s3-green-rgb), 0.08);
+    border: 2px dashed rgba(var(--s3-green-rgb), 0.45);
+    border-radius: 12px 18px 14px 16px / 16px 14px 18px 12px;
+    padding: 1.6rem 1.8rem;
+    box-shadow: 3px 5px 0 rgba(0, 0, 0, 0.12);
+    font-family: 'DynaPuff', cursive;
+}
+
+.community-note h2 {
+    font-family: var(--font-display, 'Luckiest Guy', cursive);
+    font-size: 1.4rem;
+    color: var(--text-primary);
+    margin-bottom: 0.7rem;
+    letter-spacing: 0.02em;
+}
+
+.community-note p,
+.community-note li {
+    color: var(--text-secondary);
+    line-height: 1.7;
+    font-size: 1rem;
+}
+
+.community-note p { margin-bottom: 0.7rem; }
+.community-note p:last-child { margin-bottom: 0; }
+.community-note ul { padding-left: 1.2rem; margin-bottom: 0.7rem; }
+.community-note li { margin: 0.35rem 0; }
+.community-note strong { color: var(--text-primary); }
+.community-note a { color: var(--primary-blue); text-decoration: underline; text-underline-offset: 2px; }
+
+@media (max-width: 640px) {
+    .community-note { padding: 1.3rem 1.3rem; }
 }
 

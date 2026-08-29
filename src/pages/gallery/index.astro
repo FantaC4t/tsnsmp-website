@@ -22,17 +22,22 @@ import '../../styles/gallery.css';
 </Fragment>
 
 <main id="main-content">
-    <section class="gallery-hero">
-        <div class="gallery-hero-bg"></div>
-        <div class="hero-grid"></div>
+    <section class="page-hero">
+        <div class="hero-bg"></div>
+        <div class="floating-shapes">
+            <div class="shape shape-1"></div>
+            <div class="shape shape-2"></div>
+        </div>
         <div class="container">
-            <h1><span class="gradient-text" data-text="Gallery">Gallery</span></h1>
-            <p class="gallery-hero-sub">Screenshots and highlights from the server.</p>
-            <button type="button" class="gallery-upload-btn" id="upload-trigger-btn" onclick="openUploadModal()">
-                📸 Submit a Screenshot
-            </button>
-            <div style="margin-top:.75rem">
-                <a href="/admin/" style="font-size:.78rem;color:var(--text-secondary);opacity:.45;text-decoration:none;transition:opacity .2s" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=.45">🛠️ Admin</a>
+            <div class="hero-content">
+                <h1><span class="gradient-text" data-text="Gallery">Gallery</span></h1>
+                <p>Screenshots and highlights from the server.</p>
+                <button type="button" class="gallery-upload-btn" id="upload-trigger-btn" onclick="openUploadModal()">
+                    📸 Submit a Screenshot
+                </button>
+                <div style="margin-top:.75rem">
+                    <a href="/admin/" style="font-size:.78rem;color:var(--text-secondary);opacity:.45;text-decoration:none;transition:opacity .2s" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=.45">🛠️ Admin</a>
+                </div>
             </div>
         </div>
     </section>
@@ -45,6 +50,7 @@ import '../../styles/gallery.css';
                 <button type="button" class="gallery-filter-btn" data-season="1">🌱 Season 1</button>
                 <button type="button" class="gallery-filter-btn" data-season="2">☀️ Season 2</button>
                 <button type="button" class="gallery-filter-btn" data-season="3">🚀 Season 3</button>
+                <button type="button" class="gallery-filter-btn" data-season="matcha">🍵 Matcha Season</button>
             </div>
             <div id="gallery-loading" class="empty-state">
                 <img class="empty-state-icon" src="/assets/mascot.png" alt="" width="90" height="68" loading="lazy" />
@@ -110,6 +116,7 @@ import '../../styles/gallery.css';
                         <option value="1">Season 1</option>
                         <option value="2">Season 2</option>
                         <option value="3">Season 3</option>
+                        <option value="matcha">Matcha Season</option>
                     </select>
                 </div>
                 <div class="gupload-field">
@@ -174,7 +181,7 @@ import '../../styles/gallery.css';
             return;
         }
         empty.style.display = 'none';
-        const seasonLabel = { '1': '🌱 S1', '2': '☀️ S2', '3': '🚀 S3' };
+        const seasonLabel = { '1': '🌱 S1', '2': '☀️ S2', '3': '🚀 S3', 'matcha': '🍵 Matcha' };
         grid.innerHTML = galleryItems.map((item, i) => `
             <div class="gallery-card" data-index="${i}">
                 <img src="${esc(item.url)}" alt="${esc(item.title || 'Gallery image')}" loading="lazy" draggable="false">
@@ -311,7 +318,8 @@ import '../../styles/gallery.css';
         const desc      = document.getElementById('gupload-desc').value.trim();
         const submitter = document.getElementById('gupload-submitter').value.trim();
         const seasonRaw = document.getElementById('gupload-season').value;
-        const season    = seasonRaw ? parseInt(seasonRaw, 10) : null;
+        // numbered seasons are stored as ints; the Matcha mini-season as the string "matcha"
+        const season    = seasonRaw ? (/^\d+$/.test(seasonRaw) ? parseInt(seasonRaw, 10) : seasonRaw) : null;
         const ext  = gUploadFile.name.split('.').pop().toLowerCase();
         const path = `gallery_queue/${Date.now()}_${Math.random().toString(36).slice(2,8)}.${ext}`;
 

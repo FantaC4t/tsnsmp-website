@@ -1,119 +1,7 @@
 /* ═══════════════════════════════════════════════
-   Players Page — Season 3 Redesign
+   Players Page
    Palette: teal #2BC7DB (--s3-teal) · green #3ED676 (--s3-green) · red #E8483B (--s3-red) · orange #FF7A33 (--s3-orange) · gold #E8C43D (--s3-gold)
 ═══════════════════════════════════════════════ */
-
-/* ── HERO ── */
-.players-hero {
-    position: relative;
-    min-height: 28vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
-    background: var(--bg-primary);
-    padding-top: 1.5rem;
-    padding-bottom: 1.75rem;
-    font-family: 'DynaPuff', cursive;
-}
-
-.hero-bg {
-    position: absolute;
-    inset: 0;
-    z-index: 0;
-    background:
-        radial-gradient(circle at 10% 60%, rgba(var(--s3-green-rgb), 0.12),  transparent 30%),
-        radial-gradient(circle at 90% 25%, rgba(var(--s3-teal-rgb), 0.14), transparent 30%),
-        radial-gradient(circle at 55% 85%, rgba(var(--s3-red-rgb), 0.07),   transparent 25%);
-    filter: blur(55px);
-    animation: bgPulse 10s ease-in-out infinite alternate;
-}
-
-body:not(.dark-mode) .hero-bg {
-    background:
-        radial-gradient(circle at 10% 60%, rgba(var(--s3-green-rgb), 0.18),  transparent 35%),
-        radial-gradient(circle at 90% 25%, rgba(var(--s3-teal-rgb), 0.18), transparent 35%);
-    opacity: 0.8;
-}
-
-/* Minecraft-style fine grid */
-.hero-grid {
-    position: absolute;
-    inset: 0;
-    background-image:
-        linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
-    background-size: 32px 32px;
-    mask-image: radial-gradient(ellipse at 50% 40%, black 25%, transparent 75%);
-    -webkit-mask-image: radial-gradient(ellipse at 50% 40%, black 25%, transparent 75%);
-    z-index: 1;
-    pointer-events: none;
-}
-
-body:not(.dark-mode) .hero-grid {
-    background-image:
-        linear-gradient(rgba(0,0,0,0.04) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(0,0,0,0.04) 1px, transparent 1px);
-}
-
-.players-hero .container {
-    position: relative;
-    z-index: 2;
-    text-align: center;
-}
-
-/* Season badge */
-.players-season-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 9px;
-    padding: 7px 18px;
-    background: transparent;
-    border: 2px solid var(--s3-teal);
-    border-radius: 6px 12px 8px 10px / 10px 8px 12px 6px;
-    color: var(--s3-teal);
-    font-size: 1.1rem;
-    font-family: var(--font-display);
-    font-weight: 700;
-    letter-spacing: 0.04em;
-    margin-bottom: 1.25rem;
-    box-shadow: 2px 3px 0 var(--s3-teal);
-    animation: fadeInDown 0.8s ease-out;
-}
-
-.players-season-badge-dot {
-    width: 7px;
-    height: 7px;
-    border-radius: 50%;
-    background: var(--s3-teal);
-    box-shadow: 0 0 8px rgba(var(--s3-teal-rgb), 0.7);
-    animation: blink 2s ease-in-out infinite;
-    flex-shrink: 0;
-}
-
-
-
-.players-hero h1 {
-    font-size: clamp(1.8rem, 8vw, 5.8rem);
-    font-weight: 700;
-    font-family: var(--font-display);
-    line-height: 1.05;
-    letter-spacing: 0.01em;
-    margin-bottom: 0.4rem;
-    color: var(--text-primary);
-    text-shadow: 0 2px 24px rgba(var(--s3-teal-rgb), 0.18);
-    word-break: break-word;
-}
-
-.players-hero-subtitle {
-    color: var(--text-secondary);
-    max-width: 520px;
-    margin: 0 auto;
-    font-size: 1rem;
-    line-height: 1.7;
-    animation: fadeInUp 0.4s cubic-bezier(0.22, 1, 0.36, 1) 0.1s both;
-    text-align: center;
-}
 
 .players-search {
     display: flex;
@@ -219,6 +107,7 @@ body:not(.dark-mode) .players-missing-notice {
 
 .players-list {
     padding: 2rem 0;
+    background: var(--bg-primary);
 }
 
 /* ── GRID ── */
@@ -599,7 +488,7 @@ body:not(.dark-mode) .players-missing-notice {
 .loading-skeleton {
     width: 100px;
     height: 200px;
-    background: linear-gradient(90deg, #1a1a2e 25%, #252542 50%, #1a1a2e 75%);
+    background: linear-gradient(90deg, #141b2c 25%, #1f2a47 50%, #141b2c 75%);
     background-size: 200% 100%;
     animation: skeleton-shimmer 1.4s infinite;
     border-radius: 8px;
@@ -617,8 +506,6 @@ body.dark-mode .player-card {
     background: #fdfaf4;
     border: none;
 }
-
-body:not(.dark-mode) .players-hero { background: #f0f4f5; }
 
 body:not(.dark-mode) .player-card {
     background: #fff;
@@ -672,8 +559,6 @@ body:not(.dark-mode) .player-name[style*="color"] {
         width: 90px;
         height: 165px;
     }
-
-    .players-hero { min-height: 36vh; padding-top: 100px; }
 }
 
 

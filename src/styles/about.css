@@ -1,164 +1,9 @@
 /* About Page Specific Styles */
 
-/* === HERO SECTION === */
-.page-hero {
-    position: relative;
-    min-height: 28vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
-    background: var(--bg-primary);
-    padding-top: 1.5rem;
-    padding-bottom: 1.75rem;
-    font-family: 'DynaPuff', cursive;
-}
-
-/* Dynamic Background Mesh */
-.hero-bg {
-    position: absolute;
-    inset: 0;
-    z-index: 0;
-    background:
-        radial-gradient(circle at 15% 50%, rgba(var(--s3-green-rgb), 0.10), transparent 28%),
-        radial-gradient(circle at 85% 30%, rgba(var(--s3-teal-rgb), 0.12), transparent 28%),
-        radial-gradient(circle at 50% 90%, rgba(var(--s3-teal-rgb), 0.06), transparent 40%);
-    filter: blur(60px);
-    animation: bgPulse 10s ease-in-out infinite alternate;
-}
-
-body:not(.dark-mode) .hero-bg {
-    background:
-        radial-gradient(circle at 15% 50%, rgba(var(--s3-green-rgb), 0.15), transparent 30%),
-        radial-gradient(circle at 85% 30%, rgba(var(--s3-teal-rgb), 0.15), transparent 30%);
-    opacity: 0.8;
-}
-
-/* Grid Pattern Overlay */
-.hero-grid {
-    position: absolute;
-    inset: 0;
-    background-image:
-        linear-gradient(rgba(255, 255, 255, 0.025) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
-    background-size: 32px 32px;
-    mask-image: radial-gradient(ellipse at 50% 40%, black 30%, transparent 75%);
-    -webkit-mask-image: radial-gradient(ellipse at 50% 40%, black 30%, transparent 75%);
-    z-index: 1;
-    pointer-events: none;
-}
-
-body:not(.dark-mode) .hero-grid {
-    background-image:
-        linear-gradient(rgba(0, 0, 0, 0.05) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(0, 0, 0, 0.05) 1px, transparent 1px);
-}
-
-/* === HERO BADGE === */
-.about-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 9px;
-    padding: 7px 18px;
-    background: transparent;
-    border: 2px solid var(--s3-teal);
-    border-radius: 6px 12px 8px 10px / 10px 8px 12px 6px;
-    color: var(--s3-teal);
-    font-size: 1.1rem;
-    font-family: var(--font-display);
-    font-weight: 700;
-    letter-spacing: 0.04em;
-    margin-bottom: 1.25rem;
-    box-shadow: 2px 3px 0 var(--s3-teal);
-    animation: fadeInDown 0.8s ease-out;
-}
-
-.about-badge-dot {
-    width: 7px;
-    height: 7px;
-    border-radius: 50%;
-    background: var(--s3-teal);
-    box-shadow: 0 0 8px rgba(var(--s3-teal-rgb), 0.7);
-    animation: blink 2s ease-in-out infinite;
-    flex-shrink: 0;
-}
-
-/* === HERO CONTENT === */
-.hero-content-about {
-    position: relative;
-    z-index: 2;
-    max-width: 800px;
-    margin: 0 auto;
-    text-align: center;
-}
-
-.hero-content-about h1 {
-    font-size: clamp(1.8rem, 8vw, 5.8rem);
-    font-weight: 700;
-    font-family: var(--font-display);
-    margin-bottom: 0.4rem;
-    color: var(--text-primary);
-    letter-spacing: 0.01em;
-    line-height: 1.05;
-    text-shadow: 0 2px 24px rgba(var(--s3-teal-rgb), 0.18);
-    word-break: break-word;
-}
-
-.hero-content-about > p {
-    font-size: 1.2rem;
-    color: var(--text-secondary);
-    margin-bottom: 2rem;
-    line-height: 1.6;
-}
-
-/* Floating Icons */
-.hero-decorations {
-    display: flex;
-    justify-content: center;
-    gap: 2.5rem;
-}
-
-.decoration {
-    font-size: 2.2rem;
-    filter: drop-shadow(0 0 12px rgba(var(--s3-teal-rgb), 0.35));
-    animation: float 4s ease-in-out infinite;
-    will-change: transform;
-}
-
-.decoration:nth-child(2) { animation-delay: 1.5s; }
-.decoration:nth-child(3) { animation-delay: 3s; }
-
-@keyframes float {
-    0%, 100% { transform: translateY(0); }
-    50%       { transform: translateY(-14px); }
-}
-
-/* === HERO DOODLES (about page) === */
-.hero-doodles {
-    position: absolute;
-    inset: 0;
-    z-index: 3;
-    pointer-events: none;
-    overflow: hidden;
-}
-.doodle {
-    position: absolute;
-    opacity: 0.35;
-    will-change: transform;
-}
-.doodle-star     { color: var(--s3-teal);        animation: doodleFloat 7s ease-in-out infinite alternate; }
-.doodle-star--sm { color: var(--s3-teal);        animation: doodleFloat 9s ease-in-out 0.8s infinite alternate; }
-.doodle-cross    { color: var(--s3-green);       animation: doodleFloat 8s ease-in-out 1.2s infinite alternate; }
-.doodle-squiggle { color: var(--primary-purple); animation: doodleFloat 6s ease-in-out 0.4s infinite alternate; opacity: 0.25; }
-.doodle-dots     { color: var(--s3-teal);        animation: doodleFloat 10s ease-in-out 2s infinite alternate; opacity: 0.28; }
-@keyframes doodleFloat {
-    0%   { transform: translateY(0) rotate(-1deg); }
-    100% { transform: translateY(-10px) rotate(2deg); }
-}
-
 /* === CONTENT === */
 .about-content {
     padding: 4rem 0 6rem;
+    background: var(--bg-primary);
 }
 
 /* ══════════════════════════════════
@@ -234,10 +79,7 @@ body:not(.dark-mode) .hero-grid {
 .article-header h2 {
     font-family: var(--font-display);
     font-size: clamp(1.4rem, 2.2vw, 2rem);
-    background: linear-gradient(135deg, var(--text-primary) 0%, var(--s3-teal) 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+    color: var(--text-primary);
     margin-bottom: 0.6rem;
     line-height: 1.25;
     filter: url(#chalkText);
@@ -493,6 +335,7 @@ body:not(.dark-mode) .stat-row {
 ══════════════════════════════════ */
 .season-timeline-section {
     padding: 0 0 5rem;
+    background: var(--bg-primary);
 }
 
 .timeline-heading {
@@ -503,10 +346,7 @@ body:not(.dark-mode) .stat-row {
 .timeline-heading h2 {
     font-family: var(--font-display);
     font-size: clamp(1.8rem, 3vw, 2.6rem);
-    background: linear-gradient(135deg, var(--text-primary) 0%, var(--s3-teal) 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+    color: var(--text-primary);
     margin: 0;
     filter: url(#chalkText);
 }
@@ -552,9 +392,10 @@ body:not(.dark-mode) .stat-row {
 }
 
 /* Per-season sticky note colour */
-.season-card--s1 { background: #f5e97a; transform: rotate(-2deg); }   /* yellow */
-.season-card--s2 { background: #b6f5b0; transform: rotate(1.5deg); }  /* green */
-.season-card--s3 { background: #a8edea; transform: rotate(-1deg); }   /* teal */
+.season-card--s1     { background: #f5e97a; transform: rotate(-2deg); }   /* yellow */
+.season-card--s2     { background: #b6f5b0; transform: rotate(1.5deg); }  /* green */
+.season-card--s3     { background: #bcd3f7; transform: rotate(-1deg); }   /* periwinkle blue */
+.season-card--matcha { background: #d3f0a0; transform: rotate(1.2deg); }  /* bright matcha */
 
 /* Pushpin at the top */
 .season-card::before {
@@ -571,8 +412,9 @@ body:not(.dark-mode) .stat-row {
     z-index: 3;
     pointer-events: none;
 }
-.season-card--s2::before { background: radial-gradient(circle at 38% 38%, #74b854, #3a7a20); }
-.season-card--s3::before { background: radial-gradient(circle at 38% 38%, var(--s3-teal), #0a8080); }
+.season-card--s2::before     { background: radial-gradient(circle at 38% 38%, #74b854, #3a7a20); }
+.season-card--s3::before     { background: radial-gradient(circle at 38% 38%, #5b8fd6, #274b86); }
+.season-card--matcha::before { background: radial-gradient(circle at 38% 38%, var(--s3-green), #1e7a3e); }
 
 /* Folded corner */
 .season-card::after {
@@ -586,9 +428,10 @@ body:not(.dark-mode) .stat-row {
     pointer-events: none;
 }
 
-.season-card--s1:hover { transform: rotate(0deg) translateY(-8px) scale(1.02); box-shadow: 6px 14px 30px rgba(0,0,0,0.28); }
-.season-card--s2:hover { transform: rotate(0deg) translateY(-8px) scale(1.02); box-shadow: 6px 14px 30px rgba(0,0,0,0.28); }
-.season-card--s3:hover { transform: rotate(0deg) translateY(-8px) scale(1.02); box-shadow: 6px 14px 30px rgba(0,0,0,0.28); }
+.season-card--s1:hover,
+.season-card--s2:hover,
+.season-card--s3:hover,
+.season-card--matcha:hover { transform: rotate(0deg) translateY(-8px) scale(1.02); box-shadow: 6px 14px 30px rgba(0,0,0,0.28); }
 
 body:not(.dark-mode) .season-card { box-shadow: 3px 3px 0 rgba(0,0,0,0.06), 5px 8px 18px rgba(0,0,0,0.14), inset 0 -3px 6px rgba(0,0,0,0.04); }
 
@@ -615,8 +458,9 @@ body:not(.dark-mode) .season-card { box-shadow: 3px 3px 0 rgba(0,0,0,0.06), 5px 
     box-shadow: 1px 2px 0 rgba(0,0,0,0.25);
 }
 
-.season-card--s2 .season-badge { background: rgba(0,0,0,0.2); }
-.season-card--s3 .season-badge { background: rgba(0,0,0,0.2); }
+.season-card--s2 .season-badge     { background: rgba(0,0,0,0.2); }
+.season-card--s3 .season-badge     { background: rgba(0,0,0,0.28); }
+.season-card--matcha .season-badge { background: rgba(0,0,0,0.2); font-size: 1.2rem; padding: 0.1rem 0.5rem; }
 
 .season-meta {
     display: flex;
@@ -712,7 +556,8 @@ body:not(.dark-mode) .season-card { box-shadow: 3px 3px 0 rgba(0,0,0,0.06), 5px 
     }
     .season-card--s1,
     .season-card--s2,
-    .season-card--s3 { transform: rotate(0deg); }
+    .season-card--s3,
+    .season-card--matcha { transform: rotate(0deg); }
 }
 
 @media (max-width: 640px) {

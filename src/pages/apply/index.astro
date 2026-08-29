@@ -25,13 +25,12 @@ import '../../styles/timezone-picker.css';
 <main id="main-content">
     <section class="page-hero">
         <div class="hero-bg"></div>
-        <div class="hero-grid"></div>
         <div class="floating-shapes">
             <div class="shape shape-1"></div>
             <div class="shape shape-2"></div>
         </div>
-        <div class="container" style="position:relative;z-index:2">
-            <div class="apply-hero-content">
+        <div class="container">
+            <div class="hero-content">
                 <h1><span class="gradient-text" data-text="Staff Application">Staff Application</span></h1>
                 <p>Apply to join the TSNSMP moderation team. Answer honestly and take your time — thoughtful answers matter more than long ones.</p>
             </div>
@@ -40,8 +39,17 @@ import '../../styles/timezone-picker.css';
 
     <div class="container apply-wrap">
 
+        <!-- ══ INTAKE GATE ══ -->
+        <p class="apply-gate" id="apply-gate">Checking whether applications are open…</p>
+        <div class="apply-closed" id="apply-closed" hidden>
+            <div class="apply-closed-icon">🔒</div>
+            <h2>Applications are closed right now</h2>
+            <p>We're not accepting new moderator applications at the moment. We announce openings on our Discord — check back when there's a spot.</p>
+            <a href="/" class="btn-apply-submit apply-closed-back">← Back home</a>
+        </div>
+
         <!-- ══ FORM ══ -->
-        <form id="apply-form" class="apply-form-panel" novalidate>
+        <form id="apply-form" class="apply-form-panel" hidden novalidate>
 
             <!-- Basic Information -->
             <div class="apply-section">
@@ -58,8 +66,8 @@ import '../../styles/timezone-picker.css';
                 </div>
                 <div class="field-row">
                     <div class="field">
-                        <label class="field-label" for="f-age">Age <span class="req">*</span> <span class="field-hint">(18+)</span></label>
-                        <input type="number" id="f-age" min="13" max="120" required>
+                        <label class="field-label" for="f-age">Age <span class="req">*</span> <span class="field-hint">(must be 18+)</span></label>
+                        <input type="number" id="f-age" min="18" max="120" required>
                     </div>
                     <div class="field">
                         <label class="field-label" for="tzTrigger">Timezone <span class="req">*</span></label>
@@ -360,6 +368,7 @@ import '../../styles/timezone-picker.css';
                 <div class="apply-submit-bar">
                     <p class="apply-error" id="apply-error"></p>
                     <button type="submit" class="btn-apply-submit" id="apply-submit-btn">📨 Submit Application</button>
+                    <p class="apply-privacy-note">By submitting, your answers are shared with TSNSMP staff via Discord, stored in our records, and handled per our <a href="/privacy/">Privacy page</a>.</p>
                 </div>
             </div>
         </form>
@@ -375,13 +384,29 @@ import '../../styles/timezone-picker.css';
 
 <script>
     // @ts-nocheck — plain JS, not TypeScript (see players/index.astro for context)
-    import { ref, push } from 'firebase/database';
+    import { ref, push, get } from 'firebase/database';
     import { db } from '../../scripts/firebase-client.js';
     import { initTimezonePicker } from '../../scripts/timezone-picker.js';
 
     initTimezonePicker();
 
     const form = document.getElementById('apply-form');
+
+    // ── Intake gate: staff open/close applications from the admin panel
+    //    (config/staffAppsOpen). Form starts hidden so there's no flash. ──
+    (async function gateApplications() {
+        let open = false;
+        try {
+            const snap = await get(ref(db, 'config/staffAppsOpen'));
+            open = snap.val() === true;
+        } catch (e) { open = false; }
+        document.getElementById('apply-gate').hidden = true;
+        if (open) {
+            form.hidden = false;
+        } else {
+            document.getElementById('apply-closed').hidden = false;
+        }
+    })();
 
     // ── Discord notification — proxied via Cloudflare Worker, same pattern
     // as the player application on the home page (keeps the webhook URL
@@ -460,6 +485,13 @@ import '../../styles/timezone-picker.css';
         if (!timezone) {
             showError('Please select your timezone.');
             document.getElementById('tzTrigger').scrollIntoView({ behavior: 'smooth', block: 'center' });
+            return;
+        }
+
+        const ageVal = parseInt(document.getElementById('f-age').value, 10);
+        if (!Number.isFinite(ageVal) || ageVal < 18) {
+            showError('TSNSMP is an 18+ community — we can’t accept applications from under-18s.');
+            document.getElementById('f-age').scrollIntoView({ behavior: 'smooth', block: 'center' });
             return;
         }
 

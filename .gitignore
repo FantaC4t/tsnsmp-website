@@ -12,5 +12,8 @@ dist/
 .astro/
 npm-debug.log*
 
+# Generated at build time from ./resourcepack/ by scripts/build-resourcepack.mjs
+public/resourcepack.zip
+
 # Wrangler local state
 .wrangler/

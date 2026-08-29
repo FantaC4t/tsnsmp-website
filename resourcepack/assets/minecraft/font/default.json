@@ -1,0 +1,143 @@
+{
+  "providers": [
+    {
+      "type": "reference",
+      "id": "custom_escape:custom_font"
+    },
+    {
+      "type": "bitmap",
+      "file": "minecraft:logo/logo.png",
+      "ascent": 66,
+      "height": 106,
+      "chars": [
+        "㍿"
+      ]
+    },
+    {
+      "type": "bitmap",
+      "file": "minecraft:logo/LIVE.png",
+      "ascent": 8,
+      "height": 8,
+      "chars": [
+        "⟐"
+      ]
+    },
+    {
+      "type": "bitmap",
+      "file": "minecraft:logo/Clock_Icon.png",
+      "ascent": 7,
+      "height": 8,
+      "chars": [
+        "⧨"
+      ]
+    },
+    {
+      "type": "bitmap",
+      "file": "minecraft:logo/Skull_Icon.png",
+      "ascent": 7,
+      "height": 8,
+      "chars": [
+        "⧶"
+      ]
+    },
+    {
+      "type": "bitmap",
+      "file": "minecraft:logo/Owner_Icon.png",
+      "ascent": 7,
+      "height": 8,
+      "chars": [
+        "⧽"
+      ]
+    },
+    {
+      "type": "bitmap",
+      "file": "minecraft:logo/Paying_Member_Icon.png",
+      "ascent": 7,
+      "height": 8,
+      "chars": [
+        "⧾"
+      ]
+    },
+    {
+      "type": "bitmap",
+      "file": "minecraft:logo/Moderator_Event_Planner_Icon.png",
+      "ascent": 7,
+      "height": 8,
+      "chars": [
+        "⳥"
+      ]
+    },
+    {
+      "type": "bitmap",
+      "file": "minecraft:logo/vc_talking.png",
+      "ascent": 7,
+      "height": 8,
+      "chars": [
+        "⌬"
+      ]
+    },
+    {
+      "type": "bitmap",
+      "file": "minecraft:logo/vc_microphone_muted.png",
+      "ascent": 7,
+      "height": 8,
+      "chars": [
+        "⌭"
+      ]
+    },
+    {
+      "type": "bitmap",
+      "file": "minecraft:logo/vc_disabled.png",
+      "ascent": 7,
+      "height": 8,
+      "chars": [
+        "⌮"
+      ]
+    },
+    {
+      "type": "bitmap",
+      "file": "minecraft:logo/vc_disconnected.png",
+      "ascent": 7,
+      "height": 8,
+      "chars": [
+        "⌯"
+      ]
+    },
+    {
+      "type": "bitmap",
+      "file": "minecraft:logo/vc_group.png",
+      "ascent": 7,
+      "height": 8,
+      "chars": [
+        "⌰"
+      ]
+    },
+    {
+      "type": "reference",
+      "id": "minecraft:include/space"
+    },
+    {
+      "type": "bitmap",
+      "file": "minecraft:font/custom_emojis.png",
+      "ascent": 7,
+      "chars": [
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ]
+    }
+  ]
+}

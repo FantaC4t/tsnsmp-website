@@ -1,0 +1,5 @@
+Matcha flavoured and all original textures by klei_wright
+
+matcha flavoured datapack can be found at: https://modrinth.com/datapack/matcha-flavoured
+
+resource pack modifications by bug_eater_

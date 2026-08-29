@@ -1,0 +1,22 @@
+{
+    "providers": [
+        {
+            "file": "custom_escape:internal/square.png",
+            "chars": [
+                "\uEFFF"
+            ],
+            "height": -209,
+            "ascent": -10000,
+            "type": "bitmap"
+        },
+        {
+            "type": "bitmap",
+            "file": "custom_escape:escape_menu/logo.png",
+            "height": 90,
+            "ascent": 41,
+            "chars": [
+                "\uEF00"
+            ]
+        }
+    ]
+}

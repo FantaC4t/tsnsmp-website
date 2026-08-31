@@ -17,3 +17,19 @@ not_found_handling = "404-page"
 # script runs at all -- meaning the hostname redirect in worker.js would
 # never fire for the old domain, since / matches dist/index.html directly.
 run_worker_first = true
+
+[observability]
+enabled = true
+head_sampling_rate = 1
+redact_query_string = false
+
+[observability.logs]
+enabled = true
+head_sampling_rate = 1
+persist = true
+invocation_logs = true
+
+[observability.traces]
+enabled = false
+persist = true
+head_sampling_rate = 1

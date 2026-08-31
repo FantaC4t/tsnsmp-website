@@ -81,6 +81,14 @@ async function handleSubmit(request, env, webhookKey) {
         });
     }
 
+    if (discordRes.ok) {
+        // Discord returns 204 No Content on success (no wait=true param on
+        // the webhook URL), and Response can't carry a body on a null-body
+        // status — so just return an empty success response instead of
+        // proxying Discord's raw response.
+        return new Response(null, { status: 204 });
+    }
+
     const text = await discordRes.text();
     return new Response(text, {
         status: discordRes.status,
